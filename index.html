@@ -1899,6 +1899,11 @@
         });
         if (user) {
             localStorage.setItem('2r_user', JSON.stringify(user));
+            
+            // ========== TAMBAHAN BARU: SIMPAN ROLE USER ==========
+            localStorage.setItem('2r_user_role', user.role);
+            // ====================================================
+            
             tampilkanDashboard(user);
         } else {
             document.getElementById('authError').style.display = 'block';
@@ -2981,22 +2986,22 @@
             // Tampilkan halaman yang dipilih
             if (page === 'dashboard') {
                 document.getElementById('pageDasbor').classList.add('active');
-                renderDashboardStats(); // Render statistik dashboard saat dibuka
+                renderDashboardStats();
             } else if (page === 'profile') {
                 document.getElementById('pageProfil').classList.add('active');
-                loadProfil(); // Refresh data profil saat halaman dibuka
+                loadProfil();
             } else if (page === 'daftarAkun') {
                 document.getElementById('pageDaftarAkun').classList.add('active');
-                updateDaftarIdPreview(); // Update preview ID saat halaman dibuka
+                updateDaftarIdPreview();
             } else if (page === 'persetujuan') {
                 document.getElementById('pagePersetujuan').classList.add('active');
-                renderTabelPersetujuan(); // Render tabel persetujuan saat dibuka
+                renderTabelPersetujuan();
             } else if (page === 'kelolaAkun') {
                 document.getElementById('pageKelolaAkun').classList.add('active');
-                renderTabelKelolaAkun(); // Render tabel kelola akun saat dibuka
+                renderTabelKelolaAkun();
             } else if (page === 'settingRekening') {
                 document.getElementById('pageSettingRekening').classList.add('active');
-                loadRekeningMaster(); // Load data rekening saat dibuka
+                loadRekeningMaster();
             } else if (page === 'transferMenu') {
                 document.getElementById('pageTransferMenu').classList.add('active');
             } else if (page === 'penagihan') {
@@ -3018,6 +3023,7 @@
     document.getElementById('btnLogout').addEventListener('click', function() {
         if (confirm('Apakah Anda yakin ingin keluar?')) {
             localStorage.removeItem('2r_user');
+            localStorage.removeItem('2r_user_role');
             location.reload();
         }
     });
@@ -3047,24 +3053,57 @@
             tampilkanDashboard(user);
         }
 
-        // 3. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
+        // 3. Ambil role user dari localStorage (setelah login)
+        var userRole = localStorage.getItem('2r_user_role');
+
+        // 4. Jika role adalah TOKO, sembunyikan semua menu admin
+        if (userRole === 'toko') {
+            // Daftar menu admin yang harus disembunyikan
+            var menuAdmin = [
+                'daftarAkun',
+                'persetujuan',
+                'kelolaAkun',
+                'transferMenu',
+                'penagihan',
+                'settingRekening',
+                'kelolaUpgrade',
+                'settingTarifOjek',
+                'kelolaIklan'
+            ];
+
+            // Loop untuk menyembunyikan setiap menu admin
+            menuAdmin.forEach(function(menuId) {
+                var menuItem = document.querySelector('.sidebar-menu-item[data-page="' + menuId + '"]');
+                if (menuItem) {
+                    menuItem.style.display = 'none';
+                }
+            });
+
+            // Opsional: Hapus judul "Menu Admin" jika semua menu admin disembunyikan
+            var menuAdminTitle = document.querySelector('.sidebar-menu-title');
+            if (menuAdminTitle && menuAdminTitle.textContent.trim() === 'Menu Admin') {
+                menuAdminTitle.style.display = 'none';
+            }
+        }
+
+        // 5. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
         if (document.getElementById('daftarRoleBaru')) {
             updateDaftarIdPreview();
         }
 
-        // 4. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
+        // 6. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
         if (document.getElementById('pagePersetujuan') && 
             document.getElementById('pagePersetujuan').classList.contains('active')) {
             renderTabelPersetujuan();
         }
 
-        // 5. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
+        // 7. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
         if (document.getElementById('pageSettingRekening') && 
             document.getElementById('pageSettingRekening').classList.contains('active')) {
             loadRekeningMaster();
         }
 
-        // 6. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
+        // 8. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
         if (document.getElementById('pageDasbor') && 
             document.getElementById('pageDasbor').classList.contains('active')) {
             renderDashboardStats();
