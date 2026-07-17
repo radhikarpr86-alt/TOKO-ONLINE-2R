@@ -2402,6 +2402,292 @@
         });
     </script>
 <!-- ===== AKHIR BLOK 9(2) - 01 JAVASCRIPT FUNGSI SETTING REKENING MASTER ===== -->
+<!-- ================================ BLOK 10(1) CUSTDASH - 01 HALAMAN PROFIL CUSTOMER ================================ -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah konten dari Halaman Profil Customer.
+     Berisi dua bagian utama:
+     1. Data Registrasi (nama, username, email, hp, alamat) – tampilan saja.
+     2. Form KTP & Domisili (NIK, tempat lahir, jenis kelamin, alamat KTP, alamat domisili, upload foto KTP).
+     Data KTP wajib diisi untuk verifikasi identitas dan pengiriman barang. -->
 
+<style>
+    /* CSS Khusus untuk Halaman Profil Customer */
+    .cust-profile-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .cust-profile-container .card {
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+    .cust-profile-container .form-group {
+        margin-bottom: 20px;
+    }
+
+    .cust-profile-container .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+
+    .cust-profile-container .form-group .read-only-data {
+        background: #f9f9f9;
+        padding: 10px 12px;
+        border-radius: 5px;
+        border: 1px solid #eee;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .cust-profile-container .warning-text {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 12px 16px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #856404;
+        margin-bottom: 20px;
+    }
+
+    .cust-profile-container .upload-preview {
+        width: 150px;
+        height: 100px;
+        border: 1px dashed #ddd;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888;
+        font-size: 12px;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+
+    .cust-profile-container .upload-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="page-content" id="pageCustProfil">
+    <div class="page-header">
+        <h2>Profil Customer</h2>
+        <p>Lengkapi data diri Anda sesuai KTP untuk verifikasi identitas dan pengiriman barang.</p>
+    </div>
+
+    <div class="cust-profile-container">
+        
+        <!-- BAGIAN 1: DATA REGISTRASI (TAMPILAN SAJA) -->
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pendaftaran</span>
+            </div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div>
+                        <label class="form-label">Nama Lengkap</label>
+                        <div class="read-only-data" id="custProfilNama">-</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Username</label>
+                        <div class="read-only-data" id="custProfilUsername">-</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Email</label>
+                        <div class="read-only-data" id="custProfilEmail">-</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Nomor HP</label>
+                        <div class="read-only-data" id="custProfilHp">-</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Alamat (Saat Daftar)</label>
+                        <div class="read-only-data" id="custProfilAlamat">-</div>
+                    </div>
+                </div>
+                <div class="mt-10">
+                    <button class="btn-secondary btn-sm" onclick="custEditRegistrasi()">
+                        <i class="fas fa-edit"></i> Edit Data Daftar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BAGIAN 2: FORM KTP & DOMISILI -->
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Data KTP & Domisili</span>
+                <button class="btn-primary btn-sm" onclick="custSimpanKTP()">
+                    <i class="fas fa-save"></i> Simpan KTP
+                </button>
+            </div>
+            <div class="card-body">
+                
+                <!-- Peringatan Privasi -->
+                <div class="warning-text">
+                    <i class="fas fa-shield-alt" style="color:#ffc107;"></i>
+                    Data yang Anda berikan hanya digunakan untuk verifikasi identitas dan pengiriman barang di Toko Online 2R. Data tidak akan dibagikan ke pihak ketiga tanpa izin Anda.
+                </div>
+
+                <!-- Form KTP -->
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="custNIK">NIK (16 digit) <span style="color:var(--error);">*</span></label>
+                        <input type="text" id="custNIK" class="form-input" placeholder="Masukkan NIK sesuai KTP" maxlength="16">
+                    </div>
+                    <div class="form-group">
+                        <label for="custTempatLahir">Tempat / Tanggal Lahir <span style="color:var(--error);">*</span></label>
+                        <input type="text" id="custTempatLahir" class="form-input" placeholder="Contoh: Jakarta, 17-08-1990">
+                    </div>
+                    <div class="form-group">
+                        <label for="custJenisKelamin">Jenis Kelamin <span style="color:var(--error);">*</span></label>
+                        <select id="custJenisKelamin" class="form-input">
+                            <option value="">-- Pilih --</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Alamat KTP -->
+                <div class="form-group">
+                    <label for="custAlamatKTP">Alamat Sesuai KTP <span style="color:var(--error);">*</span></label>
+                    <textarea id="custAlamatKTP" class="form-input" rows="2" placeholder="Provinsi, Kab/Kota, Kecamatan, Kelurahan, RT/RW, Kode Pos"></textarea>
+                </div>
+
+                <!-- Alamat Domisili -->
+                <div class="form-group">
+                    <label for="custAlamatDomisili">Alamat Domisili Sekarang <span style="color:var(--error);">*</span></label>
+                    <textarea id="custAlamatDomisili" class="form-input" rows="2" placeholder="Provinsi, Kab/Kota, Kecamatan, Kelurahan, RT/RW, Kode Pos"></textarea>
+                </div>
+
+                <!-- Unggah Foto KTP -->
+                <div class="form-group">
+                    <label for="custUploadKTP">Unggah Foto KTP <span style="color:var(--error);">*</span></label>
+                    <input type="file" id="custUploadKTP" accept=".jpg,.jpeg,.png" style="display:none" onchange="custPreviewKTP(event)">
+                    <div class="upload-preview" id="custPreviewKTPBox" onclick="document.getElementById('custUploadKTP').click()">
+                        <span>Klik untuk unggah<br>Max 2MB</span>
+                    </div>
+                </div>
+
+                <!-- Tombol Simpan -->
+                <div class="mt-10">
+                    <button class="btn-primary" onclick="custSimpanKTP()">
+                        <i class="fas fa-save"></i> Simpan Data KTP
+                    </button>
+                    <button class="btn-secondary" onclick="custLewatiKTP()">
+                        <i class="fas fa-skip"></i> Lewati Nanti
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- ================================ AKHIR BLOK 10(1) CUSTDASH - 01 HALAMAN PROFIL CUSTOMER ================================ -->
+    /* ================================ BLOK 10(2) CUSTDASH - 01 JAVASCRIPT PROFIL CUSTOMER ================================ */
+/* PENJELASAN: 
+     Sub-blok ini adalah logika JavaScript untuk Halaman Profil Customer.
+     Berisi:
+     1. custLoadProfil() - Menampilkan data registrasi Customer.
+     2. custPreviewKTP() - Menampilkan preview gambar KTP yang diunggah.
+     3. custSimpanKTP() - Menyimpan data KTP ke localStorage.
+     4. custLewatiKTP() - Melewati pengisian KTP untuk sementara.
+     5. custEditRegistrasi() - Mengedit data registrasi (belum diimplementasikan). */
+
+// ========== LOAD DATA REGISTRASI CUSTOMER ==========
+function custLoadProfil() {
+    // Ambil data user yang sedang login
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : null;
+    if (!user) return;
+
+    // Tampilkan data registrasi
+    document.getElementById('custProfilNama').textContent = user.nama || '-';
+    document.getElementById('custProfilUsername').textContent = user.username || '-';
+    document.getElementById('custProfilEmail').textContent = user.email || '-';
+    document.getElementById('custProfilHp').textContent = user.hp || '-';
+    document.getElementById('custProfilAlamat').textContent = user.alamat || '-';
+}
+
+// ========== PREVIEW FOTO KTP ==========
+function custPreviewKTP(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran file maksimal 2MB!');
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var box = document.getElementById('custPreviewKTPBox');
+        box.innerHTML = '<img src="' + e.target.result + '" alt="Preview KTP">';
+    };
+    reader.readAsDataURL(file);
+}
+
+// ========== SIMPAN DATA KTP ==========
+function custSimpanKTP() {
+    // Ambil data user yang sedang login
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : null;
+    if (!user) return;
+
+    var nik = document.getElementById('custNIK').value.trim();
+    var tempatLahir = document.getElementById('custTempatLahir').value.trim();
+    var jenisKelamin = document.getElementById('custJenisKelamin').value;
+    var alamatKTP = document.getElementById('custAlamatKTP').value.trim();
+    var alamatDomisili = document.getElementById('custAlamatDomisili').value.trim();
+    var fileInput = document.getElementById('custUploadKTP');
+
+    if (!nik || !tempatLahir || !jenisKelamin || !alamatKTP || !alamatDomisili || !fileInput.files || !fileInput.files[0]) {
+        alert('Harap isi semua data KTP dan unggah foto KTP!');
+        return;
+    }
+
+    // Simpan data KTP ke localStorage (bisa diganti ke database nanti)
+    var dataKTP = {
+        nik: nik,
+        tempatLahir: tempatLahir,
+        jenisKelamin: jenisKelamin,
+        alamatKTP: alamatKTP,
+        alamatDomisili: alamatDomisili,
+        fotoKTP: fileInput.files[0].name // Untuk demo, simpan nama file
+    };
+    localStorage.setItem('2r_customer_ktp_' + user.id, JSON.stringify(dataKTP));
+
+    alert('Data KTP berhasil disimpan!');
+    // Redirect ke Dasbor Customer
+    navigasiHalaman('custDashboard');
+}
+
+// ========== LEWATI KTP ==========
+function custLewatiKTP() {
+    if (confirm('Anda belum mengisi data KTP. Anda tetap bisa masuk Dasbor, tapi belum bisa belanja sampai KTP terisi. Lanjutkan?')) {
+        navigasiHalaman('custDashboard');
+    }
+}
+
+// ========== EDIT DATA REGISTRASI ==========
+function custEditRegistrasi() {
+    alert('Fitur edit data registrasi sedang dalam pengembangan.');
+}
+
+// ========== INISIALISASI SAAT HALAMAN DIMUAT ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // Jika halaman ini sedang aktif, load data profil
+    if (document.getElementById('pageCustProfil') && 
+        document.getElementById('pageCustProfil').classList.contains('active')) {
+        custLoadProfil();
+    }
+});
+/* ================================ AKHIR BLOK 10(2) CUSTDASH - 01 JAVASCRIPT PROFIL CUSTOMER ================================ */
 </body>
 </html>
