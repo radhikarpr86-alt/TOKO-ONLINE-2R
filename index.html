@@ -2705,79 +2705,103 @@
 
     // ========== NAVIGASI SIDEBAR ==========
 
-    document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
-        item.addEventListener('click', function() {
-            var page = this.dataset.page;
-            
-            // Set active menu
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
-                el.classList.remove('active'); 
+    function initSidebarNavigation() {
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var page = this.dataset.page;
+                
+                // Set active menu hanya dalam sidebar yang sama
+                var parentSidebar = this.closest('.sidebar-menu-item') ? this.parentElement : null;
+                
+                // Hapus active dari semua menu di sidebar yang sama
+                if (parentSidebar) {
+                    parentSidebar.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
+                        el.classList.remove('active'); 
+                    });
+                } else {
+                    // Fallback: hapus active dari semua menu
+                    document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
+                        el.classList.remove('active'); 
+                    });
+                }
+                this.classList.add('active');
+                
+                // Sembunyikan semua halaman
+                document.querySelectorAll('.page-content').forEach(function(el) { 
+                    el.classList.remove('active'); 
+                });
+                
+                // Tampilkan halaman yang dipilih
+                switch(page) {
+                    case 'dashboard':
+                        document.getElementById('pageDasbor').classList.add('active');
+                        renderDashboardStats();
+                        break;
+                    case 'profile':
+                        document.getElementById('pageProfil').classList.add('active');
+                        loadProfil();
+                        break;
+                    case 'daftarAkun':
+                        document.getElementById('pageDaftarAkun').classList.add('active');
+                        updateDaftarIdPreview();
+                        break;
+                    case 'persetujuan':
+                        document.getElementById('pagePersetujuan').classList.add('active');
+                        renderTabelPersetujuan();
+                        break;
+                    case 'kelolaAkun':
+                        document.getElementById('pageKelolaAkun').classList.add('active');
+                        renderTabelKelolaAkun();
+                        break;
+                    case 'settingRekening':
+                        document.getElementById('pageSettingRekening').classList.add('active');
+                        loadRekeningMaster();
+                        break;
+                    case 'transferMenu':
+                        document.getElementById('pageTransferMenu').classList.add('active');
+                        break;
+                    case 'penagihan':
+                        document.getElementById('pagePenagihan').classList.add('active');
+                        break;
+                    case 'kelolaUpgrade':
+                        document.getElementById('pageKelolaUpgrade').classList.add('active');
+                        break;
+                    case 'settingTarifOjek':
+                        document.getElementById('pageSettingTarifOjek').classList.add('active');
+                        break;
+                    case 'kelolaIklan':
+                        document.getElementById('pageKelolaIklan').classList.add('active');
+                        break;
+                    case 'kelolaProduk':
+                        tampilkanToast('Halaman Kelola Produk sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'pesananMasuk':
+                        tampilkanToast('Halaman Pesanan Masuk sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'laporanPenjualan':
+                        tampilkanToast('Halaman Laporan Penjualan sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'settingToko':
+                        tampilkanToast('Halaman Setting Toko sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'orderMasuk':
+                        tampilkanToast('Halaman Order Masuk sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'riwayatOrder':
+                        tampilkanToast('Halaman Riwayat Order sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'laporanOjek':
+                        tampilkanToast('Halaman Laporan Ojek sedang dalam pengembangan.', 'info');
+                        break;
+                    case 'settingOjek':
+                        tampilkanToast('Halaman Setting Ojek sedang dalam pengembangan.', 'info');
+                        break;
+                    default:
+                        tampilkanToast('Halaman belum tersedia', 'warning');
+                }
             });
-            this.classList.add('active');
-            
-            // Sembunyikan semua halaman
-            document.querySelectorAll('.page-content').forEach(function(el) { 
-                el.classList.remove('active'); 
-            });
-            
-            // Tampilkan halaman yang dipilih
-            if (page === 'dashboard') {
-                document.getElementById('pageDasbor').classList.add('active');
-                renderDashboardStats();
-            } else if (page === 'profile') {
-                document.getElementById('pageProfil').classList.add('active');
-                loadProfil();
-            } else if (page === 'daftarAkun') {
-                document.getElementById('pageDaftarAkun').classList.add('active');
-                updateDaftarIdPreview();
-            } else if (page === 'persetujuan') {
-                document.getElementById('pagePersetujuan').classList.add('active');
-                renderTabelPersetujuan();
-            } else if (page === 'kelolaAkun') {
-                document.getElementById('pageKelolaAkun').classList.add('active');
-                renderTabelKelolaAkun();
-            } else if (page === 'settingRekening') {
-                document.getElementById('pageSettingRekening').classList.add('active');
-                loadRekeningMaster();
-            } else if (page === 'transferMenu') {
-                document.getElementById('pageTransferMenu').classList.add('active');
-            } else if (page === 'penagihan') {
-                document.getElementById('pagePenagihan').classList.add('active');
-            } else if (page === 'kelolaUpgrade') {
-                document.getElementById('pageKelolaUpgrade').classList.add('active');
-            } else if (page === 'settingTarifOjek') {
-                document.getElementById('pageSettingTarifOjek').classList.add('active');
-            } else if (page === 'kelolaIklan') {
-                document.getElementById('pageKelolaIklan').classList.add('active');
-            } else if (page === 'kelolaProduk') {
-                // Halaman khusus Toko
-                alert('Halaman Kelola Produk sedang dalam pengembangan.');
-            } else if (page === 'pesananMasuk') {
-                // Halaman khusus Toko
-                alert('Halaman Pesanan Masuk sedang dalam pengembangan.');
-            } else if (page === 'laporanPenjualan') {
-                // Halaman khusus Toko
-                alert('Halaman Laporan Penjualan sedang dalam pengembangan.');
-            } else if (page === 'settingToko') {
-                // Halaman khusus Toko
-                alert('Halaman Setting Toko sedang dalam pengembangan.');
-            } else if (page === 'orderMasuk') {
-                // Halaman khusus Ojek
-                alert('Halaman Order Masuk sedang dalam pengembangan.');
-            } else if (page === 'riwayatOrder') {
-                // Halaman khusus Ojek
-                alert('Halaman Riwayat Order sedang dalam pengembangan.');
-            } else if (page === 'laporanOjek') {
-                // Halaman khusus Ojek
-                alert('Halaman Laporan Ojek sedang dalam pengembangan.');
-            } else if (page === 'settingOjek') {
-                // Halaman khusus Ojek
-                alert('Halaman Setting Ojek sedang dalam pengembangan.');
-            } else {
-                alert('Halaman belum tersedia');
-            }
         });
-    });
+    }
 
     // ========== LOGOUT ==========
 
@@ -2792,11 +2816,17 @@
     // ========== MODAL UTILITY ==========
 
     function bukaModal(id) {
-        document.getElementById(id).classList.add('active');
+        var modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.add('active');
+        }
     }
 
     function tutupModal(id) {
-        document.getElementById(id).classList.remove('active');
+        var modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('active');
+        }
     }
 
     // ========== FUNGSI LOAD PROFIL ==========
@@ -2889,15 +2919,13 @@
                 </div>
             `;
             
-            // Load data aplikasi
-            loadDataAplikasi();
-            // Load dokumen
-            loadDokumen();
-            // Load keterangan
-            loadKeterangan();
-            
-            // Event listener untuk upload dokumen
+            // Load data aplikasi, dokumen, dan keterangan
             setTimeout(function() {
+                loadDataAplikasi();
+                loadDokumen();
+                loadKeterangan();
+                
+                // Event listener untuk upload dokumen
                 var btnUpload = document.getElementById('btnUnggahDokumen');
                 var inputFile = document.getElementById('inputDokumen');
                 if (btnUpload && inputFile) {
@@ -2908,7 +2936,7 @@
                         uploadDokumen(e.target.files);
                     });
                 }
-            }, 100);
+            }, 200);
             
         } else {
             // Tampilkan profil untuk role lain (Toko, Ojek, Pedagang, COD, Customer)
@@ -2959,7 +2987,7 @@
                         previewKtp(e.target.files[0]);
                     });
                 }
-            }, 100);
+            }, 200);
         }
     }
 
@@ -3305,6 +3333,28 @@
         tampilkanToast('KTP berhasil disimpan!', 'success');
     }
 
+    // ========== FUNGSI UPDATE DASHBOARD HEADER ==========
+
+    function updateDashboardHeader(user) {
+        var dashboardHeader = document.querySelector('#pageDasbor .page-header');
+        if (dashboardHeader) {
+            var role = user.role;
+            var roleDisplay = role.charAt(0).toUpperCase() + role.slice(1);
+            
+            if (role === 'superadmin') {
+                dashboardHeader.innerHTML = `
+                    <h2>Dasbor SuperAdmin</h2>
+                    <p>Selamat datang, <strong id="dashboardNama">${user.nama}</strong>! Berikut adalah ringkasan sistem.</p>
+                `;
+            } else {
+                dashboardHeader.innerHTML = `
+                    <h2>Dasbor ${roleDisplay}</h2>
+                    <p>Selamat datang, <strong id="dashboardNama">${user.nama}</strong>! Ini adalah dashboard Anda.</p>
+                `;
+            }
+        }
+    }
+
     // ========== EVENT LISTENER UNTUK MENUTUP MODAL DENGAN KLIK DI LUAR ==========
 
     document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
@@ -3323,13 +3373,16 @@
         // 1. Inisialisasi akun SuperAdmin default jika belum ada
         inisialisasiSuperAdmin();
 
-        // 2. Cek apakah ada user yang sedang login
+        // 2. Inisialisasi navigasi sidebar
+        initSidebarNavigation();
+
+        // 3. Cek apakah ada user yang sedang login
         var userData = localStorage.getItem('2r_user');
         if (userData) {
             var user = JSON.parse(userData);
             tampilkanDashboard(user);
             
-            // 3. Tampilkan sidebar yang sesuai dengan role user
+            // 4. Tampilkan sidebar yang sesuai dengan role user
             var role = localStorage.getItem('2r_user_role');
             
             // Sembunyikan semua sidebar terlebih dahulu
@@ -3355,36 +3408,51 @@
                 if (sidebarUmum) sidebarUmum.style.display = 'block';
             }
             
+            // Update header dashboard sesuai role
+            updateDashboardHeader(user);
+            
             // Reset active menu ke dashboard
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
-                item.classList.remove('active');
-            });
-            var dashboardMenu = document.querySelector('.sidebar-menu-item[data-page="dashboard"]');
-            if (dashboardMenu) dashboardMenu.classList.add('active');
+            setTimeout(function() {
+                document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+                    item.classList.remove('active');
+                });
+                
+                // Cari menu dashboard di sidebar yang aktif
+                var activeSidebar = null;
+                if (role === 'superadmin' && sidebarSuperAdmin && sidebarSuperAdmin.style.display === 'block') {
+                    activeSidebar = sidebarSuperAdmin;
+                } else if (role === 'toko' && sidebarToko && sidebarToko.style.display === 'block') {
+                    activeSidebar = sidebarToko;
+                } else if (role === 'ojek' && sidebarOjek && sidebarOjek.style.display === 'block') {
+                    activeSidebar = sidebarOjek;
+                } else if (sidebarUmum && sidebarUmum.style.display === 'block') {
+                    activeSidebar = sidebarUmum;
+                }
+                
+                if (activeSidebar) {
+                    var dashboardMenu = activeSidebar.querySelector('.sidebar-menu-item[data-page="dashboard"]');
+                    if (dashboardMenu) dashboardMenu.classList.add('active');
+                }
+            }, 100);
         }
 
-        // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
+        // 5. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
         if (document.getElementById('daftarRoleBaru')) {
             updateDaftarIdPreview();
         }
 
-        // 5. Render tabel persetujuan jika elemen tersedia
+        // 6. Render tabel persetujuan jika elemen tersedia
         if (document.getElementById('tabelPersetujuanContainer')) {
             renderTabelPersetujuan();
         }
 
-        // 6. Load data rekening jika elemen tersedia
+        // 7. Load data rekening jika elemen tersedia
         if (document.getElementById('rekNamaBank')) {
             loadRekeningMaster();
         }
 
-        // 7. Render statistik dashboard
+        // 8. Render statistik dashboard
         renderDashboardStats();
-        
-        // 8. Load profil jika halaman profil aktif
-        if (document.getElementById('profilContainer')) {
-            loadProfil();
-        }
     });
 </script>
 <!-- ===== AKHIR BLOK 7 (9) - 09 NAVIGASI & EVENT LISTENER ===================================================================== -->
