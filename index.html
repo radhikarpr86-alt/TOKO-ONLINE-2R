@@ -1335,7 +1335,8 @@
 </body>
 </html>
 <!-- ===== AKHIR BLOK 1 (9) - 09 HTML DASHBOARD ===================================================================== -->
-    <!-- ===== BLOK 2 - 01 DASHBOARD SUPERADMIN ===== -->
+    <!-- ===== BLOK 2 (1) - 01 NAVBAR ===================================================================== -->
+    <!-- ===== DASHBOARD SUPERADMIN ===== -->
     <div id="pageDashboard" class="page-dashboard">
         
         <!-- Navbar -->
@@ -1346,7 +1347,8 @@
                 <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
             </div>
         </nav>
-
+<!-- ===== AKHIR BLOK 2 (1) - 01 NAVBAR ===================================================================== -->
+<!-- ===== BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-menu-title">Menu Utama</div>
@@ -1364,18 +1366,19 @@
             <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
             <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
         </aside>
-
+<!-- ===== AKHIR BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
+<!-- ===== BLOK 2 (3) - 03 CONTENT DASHBOARD ===================================================================== -->
         <!-- Content Area -->
         <main class="content">
             
-            <!-- ===== DASHBOARD SUPERADMIN (DENGAN WIDGET) ===== -->
+            <!-- ===== DASHBOARD SUPERADMIN ===== -->
             <div class="page-content active" id="pageDasbor">
                 <div class="page-header">
                     <h2>Dasbor SuperAdmin</h2>
                     <p>Selamat datang, <strong id="dashboardNama">SuperAdmin</strong>! Berikut adalah ringkasan sistem.</p>
                 </div>
 
-                <!-- 4 Kartu Statistik (Dari BLOK 10) -->
+                <!-- 4 Kartu Statistik -->
                 <div class="dashboard-widgets">
                     <div class="widget-card">
                         <div class="icon total"><i class="fas fa-users"></i></div>
@@ -1410,7 +1413,282 @@
                     </div>
                 </div>
             </div>
+<!-- ===== AKHIR BLOK 2 (3) - 03 CONTENT DASHBOARD ===================================================================== -->
+<!-- ===== BLOK 2 (4) - 04 CONTENT PROFIL ===================================================================== -->
+            <!-- ===== PROFIL ===== -->
+            <div class="page-content" id="pageProfil">
+                <div class="page-header">
+                    <h2>Profil SuperAdmin</h2>
+                    <p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>
+                </div>
 
+                <!-- Data Aplikasi -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-building" style="color:#FF6B00;"></i> Data Aplikasi</span>
+                        <button class="btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Nama Aplikasi</label><input type="text" id="appNama" class="form-input" placeholder="Nama Aplikasi"></div>
+                        <div><label class="form-label">Penerbit</label><input type="text" id="appPenerbit" class="form-input" placeholder="Penerbit"></div>
+                        <div><label class="form-label">Pemilik</label><input type="text" id="appPemilik" class="form-input" placeholder="Pemilik"></div>
+                        <div><label class="form-label">Pengelola</label><input type="text" id="appPengelola" class="form-input" placeholder="Pengelola"></div>
+                    </div>
+                </div>
+
+                <!-- Keamanan Akun -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-shield-alt" style="color:#FF6B00;"></i> Keamanan Akun</span>
+                        <button class="btn-primary btn-sm" onclick="ubahPasswordSuperAdmin()"><i class="fas fa-key"></i> Simpan Password</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Username</label><input type="text" id="superadminUsername" class="form-input" placeholder="Username"></div>
+                        <div><label class="form-label">Password Baru</label><input type="password" id="superadminPassword" class="form-input" placeholder="Password Baru"></div>
+                        <div><label class="form-label">Konfirmasi Password</label><input type="password" id="superadminPasswordKonfirmasi" class="form-input" placeholder="Konfirmasi Password"></div>
+                    </div>
+                </div>
+
+                <!-- Data Pribadi -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi</span>
+                        <button class="btn-primary btn-sm" onclick="simpanDataPribadi()"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" placeholder="Nama Lengkap"></div>
+                        <div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" placeholder="Alamat"></div>
+                        <div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" placeholder="Email"></div>
+                        <div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" placeholder="Nomor HP"></div>
+                        <div><label class="form-label">Jabatan</label><input type="text" id="profilJabatan" class="form-input" placeholder="Jabatan"></div>
+                    </div>
+                </div>
+
+                <!-- Dokumen Perusahaan -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span>
+                        <button class="btn-primary btn-sm" id="btnUnggahDokumen"><i class="fas fa-upload"></i> Unggah</button>
+                        <input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none">
+                    </div>
+                    <div id="daftarDokumen">
+                        <div class="empty-state">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Belum ada dokumen</h3>
+                            <p>Klik tombol Unggah untuk menambahkan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keterangan -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-sticky-note" style="color:#FF6B00;"></i> Keterangan</span>
+                    </div>
+                    <textarea id="textKeterangan" rows="4" class="form-input" placeholder="Isi keterangan perusahaan..."></textarea>
+                    <button class="btn-primary mt-10" onclick="simpanKeterangan()"><i class="fas fa-save"></i> Simpan Keterangan</button>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 2 (4) - 04 CONTENT PROFIL ===================================================================== -->
+<!-- ===== BLOK 2 (5) - 05 CONTENT DAFTAR AKUN ===================================================================== -->
+            <!-- ===== DAFTAR AKUN BARU ===== -->
+            <div class="page-content" id="pageDaftarAkun">
+                <div class="page-header">
+                    <h2>Daftar Akun Baru</h2>
+                    <p>Halaman ini untuk membuat akun baru sebagai SuperAdmin.</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">Form Pendaftaran Akun</div>
+                    <form id="formDaftarAkunBaru">
+                        <!-- ID Akun -->
+                        <div class="form-group">
+                            <label for="daftarIdPreview">ID Akun (Otomatis)</label>
+                            <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
+                                <i class="fas fa-id-card"></i>
+                                <span id="daftarIdPreview" style="padding:12px 10px; font-weight:600; color:#333; width:100%;">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="daftarRoleBaru" class="form-input" onchange="updateDaftarIdPreview()">
+                                <option value="customer">Customer</option>
+                                <option value="toko">Toko (Verifikasi)</option>
+                                <option value="ojek">Ojek (Verifikasi)</option>
+                                <option value="pedagang">Pedagang Pasar</option>
+                                <option value="staf_admin">Staf Admin</option>
+                                <option value="staf_owner_ojek">Staf Owner Ojek</option>
+                                <option value="staf_owner_toko">Staf Owner Toko</option>
+                                <option value="customer_service">Customer Service</option>
+                                <option value="sponsor">Sponsor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="daftarUsernameBaru" class="form-input" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="daftarPasswordBaru" class="form-input" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" id="daftarNamaBaru" class="form-input" placeholder="Nama Lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email (Opsional)</label>
+                            <input type="email" id="daftarEmailBaru" class="form-input" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label>No HP (Opsional)</label>
+                            <input type="tel" id="daftarHpBaru" class="form-input" placeholder="Nomor HP">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat (Opsional)</label>
+                            <input type="text" id="daftarAlamatBaru" class="form-input" placeholder="Alamat">
+                        </div>
+                        <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Buat Akun Baru</button>
+                    </form>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 2 (5) - 05 CONTENT DAFTAR AKUN ===================================================================== -->
+<!-- ===== BLOK 2 (6) - 06 CONTENT PERSETUJUAN ===================================================================== -->
+            <!-- ===== PERSETUJUAN AKUN ===== -->
+            <div class="page-content" id="pagePersetujuan">
+                <div class="page-header">
+                    <h2>Persetujuan Akun</h2>
+                    <p>Halaman ini menampilkan daftar akun (selain Customer) yang membutuhkan persetujuan SuperAdmin/Staf Admin untuk diaktifkan.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-user-check" style="color:#FF6B00;"></i> Daftar Permintaan Persetujuan</span>
+                        <span id="totalPending" style="font-size: 14px; color: #666;">Menunggu: 0</span>
+                    </div>
+                    <div id="tabelPersetujuanContainer">
+                        <!-- Tabel akan diisi oleh JavaScript -->
+                        <div class="empty-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <h3>Memuat Data...</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 2 (6) - 06 CONTENT PERSETUJUAN ===================================================================== -->
+<!-- ===== BLOK 2 (7) - 07 CONTENT KELOLA AKUN ===================================================================== -->
+            <!-- ===== KELOLA SEMUA AKUN ===== -->
+            <div class="page-content" id="pageKelolaAkun">
+                <div class="page-header">
+                    <div>
+                        <h2>Kelola Semua Akun</h2>
+                        <p>Halaman ini menampilkan seluruh akun yang terdaftar di sistem. SuperAdmin dapat mengaktifkan, menonaktifkan, atau menghapus akun.</p>
+                    </div>
+                </div>
+                <div class="card" style="border: none; box-shadow: none; padding: 0;">
+                    <div id="tabelKelolaAkunContainer">
+                        <!-- Tabel akan dirender oleh JavaScript -->
+                        <div class="kosong-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <h3>Sedang Memuat Data...</h3>
+                            <p>Silakan tunggu sebentar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 2 (7) - 07 CONTENT KELOLA AKUN ===================================================================== -->
+<!-- ===== BLOK 2 (8) - 08 CONTENT SETTING REKENING ===================================================================== -->
+            <!-- ===== SETTING REKENING ===== -->
+            <div class="page-content" id="pageSettingRekening">
+                <div class="page-header">
+                    <div>
+                        <h2>Setting Rekening Master</h2>
+                        <p>Kelola rekening bank utama untuk penerimaan fee sewa aplikasi, komisi, dan pembayaran lainnya.</p>
+                    </div>
+                </div>
+                <div class="rekening-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <span><i class="fas fa-university" style="color:#FF6B00;"></i> Data Rekening Penerima Fee</span>
+                            <button class="btn-primary btn-sm" onclick="simpanRekeningMaster()"><i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                        <div class="card-body" style="padding-top: 10px;">
+                            <div class="form-group">
+                                <label for="rekNamaBank">Nama Bank</label>
+                                <input type="text" id="rekNamaBank" class="form-input" placeholder="Contoh: BCA, Mandiri, BRI">
+                            </div>
+                            <div class="form-group">
+                                <label for="rekNamaPemilik">Nama Pemilik Rekening</label>
+                                <input type="text" id="rekNamaPemilik" class="form-input" placeholder="Masukkan nama pemilik rekening">
+                            </div>
+                            <div class="form-group">
+                                <label for="rekNomor">Nomor Rekening</label>
+                                <input type="text" id="rekNomor" class="form-input" placeholder="Masukkan nomor rekening">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>  <!-- PENUTUP MAIN -->
+    </div>  <!-- PENUTUP PAGE DASHBOARD -->
+<!-- ===== AKHIR BLOK 2 (8) - 08 CONTENT SETTING REKENING ===================================================================== -->
+<!-- ===== BLOK 2 (9) - 09 MODALS ===================================================================== -->
+    <!-- ===== MODAL EDIT DOKUMEN ===== -->
+    <div class="modal-overlay" id="modalEditDokumen">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit" style="color:#FF6B00;"></i> Edit Dokumen</h3>
+                <button class="modal-close" onclick="tutupModal('modalEditDokumen')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editDocId">
+                <div class="form-group">
+                    <label>Nama File</label>
+                    <input type="text" id="editDocName" class="form-input" placeholder="Nama file">
+                </div>
+                <div class="form-group">
+                    <label>Keterangan</label>
+                    <input type="text" id="editDocKeterangan" class="form-input" placeholder="Keterangan">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="tutupModal('modalEditDokumen')">Batal</button>
+                <button class="btn-primary" onclick="simpanEditDokumen()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL PREVIEW GAMBAR ===== -->
+    <div class="modal-overlay" id="modalPreviewGambar">
+        <div class="modal" style="background:transparent; box-shadow:none; max-width:800px;">
+            <div class="modal-header" style="background:white; border-radius:10px 10px 0 0;">
+                <h3 id="modalPreviewTitle">Preview Gambar</h3>
+                <button class="modal-close" onclick="tutupModal('modalPreviewGambar')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding:0; background:#1a1a1a; border-radius:0 0 10px 10px; text-align:center;">
+                <img id="modalPreviewImage" src="" alt="Preview" style="max-width:100%; max-height:75vh; display:block; margin:0 auto;">
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL TOLAK AKUN ===== -->
+    <div class="modal-overlay" id="modalTolakAkun">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle" style="color: #FF9800;"></i> Konfirmasi Penolakan</h3>
+                <button class="modal-close" onclick="tutupModal('modalTolakAkun')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menolak dan menghapus akun ini?</p>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">Tindakan ini tidak dapat dibatalkan.</p>
+                <input type="hidden" id="tolakIdAkun">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="tutupModal('modalTolakAkun')">Batal</button>
+                <button class="btn-danger" onclick="eksekusiTolakAkun()"><i class="fas fa-trash"></i> Ya, Tolak Akun</button>
+            </div>
+        </div>
+    </div>
+<!-- ===== AKHIR BLOK 2 (9) - 09 MODALS ===================================================================== -->
             <!-- ===== BLOK 3 SADASHPROFIL ===== -->
             <!-- Profil -->
             <div class="page-content" id="pageProfil">
