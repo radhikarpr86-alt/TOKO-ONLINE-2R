@@ -324,82 +324,244 @@
     </div>
 <!-- ===== AKHIR BLOK 1(2) - 01 HALAMAN LOGIN & REGISTER ===== -->
 
-    <!-- ===== BLOK 2 - 01 DASHBOARD SUPERADMIN ===== -->
-    <div id="pageDashboard" class="page-dashboard">
+    <!-- ===================================== BLOK 2(1) - 01 STRUKTUR DASHBOARD (WADAH) ===================================== -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah struktur utama dari Dashboard.
+     Berisi Navbar, Sidebar, dan Area Konten (<main>) sebagai wadah.
+     Semua halaman lain (SuperAdmin, Customer, dll) akan dimuat ke dalam <main>. -->
+
+<!-- ===== HALAMAN LOGIN & REGISTER ===== -->
+<div id="pageAuth">
+    <div class="auth-wrapper">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <i class="fas fa-store-alt"></i>
+                <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
+                <p style="color:#888; font-size:14px;">Platform Belanja & Layanan Serba Ada</p>
+            </div>
+            <div class="auth-error" id="authError">
+                <i class="fas fa-exclamation-circle"></i> <span id="authErrorText">Terjadi kesalahan!</span>
+            </div>
+            
+            <!-- Form Login -->
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+                <div class="auth-footer">Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a></div>
+            </form>
+
+            <!-- Form Register -->
+            <form class="auth-form hidden-form" id="registerForm">
+                <div class="form-group">
+                    <label>ID Akun</label>
+                    <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
+                        <i class="fas fa-id-card"></i>
+                        <span id="regIdPreview" style="padding:15px 12px; font-weight:600; color:#555;">-</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Role</label>
+                    <div class="input-group">
+                        <i class="fas fa-user-tag"></i>
+                        <select id="regRole" onchange="updateIdPreview()">
+                            <option value="customer">Customer</option>
+                            <option value="toko">Toko</option>
+                            <option value="ojek">Ojek</option>
+                            <option value="pedagang">Pedagang Pasar</option>
+                            <option value="codseller">COD Seller</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="regUsername" placeholder="Buat username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Buat password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="regNama" placeholder="Nama lengkap Anda" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email (Opsional)</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>No HP (Opsional)</label>
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="regHp" placeholder="Nomor HP">
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
+                <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DASHBOARD (WADAH UNTUK SEMUA ROLE) ===== -->
+<div id="pageDashboard" class="page-dashboard">
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+        <div class="navbar-user">
+            <span id="userNama" style="font-weight:600;">SuperAdmin</span>
+            <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div id="mainSidebar">
+        <!-- Sidebar akan dirender oleh JavaScript -->
+    </div>
+
+    <!-- Content Area (Wadah untuk semua halaman) -->
+    <main class="content">
         
-        <!-- Navbar -->
-        <nav class="navbar">
-            <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
-            <div class="navbar-user">
-                <span id="userNama" style="font-weight:600;">SuperAdmin</span>
-                <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-            </div>
-        </nav>
+        <!-- ===== HALAMAN SUPERADMIN ===== -->
+        <!-- Halaman Dasbor SuperAdmin -->
+        <div class="page-content active" id="pageDasbor">
+            <div id="contentDashboard"></div>
+        </div>
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-menu-title">Menu Utama</div>
-            <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-            <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
-            
-            <div class="sidebar-menu-title">Menu Admin</div>
-            <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-            <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-            <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-            <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
-            <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
-            <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-            <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
-            <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
-            <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
-        </aside>
+        <!-- Halaman Profil SuperAdmin -->
+        <div class="page-content" id="pageProfil">
+            <div id="contentProfile"></div>
+        </div>
 
-        <!-- Content Area -->
-        <main class="content">
-            
-            <!-- ===== DASHBOARD SUPERADMIN (DENGAN WIDGET) ===== -->
-            <div class="page-content active" id="pageDasbor">
-                <div class="page-header">
-                    <h2>Dasbor SuperAdmin</h2>
-                    <p>Selamat datang, <strong id="dashboardNama">SuperAdmin</strong>! Berikut adalah ringkasan sistem.</p>
-                </div>
+        <!-- Halaman Daftar Akun Baru -->
+        <div class="page-content" id="pageDaftarAkun">
+            <div id="contentDaftarAkun"></div>
+        </div>
 
-                <!-- 4 Kartu Statistik (Dari BLOK 10) -->
-                <div class="dashboard-widgets">
-                    <div class="widget-card">
-                        <div class="icon total"><i class="fas fa-users"></i></div>
-                        <div class="number" id="statTotalAkun">0</div>
-                        <div class="label">Total Akun</div>
-                    </div>
-                    <div class="widget-card">
-                        <div class="icon aktif"><i class="fas fa-check-circle"></i></div>
-                        <div class="number" id="statAkunAktif">0</div>
-                        <div class="label">Akun Aktif</div>
-                    </div>
-                    <div class="widget-card">
-                        <div class="icon menunggu"><i class="fas fa-clock"></i></div>
-                        <div class="number" id="statMenunggu">0</div>
-                        <div class="label">Menunggu Verifikasi</div>
-                    </div>
-                    <div class="widget-card">
-                        <div class="icon nonaktif"><i class="fas fa-ban"></i></div>
-                        <div class="number" id="statNonaktif">0</div>
-                        <div class="label">Dinonaktifkan</div>
-                    </div>
-                </div>
+        <!-- Halaman Persetujuan -->
+        <div class="page-content" id="pagePersetujuan">
+            <div id="contentPersetujuan"></div>
+        </div>
 
-                <!-- Tabel 5 Akun Terbaru -->
-                <div class="card dashboard-tabel-terbaru">
-                    <div class="card-header">
-                        <span><i class="fas fa-history" style="color:#FF6B00;"></i> 5 Akun Terbaru</span>
-                    </div>
-                    <div id="tabelAkunTerbaru">
-                        <!-- Tabel akan diisi oleh JavaScript -->
-                        <p style="color:#888; text-align:center; padding:20px;">Memuat data...</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Halaman Kelola Akun -->
+        <div class="page-content" id="pageKelolaAkun">
+            <div id="contentKelolaAkun"></div>
+        </div>
 
+        <!-- Halaman Setting Rekening -->
+        <div class="page-content" id="pageSettingRekening">
+            <div id="contentSettingRekening"></div>
+        </div>
+
+        <!-- ===== HALAMAN CUSTOMER ===== -->
+        <!-- Halaman Dasbor Customer -->
+        <div class="page-content" id="pageCustDashboard">
+            <div id="contentCustDashboard"></div>
+        </div>
+
+        <!-- Halaman Profil Customer -->
+        <div class="page-content" id="pageCustProfil">
+            <div id="contentCustProfil"></div>
+        </div>
+
+        <!-- Halaman Lihat Toko -->
+        <div class="page-content" id="pageLihatToko">
+            <div id="contentLihatToko"></div>
+        </div>
+
+        <!-- Halaman Lihat Ojek -->
+        <div class="page-content" id="pageLihatOjek">
+            <div id="contentLihatOjek"></div>
+        </div>
+
+        <!-- Halaman Lihat Produk -->
+        <div class="page-content" id="pageLihatProduk">
+            <div id="contentLihatProduk"></div>
+        </div>
+
+        <!-- Halaman Keranjang -->
+        <div class="page-content" id="pageKeranjang">
+            <div id="contentKeranjang"></div>
+        </div>
+
+        <!-- Halaman Chat -->
+        <div class="page-content" id="pageChat">
+            <div id="contentChat"></div>
+        </div>
+
+        <!-- Halaman Papan Informasi -->
+        <div class="page-content" id="pagePapanInformasi">
+            <div id="contentPapanInformasi"></div>
+        </div>
+
+        <!-- Halaman Menu Iklan -->
+        <div class="page-content" id="pageMenuIklan">
+            <div id="contentMenuIklan"></div>
+        </div>
+
+        <!-- Halaman Daftar Belanja -->
+        <div class="page-content" id="pageDaftarBelanja">
+            <div id="contentDaftarBelanja"></div>
+        </div>
+
+        <!-- Halaman Riwayat Belanja -->
+        <div class="page-content" id="pageRiwayatBelanja">
+            <div id="contentRiwayatBelanja"></div>
+        </div>
+
+        <!-- Halaman Pembayaran -->
+        <div class="page-content" id="pagePembayaran">
+            <div id="contentPembayaran"></div>
+        </div>
+
+        <!-- Halaman Ulasan & Rating -->
+        <div class="page-content" id="pageUlasan">
+            <div id="contentUlasan"></div>
+        </div>
+
+        <!-- Halaman Bantuan & FAQ -->
+        <div class="page-content" id="pageBantuan">
+            <div id="contentBantuan"></div>
+        </div>
+
+        <!-- Halaman Notifikasi -->
+        <div class="page-content" id="pageNotifikasi">
+            <div id="contentNotifikasi"></div>
+        </div>
+
+        <!-- Halaman Edit / Hapus Akun -->
+        <div class="page-content" id="pageEditAkun">
+            <div id="contentEditAkun"></div>
+        </div>
+
+    </main>
+</div>
+<!-- ===================================== AKHIR BLOK 2(1) - 01 STRUKTUR DASHBOARD (WADAH) ===================================== -->
             <!-- ===== BLOK 3 SADASHPROFIL ===== -->
             <!-- Profil -->
             <div class="page-content" id="pageProfil">
