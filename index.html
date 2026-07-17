@@ -24,12 +24,11 @@
         box-sizing: border-box;
     }
 
-    /* Body Global - Ubah agar tidak memaksa elemen ke tengah */
+    /* Body Global - Normal, tidak memaksa elemen ke tengah */
     body {
         font-family: 'Poppins', sans-serif;
         background: #f5f7fa;
         min-height: 100vh;
-        /* Hapus display: flex; justify-content: center; align-items: center; */
     }
 
     /* Sembunyikan halaman dashboard awal */
@@ -125,7 +124,7 @@
         margin-bottom: 5px;
     }
 
-    /* === CSS KHUSUS UNTUK HALAMAN LOGIN/REGISTER === */
+    /* CSS Khusus untuk Halaman Login/Register (agar di tengah) */
     #pageAuth {
         display: flex;
         justify-content: center;
@@ -466,7 +465,8 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 15px;
     }
-        /* =====================================================================
+
+    /* =====================================================================
        CSS TAMBAHAN UNTUK PROFIL UMUM (KTP)
        ===================================================================== */
 
@@ -943,11 +943,104 @@
 <!-- ===== AKHIR BLOK 1 (7) - 07 CSS DOKUMEN & REKENING ===================================================================== -->
 
 <!-- ===== BLOK 1 (8) - 08 HTML LOGIN & REGISTER ===================================================================== -->
+<body>
     <!-- ===== HALAMAN LOGIN & REGISTER ===== -->
     <div id="pageAuth">
         <div class="auth-wrapper">
             <div class="auth-box">
-                <!-- (Isi form login dan register tetap sama) -->
+                <div class="auth-logo">
+                    <i class="fas fa-store-alt"></i>
+                    <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
+                    <p>Platform Belanja & Layanan Serba Ada</p>
+                </div>
+                <div class="auth-error" id="authError">
+                    <i class="fas fa-exclamation-circle"></i> <span id="authErrorText">Terjadi kesalahan!</span>
+                </div>
+                
+                <!-- Form Login -->
+                <form class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+                    <div class="auth-footer">
+                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
+                    </div>
+                </form>
+
+                <!-- Form Register -->
+                <form class="auth-form hidden-form" id="registerForm">
+                    <div class="form-group">
+                        <label>ID Akun</label>
+                        <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
+                            <i class="fas fa-id-card"></i>
+                            <span id="regIdPreview" style="padding:15px 12px; font-weight:600; color:#555;">-</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Role</label>
+                        <div class="input-group">
+                            <i class="fas fa-user-tag"></i>
+                            <select id="regRole" onchange="updateIdPreview()">
+                                <option value="customer">Customer</option>
+                                <option value="toko">Toko</option>
+                                <option value="ojek">Ojek</option>
+                                <option value="pedagang">Pedagang Pasar</option>
+                                <option value="codseller">COD Seller</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="regUsername" placeholder="Buat username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="regPassword" placeholder="Buat password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <div class="input-group">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="regNama" placeholder="Nama lengkap Anda" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email (Opsional)</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="regEmail" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>No HP (Opsional)</label>
+                        <div class="input-group">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="regHp" placeholder="Nomor HP">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
+                    <div class="auth-footer">
+                        Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -968,20 +1061,33 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-menu-title">Menu Utama</div>
-            <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-            <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
             
-            <div class="sidebar-menu-title">Menu Admin</div>
-            <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-            <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-            <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-            <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
-            <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
-            <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-            <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
-            <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
-            <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+            <!-- ===== SIDEBAR UNTUK SUPERADMIN ===== -->
+            <div id="sidebarSuperAdmin">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                
+                <div class="sidebar-menu-title">Menu Admin</div>
+                <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+                <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+                <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+                <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+                <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+                <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+                <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+                <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+                <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+            </div>
+
+            <!-- ===== SIDEBAR UNTUK ROLE LAIN (TOKO, OJEK, PEDAGANG, COD, CUSTOMER) ===== -->
+            <div id="sidebarUmum" style="display:none;">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                <!-- Menu khusus untuk role lain bisa ditambahkan di sini -->
+            </div>
+            
         </aside>
 
         <!-- Content Area -->
@@ -1331,9 +1437,54 @@
             </div>
         </div>
     </div>
-</body>
-</html>
 <!-- ===== AKHIR BLOK 1 (9) - 09 HTML DASHBOARD ===================================================================== -->
+
+<!-- ===== BLOK 2 (1) - 01 NAVBAR ===================================================================== -->
+    <!-- ===== DASHBOARD SUPERADMIN ===== -->
+    <div id="pageDashboard" class="page-dashboard">
+        
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+            <div class="navbar-user">
+                <span id="userNama" style="font-weight:600;">SuperAdmin</span>
+                <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            </div>
+        </nav>
+<!-- ===== AKHIR BLOK 2 (1) - 01 NAVBAR ===================================================================== -->
+
+<!-- ===== BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            
+            <!-- ===== SIDEBAR UNTUK SUPERADMIN ===== -->
+            <div id="sidebarSuperAdmin">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                
+                <div class="sidebar-menu-title">Menu Admin</div>
+                <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+                <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+                <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+                <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+                <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+                <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+                <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+                <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+                <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+            </div>
+
+            <!-- ===== SIDEBAR UNTUK ROLE LAIN (TOKO, OJEK, PEDAGANG, COD, CUSTOMER) ===== -->
+            <div id="sidebarUmum" style="display:none;">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                <!-- Menu khusus untuk role lain bisa ditambahkan di sini -->
+            </div>
+            
+        </aside>
+<!-- ===== AKHIR BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
 
 <!-- ===== BLOK 2 (3) - 03 CONTENT DASHBOARD ===================================================================== -->
         <!-- Content Area -->
@@ -1382,6 +1533,7 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 2 (3) - 03 CONTENT DASHBOARD ===================================================================== -->
+
 <!-- ===== BLOK 2 (4) - 04 CONTENT PROFIL ===================================================================== -->
             <!-- ===== PROFIL (DINAMIS BERDASARKAN ROLE) ===== -->
             <div class="page-content" id="pageProfil">
@@ -1393,6 +1545,7 @@
                 <div id="profilContainer"></div>
             </div>
 <!-- ===== AKHIR BLOK 2 (4) - 04 CONTENT PROFIL ===================================================================== -->
+
 <!-- ===== BLOK 2 (5) - 05 CONTENT DAFTAR AKUN ===================================================================== -->
             <!-- ===== DAFTAR AKUN BARU ===== -->
             <div class="page-content" id="pageDaftarAkun">
@@ -1455,6 +1608,7 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 2 (5) - 05 CONTENT DAFTAR AKUN ===================================================================== -->
+
 <!-- ===== BLOK 2 (6) - 06 CONTENT PERSETUJUAN ===================================================================== -->
             <!-- ===== PERSETUJUAN AKUN ===== -->
             <div class="page-content" id="pagePersetujuan">
@@ -1478,6 +1632,7 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 2 (6) - 06 CONTENT PERSETUJUAN ===================================================================== -->
+
 <!-- ===== BLOK 2 (7) - 07 CONTENT KELOLA AKUN ===================================================================== -->
             <!-- ===== KELOLA SEMUA AKUN ===== -->
             <div class="page-content" id="pageKelolaAkun">
@@ -1499,6 +1654,7 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 2 (7) - 07 CONTENT KELOLA AKUN ===================================================================== -->
+
 <!-- ===== BLOK 2 (8) - 08 CONTENT SETTING REKENING ===================================================================== -->
             <!-- ===== SETTING REKENING ===== -->
             <div class="page-content" id="pageSettingRekening">
@@ -1532,6 +1688,7 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 2 (8) - 08 CONTENT SETTING REKENING ===================================================================== -->
+
 <!-- ===== BLOK 2 (9) - 09 MODALS ===================================================================== -->
     <!-- ===== MODAL EDIT DOKUMEN ===== -->
     <div class="modal-overlay" id="modalEditDokumen">
@@ -1718,6 +1875,7 @@
     }
 </script>
 <!-- ===== AKHIR BLOK 7 (1) - 01 UTILITY & DATA CORE ===================================================================== -->
+
 <!-- ===== BLOK 7 (2) - 02 AUTH & LOGIN ===================================================================== -->
 <script>
     // =====================================================================
@@ -1836,7 +1994,7 @@
         toggleForm('login');
     });
 
-    // ========== TAMPILKAN DASHBOARD (PERBAIKAN UTAMA) ==========
+    // ========== TAMPILKAN DASHBOARD ==========
 
     // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard
     function tampilkanDashboard(user) {
