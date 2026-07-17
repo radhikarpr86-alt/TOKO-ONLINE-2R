@@ -1480,7 +1480,6 @@
                 <div class="sidebar-menu-title">Menu Utama</div>
                 <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
                 <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
-                <!-- Menu khusus untuk role lain bisa ditambahkan di sini -->
             </div>
             
         </aside>
@@ -2744,9 +2743,12 @@
             var role = localStorage.getItem('2r_user_role');
             
             if (role === 'superadmin') {
+                // Jika SuperAdmin, tampilkan sidebar SuperAdmin, sembunyikan sidebar Umum
                 document.getElementById('sidebarSuperAdmin').style.display = 'block';
                 document.getElementById('sidebarUmum').style.display = 'none';
             } else {
+                // Jika bukan SuperAdmin (Toko, Ojek, dll), sembunyikan sidebar SuperAdmin
+                // dan tampilkan sidebar Umum
                 document.getElementById('sidebarSuperAdmin').style.display = 'none';
                 document.getElementById('sidebarUmum').style.display = 'block';
             }
