@@ -770,47 +770,69 @@
             <!-- ===== BLOK 7(3) - 01 SCRIPTS PROFIL & UPLOAD DOKUMEN ===== -->
     <script>
         // ========== KONSTANTA UNTUK LOCALSTORAGE ==========
-        const PROFILE_KEY = '2r_superadmin_profile';
+        const PROFILE_KEY = '2r_superadmin_profile'; // Khusus SuperAdmin
         const APP_KEY = '2r_aplikasi_data';
-        const DOCUMENTS_KEY = '2r_superadmin_documents';
+        const DOCUMENTS_KEY = '2r_superadmin_documents'; // Khusus SuperAdmin
         const AKUN_KEY = '2r_akun';
 
-        // ========== LOAD DATA PROFIL ==========
-        // Fungsi untuk memuat semua data profil dari localStorage ke dalam form
+        // ========== LOAD DATA PROFIL (BERDASARKAN ROLE) ==========
+        // Fungsi ini memuat data dari localStorage berdasarkan Role yang sedang login
         function loadProfil() {
-            // 1. Load Data Aplikasi
-            var dataApp = localStorage.getItem(APP_KEY);
-            var app = dataApp ? JSON.parse(dataApp) : {};
-            document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
-            document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
-            document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
-            document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+            // Ambil data user yang sedang login dari localStorage
+            var userData = localStorage.getItem('2r_user');
+            var user = userData ? JSON.parse(userData) : null;
+            if (!user) return;
 
-            // 2. Load Username SuperAdmin
-            var dataAkun = localStorage.getItem(AKUN_KEY);
-            var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
-            var sa = daftarAkun.find(function(a) { 
-                return a.role === 'superadmin'; 
-            });
-            if (sa) {
-                document.getElementById('superadminUsername').value = sa.username || '';
+            // Jika user adalah SuperAdmin, load data dari 2r_superadmin_profile
+            if (user.role === 'superadmin') {
+                // 1. Load Data Aplikasi (Khusus SuperAdmin)
+                var dataApp = localStorage.getItem(APP_KEY);
+                var app = dataApp ? JSON.parse(dataApp) : {};
+                document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
+                document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
+                document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
+                document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+
+                // 2. Load Data Pribadi SuperAdmin
+                var dataProfil = localStorage.getItem(PROFILE_KEY);
+                var profil = dataProfil ? JSON.parse(dataProfil) : {};
+                document.getElementById('profilNama').value = profil.nama || '';
+                document.getElementById('profilAlamat').value = profil.alamat || '';
+                document.getElementById('profilEmail').value = profil.email || '';
+                document.getElementById('profilHp').value = profil.hp || '';
+                document.getElementById('profilJabatan').value = profil.jabatan || '';
+                document.getElementById('textKeterangan').value = profil.keterangan || '';
+
+                // 3. Load Dokumen SuperAdmin
+                renderDokumen();
+            } 
+            // Jika user adalah Role lain (Toko, Pedagang, Ojek, Customer), load dari 2r_akun
+            else {
+                // Ambil data akun dari 2r_akun berdasarkan ID user yang login
+                var dataAkun = localStorage.getItem(AKUN_KEY);
+                var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+                var akunSaya = daftarAkun.find(function(a) {
+                    return a.id === user.id;
+                });
+
+                if (akunSaya) {
+                    // Tampilkan data dari akunSaya ke form Profil
+                    document.getElementById('profilNama').value = akunSaya.nama || '';
+                    document.getElementById('profilAlamat').value = akunSaya.alamat || '';
+                    document.getElementById('profilEmail').value = akunSaya.email || '';
+                    document.getElementById('profilHp').value = akunSaya.hp || '';
+                    document.getElementById('profilJabatan').value = akunSaya.jabatan || '';
+                }
+
+                // Sembunyikan fitur khusus SuperAdmin (Data Aplikasi, Dokumen, Keterangan)
+                // Karena Role lain belum punya fitur itu
+                document.getElementById('appNama').closest('.card').style.display = 'none';
+                document.getElementById('btnUnggahDokumen').closest('.card').style.display = 'none';
+                document.getElementById('textKeterangan').closest('.card').style.display = 'none';
             }
-
-            // 3. Load Data Pribadi
-            var dataProfil = localStorage.getItem(PROFILE_KEY);
-            var profil = dataProfil ? JSON.parse(dataProfil) : {};
-            document.getElementById('profilNama').value = profil.nama || '';
-            document.getElementById('profilAlamat').value = profil.alamat || '';
-            document.getElementById('profilEmail').value = profil.email || '';
-            document.getElementById('profilHp').value = profil.hp || '';
-            document.getElementById('profilJabatan').value = profil.jabatan || '';
-            document.getElementById('textKeterangan').value = profil.keterangan || '';
-
-            // 4. Load Dokumen
-            renderDokumen();
         }
 
-        // ========== SIMPAN DATA APLIKASI ==========
+        // ========== SIMPAN DATA APLIKASI (Khusus SuperAdmin) ==========
         function simpanDataAplikasi() {
             var data = {
                 namaAplikasi: document.getElementById('appNama').value.trim(),
@@ -875,7 +897,7 @@
             }
         }
 
-        // ========== SIMPAN DATA PRIBADI ==========
+        // ========== SIMPAN DATA PRIBADI (Khusus SuperAdmin) ==========
         function simpanDataPribadi() {
             var data = {
                 nama: document.getElementById('profilNama').value.trim(),
@@ -892,7 +914,7 @@
             alert('Data pribadi berhasil disimpan!');
         }
 
-        // ========== SIMPAN KETERANGAN ==========
+        // ========== SIMPAN KETERANGAN (Khusus SuperAdmin) ==========
         function simpanKeterangan() {
             var dataProfil = localStorage.getItem(PROFILE_KEY);
             var profil = dataProfil ? JSON.parse(dataProfil) : {};
@@ -901,7 +923,7 @@
             alert('Keterangan berhasil disimpan!');
         }
 
-        // ========== MANAJEMEN DOKUMEN ==========
+        // ========== MANAJEMEN DOKUMEN (Khusus SuperAdmin) ==========
         
         // Mendapatkan daftar dokumen dari localStorage
         function getDocuments() {
