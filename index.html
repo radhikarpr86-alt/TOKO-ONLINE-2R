@@ -1437,23 +1437,33 @@
 <!-- ===== BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-menu-title">Menu Utama</div>
-            <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-            <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
             
-            <!-- ===== MENU ADMIN (AKAN DISEMBUNYIKAN UNTUK TOKO) ===== -->
-            <div class="menu-admin-group">
+            <!-- ===== SIDEBAR UNTUK SUPERADMIN ===== -->
+            <div id="sidebarSuperAdmin">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                
                 <div class="sidebar-menu-title">Menu Admin</div>
-                <div class="sidebar-menu-item menu-admin" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-                <div class="sidebar-menu-item menu-admin" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-                <div class="sidebar-menu-item menu-admin" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-                <div class="sidebar-menu-item menu-admin" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
-                <div class="sidebar-menu-item menu-admin" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
-                <div class="sidebar-menu-item menu-admin" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-                <div class="sidebar-menu-item menu-admin" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
-                <div class="sidebar-menu-item menu-admin" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
-                <div class="sidebar-menu-item menu-admin" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+                <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+                <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+                <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+                <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+                <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+                <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+                <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+                <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+                <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
             </div>
+
+            <!-- ===== SIDEBAR UNTUK ROLE LAIN (TOKO, OJEK, PEDAGANG, COD, CUSTOMER) ===== -->
+            <div id="sidebarUmum" style="display:none;">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                <!-- Menu khusus untuk role lain bisa ditambahkan di sini -->
+            </div>
+            
         </aside>
 <!-- ===== AKHIR BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
 <!-- ===== BLOK 2 (3) - 03 CONTENT DASHBOARD ===================================================================== -->
@@ -2699,18 +2709,15 @@
             var user = JSON.parse(userData);
             tampilkanDashboard(user);
             
-            // 3. Jika role bukan superadmin, sembunyikan menu admin
+            // 3. Tampilkan sidebar yang sesuai dengan role user
             var role = localStorage.getItem('2r_user_role');
-            if (role !== 'superadmin') {
-                // Sembunyikan semua elemen dengan class "menu-admin"
-                document.querySelectorAll('.menu-admin').forEach(function(el) {
-                    el.style.display = 'none';
-                });
-                // Sembunyikan judul "Menu Admin"
-                var menuAdminTitle = document.querySelector('.menu-admin-group .sidebar-menu-title');
-                if (menuAdminTitle) {
-                    menuAdminTitle.style.display = 'none';
-                }
+            
+            if (role === 'superadmin') {
+                document.getElementById('sidebarSuperAdmin').style.display = 'block';
+                document.getElementById('sidebarUmum').style.display = 'none';
+            } else {
+                document.getElementById('sidebarSuperAdmin').style.display = 'none';
+                document.getElementById('sidebarUmum').style.display = 'block';
             }
         }
 
