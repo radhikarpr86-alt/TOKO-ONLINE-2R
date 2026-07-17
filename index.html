@@ -431,36 +431,48 @@
                 </div>
             </div>
 <!-- ===== AKHIR BLOK 4 SADASHBUATAKUN ===== -->
-            <!-- ===== BLOK 5 PLACEHOLDER ===== -->
-            <!-- Placeholder halaman lain -->
+            <!-- ===== BLOK 5 - MENU PERSETUJUAN AKUN ===== -->
+            <!-- Persetujuan Akun -->
             <div class="page-content" id="pagePersetujuan">
-                <div class="page-header"><h2>Persetujuan Akun</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageKelolaAkun">
-                <div class="page-header"><h2>Kelola Semua Akun</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageTransferMenu">
-                <div class="page-header"><h2>Transfer Menu</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pagePenagihan">
-                <div class="page-header"><h2>Penagihan</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageSettingRekening">
-                <div class="page-header"><h2>Setting Rekening</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageKelolaUpgrade">
-                <div class="page-header"><h2>Kelola Upgrade</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageSettingTarifOjek">
-                <div class="page-header"><h2>Setting Tarif Ojek</h2><p>Halaman dalam pengembangan.</p></div>
-            </div>
-            <div class="page-content" id="pageKelolaIklan">
-                <div class="page-header"><h2>Kelola Iklan</h2><p>Halaman dalam pengembangan.</p></div>
+                <div class="page-header">
+                    <h2>Persetujuan Akun</h2>
+                    <p>Halaman ini menampilkan daftar akun (selain Customer) yang membutuhkan persetujuan SuperAdmin/Staf Admin untuk diaktifkan.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-user-check" style="color:#FF6B00;"></i> Daftar Permintaan Persetujuan</span>
+                        <span id="totalPending" style="font-size: 14px; color: #666;">Menunggu: 0</span>
+                    </div>
+                    <div id="tabelPersetujuanContainer">
+                        <!-- Tabel akan diisi oleh JavaScript -->
+                        <div class="empty-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <h3>Memuat Data...</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-        </main>
-    </div>
-    <!-- ===== AKHIR BLOK 5 PLACEHOLDER ===== -->
+            <!-- Tambahan Modal untuk Konfirmasi Penolakan -->
+            <div class="modal-overlay" id="modalTolakAkun">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-exclamation-triangle" style="color: #FF9800;"></i> Konfirmasi Penolakan</h3>
+                        <button class="modal-close" onclick="tutupModal('modalTolakAkun')"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin menolak dan menghapus akun ini?</p>
+                        <p style="font-size: 12px; color: #888; margin-top: 5px;">Tindakan ini tidak dapat dibatalkan.</p>
+                        <input type="hidden" id="tolakIdAkun">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-secondary" onclick="tutupModal('modalTolakAkun')">Batal</button>
+                        <button class="btn-danger" onclick="eksekusiTolakAkun()"><i class="fas fa-trash"></i> Ya, Tolak Akun</button>
+                    </div>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 5 - MENU PERSETUJUAN AKUN ===== -->
     <!-- ===== BLOK 6 MODAL EDIT DOKUMEN ===== -->
     <div class="modal-overlay" id="modalEditDokumen">
         <div class="modal">
