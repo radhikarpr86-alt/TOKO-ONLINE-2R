@@ -705,8 +705,31 @@
             toggleForm('login');
         });
 
+        // ========== TAMPILKAN DASHBOARD (UNIVERSAL) ==========
+        // Fungsi ini menampilkan dashboard untuk semua Role, tapi hanya dengan menu Dasbor & Profil
+        function tampilkanDashboard(user) {
+            document.getElementById('pageAuth').style.display = 'none';
+            document.getElementById('pageDashboard').style.display = 'block';
+            document.getElementById('userNama').textContent = user.nama;
+            
+            // Tampilkan halaman Dasbor untuk semua Role
+            document.querySelectorAll('.page-content').forEach(function(el) { 
+                el.classList.remove('active'); 
+            });
+            document.getElementById('pageDasbor').classList.add('active');
+            
+            // Set active menu di sidebar
+            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
+                item.classList.remove('active'); 
+            });
+            document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
+
+            // Load data profil (agar siap saat menu Profil diklik)
+            loadProfil();
+            renderDashboardStats();
+        }
+
         // ========== NAVIGASI SIDEBAR ==========
-        // Hanya menangani menu Dasbor dan Profil
         document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
             item.addEventListener('click', function() {
                 var page = this.dataset.page;
@@ -725,44 +748,17 @@
                 // Tampilkan halaman yang dipilih
                 if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
-                    renderDashboardStats(); // Render statistik dashboard saat dibuka
+                    renderDashboardStats();
                 } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
-                    loadProfil(); // Refresh data profil saat halaman dibuka
+                    loadProfil();
                 } else {
                     alert('Halaman belum tersedia');
                 }
             });
         });
 
-        // ========== TAMPILKAN DASHBOARD ==========
-        // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
-        function tampilkanDashboard(user) {
-            document.getElementById('pageAuth').style.display = 'none';
-            document.getElementById('pageDashboard').style.display = 'block';
-            document.getElementById('userNama').textContent = user.nama;
-            document.getElementById('dashboardNama').textContent = user.nama;
-            
-            // Tampilkan Dasbor sebagai halaman pertama
-            document.querySelectorAll('.page-content').forEach(function(el) { 
-                el.classList.remove('active'); 
-            });
-            document.getElementById('pageDasbor').classList.add('active');
-            
-            // Set active menu di sidebar
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
-                item.classList.remove('active'); 
-            });
-            document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
-            
-            // Load data profil (agar siap saat menu Profil diklik)
-            loadProfil();
-
-            // Render statistik dashboard (Widget & Tabel Terbaru)
-            renderDashboardStats();
-        }
-
-        // ========== LOGOUT ==========
+        // ========== LOGOUT (BERFUNGSI UNTUK SEMUA ROLE) ==========
         document.getElementById('btnLogout').addEventListener('click', function() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
                 localStorage.removeItem('2r_user');
