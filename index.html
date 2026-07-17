@@ -569,6 +569,15 @@
             document.getElementById('regIdPreview').textContent = generateId(role) || '-';
         }
 
+        // ========== PREVIEW ID OTOMATIS UNTUK FORM DAFTAR AKUN (SUPERADMIN) ==========
+        function updateDaftarIdPreview() {
+            var role = document.getElementById('daftarRoleBaru').value;
+            var preview = document.getElementById('daftarIdPreview');
+            if (preview) {
+                preview.textContent = generateId(role) || '-';
+            }
+        }
+
         // ========== TOGGLE FORM ==========
         function toggleForm(tipe) {
             document.getElementById('authError').style.display = 'none';
@@ -677,6 +686,7 @@
                     loadProfil();
                 } else if (page === 'daftarAkun') {
                     document.getElementById('pageDaftarAkun').classList.add('active');
+                    updateDaftarIdPreview(); // Update ID saat halaman dibuka
                 } else if (page === 'persetujuan') {
                     document.getElementById('pagePersetujuan').classList.add('active');
                 } else if (page === 'kelolaAkun') {
@@ -1074,6 +1084,10 @@
             if (userData) {
                 var user = JSON.parse(userData);
                 tampilkanDashboard(user);
+            }
+            // Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
+            if (document.getElementById('daftarRoleBaru')) {
+                updateDaftarIdPreview();
             }
         });
     </script>
