@@ -358,15 +358,12 @@
                 </div>
             </div>
             <!-- ===== AKHIR BLOK 3 SADASHPROFIL ===== -->
-            <!-- ===== BLOK 4 - 01 SIDEBAR DINAMIS ===== -->
-<!-- PENJELASAN:
-     Blok ini berisi Navbar dan Sidebar.
-     Sidebar akan berubah secara otomatis berdasarkan Role pengguna yang sedang login.
-     Jika SuperAdmin, menu SuperAdmin ditampilkan.
-     Jika Toko/Ojek/Pedagang/Customer, menu khusus mereka ditampilkan.
-     Navbar tetap menampilkan nama user yang login dan tombol Logout. -->
+            <!-- ===== BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
+<!-- PENJELASAN: 
+     Blok ini berisi Navbar dan Sidebar untuk SuperAdmin.
+     Menu yang tersedia hanya Dasbor dan Profil. -->
 
-<!-- ===== NAVBAR SUPERADMIN & SEMUA ROLE ===== -->
+<!-- ===== NAVBAR SUPERADMIN ===== -->
 <nav class="navbar" id="mainNavbar">
     <div class="navbar-brand">
         <i class="fas fa-store-alt"></i>
@@ -384,17 +381,20 @@
 <!-- ===== SIDEBAR OVERLAY UNTUK PERANGKAT MOBILE ===== -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- ===== SIDEBAR DINAMIS (AKAN DIISI OLEH JAVASCRIPT) ===== -->
+<!-- ===== SIDEBAR SUPERADMIN ===== -->
 <aside class="sidebar" id="mainSidebar">
-    <!-- Tempat menu sidebar akan dirender oleh JavaScript -->
-    <div id="sidebarMenuContainer">
-        <!-- Loading indicator sementara -->
-        <div style="padding: 20px; text-align: center; color: #888;">
-            <i class="fas fa-spinner fa-spin"></i> Memuat menu...
+    <div class="sidebar-menu">
+        <!-- Menu Utama -->
+        <div class="sidebar-menu-title">Menu Utama</div>
+        <div class="sidebar-menu-item active" data-page="dashboard">
+            <i class="fas fa-th-large"></i> Dasbor
+        </div>
+        <div class="sidebar-menu-item" data-page="profile">
+            <i class="fas fa-user-circle"></i> Profil
         </div>
     </div>
 </aside>
-<!-- ===== AKHIR BLOK 4 - 01 SIDEBAR DINAMIS ===== -->
+<!-- ===== AKHIR BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
             <!-- ===== BLOK 5 - MENU PERSETUJUAN AKUN ===== -->
             <!-- Persetujuan Akun -->
             <div class="page-content" id="pagePersetujuan">
@@ -705,235 +705,61 @@
             toggleForm('login');
         });
 
-        // ========== FUNGSI RENDER SIDEBAR DINAMIS ==========
-        // Fungsi ini akan membuat menu sidebar berdasarkan Role yang login
-        function renderSidebar(user) {
-            var container = document.getElementById('sidebarMenuContainer');
-            if (!container) return;
-
-            var role = user.role;
-            var html = '';
-
-            // === MENU UNTUK SUPERADMIN ===
-            if (role === 'superadmin') {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-title">Menu Utama</div>
-                        <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-                        <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
-                        
-                        <div class="sidebar-menu-title">Menu Admin</div>
-                        <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-                        <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-                        <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-                        <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-                        
-                        <div class="sidebar-menu-title">Menu Lainnya</div>
-                        <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
-                        <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
-                        <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
-                        <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
-                        <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
-                    </div>
-                `;
-            }
-
-            // === MENU UNTUK TOKO ===
-            else if (role === 'toko') {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-title">Menu Toko</div>
-                        <div class="sidebar-menu-item active" data-page="dashToko"><i class="fas fa-store"></i> Dasbor Toko</div>
-                        <div class="sidebar-menu-item" data-page="profilToko"><i class="fas fa-user-circle"></i> Profil Toko</div>
-                        <div class="sidebar-menu-item" data-page="kelolaProduk"><i class="fas fa-boxes"></i> Kelola Produk</div>
-                        <div class="sidebar-menu-item" data-page="kelolaPesanan"><i class="fas fa-shopping-cart"></i> Kelola Pesanan</div>
-                        <div class="sidebar-menu-item" data-page="laporanPenjualan"><i class="fas fa-chart-line"></i> Laporan Penjualan</div>
-                    </div>
-                `;
-            }
-
-            // === MENU UNTUK PEDAGANG PASAR ===
-            else if (role === 'pedagang') {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-title">Menu Pedagang</div>
-                        <div class="sidebar-menu-item active" data-page="dashPasar"><i class="fas fa-store-alt"></i> Dasbor Pedagang</div>
-                        <div class="sidebar-menu-item" data-page="profilPedagang"><i class="fas fa-user-circle"></i> Profil Pedagang</div>
-                        <div class="sidebar-menu-item" data-page="kelolaDagangan"><i class="fas fa-box"></i> Kelola Dagangan</div>
-                        <div class="sidebar-menu-item" data-page="kelolaTransaksi"><i class="fas fa-exchange-alt"></i> Kelola Transaksi</div>
-                        <div class="sidebar-menu-item" data-page="catatanModal"><i class="fas fa-coins"></i> Catatan Modal</div>
-                    </div>
-                `;
-            }
-
-            // === MENU UNTUK OJEK ===
-            else if (role === 'ojek') {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-title">Menu Ojek</div>
-                        <div class="sidebar-menu-item active" data-page="dashOjek"><i class="fas fa-motorcycle"></i> Dasbor Ojek</div>
-                        <div class="sidebar-menu-item" data-page="profilOjek"><i class="fas fa-user-circle"></i> Profil Ojek</div>
-                        <div class="sidebar-menu-item" data-page="orderMasuk"><i class="fas fa-list"></i> Order Masuk</div>
-                        <div class="sidebar-menu-item" data-page="riwayatOrder"><i class="fas fa-history"></i> Riwayat Order</div>
-                        <div class="sidebar-menu-item" data-page="tarikSaldo"><i class="fas fa-wallet"></i> Tarik Saldo</div>
-                    </div>
-                `;
-            }
-
-            // === MENU UNTUK CUSTOMER ===
-            else if (role === 'customer') {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-title">Menu Customer</div>
-                        <div class="sidebar-menu-item active" data-page="dashCustomer"><i class="fas fa-user"></i> Dasbor Customer</div>
-                        <div class="sidebar-menu-item" data-page="profilCustomer"><i class="fas fa-user-edit"></i> Profil Customer</div>
-                        <div class="sidebar-menu-item" data-page="belanja"><i class="fas fa-shopping-bag"></i> Belanja / Cari Produk</div>
-                        <div class="sidebar-menu-item" data-page="pesanOjek"><i class="fas fa-motorcycle"></i> Pesan Ojek</div>
-                        <div class="sidebar-menu-item" data-page="riwayatBelanja"><i class="fas fa-history"></i> Riwayat Belanja</div>
-                    </div>
-                `;
-            }
-
-            // Jika Role tidak dikenali (fallback)
-            else {
-                html = `
-                    <div class="sidebar-menu">
-                        <div class="sidebar-menu-item" style="cursor:default; color:#888;">
-                            <i class="fas fa-exclamation-circle"></i> Menu tidak tersedia
-                        </div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
-
-            // Pasang event listener untuk semua menu di sidebar yang baru
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
-                item.addEventListener('click', function() {
-                    var page = this.dataset.page;
-                    navigasiRole(page, user);
+        // ========== NAVIGASI SIDEBAR ==========
+        // Hanya menangani menu Dasbor dan Profil
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var page = this.dataset.page;
+                
+                // Set active menu
+                document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
+                    el.classList.remove('active'); 
                 });
-            });
-        }
-
-        // ========== NAVIGASI KHUSUS UNTUK ROLE ==========
-        // Fungsi ini menangani perpindahan halaman untuk semua Role
-        function navigasiRole(namaHalaman, user) {
-            // Sembunyikan semua halaman
-            document.querySelectorAll('.page-content').forEach(function(el) {
-                el.classList.remove('active');
-            });
-
-            // Set active menu di sidebar
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(el) {
-                el.classList.remove('active');
-            });
-            document.querySelector('.sidebar-menu-item[data-page="' + namaHalaman + '"]').classList.add('active');
-
-            // Tampilkan halaman yang dipilih berdasarkan Role
-            if (user.role === 'superadmin') {
-                // Navigasi SuperAdmin
-                if (namaHalaman === 'dashboard') {
+                this.classList.add('active');
+                
+                // Sembunyikan semua halaman
+                document.querySelectorAll('.page-content').forEach(function(el) { 
+                    el.classList.remove('active'); 
+                });
+                
+                // Tampilkan halaman yang dipilih
+                if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
-                    renderDashboardStats();
-                } else if (namaHalaman === 'profile') {
+                    renderDashboardStats(); // Render statistik dashboard saat dibuka
+                } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
-                    loadProfil();
-                } else if (namaHalaman === 'daftarAkun') {
-                    document.getElementById('pageDaftarAkun').classList.add('active');
-                    updateDaftarIdPreview();
-                } else if (namaHalaman === 'persetujuan') {
-                    document.getElementById('pagePersetujuan').classList.add('active');
-                    renderTabelPersetujuan();
-                } else if (namaHalaman === 'kelolaAkun') {
-                    document.getElementById('pageKelolaAkun').classList.add('active');
-                    renderTabelKelolaAkun();
-                } else if (namaHalaman === 'settingRekening') {
-                    document.getElementById('pageSettingRekening').classList.add('active');
-                    loadRekeningMaster();
-                } else if (namaHalaman === 'transferMenu' || 
-                           namaHalaman === 'penagihan' || 
-                           namaHalaman === 'kelolaUpgrade' || 
-                           namaHalaman === 'settingTarifOjek' || 
-                           namaHalaman === 'kelolaIklan') {
-                    alert('Halaman ' + namaHalaman + ' sedang dalam pengembangan.');
-                }
-            } 
-            
-            else if (user.role === 'toko') {
-                // Navigasi Toko
-                if (namaHalaman === 'dashToko') {
-                    document.getElementById('pageDashToko').classList.add('active');
-                    // Nanti tambahkan fungsi render statistik toko
+                    loadProfil(); // Refresh data profil saat halaman dibuka
                 } else {
-                    alert('Fitur ' + namaHalaman + ' sedang dalam pengembangan.');
+                    alert('Halaman belum tersedia');
                 }
-            } 
-            
-            else if (user.role === 'pedagang') {
-                // Navigasi Pedagang
-                if (namaHalaman === 'dashPasar') {
-                    document.getElementById('pageDashPasar').classList.add('active');
-                    // Nanti tambahkan fungsi render statistik pedagang
-                } else {
-                    alert('Fitur ' + namaHalaman + ' sedang dalam pengembangan.');
-                }
-            } 
-            
-            else if (user.role === 'ojek') {
-                // Navigasi Ojek
-                if (namaHalaman === 'dashOjek') {
-                    document.getElementById('pageDashOjek').classList.add('active');
-                    // Nanti tambahkan fungsi render statistik ojek
-                } else {
-                    alert('Fitur ' + namaHalaman + ' sedang dalam pengembangan.');
-                }
-            } 
-            
-            else if (user.role === 'customer') {
-                // Navigasi Customer
-                if (namaHalaman === 'dashCustomer') {
-                    document.getElementById('pageDashCustomer').classList.add('active');
-                    // Nanti tambahkan fungsi render statistik customer
-                } else {
-                    alert('Fitur ' + namaHalaman + ' sedang dalam pengembangan.');
-                }
-            } 
-            
-            else {
-                alert('Halaman tidak tersedia untuk Role Anda.');
-            }
-        }
+            });
+        });
 
-        // ========== TAMPILKAN DASHBOARD (LOGIKA BARU) ==========
-        // Fungsi utama untuk mengubah tampilan dari Login ke Dashboard sesuai Role
+        // ========== TAMPILKAN DASHBOARD ==========
+        // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
         function tampilkanDashboard(user) {
             document.getElementById('pageAuth').style.display = 'none';
             document.getElementById('pageDashboard').style.display = 'block';
             document.getElementById('userNama').textContent = user.nama;
+            document.getElementById('dashboardNama').textContent = user.nama;
+            
+            // Tampilkan Dasbor sebagai halaman pertama
+            document.querySelectorAll('.page-content').forEach(function(el) { 
+                el.classList.remove('active'); 
+            });
+            document.getElementById('pageDasbor').classList.add('active');
+            
+            // Set active menu di sidebar
+            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
+                item.classList.remove('active'); 
+            });
+            document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
+            
+            // Load data profil (agar siap saat menu Profil diklik)
+            loadProfil();
 
-            // Render sidebar dinamis berdasarkan Role
-            renderSidebar(user);
-
-            // Tampilkan halaman pertama sesuai Role
-            if (user.role === 'superadmin') {
-                document.getElementById('pageDasbor').classList.add('active');
-                renderDashboardStats();
-                document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
-                loadProfil();
-            } else if (user.role === 'toko') {
-                document.getElementById('pageDashToko').classList.add('active');
-                document.querySelector('.sidebar-menu-item[data-page="dashToko"]').classList.add('active');
-            } else if (user.role === 'pedagang') {
-                document.getElementById('pageDashPasar').classList.add('active');
-                document.querySelector('.sidebar-menu-item[data-page="dashPasar"]').classList.add('active');
-            } else if (user.role === 'ojek') {
-                document.getElementById('pageDashOjek').classList.add('active');
-                document.querySelector('.sidebar-menu-item[data-page="dashOjek"]').classList.add('active');
-            } else if (user.role === 'customer') {
-                document.getElementById('pageDashCustomer').classList.add('active');
-                document.querySelector('.sidebar-menu-item[data-page="dashCustomer"]').classList.add('active');
-            }
+            // Render statistik dashboard (Widget & Tabel Terbaru)
+            renderDashboardStats();
         }
 
         // ========== LOGOUT ==========
