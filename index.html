@@ -1955,7 +1955,154 @@
     }
 </script>
 <!-- ===== AKHIR BLOK 7 (1) - 01 UTILITY & DATA CORE ===================================================================== -->
+<!-- ===== BLOK 7 (2) - 02 AUTH & LOGIN ===================================================================== -->
+<script>
+    // =====================================================================
+    // BLOK 7 (2) - 02 AUTH & LOGIN
+    // Halaman Login dan Register
+    // =====================================================================
 
+    // ========== TOGGLE FORM LOGIN / REGISTER ==========
+
+    // Fungsi untuk berpindah antara form Login dan Register di halaman publik
+    function toggleForm(tipe) {
+        document.getElementById('authError').style.display = 'none';
+        var login = document.getElementById('loginForm');
+        var register = document.getElementById('registerForm');
+        if (tipe === 'register') {
+            login.classList.add('hidden-form');
+            register.classList.remove('hidden-form');
+            updateIdPreview(); // Update preview ID otomatis
+        } else {
+            register.classList.add('hidden-form');
+            login.classList.remove('hidden-form');
+        }
+    }
+
+    // ========== PREVIEW ID UNTUK REGISTER PUBLIK ==========
+
+    function updateIdPreview() {
+        var role = document.getElementById('regRole').value;
+        document.getElementById('regIdPreview').textContent = generateId(role) || '-';
+    }
+
+    // ========== PROSES LOGIN ==========
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var username = document.getElementById('loginUsername').value.trim();
+        var password = document.getElementById('loginPassword').value.trim();
+        var daftarAkun = getDataAkun();
+        var user = daftarAkun.find(function(akun) {
+            return akun.username === username && decodePassword(akun.password) === password;
+        });
+        if (user) {
+            localStorage.setItem('2r_user', JSON.stringify(user));
+            
+            // ========== TAMBAHAN BARU: SIMPAN ROLE USER ==========
+            localStorage.setItem('2r_user_role', user.role);
+            // ====================================================
+            
+            tampilkanDashboard(user);
+        } else {
+            document.getElementById('authError').style.display = 'block';
+            document.getElementById('authErrorText').textContent = 'Username atau password salah!';
+        }
+    });
+
+    // ========== PROSES REGISTER PUBLIK ==========
+
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var role = document.getElementById('regRole').value;
+        var username = document.getElementById('regUsername').value.trim();
+        var password = document.getElementById('regPassword').value.trim();
+        var nama = document.getElementById('regNama').value.trim();
+        var email = document.getElementById('regEmail').value.trim();
+        var hp = document.getElementById('regHp').value.trim();
+        
+        if (!role || !username || !password || !nama) {
+            alert('Data belum lengkap!');
+            return;
+        }
+        
+        var daftarAkun = getDataAkun();
+        if (daftarAkun.find(function(a) { return a.username === username; })) {
+            alert('Username sudah digunakan!');
+            return;
+        }
+        if (email && daftarAkun.find(function(a) { return a.email === email; })) {
+            alert('Email sudah digunakan!');
+            return;
+        }
+        if (hp && daftarAkun.find(function(a) { return a.hp === hp; })) {
+            alert('HP sudah digunakan!');
+            return;
+        }
+        
+        var idBaru = generateId(role);
+        var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
+        
+        var akunBaru = {
+            id: idBaru,
+            role: role,
+            username: username,
+            password: encodePassword(password),
+            nama: nama,
+            email: email || '',
+            hp: hp || '',
+            alamat: '',
+            jabatan: '',
+            perusahaan: '',
+            latitude: null,
+            longitude: null,
+            status: statusAkun,
+            registeredAt: new Date().toISOString()
+        };
+        
+        daftarAkun.push(akunBaru);
+        simpanDataAkun(daftarAkun);
+        
+        alert((statusAkun === 'AKTIF' ? 'Akun berhasil dibuat!' : 'Akun berhasil dibuat! Status: ' + statusAkun) + ' ID: ' + idBaru);
+        
+        document.getElementById('regUsername').value = '';
+        document.getElementById('regPassword').value = '';
+        document.getElementById('regNama').value = '';
+        document.getElementById('regEmail').value = '';
+        document.getElementById('regHp').value = '';
+        
+        toggleForm('login');
+    });
+
+    // ========== TAMPILKAN DASHBOARD ==========
+
+    // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
+    function tampilkanDashboard(user) {
+        document.getElementById('pageAuth').style.display = 'none';
+        document.getElementById('pageDashboard').style.display = 'block';
+        document.getElementById('userNama').textContent = user.nama;
+        document.getElementById('dashboardNama').textContent = user.nama;
+        
+        // Tampilkan Dasbor sebagai halaman pertama
+        document.querySelectorAll('.page-content').forEach(function(el) { 
+            el.classList.remove('active'); 
+        });
+        document.getElementById('pageDasbor').classList.add('active');
+        
+        // Set active menu di sidebar
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
+            item.classList.remove('active'); 
+        });
+        document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
+        
+        // Load data profil (agar siap saat menu Profil diklik)
+        loadProfil();
+
+        // Render statistik dashboard (Widget & Tabel Terbaru)
+        renderDashboardStats();
+    }
+</script>
+<!-- ===== AKHIR BLOK 7 (2) - 02 AUTH & LOGIN ===================================================================== -->
 <!-- ===== BLOK 7 (4) - 04 PROFIL & DOKUMEN ===================================================================== -->
 <script>
     // =====================================================================
