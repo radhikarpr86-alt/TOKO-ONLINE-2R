@@ -763,6 +763,9 @@
             
             // Load data profil (agar siap saat menu Profil diklik)
             loadProfil();
+
+            // Render statistik dashboard (Widget & Tabel Terbaru)
+            renderDashboardStats();
         }
 
         // ========== NAVIGASI SIDEBAR ==========
@@ -784,6 +787,7 @@
                 // Tampilkan halaman yang dipilih
                 if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
+                    renderDashboardStats(); // Render statistik dashboard saat dibuka
                 } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
                     loadProfil(); // Refresh data profil saat halaman dibuka
@@ -1244,7 +1248,7 @@
             document.getElementById('daftarAlamatBaru').value = '';
         });
 
-        // ========== LOGIKA PERSETUJUAN AKUN (BLOK 8) ==========
+        // ========== LOGIKA PERSETUJUAN AKUN (BLOK 5) ==========
 
         // 1. Fungsi untuk merender tabel persetujuan
         function renderTabelPersetujuan() {
@@ -1428,6 +1432,12 @@
             if (document.getElementById('pageSettingRekening') && 
                 document.getElementById('pageSettingRekening').classList.contains('active')) {
                 loadRekeningMaster();
+            }
+
+            // 6. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
+            if (document.getElementById('pageDasbor') && 
+                document.getElementById('pageDasbor').classList.contains('active')) {
+                renderDashboardStats();
             }
         });
     </script>
