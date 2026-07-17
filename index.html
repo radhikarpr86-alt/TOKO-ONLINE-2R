@@ -1,293 +1,704 @@
-<!-- ============ BLOK 8 SCRIPTS PROFIL & UPLOAD ============ -->
-<!-- PENJELASAN: 
-     Fungsi untuk memuat, menyimpan, dan mengelola data profil, serta manajemen dokumen. -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperAdmin - Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset Dasar */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f7fa; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        /* Sembunyikan halaman dashboard */
+        .page-dashboard { display: none; }
 
-<script>
-    const PROFILE_KEY = '2r_superadmin_profile';
-    const APP_KEY = '2r_aplikasi_data';
-    const DOCUMENTS_KEY = '2r_superadmin_documents';
-    const AKUN_KEY = '2r_akun';
+        /* ===== FORM LOGIN ===== */
+        .login-wrapper { width: 100%; max-width: 400px; padding: 20px; }
+        .login-box { background: white; border-radius: 10px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .login-logo { text-align: center; margin-bottom: 20px; }
+        .login-logo i { font-size: 40px; color: #FF6B00; }
+        .login-logo h1 { font-size: 24px; color: #333; margin-top: 5px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 5px; }
+        .input-group { display: flex; align-items: center; background: #f1f3f5; border-radius: 6px; padding: 0 12px; border: 2px solid transparent; }
+        .input-group:focus-within { border-color: #FF6B00; background: white; }
+        .input-group i { color: #888; font-size: 16px; width: 30px; text-align: center; }
+        .input-group input { border: none; background: transparent; padding: 12px 0; font-size: 15px; width: 100%; outline: none; }
+        .btn-login { width: 100%; padding: 14px; background: #FF6B00; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 5px; }
+        .btn-login:hover { background: #e65c00; }
+        .login-error { display: none; background: #ffebee; color: #d32f2f; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
 
-    function loadProfil() {
-        // Data Aplikasi
-        var dataApp = localStorage.getItem(APP_KEY);
-        var app = dataApp ? JSON.parse(dataApp) : {};
-        document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
-        document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
-        document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
-        document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+        /* ===== DASHBOARD ===== */
+        .navbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #FF6B00; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
+        .navbar-brand { font-size: 20px; font-weight: 700; color: #FF6B00; }
+        .navbar-user { display: flex; align-items: center; gap: 15px; }
+        .btn-logout { background: transparent; border: 1px solid #ddd; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .btn-logout:hover { background: #d32f2f; color: white; border-color: #d32f2f; }
 
-        // Username SuperAdmin
-        var dataAkun = localStorage.getItem(AKUN_KEY);
-        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
-        var sa = daftarAkun.find(function(a) { return a.role === 'superadmin'; });
-        if (sa) document.getElementById('superadminUsername').value = sa.username || '';
+        .sidebar { position: fixed; top: 65px; left: 0; bottom: 0; width: 220px; background: white; border-right: 1px solid #eee; padding-top: 20px; }
+        .sidebar-menu-item { padding: 12px 25px; cursor: pointer; color: #555; font-weight: 500; display: flex; align-items: center; gap: 12px; }
+        .sidebar-menu-item:hover { background: #f9f9f9; color: #FF6B00; }
+        .sidebar-menu-item.active { background: #fff0e5; color: #FF6B00; border-right: 3px solid #FF6B00; }
 
-        // Data Pribadi
-        var dataProfil = localStorage.getItem(PROFILE_KEY);
-        var profil = dataProfil ? JSON.parse(dataProfil) : {};
-        document.getElementById('profilNama').value = profil.nama || '';
-        document.getElementById('profilAlamat').value = profil.alamat || '';
-        document.getElementById('profilEmail').value = profil.email || '';
-        document.getElementById('profilHp').value = profil.hp || '';
-        document.getElementById('profilJabatan').value = profil.jabatan || '';
-        document.getElementById('textKeterangan').value = profil.keterangan || '';
+        .content { margin-left: 220px; margin-top: 65px; padding: 30px; min-height: 100vh; background: #f8f9fa; }
+        .page-header { margin-bottom: 20px; }
+        .page-header h2 { font-size: 22px; color: #333; }
+        
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; padding: 20px; border: 1px solid #eee; }
+        .card-header { font-weight: 600; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .form-label { font-size: 12px; color: #888; margin-bottom: 3px; display: block; }
+        .form-input { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .form-input:focus { border-color: #FF6B00; outline: none; }
+        .btn-primary { background: #FF6B00; color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn-primary:hover { background: #e65c00; }
+        .btn-secondary { background: #eee; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; }
+        .btn-danger { background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+        .btn-xs { padding: 4px 12px; font-size: 12px; border-radius: 4px; }
+        .mt-10 { margin-top: 10px; }
+        
+        /* Dokumen List */
+        .doc-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+        .doc-item:last-child { border-bottom: none; }
+        .doc-info { display: flex; align-items: center; gap: 12px; }
+        .doc-thumb { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; border: 1px solid #ddd; cursor: pointer; }
+        .doc-icon { width: 50px; height: 50px; background: #fff0e5; color: #FF6B00; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 24px; }
+        .doc-text h4 { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 2px; }
+        .doc-text p { font-size: 12px; color: #888; }
+        .doc-actions { display: flex; gap: 6px; }
+        
+        .empty-state { text-align: center; padding: 30px 20px; color: #888; }
+        .empty-state i { font-size: 40px; color: #ddd; display: block; margin-bottom: 10px; }
 
-        renderDokumen();
-    }
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 10px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .modal-header h3 { font-size: 18px; font-weight: 600; }
+        .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; }
+        .modal-close:hover { color: #d32f2f; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
 
-    function simpanDataAplikasi() {
-        var data = {
-            namaAplikasi: document.getElementById('appNama').value.trim(),
-            penerbit: document.getElementById('appPenerbit').value.trim(),
-            pemilik: document.getElementById('appPemilik').value.trim(),
-            pengelola: document.getElementById('appPengelola').value.trim()
-        };
-        if (!data.namaAplikasi) {
-            tampilkanToast('Nama aplikasi tidak boleh kosong!', 'error');
-            return;
-        }
-        localStorage.setItem(APP_KEY, JSON.stringify(data));
-        tampilkanToast('Data aplikasi berhasil disimpan!', 'success');
-    }
-
-    function ubahPasswordSuperAdmin() {
-        var usernameBaru = document.getElementById('superadminUsername').value.trim();
-        var passwordBaru = document.getElementById('superadminPassword').value.trim();
-        var konfirmasi = document.getElementById('superadminPasswordKonfirmasi').value.trim();
-
-        if (!usernameBaru) {
-            tampilkanToast('Username tidak boleh kosong!', 'error');
-            return;
-        }
-        if (!passwordBaru) {
-            tampilkanToast('Password baru tidak boleh kosong!', 'error');
-            return;
-        }
-        if (passwordBaru.length < 6) {
-            tampilkanToast('Password minimal 6 karakter!', 'warning');
-            return;
-        }
-        if (passwordBaru !== konfirmasi) {
-            tampilkanToast('Password dan konfirmasi tidak cocok!', 'error');
-            return;
-        }
-
-        var dataAkun = localStorage.getItem(AKUN_KEY);
-        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
-        var ditemukan = false;
-        for (var i = 0; i < daftarAkun.length; i++) {
-            if (daftarAkun[i].role === 'superadmin') {
-                daftarAkun[i].username = usernameBaru;
-                daftarAkun[i].password = btoa(passwordBaru);
-                ditemukan = true;
-                break;
-            }
-        }
-        if (ditemukan) {
-            localStorage.setItem(AKUN_KEY, JSON.stringify(daftarAkun));
-            document.getElementById('superadminPassword').value = '';
-            document.getElementById('superadminPasswordKonfirmasi').value = '';
-            tampilkanToast('Password berhasil diubah! Silakan login ulang.', 'success');
-            setTimeout(function() {
-                if (confirm('Password diubah. Anda harus login ulang. Keluar sekarang?')) {
-                    logout();
-                }
-            }, 2000);
-        } else {
-            tampilkanToast('SuperAdmin tidak ditemukan!', 'error');
-        }
-    }
-
-    function simpanDataPribadi() {
-        var data = {
-            nama: document.getElementById('profilNama').value.trim(),
-            alamat: document.getElementById('profilAlamat').value.trim(),
-            email: document.getElementById('profilEmail').value.trim(),
-            hp: document.getElementById('profilHp').value.trim(),
-            jabatan: document.getElementById('profilJabatan').value.trim()
-        };
-        if (!data.nama) {
-            tampilkanToast('Nama tidak boleh kosong!', 'error');
-            return;
-        }
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
-        tampilkanToast('Data pribadi berhasil disimpan!', 'success');
-    }
-
-    function simpanKeterangan() {
-        var dataProfil = localStorage.getItem(PROFILE_KEY);
-        var profil = dataProfil ? JSON.parse(dataProfil) : {};
-        profil.keterangan = document.getElementById('textKeterangan').value;
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(profil));
-        tampilkanToast('Keterangan berhasil disimpan!', 'success');
-    }
-
-    // ===== DOKUMEN =====
-    function getDocuments() {
-        var data = localStorage.getItem(DOCUMENTS_KEY);
-        return data ? JSON.parse(data) : [];
-    }
-    function saveDocuments(doc) { localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(doc)); }
-
-    function renderDokumen() {
-        var docs = getDocuments();
-        var container = document.getElementById('daftarDokumen');
-        if (!container) return;
-        if (docs.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3><p>Klik tombol di atas untuk menambahkan dokumen.</p></div>`;
-            return;
-        }
-        var html = '';
-        for (var i = 0; i < docs.length; i++) {
-            var doc = docs[i];
-            var isImage = doc.type && doc.type.startsWith('image/');
-            var preview = isImage 
-                ? `<img src="${doc.data}" alt="${doc.name}" onclick="bukaPreviewGambar('${doc.data}','${doc.name}')" class="doc-thumb">`
-                : `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
-            html += `
-                <div class="doc-item">
-                    <div class="doc-info">
-                        ${preview}
-                        <div class="doc-text"><h4>${doc.name}</h4><p>${doc.keterangan || 'Tidak ada keterangan'}</p></div>
+    <!-- ===== HALAMAN LOGIN ===== -->
+    <div id="pageLogin">
+        <div class="login-wrapper">
+            <div class="login-box">
+                <div class="login-logo">
+                    <i class="fas fa-store-alt"></i>
+                    <h1>Toko Online 2R</h1>
+                    <p style="color: #888; font-size: 14px;">SuperAdmin Login</p>
+                </div>
+                <div class="login-error" id="loginError">
+                    <i class="fas fa-exclamation-circle"></i> <span id="loginErrorText">Username atau password salah!</span>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                        </div>
                     </div>
-                    <div class="doc-actions">
-                        <button class="btn btn-secondary btn-xs" onclick="editDokumen('${doc.id}')"><i class="fas fa-edit"></i></button>
-                        <a href="${doc.data}" download="${doc.name}" class="btn btn-primary btn-xs"><i class="fas fa-download"></i></a>
-                        <button class="btn btn-danger btn-xs" onclick="hapusDokumen('${doc.id}')"><i class="fas fa-trash"></i></button>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HALAMAN DASHBOARD ===== -->
+    <div id="pageDashboard" class="page-dashboard">
+        
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+            <div class="navbar-user">
+                <span id="userNama" style="font-weight: 600;">SuperAdmin</span>
+                <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-menu-item active" data-page="dashboard">
+                <i class="fas fa-th-large"></i> Dasbor
+            </div>
+            <div class="sidebar-menu-item" data-page="profile">
+                <i class="fas fa-user-circle"></i> Profil
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            
+            <!-- Halaman Dasbor -->
+            <div id="pageDasbor" class="page-content">
+                <div class="page-header">
+                    <h2>Dasbor SuperAdmin</h2>
+                    <p style="color: #888;">Selamat datang, <strong id="dashboardNama">SuperAdmin</strong>!</p>
+                </div>
+                <div class="card text-center" style="padding: 50px;">
+                    <i class="fas fa-tachometer-alt" style="font-size: 50px; color: #ddd;"></i>
+                    <h3 style="color: #666; margin-top: 10px;">Dasbor Siap Digunakan</h3>
+                    <p style="color: #999;">Silakan klik menu Profil untuk mengelola data.</p>
+                </div>
+            </div>
+
+            <!-- Halaman Profil -->
+            <div id="pageProfil" class="page-content hidden">
+                <div class="page-header">
+                    <h2>Profil SuperAdmin</h2>
+                    <p style="color: #888;">Kelola data aplikasi, keamanan akun, dan data pribadi.</p>
+                </div>
+
+                <!-- Data Aplikasi -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-building" style="color: #FF6B00;"></i> Data Aplikasi</span>
+                        <button class="btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Nama Aplikasi</label><input type="text" id="appNama" class="form-input" placeholder="Nama Aplikasi"></div>
+                        <div><label class="form-label">Penerbit</label><input type="text" id="appPenerbit" class="form-input" placeholder="Penerbit"></div>
+                        <div><label class="form-label">Pemilik</label><input type="text" id="appPemilik" class="form-input" placeholder="Pemilik"></div>
+                        <div><label class="form-label">Pengelola</label><input type="text" id="appPengelola" class="form-input" placeholder="Pengelola"></div>
                     </div>
                 </div>
-            `;
-        }
-        container.innerHTML = html;
-    }
 
-    function uploadDokumen(event) {
-        var files = event.target.files;
-        if (!files || files.length === 0) return;
-        var docs = getDocuments();
-        var selesai = 0;
-        tampilkanToast('Mengunggah ' + files.length + ' file...', 'info');
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            if (file.size > 10 * 1024 * 1024) {
-                tampilkanToast('File ' + file.name + ' terlalu besar (max 10MB)', 'warning');
-                selesai++;
-                if (selesai === files.length) { event.target.value = ''; renderDokumen(); }
-                continue;
+                <!-- Keamanan Akun -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-shield-alt" style="color: #FF6B00;"></i> Keamanan Akun</span>
+                        <button class="btn-primary btn-sm" onclick="ubahPasswordSuperAdmin()"><i class="fas fa-key"></i> Simpan Password</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Username</label><input type="text" id="superadminUsername" class="form-input" placeholder="Username"></div>
+                        <div><label class="form-label">Password Baru</label><input type="password" id="superadminPassword" class="form-input" placeholder="Password Baru"></div>
+                        <div><label class="form-label">Konfirmasi Password</label><input type="password" id="superadminPasswordKonfirmasi" class="form-input" placeholder="Konfirmasi Password"></div>
+                    </div>
+                </div>
+
+                <!-- Data Pribadi -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-user-circle" style="color: #FF6B00;"></i> Data Pribadi</span>
+                        <button class="btn-primary btn-sm" onclick="simpanDataPribadi()"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                    <div class="grid-2">
+                        <div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" placeholder="Nama Lengkap"></div>
+                        <div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" placeholder="Alamat"></div>
+                        <div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" placeholder="Email"></div>
+                        <div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" placeholder="Nomor HP"></div>
+                        <div><label class="form-label">Jabatan</label><input type="text" id="profilJabatan" class="form-input" placeholder="Jabatan"></div>
+                    </div>
+                </div>
+
+                <!-- Dokumen Perusahaan -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-folder-open" style="color: #FF6B00;"></i> Dokumen Perusahaan</span>
+                        <button class="btn-primary btn-sm" id="btnUnggahDokumen"><i class="fas fa-upload"></i> Unggah</button>
+                        <input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none">
+                    </div>
+                    <div id="daftarDokumen">
+                        <div class="empty-state">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Belum ada dokumen</h3>
+                            <p>Klik tombol Unggah untuk menambahkan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keterangan -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-sticky-note" style="color: #FF6B00;"></i> Keterangan</span>
+                    </div>
+                    <textarea id="textKeterangan" rows="4" class="form-input" placeholder="Isi keterangan perusahaan..."></textarea>
+                    <button class="btn-primary mt-10" onclick="simpanKeterangan()"><i class="fas fa-save"></i> Simpan Keterangan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL EDIT DOKUMEN ===== -->
+    <div class="modal-overlay" id="modalEditDokumen">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit" style="color: #FF6B00;"></i> Edit Dokumen</h3>
+                <button class="modal-close" onclick="tutupModal('modalEditDokumen')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editDocId">
+                <div class="form-group">
+                    <label>Nama File</label>
+                    <input type="text" id="editDocName" class="form-input" placeholder="Nama file">
+                </div>
+                <div class="form-group">
+                    <label>Keterangan</label>
+                    <input type="text" id="editDocKeterangan" class="form-input" placeholder="Keterangan">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="tutupModal('modalEditDokumen')">Batal</button>
+                <button class="btn-primary" onclick="simpanEditDokumen()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL PREVIEW GAMBAR ===== -->
+    <div class="modal-overlay" id="modalPreviewGambar">
+        <div class="modal" style="background: transparent; box-shadow: none; max-width: 800px;">
+            <div class="modal-header" style="background: white; border-radius: 10px 10px 0 0;">
+                <h3 id="modalPreviewTitle">Preview Gambar</h3>
+                <button class="modal-close" onclick="tutupModal('modalPreviewGambar')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 0; background: #1a1a1a; border-radius: 0 0 10px 10px; text-align: center;">
+                <img id="modalPreviewImage" src="" alt="Preview" style="max-width: 100%; max-height: 75vh; display: block; margin: 0 auto;">
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ========== DATA AKUN ==========
+        function getDataAkun() { 
+            var data = localStorage.getItem('2r_akun'); 
+            return data ? JSON.parse(data) : []; 
+        }
+        function simpanDataAkun(akun) { 
+            localStorage.setItem('2r_akun', JSON.stringify(akun)); 
+        }
+        function encodePassword(password) { 
+            return btoa(password); 
+        }
+        function decodePassword(password) { 
+            return atob(password); 
+        }
+
+        // ========== INISIALISASI SUPERADMIN ==========
+        function inisialisasiSuperAdmin() {
+            var daftarAkun = getDataAkun();
+            var superAdmin = daftarAkun.find(function(akun) {
+                return akun.role === 'superadmin';
+            });
+            if (!superAdmin) {
+                daftarAkun.push({
+                    id: 'SA-001',
+                    role: 'superadmin',
+                    username: 'TokoOnline2R',
+                    password: encodePassword('MyHand0286'),
+                    nama: 'SuperAdmin',
+                    email: 'superadmin@tokoonline2r.com',
+                    hp: '081234567890',
+                    alamat: 'Kantor Pusat Toko Online 2R',
+                    jabatan: 'Pemilik',
+                    perusahaan: 'Toko Online 2R',
+                    latitude: null,
+                    longitude: null,
+                    status: 'AKTIF',
+                    registeredAt: new Date().toISOString()
+                });
+                simpanDataAkun(daftarAkun);
+                console.log('Akun SuperAdmin default berhasil dibuat.');
             }
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                docs.push({ id: Date.now() + '-' + Math.random().toString(36).substr(2,9), name: file.name, type: file.type, data: e.target.result, keterangan: '' });
-                selesai++;
-                if (selesai === files.length) {
-                    saveDocuments(docs);
-                    renderDokumen();
-                    tampilkanToast(selesai + ' dokumen berhasil diunggah!', 'success');
-                    event.target.value = '';
-                }
-            };
-            reader.readAsDataURL(file);
         }
-    }
 
-    function editDokumen(id) {
-        var docs = getDocuments();
-        var doc = null;
-        for (var i = 0; i < docs.length; i++) {
-            if (docs[i].id === id) { doc = docs[i]; break; }
-        }
-        if (doc) {
-            document.getElementById('editDocId').value = id;
-            document.getElementById('editDocName').value = doc.name;
-            document.getElementById('editDocKeterangan').value = doc.keterangan || '';
-            bukaModal('modalEditDokumen');
-        } else {
-            tampilkanToast('Dokumen tidak ditemukan!', 'error');
-        }
-    }
-
-    function simpanEditDokumen() {
-        var id = document.getElementById('editDocId').value;
-        var namaBaru = document.getElementById('editDocName').value.trim();
-        var ketBaru = document.getElementById('editDocKeterangan').value.trim();
-        if (!namaBaru) {
-            tampilkanToast('Nama file tidak boleh kosong!', 'error');
-            return;
-        }
-        var docs = getDocuments();
-        var ditemukan = false;
-        for (var i = 0; i < docs.length; i++) {
-            if (docs[i].id === id) {
-                docs[i].name = namaBaru;
-                docs[i].keterangan = ketBaru;
-                ditemukan = true;
-                break;
-            }
-        }
-        if (ditemukan) {
-            saveDocuments(docs);
-            renderDokumen();
-            tutupModal('modalEditDokumen');
-            tampilkanToast('Dokumen berhasil diperbarui!', 'success');
-        } else {
-            tampilkanToast('Dokumen tidak ditemukan!', 'error');
-        }
-    }
-
-    function hapusDokumen(id) {
-        if (!confirm('Yakin ingin menghapus dokumen ini?')) return;
-        var docs = getDocuments();
-        var baru = [];
-        var ditemukan = false;
-        for (var i = 0; i < docs.length; i++) {
-            if (docs[i].id !== id) {
-                baru.push(docs[i]);
+        // ========== LOGIN ==========
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('loginUsername').value.trim();
+            var password = document.getElementById('loginPassword').value.trim();
+            var daftarAkun = getDataAkun();
+            var user = daftarAkun.find(function(akun) {
+                return akun.username === username && decodePassword(akun.password) === password;
+            });
+            if (user) {
+                localStorage.setItem('2r_user', JSON.stringify(user));
+                tampilkanDashboard(user);
             } else {
-                ditemukan = true;
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginErrorText').textContent = 'Username atau password salah!';
             }
-        }
-        if (ditemukan) {
-            saveDocuments(baru);
-            renderDokumen();
-            tampilkanToast('Dokumen berhasil dihapus!', 'success');
-        } else {
-            tampilkanToast('Dokumen tidak ditemukan!', 'error');
-        }
-    }
+        });
 
-    function bukaPreviewGambar(src, nama) {
-        document.getElementById('modalPreviewImage').src = src;
-        document.getElementById('modalPreviewTitle').textContent = 'Preview: ' + nama;
-        bukaModal('modalPreviewGambar');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        loadProfil();
-        var btnUpload = document.getElementById('btnUnggahDokumen');
-        var inputFile = document.getElementById('inputDokumen');
-        if (btnUpload && inputFile) {
-            btnUpload.onclick = function() { inputFile.click(); };
-            inputFile.onchange = function(e) { uploadDokumen(e); };
+        // ========== TAMPILKAN DASHBOARD ==========
+        function tampilkanDashboard(user) {
+            document.getElementById('pageLogin').style.display = 'none';
+            document.getElementById('pageDashboard').style.display = 'block';
+            document.getElementById('userNama').textContent = user.nama;
+            document.getElementById('dashboardNama').textContent = user.nama;
+            // Tampilkan halaman Dasbor
+            document.querySelectorAll('.page-content').forEach(function(el) {
+                el.classList.add('hidden');
+            });
+            document.getElementById('pageDasbor').classList.remove('hidden');
+            // Set active menu
+            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+                item.classList.remove('active');
+            });
+            document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
+            // Load data profil
+            loadProfil();
         }
-        var textKet = document.getElementById('textKeterangan');
-        if (textKet) {
-            textKet.onblur = function() { simpanKeterangan(); };
-        }
-    });
 
-    (function() {
-        var asli = window.navigasiHalaman;
-        if (typeof asli === 'function') {
-            window.navigasiHalaman = function(halaman) {
-                asli(halaman);
-                if (halaman === 'profile' && typeof loadProfil === 'function') {
+        // ========== NAVIGASI SIDEBAR ==========
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var page = this.dataset.page;
+                document.querySelectorAll('.sidebar-menu-item').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+                this.classList.add('active');
+                document.querySelectorAll('.page-content').forEach(function(el) {
+                    el.classList.add('hidden');
+                });
+                if (page === 'dashboard') {
+                    document.getElementById('pageDasbor').classList.remove('hidden');
+                } else if (page === 'profile') {
+                    document.getElementById('pageProfil').classList.remove('hidden');
                     loadProfil();
                 }
-            };
+            });
+        });
+
+        // ========== LOGOUT ==========
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('2r_user');
+                location.reload();
+            }
+        });
+
+        // ================================================================
+        // ========== BAGIAN PROFIL ==========
+        // ================================================================
+
+        const PROFILE_KEY = '2r_superadmin_profile';
+        const APP_KEY = '2r_aplikasi_data';
+        const DOCUMENTS_KEY = '2r_superadmin_documents';
+        const AKUN_KEY = '2r_akun';
+
+        // ========== LOAD PROFIL ==========
+        function loadProfil() {
+            // Data Aplikasi
+            var dataApp = localStorage.getItem(APP_KEY);
+            var app = dataApp ? JSON.parse(dataApp) : {};
+            document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
+            document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
+            document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
+            document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+
+            // Username
+            var dataAkun = localStorage.getItem(AKUN_KEY);
+            var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+            var sa = daftarAkun.find(function(a) { return a.role === 'superadmin'; });
+            if (sa) {
+                document.getElementById('superadminUsername').value = sa.username || '';
+            }
+
+            // Data Pribadi
+            var dataProfil = localStorage.getItem(PROFILE_KEY);
+            var profil = dataProfil ? JSON.parse(dataProfil) : {};
+            document.getElementById('profilNama').value = profil.nama || '';
+            document.getElementById('profilAlamat').value = profil.alamat || '';
+            document.getElementById('profilEmail').value = profil.email || '';
+            document.getElementById('profilHp').value = profil.hp || '';
+            document.getElementById('profilJabatan').value = profil.jabatan || '';
+            document.getElementById('textKeterangan').value = profil.keterangan || '';
+
+            renderDokumen();
         }
-    })();
-</script>
-<!-- ============ AKHIR BLOK 8 ============ -->
+
+        // ========== SIMPAN DATA APLIKASI ==========
+        function simpanDataAplikasi() {
+            var data = {
+                namaAplikasi: document.getElementById('appNama').value.trim(),
+                penerbit: document.getElementById('appPenerbit').value.trim(),
+                pemilik: document.getElementById('appPemilik').value.trim(),
+                pengelola: document.getElementById('appPengelola').value.trim()
+            };
+            if (!data.namaAplikasi) {
+                alert('Nama aplikasi tidak boleh kosong!');
+                return;
+            }
+            localStorage.setItem(APP_KEY, JSON.stringify(data));
+            alert('Data aplikasi berhasil disimpan!');
+        }
+
+        // ========== UBAH PASSWORD ==========
+        function ubahPasswordSuperAdmin() {
+            var usernameBaru = document.getElementById('superadminUsername').value.trim();
+            var passwordBaru = document.getElementById('superadminPassword').value.trim();
+            var konfirmasi = document.getElementById('superadminPasswordKonfirmasi').value.trim();
+
+            if (!usernameBaru) {
+                alert('Username tidak boleh kosong!');
+                return;
+            }
+            if (!passwordBaru) {
+                alert('Password baru tidak boleh kosong!');
+                return;
+            }
+            if (passwordBaru.length < 6) {
+                alert('Password minimal 6 karakter!');
+                return;
+            }
+            if (passwordBaru !== konfirmasi) {
+                alert('Password dan konfirmasi tidak cocok!');
+                return;
+            }
+
+            var dataAkun = localStorage.getItem(AKUN_KEY);
+            var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+            var ditemukan = false;
+            for (var i = 0; i < daftarAkun.length; i++) {
+                if (daftarAkun[i].role === 'superadmin') {
+                    daftarAkun[i].username = usernameBaru;
+                    daftarAkun[i].password = btoa(passwordBaru);
+                    ditemukan = true;
+                    break;
+                }
+            }
+            if (ditemukan) {
+                localStorage.setItem(AKUN_KEY, JSON.stringify(daftarAkun));
+                document.getElementById('superadminPassword').value = '';
+                document.getElementById('superadminPasswordKonfirmasi').value = '';
+                alert('Password berhasil diubah! Silakan login ulang.');
+                setTimeout(function() {
+                    if (confirm('Password diubah. Anda harus login ulang. Keluar sekarang?')) {
+                        document.getElementById('btnLogout').click();
+                    }
+                }, 1000);
+            } else {
+                alert('SuperAdmin tidak ditemukan!');
+            }
+        }
+
+        // ========== SIMPAN DATA PRIBADI ==========
+        function simpanDataPribadi() {
+            var data = {
+                nama: document.getElementById('profilNama').value.trim(),
+                alamat: document.getElementById('profilAlamat').value.trim(),
+                email: document.getElementById('profilEmail').value.trim(),
+                hp: document.getElementById('profilHp').value.trim(),
+                jabatan: document.getElementById('profilJabatan').value.trim()
+            };
+            if (!data.nama) {
+                alert('Nama tidak boleh kosong!');
+                return;
+            }
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
+            alert('Data pribadi berhasil disimpan!');
+        }
+
+        // ========== SIMPAN KETERANGAN ==========
+        function simpanKeterangan() {
+            var dataProfil = localStorage.getItem(PROFILE_KEY);
+            var profil = dataProfil ? JSON.parse(dataProfil) : {};
+            profil.keterangan = document.getElementById('textKeterangan').value;
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(profil));
+            alert('Keterangan berhasil disimpan!');
+        }
+
+        // ========== DOKUMEN ==========
+        function getDocuments() {
+            var data = localStorage.getItem(DOCUMENTS_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+        function saveDocuments(doc) {
+            localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(doc));
+        }
+
+        function renderDokumen() {
+            var docs = getDocuments();
+            var container = document.getElementById('daftarDokumen');
+            if (!container) return;
+            if (docs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Belum ada dokumen</h3>
+                        <p>Klik tombol Unggah untuk menambahkan.</p>
+                    </div>
+                `;
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < docs.length; i++) {
+                var doc = docs[i];
+                var isImage = doc.type && doc.type.startsWith('image/');
+                var preview = isImage 
+                    ? `<img src="${doc.data}" alt="${doc.name}" onclick="bukaPreviewGambar('${doc.data}','${doc.name}')" class="doc-thumb">`
+                    : `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
+                html += `
+                    <div class="doc-item">
+                        <div class="doc-info">
+                            ${preview}
+                            <div class="doc-text">
+                                <h4>${doc.name}</h4>
+                                <p>${doc.keterangan || 'Tidak ada keterangan'}</p>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <button class="btn-secondary btn-xs" onclick="editDokumen('${doc.id}')"><i class="fas fa-edit"></i></button>
+                            <a href="${doc.data}" download="${doc.name}" class="btn-primary btn-xs"><i class="fas fa-download"></i></a>
+                            <button class="btn-danger btn-xs" onclick="hapusDokumen('${doc.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // ========== UPLOAD DOKUMEN ==========
+        document.getElementById('btnUnggahDokumen').addEventListener('click', function() {
+            document.getElementById('inputDokumen').click();
+        });
+        document.getElementById('inputDokumen').addEventListener('change', function(event) {
+            var files = event.target.files;
+            if (!files || files.length === 0) return;
+            var docs = getDocuments();
+            var selesai = 0;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File ' + file.name + ' terlalu besar (max 10MB)');
+                    selesai++;
+                    if (selesai === files.length) {
+                        event.target.value = '';
+                        renderDokumen();
+                    }
+                    continue;
+                }
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    docs.push({
+                        id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                        name: file.name,
+                        type: file.type,
+                        data: e.target.result,
+                        keterangan: ''
+                    });
+                    selesai++;
+                    if (selesai === files.length) {
+                        saveDocuments(docs);
+                        renderDokumen();
+                        alert(selesai + ' dokumen berhasil diunggah!');
+                        event.target.value = '';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ========== EDIT DOKUMEN ==========
+        function editDokumen(id) {
+            var docs = getDocuments();
+            var doc = null;
+            for (var i = 0; i < docs.length; i++) {
+                if (docs[i].id === id) {
+                    doc = docs[i];
+                    break;
+                }
+            }
+            if (doc) {
+                document.getElementById('editDocId').value = id;
+                document.getElementById('editDocName').value = doc.name;
+                document.getElementById('editDocKeterangan').value = doc.keterangan || '';
+                document.getElementById('modalEditDokumen').classList.add('active');
+            } else {
+                alert('Dokumen tidak ditemukan!');
+            }
+        }
+
+        function simpanEditDokumen() {
+            var id = document.getElementById('editDocId').value;
+            var namaBaru = document.getElementById('editDocName').value.trim();
+            var ketBaru = document.getElementById('editDocKeterangan').value.trim();
+            if (!namaBaru) {
+                alert('Nama file tidak boleh kosong!');
+                return;
+            }
+            var docs = getDocuments();
+            var ditemukan = false;
+            for (var i = 0; i < docs.length; i++) {
+                if (docs[i].id === id) {
+                    docs[i].name = namaBaru;
+                    docs[i].keterangan = ketBaru;
+                    ditemukan = true;
+                    break;
+                }
+            }
+            if (ditemukan) {
+                saveDocuments(docs);
+                renderDokumen();
+                document.getElementById('modalEditDokumen').classList.remove('active');
+                alert('Dokumen berhasil diperbarui!');
+            } else {
+                alert('Dokumen tidak ditemukan!');
+            }
+        }
+
+        // ========== HAPUS DOKUMEN ==========
+        function hapusDokumen(id) {
+            if (!confirm('Yakin ingin menghapus dokumen ini?')) return;
+            var docs = getDocuments();
+            var baru = [];
+            var ditemukan = false;
+            for (var i = 0; i < docs.length; i++) {
+                if (docs[i].id !== id) {
+                    baru.push(docs[i]);
+                } else {
+                    ditemukan = true;
+                }
+            }
+            if (ditemukan) {
+                saveDocuments(baru);
+                renderDokumen();
+                alert('Dokumen berhasil dihapus!');
+            } else {
+                alert('Dokumen tidak ditemukan!');
+            }
+        }
+
+        // ========== PREVIEW GAMBAR ==========
+        function bukaPreviewGambar(src, nama) {
+            document.getElementById('modalPreviewImage').src = src;
+            document.getElementById('modalPreviewTitle').textContent = 'Preview: ' + nama;
+            document.getElementById('modalPreviewGambar').classList.add('active');
+        }
+
+        // ========== MODAL UTILITY ==========
+        function tutupModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // ========== INISIALISASI SAAT HALAMAN DIMUAT ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            inisialisasiSuperAdmin();
+            var userData = localStorage.getItem('2r_user');
+            if (userData) {
+                var user = JSON.parse(userData);
+                tampilkanDashboard(user);
+            }
+        });
+    </script>
+
 </body>
 </html>
