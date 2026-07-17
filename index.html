@@ -476,67 +476,232 @@
                 </div>
             </div>
 
-            <!-- ===== BLOK 4 SADASHBUATAKUN ===== -->
-            <!-- Daftar Akun Baru -->
-            <div class="page-content" id="pageDaftarAkun">
-                <div class="page-header">
-                    <h2>Daftar Akun Baru</h2>
-                    <p>Halaman ini untuk membuat akun baru sebagai SuperAdmin.</p>
+            <!-- ================================ BLOK 4(1) - 01 NAVBAR UTAMA ================================ -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah Navbar yang digunakan oleh semua Role (SuperAdmin, Customer, dll).
+     Berisi:
+     1. Logo aplikasi (Toko Online 2R)
+     2. Nama user yang sedang login
+     3. Tombol Logout (Keluar dari sistem) -->
+
+<nav class="navbar" id="mainNavbar">
+    <div class="navbar-brand">
+        <i class="fas fa-store-alt"></i>
+        <span>Toko Online 2R</span>
+    </div>
+    <div class="navbar-user">
+        <span id="userNama" style="font-weight: 600;">SuperAdmin</span>
+        <button class="btn-logout" id="btnLogout">
+            <i class="fas fa-sign-out-alt"></i>
+            Keluar
+        </button>
+    </div>
+</nav>
+<!-- ================================ AKHIR BLOK 4(1) - 01 NAVBAR UTAMA ================================ -->
+<!-- ================================ BLOK 4(2) - 01 SIDEBAR DINAMIS (LOGIKA) ================================ -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah logika JavaScript untuk mengubah Sidebar secara otomatis
+     berdasarkan Role pengguna yang sedang login.
+     Jika Role adalah 'superadmin', maka akan memuat BLOK 4(3).
+     Jika Role adalah 'customer', maka akan memuat BLOK 4(4). -->
+
+<script>
+    // ========== RENDER SIDEBAR BERDASARKAN ROLE ==========
+    // Fungsi ini akan dijalankan setiap kali user login atau berpindah halaman
+    function renderSidebar(user) {
+        var sidebarContainer = document.getElementById('mainSidebar');
+        if (!sidebarContainer) return;
+
+        var role = user.role;
+        var sidebarHtml = '';
+
+        // --- SIDEBAR UNTUK SUPERADMIN ---
+        if (role === 'superadmin') {
+            sidebarHtml = `
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-title">Menu Utama</div>
+                    <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                    <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                    
+                    <div class="sidebar-menu-title">Menu Admin</div>
+                    <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+                    <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+                    <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+                    <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+                    <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+                    <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+                    <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+                    <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+                    <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
                 </div>
-                <div class="card">
-                    <div class="card-header">Form Pendaftaran Akun</div>
-                    <form id="formDaftarAkunBaru">
-                        <!-- ID Akun (dibuat seperti gambar pertama) -->
-                        <div class="form-group">
-                            <label for="daftarIdPreview">ID Akun (Otomatis)</label>
-                            <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
-                                <i class="fas fa-id-card"></i>
-                                <span id="daftarIdPreview" style="padding:12px 10px; font-weight:600; color:#333; width:100%;">-</span>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Role</label>
-                            <select id="daftarRoleBaru" class="form-input" onchange="updateDaftarIdPreview()">
-                                <option value="customer">Customer</option>
-                                <option value="toko">Toko (Verifikasi)</option>
-                                <option value="ojek">Ojek (Verifikasi)</option>
-                                <option value="pedagang">Pedagang Pasar</option>
-                                <option value="staf_admin">Staf Admin</option>
-                                <option value="staf_owner_ojek">Staf Owner Ojek</option>
-                                <option value="staf_owner_toko">Staf Owner Toko</option>
-                                <option value="customer_service">Customer Service</option>
-                                <option value="sponsor">Sponsor</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" id="daftarUsernameBaru" class="form-input" placeholder="Username" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="daftarPasswordBaru" class="form-input" placeholder="Password" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nama Lengkap</label>
-                            <input type="text" id="daftarNamaBaru" class="form-input" placeholder="Nama Lengkap" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email (Opsional)</label>
-                            <input type="email" id="daftarEmailBaru" class="form-input" placeholder="Email">
-                        </div>
-                        <div class="form-group">
-                            <label>No HP (Opsional)</label>
-                            <input type="tel" id="daftarHpBaru" class="form-input" placeholder="Nomor HP">
-                        </div>
-                        <div class="form-group">
-                            <label>Alamat (Opsional)</label>
-                            <input type="text" id="daftarAlamatBaru" class="form-input" placeholder="Alamat">
-                        </div>
-                        <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Buat Akun Baru</button>
-                    </form>
+            `;
+        }
+
+        // --- SIDEBAR UNTUK CUSTOMER ---
+        else if (role === 'customer') {
+            sidebarHtml = `
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-title">Menu Customer</div>
+                    <div class="sidebar-menu-item active" data-page="custDashboard"><i class="fas fa-home"></i> Dasbor</div>
+                    <div class="sidebar-menu-item" data-page="custProfil"><i class="fas fa-user-circle"></i> Profil</div>
+                    <div class="sidebar-menu-item" data-page="lihatToko"><i class="fas fa-store"></i> Lihat Toko</div>
+                    <div class="sidebar-menu-item" data-page="lihatOjek"><i class="fas fa-motorcycle"></i> Lihat Ojek</div>
+                    <div class="sidebar-menu-item" data-page="lihatProduk"><i class="fas fa-box"></i> Lihat Produk</div>
+                    <div class="sidebar-menu-item" data-page="keranjang"><i class="fas fa-shopping-cart"></i> Keranjang</div>
+                    <div class="sidebar-menu-item" data-page="chat"><i class="fas fa-comments"></i> Chat</div>
+                    <div class="sidebar-menu-item" data-page="papanInformasi"><i class="fas fa-info-circle"></i> Papan Informasi</div>
+                    <div class="sidebar-menu-item" data-page="menuIklan"><i class="fas fa-ad"></i> Menu Iklan</div>
+                    <div class="sidebar-menu-item" data-page="daftarBelanja"><i class="fas fa-shopping-bag"></i> Daftar Belanja</div>
+                    <div class="sidebar-menu-item" data-page="riwayatBelanja"><i class="fas fa-history"></i> Riwayat Belanja</div>
+                    <div class="sidebar-menu-item" data-page="pembayaran"><i class="fas fa-credit-card"></i> Pembayaran</div>
+                    <div class="sidebar-menu-item" data-page="ulasan"><i class="fas fa-star"></i> Ulasan & Rating</div>
+                    <div class="sidebar-menu-item" data-page="bantuan"><i class="fas fa-question-circle"></i> Bantuan & FAQ</div>
+                    <div class="sidebar-menu-item" data-page="notifikasi"><i class="fas fa-bell"></i> Notifikasi</div>
+                    <div class="sidebar-menu-item" data-page="editAkun"><i class="fas fa-user-edit"></i> Edit / Hapus Akun</div>
                 </div>
-            </div>
+            `;
+        }
+
+        // --- SIDEBAR UNTUK ROLE LAIN (Toko, Ojek, Pedagang) ---
+        else if (role === 'toko' || role === 'ojek' || role === 'pedagang') {
+            // (Akan dikembangkan nanti sesuai kebutuhan masing-masing Role)
+            sidebarHtml = `
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-title">Menu ${role.charAt(0).toUpperCase() + role.slice(1)}</div>
+                    <div class="sidebar-menu-item active" data-page="${role}Dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                    <div class="sidebar-menu-item" data-page="${role}Profil"><i class="fas fa-user-circle"></i> Profil</div>
+                </div>
+            `;
+        }
+
+        // --- SIDEBAR DEFAULT (Jika Role tidak dikenali) ---
+        else {
+            sidebarHtml = `
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-item" style="cursor:default; color:#888;">
+                        <i class="fas fa-exclamation-circle"></i> Menu tidak tersedia
+                    </div>
+                </div>
+            `;
+        }
+
+        // Masukkan HTML sidebar ke dalam container
+        sidebarContainer.innerHTML = sidebarHtml;
+
+        // Pasang event listener untuk semua menu di sidebar
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var page = this.dataset.page;
+                if (page) {
+                    navigasiHalaman(page);
+                }
+            });
+        });
+    }
+</script>
+<!-- ================================ AKHIR BLOK 4(2) - 01 SIDEBAR DINAMIS (LOGIKA) ================================ -->
+<!-- ================================ BLOK 4(3) - 01 SIDEBAR SUPERADMIN ================================ -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah menu sidebar khusus untuk Role SuperAdmin.
+     Menu ini akan dirender oleh BLOK 4(2) - SIDEBAR DINAMIS (LOGIKA) saat user.role === 'superadmin'.
+     Berisi menu:
+     1. Menu Utama (Dasbor, Profil)
+     2. Menu Admin (Daftar Akun Baru, Persetujuan Akun, Kelola Semua Akun, Setting Rekening)
+     3. Menu Tambahan (Transfer Menu, Penagihan, Kelola Upgrade, Setting Tarif Ojek, Kelola Iklan) -->
+
+<div class="sidebar-menu">
+    <div class="sidebar-menu-title">Menu Utama</div>
+    <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+    <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+    
+    <div class="sidebar-menu-title">Menu Admin</div>
+    <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+    <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+    <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+    <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+    
+    <div class="sidebar-menu-title">Menu Lainnya</div>
+    <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+    <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+    <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+    <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+    <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+</div>
+<!-- ================================ AKHIR BLOK 4(3) - 01 SIDEBAR SUPERADMIN ================================ -->
+<!-- ================================ BLOK 4(4) - 01 SIDEBAR CUSTOMER ================================ -->
+<!-- PENJELASAN: 
+     Sub-blok ini adalah menu sidebar khusus untuk Role Customer.
+     Menu ini akan dirender oleh BLOK 4(2) - SIDEBAR DINAMIS (LOGIKA) saat user.role === 'customer'.
+     Berisi 16 menu sesuai rencana yang sudah kita susun. -->
+
+<div class="sidebar-menu">
+    <div class="sidebar-menu-title">Menu Customer</div>
+    
+    <div class="sidebar-menu-item active" data-page="custDashboard">
+        <i class="fas fa-home"></i> Dasbor
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="custProfil">
+        <i class="fas fa-user-circle"></i> Profil
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="lihatToko">
+        <i class="fas fa-store"></i> Lihat Toko Terdekat
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="lihatOjek">
+        <i class="fas fa-motorcycle"></i> Lihat Ojek Terdekat
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="lihatProduk">
+        <i class="fas fa-box"></i> Lihat Produk
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="keranjang">
+        <i class="fas fa-shopping-cart"></i> Keranjang
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="chat">
+        <i class="fas fa-comments"></i> Chat
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="papanInformasi">
+        <i class="fas fa-info-circle"></i> Papan Informasi
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="menuIklan">
+        <i class="fas fa-ad"></i> Menu Iklan
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="daftarBelanja">
+        <i class="fas fa-shopping-bag"></i> Daftar Belanja
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="riwayatBelanja">
+        <i class="fas fa-history"></i> Riwayat Belanja
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="pembayaran">
+        <i class="fas fa-credit-card"></i> Pembayaran
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="ulasan">
+        <i class="fas fa-star"></i> Ulasan & Rating
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="bantuan">
+        <i class="fas fa-question-circle"></i> Bantuan & FAQ
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="notifikasi">
+        <i class="fas fa-bell"></i> Notifikasi
+    </div>
+    
+    <div class="sidebar-menu-item" data-page="editAkun">
+        <i class="fas fa-user-edit"></i> Edit / Hapus Akun
+    </div>
+</div>
+<!-- ================================ AKHIR BLOK 4(4) - 01 SIDEBAR CUSTOMER ================================ -->
 
             <!-- ===== BLOK 5 - MENU PERSETUJUAN AKUN ===== -->
             <!-- Persetujuan Akun -->
