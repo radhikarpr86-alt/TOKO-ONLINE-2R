@@ -358,22 +358,23 @@
                 </div>
             </div>
             <!-- ===== AKHIR BLOK 3 SADASHPROFIL ===== -->
-            <!-- ===== BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
+           <!-- ===== BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
 <!-- PENJELASAN: 
-     Blok ini berisi Navbar dan Sidebar untuk SuperAdmin.
-     Menu yang tersedia hanya Dasbor dan Profil. -->
+     Sidebar ini bersifat statis dan sama untuk semua Role yang login.
+     Hanya ada menu Dasbor dan Profil. -->
 
-<!-- ===== NAVBAR SUPERADMIN ===== -->
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar" id="mainNavbar">
     <div class="navbar-brand">
         <i class="fas fa-store-alt"></i>
         <span>Toko Online 2R</span>
     </div>
     <div class="navbar-user">
-        <span id="userNama" style="font-weight: 600;">SuperAdmin</span>
+        <!-- Nama user akan diubah oleh JavaScript -->
+        <span id="userNama" style="font-weight: 600;">Memuat...</span>
+        <!-- Tombol Keluar -->
         <button class="btn-logout" id="btnLogout">
-            <i class="fas fa-sign-out-alt"></i>
-            Keluar
+            <i class="fas fa-sign-out-alt"></i> Keluar
         </button>
     </div>
 </nav>
@@ -381,10 +382,9 @@
 <!-- ===== SIDEBAR OVERLAY UNTUK PERANGKAT MOBILE ===== -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- ===== SIDEBAR SUPERADMIN ===== -->
+<!-- ===== SIDEBAR ===== -->
 <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-menu">
-        <!-- Menu Utama -->
         <div class="sidebar-menu-title">Menu Utama</div>
         <div class="sidebar-menu-item active" data-page="dashboard">
             <i class="fas fa-th-large"></i> Dasbor
@@ -609,7 +609,6 @@
             <!-- ===== BLOK 7(2) - 01 SCRIPTS LOGIN, REGISTER & NAVIGASI ===== -->
     <script>
         // ========== TOGGLE FORM LOGIN / REGISTER ==========
-        // Fungsi untuk berpindah antara form Login dan Register di halaman publik
         function toggleForm(tipe) {
             document.getElementById('authError').style.display = 'none';
             var login = document.getElementById('loginForm');
@@ -617,7 +616,7 @@
             if (tipe === 'register') {
                 login.classList.add('hidden-form');
                 register.classList.remove('hidden-form');
-                updateIdPreview(); // Update preview ID otomatis
+                updateIdPreview();
             } else {
                 register.classList.add('hidden-form');
                 login.classList.remove('hidden-form');
@@ -706,25 +705,25 @@
         });
 
         // ========== TAMPILKAN DASHBOARD ==========
-        // Fungsi utama untuk menampilkan dashboard setelah login
         function tampilkanDashboard(user) {
             document.getElementById('pageAuth').style.display = 'none';
             document.getElementById('pageDashboard').style.display = 'block';
+            
+            // Ganti nama user di navbar
             document.getElementById('userNama').textContent = user.nama;
             
-            // Tampilkan Dasbor sebagai halaman pertama
+            // Set active menu Dasbor
             document.querySelectorAll('.page-content').forEach(function(el) { 
                 el.classList.remove('active'); 
             });
             document.getElementById('pageDasbor').classList.add('active');
             
-            // Set active menu di sidebar
             document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
                 item.classList.remove('active'); 
             });
             document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
 
-            // Load data profil dan statistik dashboard
+            // Load data
             loadProfil();
             renderDashboardStats();
         }
@@ -734,31 +733,26 @@
             item.addEventListener('click', function() {
                 var page = this.dataset.page;
                 
-                // Set active menu
                 document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
                     el.classList.remove('active'); 
                 });
                 this.classList.add('active');
                 
-                // Sembunyikan semua halaman
                 document.querySelectorAll('.page-content').forEach(function(el) { 
                     el.classList.remove('active'); 
                 });
                 
-                // Tampilkan halaman yang dipilih
                 if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
                     renderDashboardStats();
                 } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
                     loadProfil();
-                } else {
-                    alert('Halaman belum tersedia');
                 }
             });
         });
 
-        // ========== LOGOUT (BERFUNGSI UNTUK SEMUA ROLE) ==========
+        // ========== LOGOUT (BERFUNGSI UNTUK SEMUA) ==========
         document.getElementById('btnLogout').addEventListener('click', function() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
                 localStorage.removeItem('2r_user');
