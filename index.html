@@ -2751,35 +2751,27 @@
                 document.getElementById('pageKelolaIklan').classList.add('active');
             } else if (page === 'kelolaProduk') {
                 // Halaman khusus Toko
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Kelola Produk sedang dalam pengembangan.');
             } else if (page === 'pesananMasuk') {
                 // Halaman khusus Toko
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Pesanan Masuk sedang dalam pengembangan.');
             } else if (page === 'laporanPenjualan') {
                 // Halaman khusus Toko
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Laporan Penjualan sedang dalam pengembangan.');
             } else if (page === 'settingToko') {
                 // Halaman khusus Toko
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Setting Toko sedang dalam pengembangan.');
             } else if (page === 'orderMasuk') {
                 // Halaman khusus Ojek
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Order Masuk sedang dalam pengembangan.');
             } else if (page === 'riwayatOrder') {
                 // Halaman khusus Ojek
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Riwayat Order sedang dalam pengembangan.');
             } else if (page === 'laporanOjek') {
                 // Halaman khusus Ojek
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Laporan Ojek sedang dalam pengembangan.');
             } else if (page === 'settingOjek') {
                 // Halaman khusus Ojek
-                document.getElementById('pageDasbor').classList.add('active');
                 alert('Halaman Setting Ojek sedang dalam pengembangan.');
             } else {
                 alert('Halaman belum tersedia');
@@ -2824,6 +2816,11 @@
         if (role === 'superadmin') {
             // Tampilkan profil SuperAdmin
             profilContainer.innerHTML = `
+                <div class="page-header">
+                    <h2>Profil SuperAdmin</h2>
+                    <p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>
+                </div>
+
                 <!-- Data Aplikasi -->
                 <div class="card">
                     <div class="card-header">
@@ -2985,10 +2982,15 @@
         var data = localStorage.getItem('2r_data_aplikasi');
         if (data) {
             var app = JSON.parse(data);
-            document.getElementById('appNama').value = app.nama || '';
-            document.getElementById('appPenerbit').value = app.penerbit || '';
-            document.getElementById('appPemilik').value = app.pemilik || '';
-            document.getElementById('appPengelola').value = app.pengelola || '';
+            var elAppNama = document.getElementById('appNama');
+            var elAppPenerbit = document.getElementById('appPenerbit');
+            var elAppPemilik = document.getElementById('appPemilik');
+            var elAppPengelola = document.getElementById('appPengelola');
+            
+            if (elAppNama) elAppNama.value = app.nama || '';
+            if (elAppPenerbit) elAppPenerbit.value = app.penerbit || '';
+            if (elAppPemilik) elAppPemilik.value = app.pemilik || '';
+            if (elAppPengelola) elAppPengelola.value = app.pengelola || '';
         }
     }
 
@@ -3072,17 +3074,17 @@
         var konfirmasi = document.getElementById('superadminPasswordKonfirmasi').value.trim();
         
         if (!username || !password || !konfirmasi) {
-            alert('Harap isi semua field!');
+            tampilkanToast('Harap isi semua field!', 'warning');
             return;
         }
         
         if (password !== konfirmasi) {
-            alert('Password dan konfirmasi password tidak cocok!');
+            tampilkanToast('Password dan konfirmasi password tidak cocok!', 'error');
             return;
         }
         
         if (password.length < 6) {
-            alert('Password minimal 6 karakter!');
+            tampilkanToast('Password minimal 6 karakter!', 'warning');
             return;
         }
         
@@ -3250,8 +3252,9 @@
 
     function loadKeterangan() {
         var keterangan = localStorage.getItem('2r_keterangan');
-        if (keterangan) {
-            document.getElementById('textKeterangan').value = keterangan;
+        var elKeterangan = document.getElementById('textKeterangan');
+        if (keterangan && elKeterangan) {
+            elKeterangan.value = keterangan;
         }
     }
 
@@ -3275,7 +3278,7 @@
     function simpanKtp() {
         var ktpData = localStorage.getItem('2r_ktp_temp');
         if (!ktpData) {
-            alert('Silakan upload KTP terlebih dahulu!');
+            tampilkanToast('Silakan upload KTP terlebih dahulu!', 'warning');
             return;
         }
         
@@ -3302,6 +3305,16 @@
         tampilkanToast('KTP berhasil disimpan!', 'success');
     }
 
+    // ========== EVENT LISTENER UNTUK MENUTUP MODAL DENGAN KLIK DI LUAR ==========
+
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    });
+
     // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
 
     // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
@@ -3320,22 +3333,34 @@
             var role = localStorage.getItem('2r_user_role');
             
             // Sembunyikan semua sidebar terlebih dahulu
-            document.getElementById('sidebarSuperAdmin').style.display = 'none';
-            document.getElementById('sidebarToko').style.display = 'none';
-            document.getElementById('sidebarOjek').style.display = 'none';
-            document.getElementById('sidebarUmum').style.display = 'none';
+            var sidebarSuperAdmin = document.getElementById('sidebarSuperAdmin');
+            var sidebarToko = document.getElementById('sidebarToko');
+            var sidebarOjek = document.getElementById('sidebarOjek');
+            var sidebarUmum = document.getElementById('sidebarUmum');
+            
+            if (sidebarSuperAdmin) sidebarSuperAdmin.style.display = 'none';
+            if (sidebarToko) sidebarToko.style.display = 'none';
+            if (sidebarOjek) sidebarOjek.style.display = 'none';
+            if (sidebarUmum) sidebarUmum.style.display = 'none';
             
             // Tampilkan sidebar sesuai role
             if (role === 'superadmin') {
-                document.getElementById('sidebarSuperAdmin').style.display = 'block';
+                if (sidebarSuperAdmin) sidebarSuperAdmin.style.display = 'block';
             } else if (role === 'toko') {
-                document.getElementById('sidebarToko').style.display = 'block';
+                if (sidebarToko) sidebarToko.style.display = 'block';
             } else if (role === 'ojek') {
-                document.getElementById('sidebarOjek').style.display = 'block';
+                if (sidebarOjek) sidebarOjek.style.display = 'block';
             } else {
                 // Untuk role lain: pedagang, codseller, customer
-                document.getElementById('sidebarUmum').style.display = 'block';
+                if (sidebarUmum) sidebarUmum.style.display = 'block';
             }
+            
+            // Reset active menu ke dashboard
+            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+                item.classList.remove('active');
+            });
+            var dashboardMenu = document.querySelector('.sidebar-menu-item[data-page="dashboard"]');
+            if (dashboardMenu) dashboardMenu.classList.add('active');
         }
 
         // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
@@ -3343,22 +3368,22 @@
             updateDaftarIdPreview();
         }
 
-        // 5. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
-        if (document.getElementById('pagePersetujuan') && 
-            document.getElementById('pagePersetujuan').classList.contains('active')) {
+        // 5. Render tabel persetujuan jika elemen tersedia
+        if (document.getElementById('tabelPersetujuanContainer')) {
             renderTabelPersetujuan();
         }
 
-        // 6. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
-        if (document.getElementById('pageSettingRekening') && 
-            document.getElementById('pageSettingRekening').classList.contains('active')) {
+        // 6. Load data rekening jika elemen tersedia
+        if (document.getElementById('rekNamaBank')) {
             loadRekeningMaster();
         }
 
-        // 7. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
-        if (document.getElementById('pageDasbor') && 
-            document.getElementById('pageDasbor').classList.contains('active')) {
-            renderDashboardStats();
+        // 7. Render statistik dashboard
+        renderDashboardStats();
+        
+        // 8. Load profil jika halaman profil aktif
+        if (document.getElementById('profilContainer')) {
+            loadProfil();
         }
     });
 </script>
