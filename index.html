@@ -796,12 +796,13 @@
                 } else if (page === 'kelolaAkun') {
                     document.getElementById('pageKelolaAkun').classList.add('active');
                     renderTabelKelolaAkun(); // Render tabel kelola akun saat dibuka
+                } else if (page === 'settingRekening') {
+                    document.getElementById('pageSettingRekening').classList.add('active');
+                    loadRekeningMaster(); // Load data rekening saat dibuka
                 } else if (page === 'transferMenu') {
                     document.getElementById('pageTransferMenu').classList.add('active');
                 } else if (page === 'penagihan') {
                     document.getElementById('pagePenagihan').classList.add('active');
-                } else if (page === 'settingRekening') {
-                    document.getElementById('pageSettingRekening').classList.add('active');
                 } else if (page === 'kelolaUpgrade') {
                     document.getElementById('pageKelolaUpgrade').classList.add('active');
                 } else if (page === 'settingTarifOjek') {
@@ -1421,6 +1422,12 @@
             if (document.getElementById('pagePersetujuan') && 
                 document.getElementById('pagePersetujuan').classList.contains('active')) {
                 renderTabelPersetujuan();
+            }
+
+            // 5. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
+            if (document.getElementById('pageSettingRekening') && 
+                document.getElementById('pageSettingRekening').classList.contains('active')) {
+                loadRekeningMaster();
             }
         });
     </script>
