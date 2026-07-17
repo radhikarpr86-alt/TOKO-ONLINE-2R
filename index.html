@@ -358,43 +358,69 @@
                 </div>
             </div>
             <!-- ===== AKHIR BLOK 3 SADASHPROFIL ===== -->
-           <!-- ===== BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
-<!-- PENJELASAN: 
-     Sidebar ini bersifat statis dan sama untuk semua Role yang login.
-     Hanya ada menu Dasbor dan Profil. -->
-
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar" id="mainNavbar">
-    <div class="navbar-brand">
-        <i class="fas fa-store-alt"></i>
-        <span>Toko Online 2R</span>
-    </div>
-    <div class="navbar-user">
-        <!-- Nama user akan diubah oleh JavaScript -->
-        <span id="userNama" style="font-weight: 600;">Memuat...</span>
-        <!-- Tombol Keluar -->
-        <button class="btn-logout" id="btnLogout">
-            <i class="fas fa-sign-out-alt"></i> Keluar
-        </button>
-    </div>
-</nav>
-
-<!-- ===== SIDEBAR OVERLAY UNTUK PERANGKAT MOBILE ===== -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar" id="mainSidebar">
-    <div class="sidebar-menu">
-        <div class="sidebar-menu-title">Menu Utama</div>
-        <div class="sidebar-menu-item active" data-page="dashboard">
-            <i class="fas fa-th-large"></i> Dasbor
-        </div>
-        <div class="sidebar-menu-item" data-page="profile">
-            <i class="fas fa-user-circle"></i> Profil
-        </div>
-    </div>
-</aside>
-<!-- ===== AKHIR BLOK 4 - 01 NAVBAR DAN SIDEBAR SUPERADMIN ===== -->
+            <!-- ===== BLOK 4 SADASHBUATAKUN ===== -->
+            <!-- Daftar Akun Baru -->
+            <div class="page-content" id="pageDaftarAkun">
+                <div class="page-header">
+                    <h2>Daftar Akun Baru</h2>
+                    <p>Halaman ini untuk membuat akun baru sebagai SuperAdmin.</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">Form Pendaftaran Akun</div>
+                    <form id="formDaftarAkunBaru">
+                        <!-- ID Akun (dibuat seperti gambar pertama) -->
+                        <div class="form-group">
+                            <label for="daftarIdPreview">ID Akun (Otomatis)</label>
+                            <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
+                                <i class="fas fa-id-card"></i>
+                                <span id="daftarIdPreview" style="padding:12px 10px; font-weight:600; color:#333; width:100%;">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="daftarRoleBaru" class="form-input" onchange="updateDaftarIdPreview()">
+                                <option value="customer">Customer</option>
+                                <option value="toko">Toko (Verifikasi)</option>
+                                <option value="ojek">Ojek (Verifikasi)</option>
+                                <option value="staf_admin">Staf Admin</option>
+                                <option value="staf_owner_ojek">Staf Owner Ojek</option>
+                                <option value="staf_owner_toko">Staf Owner Toko</option>
+                                <option value="customer_service">Customer Service</option>
+                                <option value="sponsor">Sponsor</option>
+                            </select>
+                        </div>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="daftarUsernameBaru" class="form-input" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="daftarPasswordBaru" class="form-input" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" id="daftarNamaBaru" class="form-input" placeholder="Nama Lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email (Opsional)</label>
+                            <input type="email" id="daftarEmailBaru" class="form-input" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label>No HP (Opsional)</label>
+                            <input type="tel" id="daftarHpBaru" class="form-input" placeholder="Nomor HP">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat (Opsional)</label>
+                            <input type="text" id="daftarAlamatBaru" class="form-input" placeholder="Alamat">
+                        </div>
+                        <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Buat Akun Baru</button>
+                    </form>
+                </div>
+            </div>
+<!-- ===== AKHIR BLOK 4 SADASHBUATAKUN ===== -->
             <!-- ===== BLOK 5 - MENU PERSETUJUAN AKUN ===== -->
             <!-- Persetujuan Akun -->
             <div class="page-content" id="pagePersetujuan">
@@ -609,6 +635,7 @@
             <!-- ===== BLOK 7(2) - 01 SCRIPTS LOGIN, REGISTER & NAVIGASI ===== -->
     <script>
         // ========== TOGGLE FORM LOGIN / REGISTER ==========
+        // Fungsi untuk berpindah antara form Login dan Register di halaman publik
         function toggleForm(tipe) {
             document.getElementById('authError').style.display = 'none';
             var login = document.getElementById('loginForm');
@@ -616,7 +643,7 @@
             if (tipe === 'register') {
                 login.classList.add('hidden-form');
                 register.classList.remove('hidden-form');
-                updateIdPreview();
+                updateIdPreview(); // Update preview ID otomatis
             } else {
                 register.classList.add('hidden-form');
                 login.classList.remove('hidden-form');
@@ -671,7 +698,7 @@
             }
             
             var idBaru = generateId(role);
-            var statusAkun = (role === 'toko' || role === 'ojek' || role === 'pedagang') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
+            var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
             
             var akunBaru = {
                 id: idBaru,
@@ -705,26 +732,29 @@
         });
 
         // ========== TAMPILKAN DASHBOARD ==========
+        // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
         function tampilkanDashboard(user) {
             document.getElementById('pageAuth').style.display = 'none';
             document.getElementById('pageDashboard').style.display = 'block';
-            
-            // Ganti nama user di navbar
             document.getElementById('userNama').textContent = user.nama;
+            document.getElementById('dashboardNama').textContent = user.nama;
             
-            // Set active menu Dasbor
+            // Tampilkan Dasbor sebagai halaman pertama
             document.querySelectorAll('.page-content').forEach(function(el) { 
                 el.classList.remove('active'); 
             });
             document.getElementById('pageDasbor').classList.add('active');
             
+            // Set active menu di sidebar
             document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
                 item.classList.remove('active'); 
             });
             document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
-
-            // Load data
+            
+            // Load data profil (agar siap saat menu Profil diklik)
             loadProfil();
+
+            // Render statistik dashboard (Widget & Tabel Terbaru)
             renderDashboardStats();
         }
 
@@ -733,26 +763,53 @@
             item.addEventListener('click', function() {
                 var page = this.dataset.page;
                 
+                // Set active menu
                 document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
                     el.classList.remove('active'); 
                 });
                 this.classList.add('active');
                 
+                // Sembunyikan semua halaman
                 document.querySelectorAll('.page-content').forEach(function(el) { 
                     el.classList.remove('active'); 
                 });
                 
+                // Tampilkan halaman yang dipilih
                 if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
-                    renderDashboardStats();
+                    renderDashboardStats(); // Render statistik dashboard saat dibuka
                 } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
-                    loadProfil();
+                    loadProfil(); // Refresh data profil saat halaman dibuka
+                } else if (page === 'daftarAkun') {
+                    document.getElementById('pageDaftarAkun').classList.add('active');
+                    updateDaftarIdPreview(); // Update preview ID saat halaman dibuka
+                } else if (page === 'persetujuan') {
+                    document.getElementById('pagePersetujuan').classList.add('active');
+                    renderTabelPersetujuan(); // Render tabel persetujuan saat dibuka
+                } else if (page === 'kelolaAkun') {
+                    document.getElementById('pageKelolaAkun').classList.add('active');
+                    renderTabelKelolaAkun(); // Render tabel kelola akun saat dibuka
+                } else if (page === 'settingRekening') {
+                    document.getElementById('pageSettingRekening').classList.add('active');
+                    loadRekeningMaster(); // Load data rekening saat dibuka
+                } else if (page === 'transferMenu') {
+                    document.getElementById('pageTransferMenu').classList.add('active');
+                } else if (page === 'penagihan') {
+                    document.getElementById('pagePenagihan').classList.add('active');
+                } else if (page === 'kelolaUpgrade') {
+                    document.getElementById('pageKelolaUpgrade').classList.add('active');
+                } else if (page === 'settingTarifOjek') {
+                    document.getElementById('pageSettingTarifOjek').classList.add('active');
+                } else if (page === 'kelolaIklan') {
+                    document.getElementById('pageKelolaIklan').classList.add('active');
+                } else {
+                    alert('Halaman belum tersedia');
                 }
             });
         });
 
-        // ========== LOGOUT (BERFUNGSI UNTUK SEMUA) ==========
+        // ========== LOGOUT ==========
         document.getElementById('btnLogout').addEventListener('click', function() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
                 localStorage.removeItem('2r_user');
@@ -764,69 +821,47 @@
             <!-- ===== BLOK 7(3) - 01 SCRIPTS PROFIL & UPLOAD DOKUMEN ===== -->
     <script>
         // ========== KONSTANTA UNTUK LOCALSTORAGE ==========
-        const PROFILE_KEY = '2r_superadmin_profile'; // Khusus SuperAdmin
+        const PROFILE_KEY = '2r_superadmin_profile';
         const APP_KEY = '2r_aplikasi_data';
-        const DOCUMENTS_KEY = '2r_superadmin_documents'; // Khusus SuperAdmin
+        const DOCUMENTS_KEY = '2r_superadmin_documents';
         const AKUN_KEY = '2r_akun';
 
-        // ========== LOAD DATA PROFIL (BERDASARKAN ROLE) ==========
-        // Fungsi ini memuat data dari localStorage berdasarkan Role yang sedang login
+        // ========== LOAD DATA PROFIL ==========
+        // Fungsi untuk memuat semua data profil dari localStorage ke dalam form
         function loadProfil() {
-            // Ambil data user yang sedang login dari localStorage
-            var userData = localStorage.getItem('2r_user');
-            var user = userData ? JSON.parse(userData) : null;
-            if (!user) return;
+            // 1. Load Data Aplikasi
+            var dataApp = localStorage.getItem(APP_KEY);
+            var app = dataApp ? JSON.parse(dataApp) : {};
+            document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
+            document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
+            document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
+            document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
 
-            // Jika user adalah SuperAdmin, load data dari 2r_superadmin_profile
-            if (user.role === 'superadmin') {
-                // 1. Load Data Aplikasi (Khusus SuperAdmin)
-                var dataApp = localStorage.getItem(APP_KEY);
-                var app = dataApp ? JSON.parse(dataApp) : {};
-                document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
-                document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
-                document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
-                document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
-
-                // 2. Load Data Pribadi SuperAdmin
-                var dataProfil = localStorage.getItem(PROFILE_KEY);
-                var profil = dataProfil ? JSON.parse(dataProfil) : {};
-                document.getElementById('profilNama').value = profil.nama || '';
-                document.getElementById('profilAlamat').value = profil.alamat || '';
-                document.getElementById('profilEmail').value = profil.email || '';
-                document.getElementById('profilHp').value = profil.hp || '';
-                document.getElementById('profilJabatan').value = profil.jabatan || '';
-                document.getElementById('textKeterangan').value = profil.keterangan || '';
-
-                // 3. Load Dokumen SuperAdmin
-                renderDokumen();
-            } 
-            // Jika user adalah Role lain (Toko, Pedagang, Ojek, Customer), load dari 2r_akun
-            else {
-                // Ambil data akun dari 2r_akun berdasarkan ID user yang login
-                var dataAkun = localStorage.getItem(AKUN_KEY);
-                var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
-                var akunSaya = daftarAkun.find(function(a) {
-                    return a.id === user.id;
-                });
-
-                if (akunSaya) {
-                    // Tampilkan data dari akunSaya ke form Profil
-                    document.getElementById('profilNama').value = akunSaya.nama || '';
-                    document.getElementById('profilAlamat').value = akunSaya.alamat || '';
-                    document.getElementById('profilEmail').value = akunSaya.email || '';
-                    document.getElementById('profilHp').value = akunSaya.hp || '';
-                    document.getElementById('profilJabatan').value = akunSaya.jabatan || '';
-                }
-
-                // Sembunyikan fitur khusus SuperAdmin (Data Aplikasi, Dokumen, Keterangan)
-                // Karena Role lain belum punya fitur itu
-                document.getElementById('appNama').closest('.card').style.display = 'none';
-                document.getElementById('btnUnggahDokumen').closest('.card').style.display = 'none';
-                document.getElementById('textKeterangan').closest('.card').style.display = 'none';
+            // 2. Load Username SuperAdmin
+            var dataAkun = localStorage.getItem(AKUN_KEY);
+            var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+            var sa = daftarAkun.find(function(a) { 
+                return a.role === 'superadmin'; 
+            });
+            if (sa) {
+                document.getElementById('superadminUsername').value = sa.username || '';
             }
+
+            // 3. Load Data Pribadi
+            var dataProfil = localStorage.getItem(PROFILE_KEY);
+            var profil = dataProfil ? JSON.parse(dataProfil) : {};
+            document.getElementById('profilNama').value = profil.nama || '';
+            document.getElementById('profilAlamat').value = profil.alamat || '';
+            document.getElementById('profilEmail').value = profil.email || '';
+            document.getElementById('profilHp').value = profil.hp || '';
+            document.getElementById('profilJabatan').value = profil.jabatan || '';
+            document.getElementById('textKeterangan').value = profil.keterangan || '';
+
+            // 4. Load Dokumen
+            renderDokumen();
         }
 
-        // ========== SIMPAN DATA APLIKASI (Khusus SuperAdmin) ==========
+        // ========== SIMPAN DATA APLIKASI ==========
         function simpanDataAplikasi() {
             var data = {
                 namaAplikasi: document.getElementById('appNama').value.trim(),
@@ -891,7 +926,7 @@
             }
         }
 
-        // ========== SIMPAN DATA PRIBADI (Khusus SuperAdmin) ==========
+        // ========== SIMPAN DATA PRIBADI ==========
         function simpanDataPribadi() {
             var data = {
                 nama: document.getElementById('profilNama').value.trim(),
@@ -908,7 +943,7 @@
             alert('Data pribadi berhasil disimpan!');
         }
 
-        // ========== SIMPAN KETERANGAN (Khusus SuperAdmin) ==========
+        // ========== SIMPAN KETERANGAN ==========
         function simpanKeterangan() {
             var dataProfil = localStorage.getItem(PROFILE_KEY);
             var profil = dataProfil ? JSON.parse(dataProfil) : {};
@@ -917,7 +952,7 @@
             alert('Keterangan berhasil disimpan!');
         }
 
-        // ========== MANAJEMEN DOKUMEN (Khusus SuperAdmin) ==========
+        // ========== MANAJEMEN DOKUMEN ==========
         
         // Mendapatkan daftar dokumen dari localStorage
         function getDocuments() {
@@ -2081,297 +2116,5 @@
         // renderDashboardStats();
     </script>
 <!-- ===== AKHIR BLOK 10(2) - 01 JAVASCRIPT FUNGSI DASHBOARD STATISTIK ===== -->
-    <!-- ===== BLOK 11 - 01 DASHBOARD TOKO ===== -->
-<style>
-    /* CSS Khusus untuk Dashboard Toko */
-    .dash-toko-widgets {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-    .dash-toko-widgets .widget-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #eee;
-        text-align: center;
-    }
-    .dash-toko-widgets .widget-card .icon {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-    .dash-toko-widgets .widget-card .icon.produk { color: #2196F3; }
-    .dash-toko-widgets .widget-card .icon.pesanan { color: #FF9800; }
-    .dash-toko-widgets .widget-card .icon.saldo { color: #4CAF50; }
-    .dash-toko-widgets .widget-card .number {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-    }
-    .dash-toko-widgets .widget-card .label {
-        font-size: 14px;
-        color: #888;
-        margin-top: 4px;
-    }
-</style>
-
-<!-- HTML untuk Halaman Dashboard Toko -->
-<div class="page-content" id="pageDashToko">
-    <div class="page-header">
-        <h2>Dashboard Toko</h2>
-        <p>Selamat datang, <strong id="dashTokoNama">Toko</strong>! Berikut adalah ringkasan bisnis Anda.</p>
-    </div>
-
-    <!-- Widget Statistik Toko -->
-    <div class="dash-toko-widgets">
-        <div class="widget-card">
-            <div class="icon produk"><i class="fas fa-box"></i></div>
-            <div class="number" id="tokoTotalProduk">0</div>
-            <div class="label">Total Produk</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon pesanan"><i class="fas fa-shopping-cart"></i></div>
-            <div class="number" id="tokoTotalPesanan">0</div>
-            <div class="label">Total Pesanan</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
-            <div class="number" id="tokoSaldo">Rp 0</div>
-            <div class="label">Saldo</div>
-        </div>
-    </div>
-
-    <!-- Tabel Pesanan Terbaru (Placeholder) -->
-    <div class="card">
-        <div class="card-header">
-            <span><i class="fas fa-clock" style="color:#FF6B00;"></i> Pesanan Terbaru</span>
-        </div>
-        <div style="padding:15px; text-align:center; color:#888;">
-            <p>Fitur ini sedang dalam pengembangan.</p>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 11 - 01 DASHBOARD TOKO ===== -->
-    <!-- ===== BLOK 12 - 01 DASHBOARD PEDAGANG PASAR ===== -->
-<style>
-    /* CSS Khusus untuk Dashboard Pedagang */
-    .dash-pasar-widgets {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-    .dash-pasar-widgets .widget-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #eee;
-        text-align: center;
-    }
-    .dash-pasar-widgets .widget-card .icon {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-    .dash-pasar-widgets .widget-card .icon.dagangan { color: #9C27B0; }
-    .dash-pasar-widgets .widget-card .icon.modal { color: #FF9800; }
-    .dash-pasar-widgets .widget-card .icon.pembeli { color: #4CAF50; }
-    .dash-pasar-widgets .widget-card .number {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-    }
-    .dash-pasar-widgets .widget-card .label {
-        font-size: 14px;
-        color: #888;
-        margin-top: 4px;
-    }
-</style>
-
-<!-- HTML untuk Halaman Dashboard Pedagang Pasar -->
-<div class="page-content" id="pageDashPasar">
-    <div class="page-header">
-        <h2>Dashboard Pedagang Pasar</h2>
-        <p>Selamat datang, <strong id="dashPasarNama">Pedagang</strong>! Berikut adalah ringkasan dagangan Anda.</p>
-    </div>
-
-    <!-- Widget Statistik Pedagang -->
-    <div class="dash-pasar-widgets">
-        <div class="widget-card">
-            <div class="icon dagangan"><i class="fas fa-store-alt"></i></div>
-            <div class="number" id="pasarTotalDagangan">0</div>
-            <div class="label">Total Dagangan</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon modal"><i class="fas fa-coins"></i></div>
-            <div class="number" id="pasarModal">Rp 0</div>
-            <div class="label">Modal</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon pembeli"><i class="fas fa-users"></i></div>
-            <div class="number" id="pasarTotalPembeli">0</div>
-            <div class="label">Total Pembeli</div>
-        </div>
-    </div>
-
-    <!-- Tabel Transaksi Terbaru (Placeholder) -->
-    <div class="card">
-        <div class="card-header">
-            <span><i class="fas fa-history" style="color:#FF6B00;"></i> Transaksi Terbaru</span>
-        </div>
-        <div style="padding:15px; text-align:center; color:#888;">
-            <p>Fitur ini sedang dalam pengembangan.</p>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 12 - 01 DASHBOARD PEDAGANG PASAR ===== -->
-    <!-- ===== BLOK 13 - 01 DASHBOARD OJEK ===== -->
-<style>
-    /* CSS Khusus untuk Dashboard Ojek */
-    .dash-ojek-widgets {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-    .dash-ojek-widgets .widget-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #eee;
-        text-align: center;
-    }
-    .dash-ojek-widgets .widget-card .icon {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-    .dash-ojek-widgets .widget-card .icon.order { color: #2196F3; }
-    .dash-ojek-widgets .widget-card .icon.saldo { color: #4CAF50; }
-    .dash-ojek-widgets .widget-card .icon.rating { color: #FF9800; }
-    .dash-ojek-widgets .widget-card .number {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-    }
-    .dash-ojek-widgets .widget-card .label {
-        font-size: 14px;
-        color: #888;
-        margin-top: 4px;
-    }
-</style>
-
-<!-- HTML untuk Halaman Dashboard Ojek -->
-<div class="page-content" id="pageDashOjek">
-    <div class="page-header">
-        <h2>Dashboard Ojek</h2>
-        <p>Selamat datang, <strong id="dashOjekNama">Ojek</strong>! Berikut adalah ringkasan performa Anda.</p>
-    </div>
-
-    <!-- Widget Statistik Ojek -->
-    <div class="dash-ojek-widgets">
-        <div class="widget-card">
-            <div class="icon order"><i class="fas fa-motorcycle"></i></div>
-            <div class="number" id="ojekTotalOrder">0</div>
-            <div class="label">Total Order</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
-            <div class="number" id="ojekSaldo">Rp 0</div>
-            <div class="label">Saldo</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon rating"><i class="fas fa-star"></i></div>
-            <div class="number" id="ojekRating">0.0</div>
-            <div class="label">Rating</div>
-        </div>
-    </div>
-
-    <!-- Tabel Riwayat Order (Placeholder) -->
-    <div class="card">
-        <div class="card-header">
-            <span><i class="fas fa-list" style="color:#FF6B00;"></i> Riwayat Order</span>
-        </div>
-        <div style="padding:15px; text-align:center; color:#888;">
-            <p>Fitur ini sedang dalam pengembangan.</p>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 13 - 01 DASHBOARD OJEK ===== -->
-    <!-- ===== BLOK 14 - 01 DASHBOARD CUSTOMER ===== -->
-<style>
-    /* CSS Khusus untuk Dashboard Customer */
-    .dash-customer-widgets {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-    .dash-customer-widgets .widget-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #eee;
-        text-align: center;
-    }
-    .dash-customer-widgets .widget-card .icon {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-    .dash-customer-widgets .widget-card .icon.belanja { color: #2196F3; }
-    .dash-customer-widgets .widget-card .icon.saldo { color: #4CAF50; }
-    .dash-customer-widgets .widget-card .icon.poin { color: #FF9800; }
-    .dash-customer-widgets .widget-card .number {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-    }
-    .dash-customer-widgets .widget-card .label {
-        font-size: 14px;
-        color: #888;
-        margin-top: 4px;
-    }
-</style>
-
-<!-- HTML untuk Halaman Dashboard Customer -->
-<div class="page-content" id="pageDashCustomer">
-    <div class="page-header">
-        <h2>Dashboard Customer</h2>
-        <p>Selamat datang, <strong id="dashCustomerNama">Customer</strong>! Berikut adalah ringkasan aktivitas Anda.</p>
-    </div>
-
-    <!-- Widget Statistik Customer -->
-    <div class="dash-customer-widgets">
-        <div class="widget-card">
-            <div class="icon belanja"><i class="fas fa-shopping-bag"></i></div>
-            <div class="number" id="customerTotalBelanja">0</div>
-            <div class="label">Total Belanja</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
-            <div class="number" id="customerSaldo">Rp 0</div>
-            <div class="label">Saldo</div>
-        </div>
-        <div class="widget-card">
-            <div class="icon poin"><i class="fas fa-gem"></i></div>
-            <div class="number" id="customerPoin">0</div>
-            <div class="label">Poin</div>
-        </div>
-    </div>
-
-    <!-- Tabel Riwayat Belanja (Placeholder) -->
-    <div class="card">
-        <div class="card-header">
-            <span><i class="fas fa-history" style="color:#FF6B00;"></i> Riwayat Belanja</span>
-        </div>
-        <div style="padding:15px; text-align:center; color:#888;">
-            <p>Fitur ini sedang dalam pengembangan.</p>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 14 - 01 DASHBOARD CUSTOMER ===== -->
 </body>
 </html>
