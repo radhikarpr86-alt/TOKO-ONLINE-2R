@@ -1121,16 +1121,14 @@
 <!-- ============ BLOK 5(1) - 01 CONTENT AREA (DASHBOARD & PROFIL) ============ -->
 <!-- PENJELASAN: 
      Ini adalah bagian pertama dari area konten. Bagian ini berisi kode HTML untuk 
-     Halaman Dasbor (Dashboard) dan Halaman Profil SuperAdmin. 
-     Halaman Dasbor berisi sambutan dan status awal sistem. 
-     Halaman Profil berisi data lengkap SuperAdmin (Nama, Alamat, Email, dll) 
-     beserta formulir untuk mengunggah dokumen perusahaan dan menyimpan keterangan. 
-     Halaman-halaman ini merupakan komponen utama dari antarmuka SuperAdmin.
+     Halaman Dasbor (Dashboard) dan Halaman Profil SuperAdmin (revisi).
      
-     PERBAIKAN PENTING:
-     1. Tombol "Edit Profil" telah dihapus dari halaman Profil.
-     2. Semua ID elemen tetap sama dan terintegrasi dengan JavaScript.
-     3. Tidak ada kode yang terpotong atau tumpang tindih. -->
+     PERBAIKAN PADA HALAMAN PROFIL:
+     1. Menambahkan card "Data Aplikasi" (Nama Aplikasi, Penerbit, Pemilik, Pengelola).
+     2. Menambahkan card "Keamanan Akun" (Username & Password dengan tombol Simpan).
+     3. Card "Informasi Pribadi" diubah menjadi data pribadi (Nama, Alamat, Email, HP, Jabatan).
+     4. Card "Manajemen Dokumen" mendukung unggah tak terbatas, preview, edit, hapus, download.
+     5. Semua data disimpan di localStorage dengan key terpisah. -->
 
 <main class="content-area expanded hidden" id="contentArea">
     
@@ -1156,50 +1154,98 @@
         <div class="page-header">
             <div>
                 <h2>Profil SuperAdmin</h2>
-                <p>Kelola data profil dan dokumen perusahaan <strong>Toko Online 2R</strong></p>
+                <p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>
             </div>
         </div>
         
-        <!-- Informasi Profil -->
+        <!-- ===== DATA APLIKASI ===== -->
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-user-circle" style="color:var(--orange-primary)"></i> Informasi Profil</h3>
-                <!-- TOMBOL EDIT PROFIL TELAH DIHAPUS -->
+                <h3><i class="fas fa-building" style="color:var(--orange-primary)"></i> Data Aplikasi</h3>
+                <button class="btn btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan Data Aplikasi</button>
             </div>
             <div class="card-body">
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
                     <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Nama Lengkap</p>
-                        <p style="font-weight:600;" id="profilNama">-</p>
+                        <p style="font-size:12px; color:var(--gray-500);">Nama Aplikasi</p>
+                        <input type="text" id="appNama" placeholder="Masukkan nama aplikasi" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
                     </div>
                     <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Alamat</p>
-                        <p style="font-weight:600;" id="profilAlamat">-</p>
+                        <p style="font-size:12px; color:var(--gray-500);">Penerbit</p>
+                        <input type="text" id="appPenerbit" placeholder="Masukkan nama penerbit" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
                     </div>
                     <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Email</p>
-                        <p style="font-weight:600;" id="profilEmail">-</p>
+                        <p style="font-size:12px; color:var(--gray-500);">Pemilik</p>
+                        <input type="text" id="appPemilik" placeholder="Masukkan nama pemilik" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
                     </div>
                     <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Nomor HP</p>
-                        <p style="font-weight:600;" id="profilHp">-</p>
-                    </div>
-                    <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Jabatan</p>
-                        <p style="font-weight:600;" id="profilJabatan">-</p>
-                    </div>
-                    <div>
-                        <p style="font-size:12px; color:var(--gray-500);">Perusahaan Penerbit</p>
-                        <p style="font-weight:600;" id="profilPerusahaan">-</p>
+                        <p style="font-size:12px; color:var(--gray-500);">Pengelola</p>
+                        <input type="text" id="appPengelola" placeholder="Masukkan nama pengelola" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Dokumen Perusahaan -->
+        <!-- ===== KEAMANAN AKUN ===== -->
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-folder-open" style="color:var(--orange-primary)"></i> Dokumen Perusahaan</h3>
+                <h3><i class="fas fa-shield-alt" style="color:var(--orange-primary)"></i> Keamanan Akun</h3>
+                <button class="btn btn-primary btn-sm" onclick="ubahPasswordSuperAdmin()"><i class="fas fa-key"></i> Simpan Password Baru</button>
+            </div>
+            <div class="card-body">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Username</p>
+                        <input type="text" id="superadminUsername" placeholder="Username" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Password Baru</p>
+                        <input type="password" id="superadminPassword" placeholder="Masukkan password baru" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Konfirmasi Password</p>
+                        <input type="password" id="superadminPasswordKonfirmasi" placeholder="Konfirmasi password baru" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== INFORMASI PRIBADI ===== -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-circle" style="color:var(--orange-primary)"></i> Informasi Pribadi</h3>
+                <button class="btn btn-primary btn-sm" onclick="simpanDataPribadi()"><i class="fas fa-save"></i> Simpan Data Pribadi</button>
+            </div>
+            <div class="card-body">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Nama Lengkap</p>
+                        <input type="text" id="profilNama" placeholder="Masukkan nama lengkap" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Alamat</p>
+                        <input type="text" id="profilAlamat" placeholder="Masukkan alamat" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Email</p>
+                        <input type="email" id="profilEmail" placeholder="Masukkan email" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Nomor HP</p>
+                        <input type="tel" id="profilHp" placeholder="Masukkan nomor HP" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:var(--gray-500);">Jabatan</p>
+                        <input type="text" id="profilJabatan" placeholder="Masukkan jabatan" style="width:100%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== MANAJEMEN DOKUMEN ===== -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-folder-open" style="color:var(--orange-primary)"></i> Manajemen Dokumen Perusahaan</h3>
                 <button class="btn btn-primary btn-sm" id="btnUnggahDokumen"><i class="fas fa-upload"></i> Unggah Dokumen</button>
                 <input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" style="display:none">
             </div>
@@ -1207,15 +1253,15 @@
                 <div class="empty-state">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>Belum ada dokumen</h3>
-                    <p>Klik tombol di atas untuk menambahkan.</p>
+                    <p>Klik tombol di atas untuk menambahkan dokumen.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Keterangan -->
+        <!-- ===== KETERANGAN PERUSAHAAN ===== -->
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-sticky-note" style="color:var(--orange-primary)"></i> Keterangan</h3>
+                <h3><i class="fas fa-sticky-note" style="color:var(--orange-primary)"></i> Keterangan Perusahaan</h3>
             </div>
             <div class="card-body">
                 <textarea id="textKeterangan" rows="4" placeholder="Isi keterangan perusahaan..."></textarea>
@@ -2078,178 +2124,236 @@
 <!-- ============ BLOK 8 SCRIPTS PROFIL & UPLOAD ============ -->
 <!-- PENJELASAN: 
      Blok ini berisi semua fungsi JavaScript yang terkait dengan halaman Profil:
-     1. loadProfil() - Memuat dan menampilkan data profil dari localStorage.
-     2. simpanKeterangan() - Menyimpan keterangan perusahaan.
-     3. Fungsi manajemen dokumen (getDocuments, saveDocuments, renderDokumen).
-     4. uploadDokumen() - Mengunggah dokumen baru dengan validasi ukuran file.
-     5. editDokumen() - Membuka modal edit dokumen.
-     6. simpanEditDokumen() - Menyimpan hasil edit dokumen.
-     7. hapusDokumen() - Menghapus dokumen dari sistem.
-     8. bukaPreviewGambar() - Membuka modal preview gambar.
-     9. Event listener untuk tombol upload dan textarea keterangan.
-     
-     PERBAIKAN PENTING:
-     1. Fungsi EDIT PROFIL (bukaModalEditProfil dan simpanProfil) telah DIHAPUS.
-     2. Semua fungsi manajemen dokumen tetap lengkap dan berfungsi penuh.
-     3. Tidak ada kode yang terpotong atau tumpang tindih. -->
+     1. loadProfil() - Memuat semua data profil (aplikasi, password, pribadi, dokumen).
+     2. simpanDataAplikasi() - Menyimpan data aplikasi ke localStorage.
+     3. ubahPasswordSuperAdmin() - Mengubah password SuperAdmin.
+     4. simpanDataPribadi() - Menyimpan data pribadi ke localStorage.
+     5. simpanKeterangan() - Menyimpan keterangan perusahaan.
+     6. Fungsi manajemen dokumen (getDocuments, saveDocuments, renderDokumen).
+     7. uploadDokumen() - Mengunggah dokumen baru (unlimited, validasi 10MB).
+     8. editDokumen() - Membuka modal edit dokumen.
+     9. simpanEditDokumen() - Menyimpan hasil edit dokumen.
+     10. hapusDokumen() - Menghapus dokumen.
+     11. bukaPreviewGambar() - Membuka modal preview gambar.
+     12. Event listener untuk tombol upload dan textarea keterangan. -->
 
 <script>
-    // Konstanta untuk penyimpanan data di localStorage
+    // ===== KONSTANTA =====
     const PROFILE_KEY = '2r_superadmin_profile';
+    const APP_KEY = '2r_aplikasi_data';
     const DOCUMENTS_KEY = '2r_superadmin_documents';
+    const AKUN_KEY = '2r_akun';
 
     // ===== FUNGSI MEMUAT PROFIL =====
-    // Fungsi untuk memuat dan menampilkan data profil dari localStorage
     function loadProfil() {
-        // Mengambil data profil dari localStorage
+        // 1. Load Data Aplikasi
+        var dataApp = localStorage.getItem(APP_KEY);
+        var app = dataApp ? JSON.parse(dataApp) : {};
+        document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
+        document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
+        document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
+        document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+
+        // 2. Load Username SuperAdmin
+        var dataAkun = localStorage.getItem(AKUN_KEY);
+        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+        var superAdmin = daftarAkun.find(function(akun) {
+            return akun.role === 'superadmin';
+        });
+        if (superAdmin) {
+            document.getElementById('superadminUsername').value = superAdmin.username || '';
+        }
+
+        // 3. Load Data Pribadi
         var dataProfil = localStorage.getItem(PROFILE_KEY);
         var profil = dataProfil ? JSON.parse(dataProfil) : {};
-        
-        // Menampilkan data profil ke elemen HTML
-        document.getElementById('profilNama').textContent = profil.nama || '-';
-        document.getElementById('profilAlamat').textContent = profil.alamat || '-';
-        document.getElementById('profilEmail').textContent = profil.email || '-';
-        document.getElementById('profilHp').textContent = profil.hp || '-';
-        document.getElementById('profilJabatan').textContent = profil.jabatan || '-';
-        document.getElementById('profilPerusahaan').textContent = profil.perusahaan || '-';
+        document.getElementById('profilNama').value = profil.nama || '';
+        document.getElementById('profilAlamat').value = profil.alamat || '';
+        document.getElementById('profilEmail').value = profil.email || '';
+        document.getElementById('profilHp').value = profil.hp || '';
+        document.getElementById('profilJabatan').value = profil.jabatan || '';
         document.getElementById('textKeterangan').value = profil.keterangan || '';
-        
-        // Memuat daftar dokumen
+
+        // 4. Load Dokumen
         renderDokumen();
     }
 
-    // ===== FUNGSI MENYIMPAN KETERANGAN =====
-    // Fungsi untuk menyimpan keterangan perusahaan
+    // ===== FUNGSI SIMPAN DATA APLIKASI =====
+    function simpanDataAplikasi() {
+        var data = {
+            namaAplikasi: document.getElementById('appNama').value.trim(),
+            penerbit: document.getElementById('appPenerbit').value.trim(),
+            pemilik: document.getElementById('appPemilik').value.trim(),
+            pengelola: document.getElementById('appPengelola').value.trim()
+        };
+        if (!data.namaAplikasi) {
+            tampilkanToast('Nama aplikasi tidak boleh kosong!', 'error');
+            return;
+        }
+        localStorage.setItem(APP_KEY, JSON.stringify(data));
+        tampilkanToast('Data aplikasi berhasil disimpan!', 'success');
+    }
+
+    // ===== FUNGSI UBAH PASSWORD SUPERADMIN =====
+    function ubahPasswordSuperAdmin() {
+        var usernameBaru = document.getElementById('superadminUsername').value.trim();
+        var passwordBaru = document.getElementById('superadminPassword').value.trim();
+        var konfirmasi = document.getElementById('superadminPasswordKonfirmasi').value.trim();
+
+        if (!usernameBaru) {
+            tampilkanToast('Username tidak boleh kosong!', 'error');
+            return;
+        }
+        if (!passwordBaru) {
+            tampilkanToast('Password baru tidak boleh kosong!', 'error');
+            return;
+        }
+        if (passwordBaru.length < 6) {
+            tampilkanToast('Password minimal 6 karakter!', 'warning');
+            return;
+        }
+        if (passwordBaru !== konfirmasi) {
+            tampilkanToast('Password dan konfirmasi tidak cocok!', 'error');
+            return;
+        }
+
+        // Ambil data akun
+        var dataAkun = localStorage.getItem(AKUN_KEY);
+        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+        var ditemukan = false;
+
+        // Cari SuperAdmin dan update
+        for (var i = 0; i < daftarAkun.length; i++) {
+            if (daftarAkun[i].role === 'superadmin') {
+                daftarAkun[i].username = usernameBaru;
+                daftarAkun[i].password = btoa(passwordBaru);
+                ditemukan = true;
+                break;
+            }
+        }
+
+        if (ditemukan) {
+            localStorage.setItem(AKUN_KEY, JSON.stringify(daftarAkun));
+            // Reset input password
+            document.getElementById('superadminPassword').value = '';
+            document.getElementById('superadminPasswordKonfirmasi').value = '';
+            tampilkanToast('Password berhasil diubah! Silakan login ulang.', 'success');
+            
+            // Auto logout setelah 2 detik
+            setTimeout(function() {
+                if (confirm('Password diubah. Anda harus login ulang. Keluar sekarang?')) {
+                    logout();
+                }
+            }, 2000);
+        } else {
+            tampilkanToast('SuperAdmin tidak ditemukan!', 'error');
+        }
+    }
+
+    // ===== FUNGSI SIMPAN DATA PRIBADI =====
+    function simpanDataPribadi() {
+        var data = {
+            nama: document.getElementById('profilNama').value.trim(),
+            alamat: document.getElementById('profilAlamat').value.trim(),
+            email: document.getElementById('profilEmail').value.trim(),
+            hp: document.getElementById('profilHp').value.trim(),
+            jabatan: document.getElementById('profilJabatan').value.trim()
+        };
+        if (!data.nama) {
+            tampilkanToast('Nama tidak boleh kosong!', 'error');
+            return;
+        }
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
+        tampilkanToast('Data pribadi berhasil disimpan!', 'success');
+    }
+
+    // ===== FUNGSI SIMPAN KETERANGAN =====
     function simpanKeterangan() {
-        // Mengambil data profil yang sudah ada
         var dataProfil = localStorage.getItem(PROFILE_KEY);
         var profil = dataProfil ? JSON.parse(dataProfil) : {};
-        
-        // Mengambil nilai keterangan dari textarea
         profil.keterangan = document.getElementById('textKeterangan').value;
-        
-        // Menyimpan kembali ke localStorage
         localStorage.setItem(PROFILE_KEY, JSON.stringify(profil));
-        
-        // Menampilkan notifikasi sukses
         tampilkanToast('Keterangan berhasil disimpan!', 'success');
     }
 
     // ===== FUNGSI MANAJEMEN DOKUMEN =====
-    
-    // Fungsi untuk mendapatkan daftar dokumen dari localStorage
     function getDocuments() {
-        var dataDokumen = localStorage.getItem(DOCUMENTS_KEY);
-        return dataDokumen ? JSON.parse(dataDokumen) : [];
+        var data = localStorage.getItem(DOCUMENTS_KEY);
+        return data ? JSON.parse(data) : [];
     }
 
-    // Fungsi untuk menyimpan daftar dokumen ke localStorage
     function saveDocuments(dokumen) {
         localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(dokumen));
     }
 
-    // Fungsi untuk merender daftar dokumen ke dalam HTML
     function renderDokumen() {
         var daftarDokumen = getDocuments();
         var container = document.getElementById('daftarDokumen');
-        
-        // Jika container tidak ditemukan, hentikan fungsi
-        if (!container) {
-            return;
-        }
-        
-        // Jika tidak ada dokumen
+        if (!container) return;
+
         if (daftarDokumen.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>Belum ada dokumen</h3>
-                    <p>Klik tombol di atas untuk menambahkan.</p>
+                    <p>Klik tombol di atas untuk menambahkan dokumen.</p>
                 </div>
             `;
             return;
         }
-        
-        // Membuat HTML untuk setiap dokumen
+
         var html = '';
         for (var i = 0; i < daftarDokumen.length; i++) {
-            var dokumen = daftarDokumen[i];
-            var isImage = dokumen.type && dokumen.type.startsWith('image/');
-            var previewHtml = '';
-            
-            if (isImage) {
-                // Jika dokumen adalah gambar, tampilkan thumbnail
-                previewHtml = `<img src="${dokumen.data}" alt="${dokumen.name}" onclick="bukaPreviewGambar('${dokumen.data}', '${dokumen.name}')" class="doc-thumb">`;
-            } else {
-                // Jika dokumen bukan gambar, tampilkan ikon
-                previewHtml = `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
-            }
-            
+            var doc = daftarDokumen[i];
+            var isImage = doc.type && doc.type.startsWith('image/');
+            var preview = isImage 
+                ? `<img src="${doc.data}" alt="${doc.name}" onclick="bukaPreviewGambar('${doc.data}','${doc.name}')" class="doc-thumb">`
+                : `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
+
             html += `
                 <div class="doc-item">
                     <div class="doc-info">
-                        ${previewHtml}
+                        ${preview}
                         <div class="doc-text">
-                            <h4>${dokumen.name}</h4>
-                            <p>${dokumen.keterangan || 'Tidak ada keterangan'}</p>
+                            <h4>${doc.name}</h4>
+                            <p>${doc.keterangan || 'Tidak ada keterangan'}</p>
                         </div>
                     </div>
                     <div class="doc-actions">
-                        <button class="btn btn-secondary btn-xs" onclick="editDokumen('${dokumen.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <a href="${dokumen.data}" download="${dokumen.name}" class="btn btn-primary btn-xs">
-                            <i class="fas fa-download"></i>
-                        </a>
-                        <button class="btn btn-danger btn-xs" onclick="hapusDokumen('${dokumen.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <button class="btn btn-secondary btn-xs" onclick="editDokumen('${doc.id}')"><i class="fas fa-edit"></i></button>
+                        <a href="${doc.data}" download="${doc.name}" class="btn btn-primary btn-xs"><i class="fas fa-download"></i></a>
+                        <button class="btn btn-danger btn-xs" onclick="hapusDokumen('${doc.id}')"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `;
         }
-        
-        // Memasukkan HTML ke dalam container
         container.innerHTML = html;
     }
 
     // ===== FUNGSI UPLOAD DOKUMEN =====
-    // Fungsi untuk mengunggah dokumen baru
     function uploadDokumen(event) {
         var files = event.target.files;
-        
-        // Jika tidak ada file yang dipilih
-        if (!files || files.length === 0) {
-            return;
-        }
-        
+        if (!files || files.length === 0) return;
+
         var daftarDokumen = getDocuments();
-        var jumlahTerunggah = 0;
-        
-        // Menampilkan notifikasi proses upload
+        var selesai = 0;
+
         tampilkanToast('Mengunggah ' + files.length + ' file...', 'info');
-        
-        // Memproses setiap file
+
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-            
-            // Validasi ukuran file (max 10MB)
             if (file.size > 10 * 1024 * 1024) {
                 tampilkanToast('File ' + file.name + ' terlalu besar (max 10MB)', 'warning');
-                jumlahTerunggah++;
-                
-                // Jika semua file sudah diproses
-                if (jumlahTerunggah === files.length) {
+                selesai++;
+                if (selesai === files.length) {
                     event.target.value = '';
                     renderDokumen();
                 }
                 continue;
             }
-            
-            // Membaca file menjadi base64
+
             var reader = new FileReader();
             reader.onload = function(e) {
-                // Menambahkan dokumen baru ke daftar
                 daftarDokumen.push({
                     id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
                     name: file.name,
@@ -2257,87 +2361,59 @@
                     data: e.target.result,
                     keterangan: ''
                 });
-                
-                jumlahTerunggah++;
-                
-                // Jika semua file sudah diproses
-                if (jumlahTerunggah === files.length) {
+                selesai++;
+                if (selesai === files.length) {
                     saveDocuments(daftarDokumen);
                     renderDokumen();
-                    tampilkanToast(jumlahTerunggah + ' dokumen berhasil diunggah!', 'success');
+                    tampilkanToast(selesai + ' dokumen berhasil diunggah!', 'success');
                     event.target.value = '';
                 }
             };
-            
-            reader.onerror = function() {
-                tampilkanToast('Gagal membaca file ' + file.name, 'error');
-                jumlahTerunggah++;
-                
-                // Jika semua file sudah diproses
-                if (jumlahTerunggah === files.length) {
-                    event.target.value = '';
-                    renderDokumen();
-                }
-            };
-            
             reader.readAsDataURL(file);
         }
     }
 
     // ===== FUNGSI EDIT DOKUMEN =====
-    // Fungsi untuk membuka modal edit dokumen
     function editDokumen(id) {
         var daftarDokumen = getDocuments();
-        var dokumen = null;
-        
-        // Mencari dokumen berdasarkan ID
+        var doc = null;
         for (var i = 0; i < daftarDokumen.length; i++) {
             if (daftarDokumen[i].id === id) {
-                dokumen = daftarDokumen[i];
+                doc = daftarDokumen[i];
                 break;
             }
         }
-        
-        // Jika dokumen ditemukan
-        if (dokumen) {
+        if (doc) {
             document.getElementById('editDocId').value = id;
-            document.getElementById('editDocName').value = dokumen.name;
-            document.getElementById('editDocKeterangan').value = dokumen.keterangan || '';
-            
-            // Membuka modal edit dokumen
+            document.getElementById('editDocName').value = doc.name;
+            document.getElementById('editDocKeterangan').value = doc.keterangan || '';
             bukaModal('modalEditDokumen');
         } else {
             tampilkanToast('Dokumen tidak ditemukan!', 'error');
         }
     }
 
-    // Fungsi untuk menyimpan hasil edit dokumen
     function simpanEditDokumen() {
         var id = document.getElementById('editDocId').value;
         var namaBaru = document.getElementById('editDocName').value.trim();
-        var keteranganBaru = document.getElementById('editDocKeterangan').value.trim();
-        
-        // Validasi nama file
+        var ketBaru = document.getElementById('editDocKeterangan').value.trim();
+
         if (!namaBaru) {
             tampilkanToast('Nama file tidak boleh kosong!', 'error');
             return;
         }
-        
+
         var daftarDokumen = getDocuments();
-        var dokumenDitemukan = false;
-        
-        // Mencari dan mengupdate dokumen
+        var ditemukan = false;
         for (var i = 0; i < daftarDokumen.length; i++) {
             if (daftarDokumen[i].id === id) {
                 daftarDokumen[i].name = namaBaru;
-                daftarDokumen[i].keterangan = keteranganBaru;
-                dokumenDitemukan = true;
+                daftarDokumen[i].keterangan = ketBaru;
+                ditemukan = true;
                 break;
             }
         }
-        
-        // Jika dokumen ditemukan dan berhasil diupdate
-        if (dokumenDitemukan) {
+        if (ditemukan) {
             saveDocuments(daftarDokumen);
             renderDokumen();
             tutupModal('modalEditDokumen');
@@ -2348,29 +2424,20 @@
     }
 
     // ===== FUNGSI HAPUS DOKUMEN =====
-    // Fungsi untuk menghapus dokumen
     function hapusDokumen(id) {
-        // Konfirmasi penghapusan
-        if (!confirm('Yakin ingin menghapus dokumen ini?')) {
-            return;
-        }
-        
+        if (!confirm('Yakin ingin menghapus dokumen ini?')) return;
         var daftarDokumen = getDocuments();
-        var daftarBaru = [];
+        var baru = [];
         var ditemukan = false;
-        
-        // Menyaring dokumen yang akan dihapus
         for (var i = 0; i < daftarDokumen.length; i++) {
             if (daftarDokumen[i].id !== id) {
-                daftarBaru.push(daftarDokumen[i]);
+                baru.push(daftarDokumen[i]);
             } else {
                 ditemukan = true;
             }
         }
-        
-        // Jika dokumen ditemukan dan berhasil dihapus
         if (ditemukan) {
-            saveDocuments(daftarBaru);
+            saveDocuments(baru);
             renderDokumen();
             tampilkanToast('Dokumen berhasil dihapus!', 'success');
         } else {
@@ -2379,7 +2446,6 @@
     }
 
     // ===== FUNGSI PREVIEW GAMBAR =====
-    // Fungsi untuk membuka modal preview gambar
     function bukaPreviewGambar(src, nama) {
         document.getElementById('modalPreviewImage').src = src;
         document.getElementById('modalPreviewTitle').textContent = 'Preview: ' + nama;
@@ -2387,41 +2453,28 @@
     }
 
     // ===== EVENT LISTENER =====
-    // Event listener saat halaman dimuat
     document.addEventListener('DOMContentLoaded', function() {
-        // Memuat data profil
         loadProfil();
-        
-        // Event listener untuk tombol upload dokumen
+
         var btnUpload = document.getElementById('btnUnggahDokumen');
         var inputFile = document.getElementById('inputDokumen');
-        
         if (btnUpload && inputFile) {
-            btnUpload.onclick = function() {
-                inputFile.click();
-            };
-            
-            inputFile.onchange = function(event) {
-                uploadDokumen(event);
-            };
+            btnUpload.onclick = function() { inputFile.click(); };
+            inputFile.onchange = function(e) { uploadDokumen(e); };
         }
-        
-        // Event listener untuk textarea keterangan (auto-save saat blur)
-        var textKeterangan = document.getElementById('textKeterangan');
-        if (textKeterangan) {
-            textKeterangan.onblur = function() {
-                simpanKeterangan();
-            };
+
+        var textKet = document.getElementById('textKeterangan');
+        if (textKet) {
+            textKet.onblur = function() { simpanKeterangan(); };
         }
     });
 
-    // ===== OVERRIDE NAVIGASI HALAMAN =====
-    // Memastikan saat navigasi ke halaman Profil, data profil dimuat ulang
+    // Override navigasi
     (function() {
-        var fungsiNavigasiAsli = window.navigasiHalaman;
-        if (typeof fungsiNavigasiAsli === 'function') {
+        var asli = window.navigasiHalaman;
+        if (typeof asli === 'function') {
             window.navigasiHalaman = function(halaman) {
-                fungsiNavigasiAsli(halaman);
+                asli(halaman);
                 if (halaman === 'profile' && typeof loadProfil === 'function') {
                     loadProfil();
                 }
