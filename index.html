@@ -3038,6 +3038,43 @@
         document.getElementById(id).classList.remove('active');
     }
 
+    // ========== FUNGSI UNTUK MENYEMBUNYIKAN MENU ADMIN ==========
+
+    function sembunyikanMenuAdmin() {
+        // Ambil role user dari localStorage
+        var userRole = localStorage.getItem('2r_user_role');
+        
+        // Jika role adalah TOKO atau bukan SUPERADMIN, sembunyikan menu admin
+        if (userRole !== 'superadmin') {
+            // Daftar menu admin yang harus disembunyikan
+            var menuAdminList = [
+                'daftarAkun',
+                'persetujuan',
+                'kelolaAkun',
+                'transferMenu',
+                'penagihan',
+                'settingRekening',
+                'kelolaUpgrade',
+                'settingTarifOjek',
+                'kelolaIklan'
+            ];
+
+            // Loop untuk menyembunyikan setiap menu admin
+            menuAdminList.forEach(function(menuId) {
+                var menuItem = document.querySelector('.sidebar-menu-item[data-page="' + menuId + '"]');
+                if (menuItem) {
+                    menuItem.style.display = 'none';
+                }
+            });
+
+            // Sembunyikan judul "Menu Admin"
+            var menuAdminTitle = document.querySelector('.sidebar-menu-title');
+            if (menuAdminTitle && menuAdminTitle.textContent.trim() === 'Menu Admin') {
+                menuAdminTitle.style.display = 'none';
+            }
+        }
+    }
+
     // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
 
     // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
@@ -3051,59 +3088,31 @@
         if (userData) {
             var user = JSON.parse(userData);
             tampilkanDashboard(user);
+            
+            // 3. Jalankan fungsi penyembunyian menu admin SETELAH dashboard ditampilkan
+            setTimeout(function() {
+                sembunyikanMenuAdmin();
+            }, 100); // Delay 100ms agar DOM sidebar sudah selesai dirender
         }
 
-        // 3. Ambil role user dari localStorage (setelah login)
-        var userRole = localStorage.getItem('2r_user_role');
-
-        // 4. Jika role adalah TOKO, sembunyikan semua menu admin
-        if (userRole === 'toko') {
-            // Daftar menu admin yang harus disembunyikan
-            var menuAdmin = [
-                'daftarAkun',
-                'persetujuan',
-                'kelolaAkun',
-                'transferMenu',
-                'penagihan',
-                'settingRekening',
-                'kelolaUpgrade',
-                'settingTarifOjek',
-                'kelolaIklan'
-            ];
-
-            // Loop untuk menyembunyikan setiap menu admin
-            menuAdmin.forEach(function(menuId) {
-                var menuItem = document.querySelector('.sidebar-menu-item[data-page="' + menuId + '"]');
-                if (menuItem) {
-                    menuItem.style.display = 'none';
-                }
-            });
-
-            // Opsional: Hapus judul "Menu Admin" jika semua menu admin disembunyikan
-            var menuAdminTitle = document.querySelector('.sidebar-menu-title');
-            if (menuAdminTitle && menuAdminTitle.textContent.trim() === 'Menu Admin') {
-                menuAdminTitle.style.display = 'none';
-            }
-        }
-
-        // 5. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
+        // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
         if (document.getElementById('daftarRoleBaru')) {
             updateDaftarIdPreview();
         }
 
-        // 6. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
+        // 5. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
         if (document.getElementById('pagePersetujuan') && 
             document.getElementById('pagePersetujuan').classList.contains('active')) {
             renderTabelPersetujuan();
         }
 
-        // 7. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
+        // 6. Pastikan data rekening muncul jika halaman Setting Rekening sedang aktif
         if (document.getElementById('pageSettingRekening') && 
             document.getElementById('pageSettingRekening').classList.contains('active')) {
             loadRekeningMaster();
         }
 
-        // 8. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
+        // 7. Render statistik dashboard saat halaman dimuat (jika Dasbor sedang aktif)
         if (document.getElementById('pageDasbor') && 
             document.getElementById('pageDasbor').classList.contains('active')) {
             renderDashboardStats();
