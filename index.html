@@ -24,14 +24,12 @@
         box-sizing: border-box;
     }
 
-    /* Body Global */
+    /* Body Global - Ubah agar tidak memaksa elemen ke tengah */
     body {
         font-family: 'Poppins', sans-serif;
         background: #f5f7fa;
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        /* Hapus display: flex; justify-content: center; align-items: center; */
     }
 
     /* Sembunyikan halaman dashboard awal */
@@ -125,6 +123,15 @@
         font-weight: 600;
         color: #666;
         margin-bottom: 5px;
+    }
+
+    /* === CSS KHUSUS UNTUK HALAMAN LOGIN/REGISTER === */
+    #pageAuth {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
     }
 </style>
 <!-- ===== AKHIR BLOK 1 (2) - 02 CSS RESET & GLOBAL ===================================================================== -->
