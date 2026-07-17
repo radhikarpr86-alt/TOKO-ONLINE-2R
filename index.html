@@ -2116,5 +2116,297 @@
         // renderDashboardStats();
     </script>
 <!-- ===== AKHIR BLOK 10(2) - 01 JAVASCRIPT FUNGSI DASHBOARD STATISTIK ===== -->
+    <!-- ===== BLOK 11 - 01 DASHBOARD TOKO ===== -->
+<style>
+    /* CSS Khusus untuk Dashboard Toko */
+    .dash-toko-widgets {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .dash-toko-widgets .widget-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        text-align: center;
+    }
+    .dash-toko-widgets .widget-card .icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    .dash-toko-widgets .widget-card .icon.produk { color: #2196F3; }
+    .dash-toko-widgets .widget-card .icon.pesanan { color: #FF9800; }
+    .dash-toko-widgets .widget-card .icon.saldo { color: #4CAF50; }
+    .dash-toko-widgets .widget-card .number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+    .dash-toko-widgets .widget-card .label {
+        font-size: 14px;
+        color: #888;
+        margin-top: 4px;
+    }
+</style>
+
+<!-- HTML untuk Halaman Dashboard Toko -->
+<div class="page-content" id="pageDashToko">
+    <div class="page-header">
+        <h2>Dashboard Toko</h2>
+        <p>Selamat datang, <strong id="dashTokoNama">Toko</strong>! Berikut adalah ringkasan bisnis Anda.</p>
+    </div>
+
+    <!-- Widget Statistik Toko -->
+    <div class="dash-toko-widgets">
+        <div class="widget-card">
+            <div class="icon produk"><i class="fas fa-box"></i></div>
+            <div class="number" id="tokoTotalProduk">0</div>
+            <div class="label">Total Produk</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon pesanan"><i class="fas fa-shopping-cart"></i></div>
+            <div class="number" id="tokoTotalPesanan">0</div>
+            <div class="label">Total Pesanan</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
+            <div class="number" id="tokoSaldo">Rp 0</div>
+            <div class="label">Saldo</div>
+        </div>
+    </div>
+
+    <!-- Tabel Pesanan Terbaru (Placeholder) -->
+    <div class="card">
+        <div class="card-header">
+            <span><i class="fas fa-clock" style="color:#FF6B00;"></i> Pesanan Terbaru</span>
+        </div>
+        <div style="padding:15px; text-align:center; color:#888;">
+            <p>Fitur ini sedang dalam pengembangan.</p>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 11 - 01 DASHBOARD TOKO ===== -->
+    <!-- ===== BLOK 12 - 01 DASHBOARD PEDAGANG PASAR ===== -->
+<style>
+    /* CSS Khusus untuk Dashboard Pedagang */
+    .dash-pasar-widgets {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .dash-pasar-widgets .widget-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        text-align: center;
+    }
+    .dash-pasar-widgets .widget-card .icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    .dash-pasar-widgets .widget-card .icon.dagangan { color: #9C27B0; }
+    .dash-pasar-widgets .widget-card .icon.modal { color: #FF9800; }
+    .dash-pasar-widgets .widget-card .icon.pembeli { color: #4CAF50; }
+    .dash-pasar-widgets .widget-card .number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+    .dash-pasar-widgets .widget-card .label {
+        font-size: 14px;
+        color: #888;
+        margin-top: 4px;
+    }
+</style>
+
+<!-- HTML untuk Halaman Dashboard Pedagang Pasar -->
+<div class="page-content" id="pageDashPasar">
+    <div class="page-header">
+        <h2>Dashboard Pedagang Pasar</h2>
+        <p>Selamat datang, <strong id="dashPasarNama">Pedagang</strong>! Berikut adalah ringkasan dagangan Anda.</p>
+    </div>
+
+    <!-- Widget Statistik Pedagang -->
+    <div class="dash-pasar-widgets">
+        <div class="widget-card">
+            <div class="icon dagangan"><i class="fas fa-store-alt"></i></div>
+            <div class="number" id="pasarTotalDagangan">0</div>
+            <div class="label">Total Dagangan</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon modal"><i class="fas fa-coins"></i></div>
+            <div class="number" id="pasarModal">Rp 0</div>
+            <div class="label">Modal</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon pembeli"><i class="fas fa-users"></i></div>
+            <div class="number" id="pasarTotalPembeli">0</div>
+            <div class="label">Total Pembeli</div>
+        </div>
+    </div>
+
+    <!-- Tabel Transaksi Terbaru (Placeholder) -->
+    <div class="card">
+        <div class="card-header">
+            <span><i class="fas fa-history" style="color:#FF6B00;"></i> Transaksi Terbaru</span>
+        </div>
+        <div style="padding:15px; text-align:center; color:#888;">
+            <p>Fitur ini sedang dalam pengembangan.</p>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 12 - 01 DASHBOARD PEDAGANG PASAR ===== -->
+    <!-- ===== BLOK 13 - 01 DASHBOARD OJEK ===== -->
+<style>
+    /* CSS Khusus untuk Dashboard Ojek */
+    .dash-ojek-widgets {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .dash-ojek-widgets .widget-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        text-align: center;
+    }
+    .dash-ojek-widgets .widget-card .icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    .dash-ojek-widgets .widget-card .icon.order { color: #2196F3; }
+    .dash-ojek-widgets .widget-card .icon.saldo { color: #4CAF50; }
+    .dash-ojek-widgets .widget-card .icon.rating { color: #FF9800; }
+    .dash-ojek-widgets .widget-card .number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+    .dash-ojek-widgets .widget-card .label {
+        font-size: 14px;
+        color: #888;
+        margin-top: 4px;
+    }
+</style>
+
+<!-- HTML untuk Halaman Dashboard Ojek -->
+<div class="page-content" id="pageDashOjek">
+    <div class="page-header">
+        <h2>Dashboard Ojek</h2>
+        <p>Selamat datang, <strong id="dashOjekNama">Ojek</strong>! Berikut adalah ringkasan performa Anda.</p>
+    </div>
+
+    <!-- Widget Statistik Ojek -->
+    <div class="dash-ojek-widgets">
+        <div class="widget-card">
+            <div class="icon order"><i class="fas fa-motorcycle"></i></div>
+            <div class="number" id="ojekTotalOrder">0</div>
+            <div class="label">Total Order</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
+            <div class="number" id="ojekSaldo">Rp 0</div>
+            <div class="label">Saldo</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon rating"><i class="fas fa-star"></i></div>
+            <div class="number" id="ojekRating">0.0</div>
+            <div class="label">Rating</div>
+        </div>
+    </div>
+
+    <!-- Tabel Riwayat Order (Placeholder) -->
+    <div class="card">
+        <div class="card-header">
+            <span><i class="fas fa-list" style="color:#FF6B00;"></i> Riwayat Order</span>
+        </div>
+        <div style="padding:15px; text-align:center; color:#888;">
+            <p>Fitur ini sedang dalam pengembangan.</p>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 13 - 01 DASHBOARD OJEK ===== -->
+    <!-- ===== BLOK 14 - 01 DASHBOARD CUSTOMER ===== -->
+<style>
+    /* CSS Khusus untuk Dashboard Customer */
+    .dash-customer-widgets {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .dash-customer-widgets .widget-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        text-align: center;
+    }
+    .dash-customer-widgets .widget-card .icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    .dash-customer-widgets .widget-card .icon.belanja { color: #2196F3; }
+    .dash-customer-widgets .widget-card .icon.saldo { color: #4CAF50; }
+    .dash-customer-widgets .widget-card .icon.poin { color: #FF9800; }
+    .dash-customer-widgets .widget-card .number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+    .dash-customer-widgets .widget-card .label {
+        font-size: 14px;
+        color: #888;
+        margin-top: 4px;
+    }
+</style>
+
+<!-- HTML untuk Halaman Dashboard Customer -->
+<div class="page-content" id="pageDashCustomer">
+    <div class="page-header">
+        <h2>Dashboard Customer</h2>
+        <p>Selamat datang, <strong id="dashCustomerNama">Customer</strong>! Berikut adalah ringkasan aktivitas Anda.</p>
+    </div>
+
+    <!-- Widget Statistik Customer -->
+    <div class="dash-customer-widgets">
+        <div class="widget-card">
+            <div class="icon belanja"><i class="fas fa-shopping-bag"></i></div>
+            <div class="number" id="customerTotalBelanja">0</div>
+            <div class="label">Total Belanja</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon saldo"><i class="fas fa-wallet"></i></div>
+            <div class="number" id="customerSaldo">Rp 0</div>
+            <div class="label">Saldo</div>
+        </div>
+        <div class="widget-card">
+            <div class="icon poin"><i class="fas fa-gem"></i></div>
+            <div class="number" id="customerPoin">0</div>
+            <div class="label">Poin</div>
+        </div>
+    </div>
+
+    <!-- Tabel Riwayat Belanja (Placeholder) -->
+    <div class="card">
+        <div class="card-header">
+            <span><i class="fas fa-history" style="color:#FF6B00;"></i> Riwayat Belanja</span>
+        </div>
+        <div style="padding:15px; text-align:center; color:#888;">
+            <p>Fitur ini sedang dalam pengembangan.</p>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 14 - 01 DASHBOARD CUSTOMER ===== -->
 </body>
 </html>
