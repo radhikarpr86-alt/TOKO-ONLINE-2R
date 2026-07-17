@@ -79,9 +79,77 @@
         .modal-close:hover { color: #d32f2f; }
         .modal-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
         .hidden { display: none !important; }
+
+        /* ===== PERBAIKAN TAMPILAN DOKUMEN (IKON KECIL & RAPI) ===== */
+        .doc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .doc-item:last-child { border-bottom: none; }
+
+        .doc-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .doc-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .doc-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff0e5;
+            color: #FF6B00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 22px;
+        }
+
+        .doc-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .doc-text p {
+            font-size: 12px;
+            color: #888;
+            margin: 0;
+        }
+
+        /* Mengubah tombol aksi agar ikonnya kecil dan proporsional */
+        .doc-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .doc-actions .btn {
+            padding: 6px 10px !important;
+            font-size: 13px !important;
+            border-radius: 4px !important;
+            min-width: 34px;
+            height: 34px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+        .doc-actions .btn i {
+            font-size: 14px !important;
+        }
     </style>
 </head>
-<body>
 <!-- ================================ AKHIR BLOK 1(1) - 01 PEMBUKAAN ===================================================================== -->
     <!-- ===== BLOK 1(2) - 01 HALAMAN LOGIN & REGISTER ===== -->
     <div id="pageAuth">
