@@ -2726,7 +2726,7 @@
         document.getElementById(id).classList.remove('active');
     }
 
-        // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
+    // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
 
     // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
     document.addEventListener('DOMContentLoaded', function() {
@@ -2744,19 +2744,13 @@
             var role = localStorage.getItem('2r_user_role');
             
             if (role === 'superadmin') {
-                // Jika SuperAdmin, tampilkan sidebar SuperAdmin
                 document.getElementById('sidebarSuperAdmin').style.display = 'block';
                 document.getElementById('sidebarUmum').style.display = 'none';
             } else {
-                // Jika bukan SuperAdmin (Toko, Ojek, dll), sembunyikan sidebar SuperAdmin
-                // dan tampilkan sidebar Umum
                 document.getElementById('sidebarSuperAdmin').style.display = 'none';
                 document.getElementById('sidebarUmum').style.display = 'block';
             }
         }
-
-        // ... kode lainnya ...
-    });
 
         // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
         if (document.getElementById('daftarRoleBaru')) {
