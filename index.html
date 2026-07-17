@@ -511,29 +511,39 @@
         </div>
     </div>
     <!-- ===== AKHIR BLOK 6 MODAL EDIT DOKUMEN ===== -->
-    <!-- ===== BLOK 7 JAVASCRIPT ===== -->
+    <!-- ===== BLOK 7(1) - 01 SCRIPTS DATA AKUN & UTILITY ===== -->
     <script>
-        // ========== DATA AKUN ==========
+        // ========== MANAJEMEN DATA AKUN ==========
+        
+        // Mengambil data akun dari localStorage
         function getDataAkun() { 
             var data = localStorage.getItem('2r_akun'); 
             return data ? JSON.parse(data) : []; 
         }
+        
+        // Menyimpan data akun ke localStorage
         function simpanDataAkun(akun) { 
             localStorage.setItem('2r_akun', JSON.stringify(akun)); 
         }
+        
+        // Enkripsi password menggunakan Base64
         function encodePassword(password) { 
             return btoa(password); 
         }
+        
+        // Dekripsi password dari Base64
         function decodePassword(password) { 
             return atob(password); 
         }
 
-        // ========== INISIALISASI SUPERADMIN ==========
+        // ========== INISIALISASI SUPERADMIN DEFAULT ==========
+        // Jika belum ada akun SuperAdmin, sistem akan otomatis membuatnya saat pertama kali dijalankan
         function inisialisasiSuperAdmin() {
             var daftarAkun = getDataAkun();
             var superAdmin = daftarAkun.find(function(akun) {
                 return akun.role === 'superadmin';
             });
+            
             if (!superAdmin) {
                 daftarAkun.push({
                     id: 'SA-001',
@@ -556,32 +566,50 @@
             }
         }
 
-        // ========== GENERATE ID ==========
+        // ========== GENERATE ID OTOMATIS ==========
+        // Fungsi utama untuk membuat ID unik berdasarkan Role
         function generateId(role) {
             var daftarAkun = getDataAkun();
-            var akunSama = daftarAkun.filter(function(a) { return a.role === role; });
+            var akunSama = daftarAkun.filter(function(a) { 
+                return a.role === role; 
+            });
+            
             var urut = 1;
             akunSama.forEach(function(a) {
                 var id = a.id.split('-');
                 if (id.length === 2) {
                     var angka = parseInt(id[1]);
-                    if (!isNaN(angka) && angka >= urut) urut = angka + 1;
+                    if (!isNaN(angka) && angka >= urut) {
+                        urut = angka + 1;
+                    }
                 }
             });
+            
             var prefix = {
-                'customer':'CUST','toko':'TOKO','ojek':'OJEK','pedagang':'PEDAGANG',
-                'codseller':'COD','superadmin':'SA','staf_admin':'STA','staf_owner_ojek':'SOO',
-                'staf_owner_toko':'SOT','customer_service':'CS','sponsor':'SPN'
+                'customer': 'CUST',
+                'toko': 'TOKO',
+                'ojek': 'OJEK',
+                'pedagang': 'PEDAGANG',
+                'codseller': 'COD',
+                'superadmin': 'SA',
+                'staf_admin': 'STA',
+                'staf_owner_ojek': 'SOO',
+                'staf_owner_toko': 'SOT',
+                'customer_service': 'CS',
+                'sponsor': 'SPN'
             };
-            return (prefix[role] || 'USR') + '-' + String(urut).padStart(3, '0');
+            
+            var prefixRole = prefix[role] || 'USR';
+            return prefixRole + '-' + String(urut).padStart(3, '0');
         }
 
+        // ========== PREVIEW ID UNTUK REGISTER PUBLIK ==========
         function updateIdPreview() {
             var role = document.getElementById('regRole').value;
             document.getElementById('regIdPreview').textContent = generateId(role) || '-';
         }
 
-        // ========== PREVIEW ID OTOMATIS UNTUK FORM DAFTAR AKUN (SUPERADMIN) ==========
+        // ========== PREVIEW ID UNTUK DAFTAR AKUN (SUPERADMIN) ==========
         function updateDaftarIdPreview() {
             var role = document.getElementById('daftarRoleBaru').value;
             var preview = document.getElementById('daftarIdPreview');
@@ -590,7 +618,34 @@
             }
         }
 
-        // ========== TOGGLE FORM ==========
+        // ========== TOAST NOTIFICATION ==========
+        // Menampilkan notifikasi pop-up di pojok kanan atas
+        function tampilkanToast(pesan, tipe) {
+            tipe = tipe || 'success';
+            var toastElement = document.createElement('div');
+            toastElement.className = 'toast ' + tipe;
+            
+            var icon = tipe === 'success' ? 'fa-check-circle' : 
+                       (tipe === 'error' ? 'fa-times-circle' : 
+                       (tipe === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'));
+            toastElement.innerHTML = '<i class="fas ' + icon + '"></i> ' + pesan;
+            
+            document.getElementById('toastContainer').appendChild(toastElement);
+            
+            // Hapus toast setelah 3.5 detik
+            setTimeout(function() {
+                toastElement.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(function() {
+                    toastElement.remove();
+                }, 300);
+            }, 3500);
+        }
+    </script>
+<!-- ===== AKHIR BLOK 7(1) - 01 SCRIPTS DATA AKUN & UTILITY ===== -->
+            <!-- ===== BLOK 7(2) - 01 SCRIPTS LOGIN, REGISTER & NAVIGASI ===== -->
+    <script>
+        // ========== TOGGLE FORM LOGIN / REGISTER ==========
+        // Fungsi untuk berpindah antara form Login dan Register di halaman publik
         function toggleForm(tipe) {
             document.getElementById('authError').style.display = 'none';
             var login = document.getElementById('loginForm');
@@ -598,14 +653,14 @@
             if (tipe === 'register') {
                 login.classList.add('hidden-form');
                 register.classList.remove('hidden-form');
-                updateIdPreview();
+                updateIdPreview(); // Update preview ID otomatis
             } else {
                 register.classList.add('hidden-form');
                 login.classList.remove('hidden-form');
             }
         }
 
-        // ========== LOGIN ==========
+        // ========== PROSES LOGIN ==========
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             var username = document.getElementById('loginUsername').value.trim();
@@ -623,7 +678,7 @@
             }
         });
 
-        // ========== REGISTER PUBLIK ==========
+        // ========== PROSES REGISTER PUBLIK ==========
         document.getElementById('registerForm').addEventListener('submit', function(event) {
             event.preventDefault();
             var role = document.getElementById('regRole').value;
@@ -632,10 +687,12 @@
             var nama = document.getElementById('regNama').value.trim();
             var email = document.getElementById('regEmail').value.trim();
             var hp = document.getElementById('regHp').value.trim();
+            
             if (!role || !username || !password || !nama) {
                 alert('Data belum lengkap!');
                 return;
             }
+            
             var daftarAkun = getDataAkun();
             if (daftarAkun.find(function(a) { return a.username === username; })) {
                 alert('Username sudah digunakan!');
@@ -649,37 +706,62 @@
                 alert('HP sudah digunakan!');
                 return;
             }
+            
             var idBaru = generateId(role);
             var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
+            
             var akunBaru = {
-                id: idBaru, role: role, username: username, password: encodePassword(password),
-                nama: nama, email: email || '', hp: hp || '', alamat: '',
-                jabatan: '', perusahaan: '', latitude: null, longitude: null,
-                status: statusAkun, registeredAt: new Date().toISOString()
+                id: idBaru,
+                role: role,
+                username: username,
+                password: encodePassword(password),
+                nama: nama,
+                email: email || '',
+                hp: hp || '',
+                alamat: '',
+                jabatan: '',
+                perusahaan: '',
+                latitude: null,
+                longitude: null,
+                status: statusAkun,
+                registeredAt: new Date().toISOString()
             };
+            
             daftarAkun.push(akunBaru);
             simpanDataAkun(daftarAkun);
+            
             alert((statusAkun === 'AKTIF' ? 'Akun berhasil dibuat!' : 'Akun berhasil dibuat! Status: ' + statusAkun) + ' ID: ' + idBaru);
+            
             document.getElementById('regUsername').value = '';
             document.getElementById('regPassword').value = '';
             document.getElementById('regNama').value = '';
             document.getElementById('regEmail').value = '';
             document.getElementById('regHp').value = '';
+            
             toggleForm('login');
         });
 
         // ========== TAMPILKAN DASHBOARD ==========
+        // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
         function tampilkanDashboard(user) {
             document.getElementById('pageAuth').style.display = 'none';
             document.getElementById('pageDashboard').style.display = 'block';
             document.getElementById('userNama').textContent = user.nama;
             document.getElementById('dashboardNama').textContent = user.nama;
-            // Tampilkan Dasbor
-            document.querySelectorAll('.page-content').forEach(function(el) { el.classList.remove('active'); });
+            
+            // Tampilkan Dasbor sebagai halaman pertama
+            document.querySelectorAll('.page-content').forEach(function(el) { 
+                el.classList.remove('active'); 
+            });
             document.getElementById('pageDasbor').classList.add('active');
-            // Set active menu
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { item.classList.remove('active'); });
+            
+            // Set active menu di sidebar
+            document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
+                item.classList.remove('active'); 
+            });
             document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
+            
+            // Load data profil (agar siap saat menu Profil diklik)
             loadProfil();
         }
 
@@ -687,20 +769,30 @@
         document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
             item.addEventListener('click', function() {
                 var page = this.dataset.page;
-                document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { el.classList.remove('active'); });
-                this.classList.add('active');
-                document.querySelectorAll('.page-content').forEach(function(el) { el.classList.remove('active'); });
                 
+                // Set active menu
+                document.querySelectorAll('.sidebar-menu-item').forEach(function(el) { 
+                    el.classList.remove('active'); 
+                });
+                this.classList.add('active');
+                
+                // Sembunyikan semua halaman
+                document.querySelectorAll('.page-content').forEach(function(el) { 
+                    el.classList.remove('active'); 
+                });
+                
+                // Tampilkan halaman yang dipilih
                 if (page === 'dashboard') {
                     document.getElementById('pageDasbor').classList.add('active');
                 } else if (page === 'profile') {
                     document.getElementById('pageProfil').classList.add('active');
-                    loadProfil();
+                    loadProfil(); // Refresh data profil saat halaman dibuka
                 } else if (page === 'daftarAkun') {
                     document.getElementById('pageDaftarAkun').classList.add('active');
-                    updateDaftarIdPreview(); // Update ID saat halaman dibuka
+                    updateDaftarIdPreview(); // Update preview ID saat halaman dibuka
                 } else if (page === 'persetujuan') {
                     document.getElementById('pagePersetujuan').classList.add('active');
+                    renderTabelPersetujuan(); // Render tabel persetujuan saat dibuka
                 } else if (page === 'kelolaAkun') {
                     document.getElementById('pageKelolaAkun').classList.add('active');
                 } else if (page === 'transferMenu') {
@@ -728,14 +820,20 @@
                 location.reload();
             }
         });
-
-        // ========== FUNGSI PROFIL ==========
+    </script>
+<!-- ===== AKHIR BLOK 7(2) - 01 SCRIPTS LOGIN, REGISTER & NAVIGASI ===== -->
+            <!-- ===== BLOK 7(3) - 01 SCRIPTS PROFIL & UPLOAD DOKUMEN ===== -->
+    <script>
+        // ========== KONSTANTA UNTUK LOCALSTORAGE ==========
         const PROFILE_KEY = '2r_superadmin_profile';
         const APP_KEY = '2r_aplikasi_data';
         const DOCUMENTS_KEY = '2r_superadmin_documents';
         const AKUN_KEY = '2r_akun';
 
+        // ========== LOAD DATA PROFIL ==========
+        // Fungsi untuk memuat semua data profil dari localStorage ke dalam form
         function loadProfil() {
+            // 1. Load Data Aplikasi
             var dataApp = localStorage.getItem(APP_KEY);
             var app = dataApp ? JSON.parse(dataApp) : {};
             document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
@@ -743,13 +841,17 @@
             document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
             document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
 
+            // 2. Load Username SuperAdmin
             var dataAkun = localStorage.getItem(AKUN_KEY);
             var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
-            var sa = daftarAkun.find(function(a) { return a.role === 'superadmin'; });
+            var sa = daftarAkun.find(function(a) { 
+                return a.role === 'superadmin'; 
+            });
             if (sa) {
                 document.getElementById('superadminUsername').value = sa.username || '';
             }
 
+            // 3. Load Data Pribadi
             var dataProfil = localStorage.getItem(PROFILE_KEY);
             var profil = dataProfil ? JSON.parse(dataProfil) : {};
             document.getElementById('profilNama').value = profil.nama || '';
@@ -759,9 +861,11 @@
             document.getElementById('profilJabatan').value = profil.jabatan || '';
             document.getElementById('textKeterangan').value = profil.keterangan || '';
 
+            // 4. Load Dokumen
             renderDokumen();
         }
 
+        // ========== SIMPAN DATA APLIKASI ==========
         function simpanDataAplikasi() {
             var data = {
                 namaAplikasi: document.getElementById('appNama').value.trim(),
@@ -777,6 +881,7 @@
             alert('Data aplikasi berhasil disimpan!');
         }
 
+        // ========== UBAH PASSWORD SUPERADMIN ==========
         function ubahPasswordSuperAdmin() {
             var usernameBaru = document.getElementById('superadminUsername').value.trim();
             var passwordBaru = document.getElementById('superadminPassword').value.trim();
@@ -825,6 +930,7 @@
             }
         }
 
+        // ========== SIMPAN DATA PRIBADI ==========
         function simpanDataPribadi() {
             var data = {
                 nama: document.getElementById('profilNama').value.trim(),
@@ -841,6 +947,7 @@
             alert('Data pribadi berhasil disimpan!');
         }
 
+        // ========== SIMPAN KETERANGAN ==========
         function simpanKeterangan() {
             var dataProfil = localStorage.getItem(PROFILE_KEY);
             var profil = dataProfil ? JSON.parse(dataProfil) : {};
@@ -849,19 +956,25 @@
             alert('Keterangan berhasil disimpan!');
         }
 
-        // ========== DOKUMEN ==========
+        // ========== MANAJEMEN DOKUMEN ==========
+        
+        // Mendapatkan daftar dokumen dari localStorage
         function getDocuments() {
             var data = localStorage.getItem(DOCUMENTS_KEY);
             return data ? JSON.parse(data) : [];
         }
+
+        // Menyimpan daftar dokumen ke localStorage
         function saveDocuments(doc) {
             localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(doc));
         }
 
+        // Merender daftar dokumen ke dalam HTML
         function renderDokumen() {
             var docs = getDocuments();
             var container = document.getElementById('daftarDokumen');
             if (!container) return;
+            
             if (docs.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -872,6 +985,7 @@
                 `;
                 return;
             }
+            
             var html = '';
             for (var i = 0; i < docs.length; i++) {
                 var doc = docs[i];
@@ -879,6 +993,7 @@
                 var preview = isImage 
                     ? `<img src="${doc.data}" alt="${doc.name}" onclick="bukaPreviewGambar('${doc.data}','${doc.name}')" class="doc-thumb">`
                     : `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
+                
                 html += `
                     <div class="doc-item">
                         <div class="doc-info">
@@ -899,14 +1014,20 @@
             container.innerHTML = html;
         }
 
+        // ========== UPLOAD DOKUMEN ==========
+        // Event listener untuk tombol upload
         document.getElementById('btnUnggahDokumen').addEventListener('click', function() {
             document.getElementById('inputDokumen').click();
         });
+
+        // Event listener untuk input file (proses upload)
         document.getElementById('inputDokumen').addEventListener('change', function(event) {
             var files = event.target.files;
             if (!files || files.length === 0) return;
+            
             var docs = getDocuments();
             var selesai = 0;
+            
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 if (file.size > 10 * 1024 * 1024) {
@@ -918,6 +1039,7 @@
                     }
                     continue;
                 }
+                
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     docs.push({
@@ -939,6 +1061,7 @@
             }
         });
 
+        // ========== EDIT DOKUMEN ==========
         function editDokumen(id) {
             var docs = getDocuments();
             var doc = null;
@@ -962,10 +1085,12 @@
             var id = document.getElementById('editDocId').value;
             var namaBaru = document.getElementById('editDocName').value.trim();
             var ketBaru = document.getElementById('editDocKeterangan').value.trim();
+            
             if (!namaBaru) {
                 alert('Nama file tidak boleh kosong!');
                 return;
             }
+            
             var docs = getDocuments();
             var ditemukan = false;
             for (var i = 0; i < docs.length; i++) {
@@ -986,8 +1111,10 @@
             }
         }
 
+        // ========== HAPUS DOKUMEN ==========
         function hapusDokumen(id) {
             if (!confirm('Yakin ingin menghapus dokumen ini?')) return;
+            
             var docs = getDocuments();
             var baru = [];
             var ditemukan = false;
@@ -1007,17 +1134,26 @@
             }
         }
 
+        // ========== PREVIEW GAMBAR ==========
         function bukaPreviewGambar(src, nama) {
             document.getElementById('modalPreviewImage').src = src;
             document.getElementById('modalPreviewTitle').textContent = 'Preview: ' + nama;
             document.getElementById('modalPreviewGambar').classList.add('active');
         }
 
+        // ========== MODAL UTILITY ==========
+        function bukaModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
         function tutupModal(id) {
             document.getElementById(id).classList.remove('active');
         }
-
+    </script>
+<!-- ===== AKHIR BLOK 7(3) - 01 SCRIPTS PROFIL & UPLOAD DOKUMEN ===== -->
+            <!-- ===== BLOK 7(4) - 01 SCRIPTS DAFTAR AKUN & PERSETUJUAN ===== -->
+    <script>
         // ========== DAFTAR AKUN BARU (SUPERADMIN) ==========
+        // Menyimpan akun baru yang dibuat melalui form di BLOK 4
         document.getElementById('formDaftarAkunBaru').addEventListener('submit', function(event) {
             event.preventDefault();
             var role = document.getElementById('daftarRoleBaru').value;
@@ -1028,6 +1164,7 @@
             var hp = document.getElementById('daftarHpBaru').value.trim();
             var alamat = document.getElementById('daftarAlamatBaru').value.trim();
 
+            // Validasi input
             if (!role || !username || !password || !nama) {
                 alert('Harap isi Role, Username, Password, dan Nama Lengkap!');
                 return;
@@ -1042,6 +1179,8 @@
             }
 
             var daftarAkun = getDataAkun();
+
+            // Cek duplikasi
             if (daftarAkun.find(function(a) { return a.username === username; })) {
                 alert('Username sudah digunakan!');
                 return;
@@ -1055,6 +1194,7 @@
                 return;
             }
 
+            // Generate ID & Status
             var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
             var prefix = {
                 'customer':'CUST','toko':'TOKO','ojek':'OJEK','pedagang':'PEDAGANG',
@@ -1073,14 +1213,27 @@
             var idBaru = (prefix[role] || 'USR') + '-' + String(urut).padStart(3, '0');
 
             var akunBaru = {
-                id: idBaru, role: role, username: username, password: encodePassword(password),
-                nama: nama, email: email || '', hp: hp || '', alamat: alamat || '',
-                jabatan: '', perusahaan: '', latitude: null, longitude: null,
-                status: statusAkun, registeredAt: new Date().toISOString()
+                id: idBaru,
+                role: role,
+                username: username,
+                password: encodePassword(password),
+                nama: nama,
+                email: email || '',
+                hp: hp || '',
+                alamat: alamat || '',
+                jabatan: '',
+                perusahaan: '',
+                latitude: null,
+                longitude: null,
+                status: statusAkun,
+                registeredAt: new Date().toISOString()
             };
             daftarAkun.push(akunBaru);
             simpanDataAkun(daftarAkun);
+
             alert('Akun ' + role + ' dengan ID ' + idBaru + ' berhasil dibuat. Status: ' + statusAkun);
+            
+            // Reset form
             document.getElementById('daftarUsernameBaru').value = '';
             document.getElementById('daftarPasswordBaru').value = '';
             document.getElementById('daftarNamaBaru').value = '';
@@ -1089,20 +1242,187 @@
             document.getElementById('daftarAlamatBaru').value = '';
         });
 
-        // ========== INISIALISASI SAAT HALAMAN DIMUAT ==========
+        // ========== LOGIKA PERSETUJUAN AKUN (BLOK 8) ==========
+
+        // 1. Fungsi untuk merender tabel persetujuan
+        function renderTabelPersetujuan() {
+            var daftarAkun = getDataAkun();
+            
+            // Filter: Ambil semua akun yang BUKAN superadmin dan BUKAN customer
+            // Karena customer otomatis aktif tanpa persetujuan
+            var daftarPending = daftarAkun.filter(function(akun) {
+                return akun.role !== 'superadmin' && akun.role !== 'customer';
+            });
+
+            var container = document.getElementById('tabelPersetujuanContainer');
+            var counter = document.getElementById('totalPending');
+
+            if (!container) return;
+
+            if (daftarPending.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+                        <h3>Tidak ada akun yang menunggu persetujuan</h3>
+                        <p>Semua akun sudah aktif.</p>
+                    </div>
+                `;
+                if (counter) counter.textContent = 'Menunggu: 0';
+                return;
+            }
+
+            // Update counter
+            if (counter) counter.textContent = 'Menunggu: ' + daftarPending.length;
+
+            var html = `
+                <div style="overflow-x: auto; margin-top: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: #f8f9fa; border-bottom: 2px solid #eee;">
+                                <th style="padding: 12px; text-align: left;">ID Akun</th>
+                                <th style="padding: 12px; text-align: left;">Role</th>
+                                <th style="padding: 12px; text-align: left;">Username</th>
+                                <th style="padding: 12px; text-align: left;">Nama</th>
+                                <th style="padding: 12px; text-align: left;">Status</th>
+                                <th style="padding: 12px; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            for (var i = 0; i < daftarPending.length; i++) {
+                var akun = daftarPending[i];
+                var statusBadge = '';
+                
+                if (akun.status === 'AKTIF') {
+                    statusBadge = '<span style="background: #e8f5e9; color: #2e7d32; padding: 4px 12px; border-radius: 12px; font-size: 12px;">AKTIF</span>';
+                } else {
+                    statusBadge = '<span style="background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Menunggu Verifikasi</span>';
+                }
+
+                html += `
+                    <tr style="border-bottom: 1px solid #f5f5f5;">
+                        <td style="padding: 12px; font-weight: 600;">${akun.id}</td>
+                        <td style="padding: 12px;">${akun.role}</td>
+                        <td style="padding: 12px;">${akun.username}</td>
+                        <td style="padding: 12px;">${akun.nama}</td>
+                        <td style="padding: 12px;">${statusBadge}</td>
+                        <td style="padding: 12px; text-align: center; display: flex; gap: 8px; justify-content: center;">
+                            ${akun.status !== 'AKTIF' ? `
+                                <button class="btn-primary btn-xs" onclick="setujuiAkun('${akun.id}')">
+                                    <i class="fas fa-check"></i> Setujui
+                                </button>
+                                <button class="btn-danger btn-xs" onclick="bukaTolakAkun('${akun.id}')">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            ` : `
+                                <span style="font-size: 12px; color: #888;">Sudah Aktif</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            }
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // 2. Fungsi untuk menyetujui akun
+        function setujuiAkun(id) {
+            if (!confirm('Apakah Anda yakin ingin menyetujui dan mengaktifkan akun ini?')) return;
+
+            var daftarAkun = getDataAkun();
+            var ditemukan = false;
+
+            for (var i = 0; i < daftarAkun.length; i++) {
+                if (daftarAkun[i].id === id) {
+                    daftarAkun[i].status = 'AKTIF';
+                    ditemukan = true;
+                    break;
+                }
+            }
+
+            if (ditemukan) {
+                simpanDataAkun(daftarAkun);
+                renderTabelPersetujuan();
+                alert('Akun berhasil diaktifkan!');
+            } else {
+                alert('Akun tidak ditemukan!');
+            }
+        }
+
+        // 3. Fungsi untuk membuka modal penolakan
+        function bukaTolakAkun(id) {
+            document.getElementById('tolakIdAkun').value = id;
+            bukaModal('modalTolakAkun');
+        }
+
+        // 4. Fungsi eksekusi penolakan (dari modal)
+        function eksekusiTolakAkun() {
+            var id = document.getElementById('tolakIdAkun').value;
+            var daftarAkun = getDataAkun();
+            var daftarBaru = [];
+            var ditemukan = false;
+
+            for (var i = 0; i < daftarAkun.length; i++) {
+                if (daftarAkun[i].id !== id) {
+                    daftarBaru.push(daftarAkun[i]);
+                } else {
+                    ditemukan = true;
+                }
+            }
+
+            if (ditemukan) {
+                simpanDataAkun(daftarBaru);
+                tutupModal('modalTolakAkun');
+                renderTabelPersetujuan();
+                alert('Akun berhasil ditolak dan dihapus dari sistem.');
+            } else {
+                alert('Akun tidak ditemukan!');
+            }
+        }
+    </script>
+<!-- ===== AKHIR BLOK 7(4) - 01 SCRIPTS DAFTAR AKUN & PERSETUJUAN ===== -->
+            <!-- ===== BLOK 7(5) - 01 SCRIPTS EVENT LISTENER & INISIALISASI ===== -->
+    <script>
+        // ========== EVENT LISTENER: PRELOADER ==========
+        // Menjalankan animasi loading saat halaman dimuat
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 500);
+        });
+
+        // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
+        // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
         document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Inisialisasi akun SuperAdmin default jika belum ada
             inisialisasiSuperAdmin();
+
+            // 2. Cek apakah ada user yang sedang login
             var userData = localStorage.getItem('2r_user');
             if (userData) {
                 var user = JSON.parse(userData);
                 tampilkanDashboard(user);
             }
-            // Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
+
+            // 3. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
             if (document.getElementById('daftarRoleBaru')) {
                 updateDaftarIdPreview();
             }
+
+            // 4. Pastikan tabel persetujuan muncul jika halaman Persetujuan sedang aktif
+            if (document.getElementById('pagePersetujuan') && 
+                document.getElementById('pagePersetujuan').classList.contains('active')) {
+                renderTabelPersetujuan();
+            }
         });
     </script>
-<!-- ===== AKHIR BLOK 7 JAVASCRIPT ===== -->
+<!-- ===== AKHIR BLOK 7(5) - 01 SCRIPTS EVENT LISTENER & INISIALISASI ===== -->
 </body>
 </html>
