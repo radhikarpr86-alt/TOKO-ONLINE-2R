@@ -1764,5 +1764,132 @@
         // (Kode ini sudah terintegrasi di BLOK 7(2) - navigasi sidebar)
     </script>
 <!-- ===== AKHIR BLOK 8(2) - 01 JAVASCRIPT FUNGSI KELOLA SEMUA AKUN ===== -->
+            <!-- ===== BLOK 9(1) - 01 HTML & CSS SETTING REKENING MASTER ===== -->
+<style>
+    /* CSS Khusus untuk Halaman Setting Rekening */
+    .rekening-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .rekening-container .card {
+        padding: 25px;
+    }
+    .rekening-container .form-group {
+        margin-bottom: 20px;
+    }
+    .rekening-container .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+</style>
+
+<!-- HTML untuk Halaman Setting Rekening -->
+<div class="page-content" id="pageSettingRekening">
+    <div class="page-header">
+        <div>
+            <h2>Setting Rekening Master</h2>
+            <p>Kelola rekening bank utama untuk penerimaan fee sewa aplikasi, komisi, dan pembayaran lainnya.</p>
+        </div>
+    </div>
+
+    <div class="rekening-container">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fas fa-university" style="color:#FF6B00;"></i> Data Rekening Penerima Fee</span>
+                <button class="btn-primary btn-sm" onclick="simpanRekeningMaster()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+            <div class="card-body" style="padding-top: 10px;">
+                <div class="form-group">
+                    <label for="rekNamaBank">Nama Bank</label>
+                    <input type="text" id="rekNamaBank" class="form-input" placeholder="Contoh: BCA, Mandiri, BRI">
+                </div>
+                <div class="form-group">
+                    <label for="rekNamaPemilik">Nama Pemilik Rekening</label>
+                    <input type="text" id="rekNamaPemilik" class="form-input" placeholder="Masukkan nama pemilik rekening">
+                </div>
+                <div class="form-group">
+                    <label for="rekNomor">Nomor Rekening</label>
+                    <input type="text" id="rekNomor" class="form-input" placeholder="Masukkan nomor rekening">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 9(1) - 01 HTML & CSS SETTING REKENING MASTER ===== -->
+            <!-- ===== BLOK 9(2) - 01 JAVASCRIPT FUNGSI SETTING REKENING MASTER ===== -->
+    <script>
+        // =====================================================================
+        // KONSTANTA UNTUK PENYIMPANAN DATA REKENING
+        // =====================================================================
+        const REKENING_KEY = '2r_rekening_master';
+
+        // =====================================================================
+        // FUNGSI MEMUAT DATA REKENING
+        // Fungsi ini akan mengambil data rekening dari localStorage dan
+        // menampilkannya ke dalam form input saat halaman Setting Rekening dibuka.
+        // =====================================================================
+        function loadRekeningMaster() {
+            // Mengambil data dari localStorage
+            var dataRekening = localStorage.getItem(REKENING_KEY);
+            var rekening = dataRekening ? JSON.parse(dataRekening) : {};
+
+            // Menampilkan data ke dalam input form
+            document.getElementById('rekNamaBank').value = rekening.namaBank || '';
+            document.getElementById('rekNamaPemilik').value = rekening.namaPemilik || '';
+            document.getElementById('rekNomor').value = rekening.nomorRekening || '';
+        }
+
+        // =====================================================================
+        // FUNGSI MENYIMPAN DATA REKENING
+        // Fungsi ini akan mengambil nilai dari input form, melakukan validasi,
+        // lalu menyimpannya ke dalam localStorage.
+        // =====================================================================
+        function simpanRekeningMaster() {
+            // Mengambil nilai dari input form
+            var namaBank = document.getElementById('rekNamaBank').value.trim();
+            var namaPemilik = document.getElementById('rekNamaPemilik').value.trim();
+            var nomorRekening = document.getElementById('rekNomor').value.trim();
+
+            // Melakukan validasi data agar tidak ada yang kosong
+            if (!namaBank || !namaPemilik || !nomorRekening) {
+                alert('Harap isi Nama Bank, Nama Pemilik, dan Nomor Rekening terlebih dahulu.');
+                return;
+            }
+
+            // Membuat objek data rekening
+            var dataRekening = {
+                namaBank: namaBank,
+                namaPemilik: namaPemilik,
+                nomorRekening: nomorRekening
+            };
+
+            // Menyimpan data ke dalam localStorage
+            localStorage.setItem(REKENING_KEY, JSON.stringify(dataRekening));
+
+            // Menampilkan notifikasi bahwa data berhasil disimpan
+            alert('Data rekening master berhasil disimpan!');
+        }
+
+        // =====================================================================
+        // EVENT LISTENER: DOM CONTENT LOADED
+        // Memastikan fungsi loadRekeningMaster dijalankan saat halaman dimuat
+        // dan saat navigasi berpindah ke menu Setting Rekening.
+        // =====================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Jika user sudah login dan membuka halaman Setting Rekening, load datanya
+            var userData = localStorage.getItem('2r_user');
+            if (userData) {
+                // Cek apakah halaman Setting Rekening sedang aktif
+                var settingRekeningPage = document.getElementById('pageSettingRekening');
+                if (settingRekeningPage && settingRekeningPage.classList.contains('active')) {
+                    loadRekeningMaster();
+                }
+            }
+        });
+    </script>
+<!-- ===== AKHIR BLOK 9(2) - 01 JAVASCRIPT FUNGSI SETTING REKENING MASTER ===== -->
 </body>
 </html>
