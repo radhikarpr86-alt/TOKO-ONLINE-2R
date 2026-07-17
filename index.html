@@ -459,6 +459,83 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 15px;
     }
+        /* =====================================================================
+       CSS TAMBAHAN UNTUK PROFIL UMUM (KTP)
+       ===================================================================== */
+
+    /* Container Profil Umum */
+    .profil-umum-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .profil-umum-container .card {
+        padding: 25px;
+    }
+    .profil-umum-container .grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .profil-umum-container .form-group {
+        margin-bottom: 20px;
+    }
+    .profil-umum-container .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+    .profil-umum-container .form-group .form-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .profil-umum-container .form-group .form-input:focus {
+        border-color: #FF6B00;
+        outline: none;
+    }
+    
+    /* Upload KTP */
+    .upload-ktp-container {
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        background: #fafafa;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .upload-ktp-container:hover {
+        border-color: #FF6B00;
+        background: #fff0e5;
+    }
+    .upload-ktp-container img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        object-fit: contain;
+    }
+    .upload-ktp-container i {
+        font-size: 40px;
+        color: #ddd;
+        display: block;
+        margin-bottom: 10px;
+    }
+    .upload-ktp-container p {
+        color: #888;
+        font-size: 13px;
+    }
+    
+    /* Preview KTP */
+    .preview-ktp {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 6px;
+        margin-top: 10px;
+        object-fit: contain;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (5) - 05 CSS WIDGET & TABEL ===================================================================== -->
 
@@ -1361,20 +1438,33 @@
 <!-- ===== BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-menu-title">Menu Utama</div>
-            <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-            <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
             
-            <div class="sidebar-menu-title">Menu Admin</div>
-            <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-            <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-            <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-            <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
-            <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
-            <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-            <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
-            <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
-            <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+            <!-- ===== SIDEBAR UNTUK SUPERADMIN ===== -->
+            <div id="sidebarSuperAdmin">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                
+                <div class="sidebar-menu-title">Menu Admin</div>
+                <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
+                <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
+                <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
+                <div class="sidebar-menu-item" data-page="transferMenu"><i class="fas fa-exchange-alt"></i> Transfer Menu</div>
+                <div class="sidebar-menu-item" data-page="penagihan"><i class="fas fa-file-invoice-dollar"></i> Penagihan</div>
+                <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
+                <div class="sidebar-menu-item" data-page="kelolaUpgrade"><i class="fas fa-crown"></i> Kelola Upgrade</div>
+                <div class="sidebar-menu-item" data-page="settingTarifOjek"><i class="fas fa-cogs"></i> Setting Tarif Ojek</div>
+                <div class="sidebar-menu-item" data-page="kelolaIklan"><i class="fas fa-ad"></i> Kelola Iklan</div>
+            </div>
+
+            <!-- ===== SIDEBAR UNTUK ROLE LAIN (TOKO, OJEK, PEDAGANG, COD, CUSTOMER) ===== -->
+            <div id="sidebarUmum" style="display:none;">
+                <div class="sidebar-menu-title">Menu Utama</div>
+                <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
+                <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+                <!-- Menu tambahan untuk Toko/Ojek bisa ditambahkan di sini nanti -->
+            </div>
+            
         </aside>
 <!-- ===== AKHIR BLOK 2 (2) - 02 SIDEBAR ===================================================================== -->
 
@@ -1856,154 +1946,698 @@
 </script>
 <!-- ===== AKHIR BLOK 7 (1) - 01 UTILITY & DATA CORE ===================================================================== -->
 
-<!-- ===== BLOK 7 (2) - 02 AUTH & LOGIN ===================================================================== -->
+<!-- ===== BLOK 7 (4) - 04 PROFIL & DOKUMEN ===================================================================== -->
 <script>
     // =====================================================================
-    // BLOK 7 (2) - 02 AUTH & LOGIN
-    // Halaman Login dan Register
+    // BLOK 7 (4) - 04 PROFIL & DOKUMEN
+    // Menu Profil (Dinamis berdasarkan role)
     // =====================================================================
 
-    // ========== TOGGLE FORM LOGIN / REGISTER ==========
+    // ========== KONSTANTA UNTUK LOCALSTORAGE ==========
 
-    // Fungsi untuk berpindah antara form Login dan Register di halaman publik
-    function toggleForm(tipe) {
-        document.getElementById('authError').style.display = 'none';
-        var login = document.getElementById('loginForm');
-        var register = document.getElementById('registerForm');
-        if (tipe === 'register') {
-            login.classList.add('hidden-form');
-            register.classList.remove('hidden-form');
-            updateIdPreview(); // Update preview ID otomatis
+    const PROFILE_KEY = '2r_superadmin_profile';
+    const APP_KEY = '2r_aplikasi_data';
+    const DOCUMENTS_KEY = '2r_superadmin_documents';
+    const AKUN_KEY = '2r_akun';
+
+    // ========== LOAD PROFIL BERDASARKAN ROLE ==========
+
+    // Fungsi utama untuk memuat profil berdasarkan role user yang login
+    function loadProfil() {
+        var userData = localStorage.getItem('2r_user');
+        if (!userData) return;
+        var user = JSON.parse(userData);
+        var role = user.role;
+
+        if (role === 'superadmin') {
+            loadProfilSuperAdmin();
         } else {
-            register.classList.add('hidden-form');
-            login.classList.remove('hidden-form');
+            loadProfilUmum(user);
         }
     }
 
-    // ========== PREVIEW ID UNTUK REGISTER PUBLIK ==========
+    // ================================================================
+    // BAGIAN 1: PROFIL SUPERADMIN
+    // ================================================================
 
-    function updateIdPreview() {
-        var role = document.getElementById('regRole').value;
-        document.getElementById('regIdPreview').textContent = generateId(role) || '-';
+    function loadProfilSuperAdmin() {
+        var container = document.getElementById('profilContainer');
+        
+        // Tampilkan form SuperAdmin
+        var html = `
+            <div class="page-header">
+                <h2>Profil SuperAdmin</h2>
+                <p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>
+            </div>
+
+            <!-- Data Aplikasi -->
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fas fa-building" style="color:#FF6B00;"></i> Data Aplikasi</span>
+                    <button class="btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+                <div class="grid-2">
+                    <div><label class="form-label">Nama Aplikasi</label><input type="text" id="appNama" class="form-input" placeholder="Nama Aplikasi"></div>
+                    <div><label class="form-label">Penerbit</label><input type="text" id="appPenerbit" class="form-input" placeholder="Penerbit"></div>
+                    <div><label class="form-label">Pemilik</label><input type="text" id="appPemilik" class="form-input" placeholder="Pemilik"></div>
+                    <div><label class="form-label">Pengelola</label><input type="text" id="appPengelola" class="form-input" placeholder="Pengelola"></div>
+                </div>
+            </div>
+
+            <!-- Keamanan Akun -->
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fas fa-shield-alt" style="color:#FF6B00;"></i> Keamanan Akun</span>
+                    <button class="btn-primary btn-sm" onclick="ubahPasswordSuperAdmin()"><i class="fas fa-key"></i> Simpan Password</button>
+                </div>
+                <div class="grid-2">
+                    <div><label class="form-label">Username</label><input type="text" id="superadminUsername" class="form-input" placeholder="Username"></div>
+                    <div><label class="form-label">Password Baru</label><input type="password" id="superadminPassword" class="form-input" placeholder="Password Baru"></div>
+                    <div><label class="form-label">Konfirmasi Password</label><input type="password" id="superadminPasswordKonfirmasi" class="form-input" placeholder="Konfirmasi Password"></div>
+                </div>
+            </div>
+
+            <!-- Data Pribadi -->
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi</span>
+                    <button class="btn-primary btn-sm" onclick="simpanDataPribadi()"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+                <div class="grid-2">
+                    <div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" placeholder="Nama Lengkap"></div>
+                    <div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" placeholder="Alamat"></div>
+                    <div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" placeholder="Email"></div>
+                    <div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" placeholder="Nomor HP"></div>
+                    <div><label class="form-label">Jabatan</label><input type="text" id="profilJabatan" class="form-input" placeholder="Jabatan"></div>
+                </div>
+            </div>
+
+            <!-- Dokumen Perusahaan -->
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span>
+                    <button class="btn-primary btn-sm" id="btnUnggahDokumen"><i class="fas fa-upload"></i> Unggah</button>
+                    <input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none">
+                </div>
+                <div id="daftarDokumen">
+                    <div class="empty-state">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Belum ada dokumen</h3>
+                        <p>Klik tombol Unggah untuk menambahkan.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keterangan -->
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fas fa-sticky-note" style="color:#FF6B00;"></i> Keterangan</span>
+                </div>
+                <textarea id="textKeterangan" rows="4" class="form-input" placeholder="Isi keterangan perusahaan..."></textarea>
+                <button class="btn-primary mt-10" onclick="simpanKeterangan()"><i class="fas fa-save"></i> Simpan Keterangan</button>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+
+        // Load data SuperAdmin yang sudah ada
+        var dataApp = localStorage.getItem(APP_KEY);
+        var app = dataApp ? JSON.parse(dataApp) : {};
+        document.getElementById('appNama').value = app.namaAplikasi || 'Toko Online 2R';
+        document.getElementById('appPenerbit').value = app.penerbit || 'Toko Online 2R';
+        document.getElementById('appPemilik').value = app.pemilik || 'SuperAdmin';
+        document.getElementById('appPengelola').value = app.pengelola || 'SuperAdmin';
+
+        var dataAkun = localStorage.getItem(AKUN_KEY);
+        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+        var sa = daftarAkun.find(function(a) { return a.role === 'superadmin'; });
+        if (sa) {
+            document.getElementById('superadminUsername').value = sa.username || '';
+        }
+
+        var dataProfil = localStorage.getItem(PROFILE_KEY);
+        var profil = dataProfil ? JSON.parse(dataProfil) : {};
+        document.getElementById('profilNama').value = profil.nama || '';
+        document.getElementById('profilAlamat').value = profil.alamat || '';
+        document.getElementById('profilEmail').value = profil.email || '';
+        document.getElementById('profilHp').value = profil.hp || '';
+        document.getElementById('profilJabatan').value = profil.jabatan || '';
+        document.getElementById('textKeterangan').value = profil.keterangan || '';
+
+        renderDokumen();
     }
 
-    // ========== PROSES LOGIN ==========
+    // ================================================================
+    // BAGIAN 2: PROFIL UMUM (TOKO, OJEK, PEDAGANG, COD, CUSTOMER)
+    // ================================================================
 
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        var username = document.getElementById('loginUsername').value.trim();
-        var password = document.getElementById('loginPassword').value.trim();
-        var daftarAkun = getDataAkun();
-        var user = daftarAkun.find(function(akun) {
-            return akun.username === username && decodePassword(akun.password) === password;
-        });
-        if (user) {
-            localStorage.setItem('2r_user', JSON.stringify(user));
+    // Fungsi untuk memuat profil umum dengan KTP
+    function loadProfilUmum(user) {
+        var container = document.getElementById('profilContainer');
+        var roleLabel = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+        
+        // Tampilkan form Profil Umum
+        var html = `
+            <div class="page-header">
+                <h2>Profil ${roleLabel}</h2>
+                <p>Lengkapi data diri Anda sesuai KTP untuk verifikasi.</p>
+            </div>
             
-            // ========== TAMBAHAN BARU: SIMPAN ROLE USER ==========
-            localStorage.setItem('2r_user_role', user.role);
-            // ====================================================
-            
-            tampilkanDashboard(user);
-        } else {
-            document.getElementById('authError').style.display = 'block';
-            document.getElementById('authErrorText').textContent = 'Username atau password salah!';
-        }
-    });
+            <div class="profil-umum-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data ${roleLabel}</span>
+                        <button class="btn-primary btn-sm" onclick="simpanProfilUmum()"><i class="fas fa-save"></i> Simpan Profil</button>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Data Dasar (Otomatis dari Registrasi) -->
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>ID Akun</label>
+                                <input type="text" id="profilUmumId" class="form-input" readonly style="background:#f0f0f0;">
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <input type="text" id="profilUmumRole" class="form-input" readonly style="background:#f0f0f0;">
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="profilUmumUsername" class="form-input" readonly style="background:#f0f0f0;">
+                            </div>
+                            <div class="form-group">
+                                <label>Password Baru (Opsional)</label>
+                                <input type="password" id="profilUmumPassword" class="form-input" placeholder="Kosongkan jika tidak ingin ganti">
+                            </div>
+                        </div>
+                        
+                        <!-- Data Pribadi (Bisa Diedit) -->
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Nama Lengkap *</label>
+                                <input type="text" id="profilUmumNama" class="form-input" placeholder="Nama Lengkap Sesuai KTP" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" id="profilUmumEmail" class="form-input" placeholder="Email" required>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Nomor HP *</label>
+                                <input type="tel" id="profilUmumHp" class="form-input" placeholder="Nomor HP" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Alamat Domisili</label>
+                                <input type="text" id="profilUmumAlamat" class="form-input" placeholder="Alamat Domisili">
+                            </div>
+                        </div>
+                        
+                        <!-- Data KTP -->
+                        <div class="card-header" style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px;">
+                            <span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Data KTP</span>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>NIK (Nomor KTP) *</label>
+                                <input type="text" id="profilUmumNik" class="form-input" placeholder="Nomor KTP" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tempat Lahir *</label>
+                                <input type="text" id="profilUmumTempatLahir" class="form-input" placeholder="Tempat Lahir" required>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Tanggal Lahir *</label>
+                                <input type="date" id="profilUmumTanggalLahir" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Jenis Kelamin *</label>
+                                <select id="profilUmumJenisKelamin" class="form-input" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat Sesuai KTP *</label>
+                            <textarea id="profilUmumAlamatKtp" class="form-input" rows="2" placeholder="Alamat Sesuai KTP" required></textarea>
+                        </div>
+                        
+                        <!-- Upload KTP -->
+                        <div class="card-header" style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px;">
+                            <span><i class="fas fa-upload" style="color:#FF6B00;"></i> Upload Foto KTP</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="upload-ktp-container" id="uploadKtpContainer" onclick="document.getElementById('inputKtp').click()">
+                                <i class="fas fa-cloud-upload-alt" id="uploadKtpIcon"></i>
+                                <img id="uploadKtpPreview" class="preview-ktp" style="display:none;">
+                                <p id="uploadKtpText">Klik untuk upload foto KTP (Format: JPG, PNG, PDF)</p>
+                                <input type="file" id="inputKtp" accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="previewKtp(event)">
+                            </div>
+                        </div>
+                        
+                        <!-- Tombol Simpan -->
+                        <div style="text-align: right; margin-top: 15px;">
+                            <button class="btn-primary" onclick="simpanProfilUmum()"><i class="fas fa-save"></i> Simpan Profil</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML = html;
 
-    // ========== PROSES REGISTER PUBLIK ==========
+        // Isi form dengan data user (dari registrasi) atau data yang sudah disimpan
+        var profilKey = '2r_profil_' + user.role + '_' + user.id;
+        var dataProfil = localStorage.getItem(profilKey);
+        var profil = dataProfil ? JSON.parse(dataProfil) : {};
 
-    document.getElementById('registerForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        var role = document.getElementById('regRole').value;
-        var username = document.getElementById('regUsername').value.trim();
-        var password = document.getElementById('regPassword').value.trim();
-        var nama = document.getElementById('regNama').value.trim();
-        var email = document.getElementById('regEmail').value.trim();
-        var hp = document.getElementById('regHp').value.trim();
-        
-        if (!role || !username || !password || !nama) {
-            alert('Data belum lengkap!');
+        document.getElementById('profilUmumId').value = user.id || '';
+        document.getElementById('profilUmumRole').value = user.role || '';
+        document.getElementById('profilUmumUsername').value = user.username || '';
+        document.getElementById('profilUmumPassword').value = '';
+
+        document.getElementById('profilUmumNama').value = profil.nama || user.nama || '';
+        document.getElementById('profilUmumEmail').value = profil.email || user.email || '';
+        document.getElementById('profilUmumHp').value = profil.hp || user.hp || '';
+        document.getElementById('profilUmumAlamat').value = profil.alamat || user.alamat || '';
+
+        document.getElementById('profilUmumNik').value = profil.nik || '';
+        document.getElementById('profilUmumTempatLahir').value = profil.tempatLahir || '';
+        document.getElementById('profilUmumTanggalLahir').value = profil.tanggalLahir || '';
+        document.getElementById('profilUmumJenisKelamin').value = profil.jenisKelamin || '';
+        document.getElementById('profilUmumAlamatKtp').value = profil.alamatKtp || '';
+
+        if (profil.fotoKtp) {
+            document.getElementById('uploadKtpPreview').src = profil.fotoKtp;
+            document.getElementById('uploadKtpPreview').style.display = 'block';
+            document.getElementById('uploadKtpIcon').style.display = 'none';
+            document.getElementById('uploadKtpText').textContent = 'Klik untuk ganti foto KTP';
+        }
+    }
+
+    // ========== PREVIEW FOTO KTP ==========
+
+    function previewKtp(event) {
+        var file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file terlalu besar! Maksimal 2MB.');
             return;
         }
-        
-        var daftarAkun = getDataAkun();
-        if (daftarAkun.find(function(a) { return a.username === username; })) {
-            alert('Username sudah digunakan!');
-            return;
-        }
-        if (email && daftarAkun.find(function(a) { return a.email === email; })) {
-            alert('Email sudah digunakan!');
-            return;
-        }
-        if (hp && daftarAkun.find(function(a) { return a.hp === hp; })) {
-            alert('HP sudah digunakan!');
-            return;
-        }
-        
-        var idBaru = generateId(role);
-        var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
-        
-        var akunBaru = {
-            id: idBaru,
-            role: role,
-            username: username,
-            password: encodePassword(password),
-            nama: nama,
-            email: email || '',
-            hp: hp || '',
-            alamat: '',
-            jabatan: '',
-            perusahaan: '',
-            latitude: null,
-            longitude: null,
-            status: statusAkun,
-            registeredAt: new Date().toISOString()
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('uploadKtpPreview').src = e.target.result;
+            document.getElementById('uploadKtpPreview').style.display = 'block';
+            document.getElementById('uploadKtpIcon').style.display = 'none';
+            document.getElementById('uploadKtpText').textContent = 'Klik untuk ganti foto KTP';
         };
-        
-        daftarAkun.push(akunBaru);
+        reader.readAsDataURL(file);
+    }
+
+    // ========== SIMPAN PROFIL UMUM ==========
+
+    function simpanProfilUmum() {
+        var userData = localStorage.getItem('2r_user');
+        if (!userData) {
+            alert('Anda belum login!');
+            return;
+        }
+        var user = JSON.parse(userData);
+
+        var nama = document.getElementById('profilUmumNama').value.trim();
+        var email = document.getElementById('profilUmumEmail').value.trim();
+        var hp = document.getElementById('profilUmumHp').value.trim();
+        var alamat = document.getElementById('profilUmumAlamat').value.trim();
+        var nik = document.getElementById('profilUmumNik').value.trim();
+        var tempatLahir = document.getElementById('profilUmumTempatLahir').value.trim();
+        var tanggalLahir = document.getElementById('profilUmumTanggalLahir').value;
+        var jenisKelamin = document.getElementById('profilUmumJenisKelamin').value;
+        var alamatKtp = document.getElementById('profilUmumAlamatKtp').value.trim();
+        var passwordBaru = document.getElementById('profilUmumPassword').value.trim();
+        var fotoKtp = document.getElementById('uploadKtpPreview').src;
+
+        if (!nama || !email || !hp || !nik || !tempatLahir || !tanggalLahir || !jenisKelamin || !alamatKtp) {
+            alert('Harap lengkapi semua data wajib (ditandai dengan *).');
+            return;
+        }
+
+        if (!email.includes('@') || !email.includes('.')) {
+            alert('Format email tidak valid!');
+            return;
+        }
+
+        if (nik.length < 16) {
+            alert('NIK harus terdiri dari minimal 16 digit!');
+            return;
+        }
+
+        if (passwordBaru) {
+            if (passwordBaru.length < 6) {
+                alert('Password minimal 6 karakter!');
+                return;
+            }
+            var daftarAkun = getDataAkun();
+            for (var i = 0; i < daftarAkun.length; i++) {
+                if (daftarAkun[i].id === user.id) {
+                    daftarAkun[i].password = encodePassword(passwordBaru);
+                    break;
+                }
+            }
+            simpanDataAkun(daftarAkun);
+            user.password = encodePassword(passwordBaru);
+            localStorage.setItem('2r_user', JSON.stringify(user));
+        }
+
+        // Simpan data profil per role dan per user
+        var profilKey = '2r_profil_' + user.role + '_' + user.id;
+        var dataProfil = {
+            nama: nama,
+            email: email,
+            hp: hp,
+            alamat: alamat,
+            nik: nik,
+            tempatLahir: tempatLahir,
+            tanggalLahir: tanggalLahir,
+            jenisKelamin: jenisKelamin,
+            alamatKtp: alamatKtp,
+            fotoKtp: fotoKtp
+        };
+        localStorage.setItem(profilKey, JSON.stringify(dataProfil));
+
+        // Update data registrasi user di data akun
+        var daftarAkun = getDataAkun();
+        for (var i = 0; i < daftarAkun.length; i++) {
+            if (daftarAkun[i].id === user.id) {
+                daftarAkun[i].nama = nama;
+                daftarAkun[i].email = email;
+                daftarAkun[i].hp = hp;
+                daftarAkun[i].alamat = alamat;
+                break;
+            }
+        }
         simpanDataAkun(daftarAkun);
+
+        alert('Profil berhasil disimpan!');
+    }
+
+    // ================================================================
+    // BAGIAN 3: FUNGSI-FUNGSI SUPERADMIN (SUDAH ADA)
+    // ================================================================
+
+    // ========== SIMPAN DATA APLIKASI ==========
+
+    function simpanDataAplikasi() {
+        var data = {
+            namaAplikasi: document.getElementById('appNama').value.trim(),
+            penerbit: document.getElementById('appPenerbit').value.trim(),
+            pemilik: document.getElementById('appPemilik').value.trim(),
+            pengelola: document.getElementById('appPengelola').value.trim()
+        };
+        if (!data.namaAplikasi) {
+            alert('Nama aplikasi tidak boleh kosong!');
+            return;
+        }
+        localStorage.setItem(APP_KEY, JSON.stringify(data));
+        alert('Data aplikasi berhasil disimpan!');
+    }
+
+    // ========== UBAH PASSWORD SUPERADMIN ==========
+
+    function ubahPasswordSuperAdmin() {
+        var usernameBaru = document.getElementById('superadminUsername').value.trim();
+        var passwordBaru = document.getElementById('superadminPassword').value.trim();
+        var konfirmasi = document.getElementById('superadminPasswordKonfirmasi').value.trim();
+
+        if (!usernameBaru) {
+            alert('Username tidak boleh kosong!');
+            return;
+        }
+        if (!passwordBaru) {
+            alert('Password baru tidak boleh kosong!');
+            return;
+        }
+        if (passwordBaru.length < 6) {
+            alert('Password minimal 6 karakter!');
+            return;
+        }
+        if (passwordBaru !== konfirmasi) {
+            alert('Password dan konfirmasi tidak cocok!');
+            return;
+        }
+
+        var dataAkun = localStorage.getItem(AKUN_KEY);
+        var daftarAkun = dataAkun ? JSON.parse(dataAkun) : [];
+        var ditemukan = false;
+        for (var i = 0; i < daftarAkun.length; i++) {
+            if (daftarAkun[i].role === 'superadmin') {
+                daftarAkun[i].username = usernameBaru;
+                daftarAkun[i].password = btoa(passwordBaru);
+                ditemukan = true;
+                break;
+            }
+        }
+        if (ditemukan) {
+            localStorage.setItem(AKUN_KEY, JSON.stringify(daftarAkun));
+            document.getElementById('superadminPassword').value = '';
+            document.getElementById('superadminPasswordKonfirmasi').value = '';
+            alert('Password berhasil diubah! Silakan login ulang.');
+            setTimeout(function() {
+                if (confirm('Password diubah. Anda harus login ulang. Keluar sekarang?')) {
+                    document.getElementById('btnLogout').click();
+                }
+            }, 1000);
+        } else {
+            alert('SuperAdmin tidak ditemukan!');
+        }
+    }
+
+    // ========== SIMPAN DATA PRIBADI ==========
+
+    function simpanDataPribadi() {
+        var data = {
+            nama: document.getElementById('profilNama').value.trim(),
+            alamat: document.getElementById('profilAlamat').value.trim(),
+            email: document.getElementById('profilEmail').value.trim(),
+            hp: document.getElementById('profilHp').value.trim(),
+            jabatan: document.getElementById('profilJabatan').value.trim()
+        };
+        if (!data.nama) {
+            alert('Nama tidak boleh kosong!');
+            return;
+        }
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
+        alert('Data pribadi berhasil disimpan!');
+    }
+
+    // ========== SIMPAN KETERANGAN ==========
+
+    function simpanKeterangan() {
+        var dataProfil = localStorage.getItem(PROFILE_KEY);
+        var profil = dataProfil ? JSON.parse(dataProfil) : {};
+        profil.keterangan = document.getElementById('textKeterangan').value;
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(profil));
+        alert('Keterangan berhasil disimpan!');
+    }
+
+    // ========== MANAJEMEN DOKUMEN ==========
+
+    // Mendapatkan daftar dokumen dari localStorage
+    function getDocuments() {
+        var data = localStorage.getItem(DOCUMENTS_KEY);
+        return data ? JSON.parse(data) : [];
+    }
+
+    // Menyimpan daftar dokumen ke localStorage
+    function saveDocuments(doc) {
+        localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(doc));
+    }
+
+    // Merender daftar dokumen ke dalam HTML
+    function renderDokumen() {
+        var docs = getDocuments();
+        var container = document.getElementById('daftarDokumen');
+        if (!container) return;
         
-        alert((statusAkun === 'AKTIF' ? 'Akun berhasil dibuat!' : 'Akun berhasil dibuat! Status: ' + statusAkun) + ' ID: ' + idBaru);
+        if (docs.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Belum ada dokumen</h3>
+                    <p>Klik tombol Unggah untuk menambahkan.</p>
+                </div>
+            `;
+            return;
+        }
         
-        document.getElementById('regUsername').value = '';
-        document.getElementById('regPassword').value = '';
-        document.getElementById('regNama').value = '';
-        document.getElementById('regEmail').value = '';
-        document.getElementById('regHp').value = '';
-        
-        toggleForm('login');
+        var html = '';
+        for (var i = 0; i < docs.length; i++) {
+            var doc = docs[i];
+            var isImage = doc.type && doc.type.startsWith('image/');
+            var preview = isImage 
+                ? `<img src="${doc.data}" alt="${doc.name}" onclick="bukaPreviewGambar('${doc.data}','${doc.name}')" class="doc-thumb">`
+                : `<div class="doc-icon"><i class="fas fa-file-alt"></i></div>`;
+            
+            html += `
+                <div class="doc-item">
+                    <div class="doc-info">
+                        ${preview}
+                        <div class="doc-text">
+                            <h4>${doc.name}</h4>
+                            <p>${doc.keterangan || 'Tidak ada keterangan'}</p>
+                        </div>
+                    </div>
+                    <div class="doc-actions">
+                        <button class="btn-secondary btn-xs" onclick="editDokumen('${doc.id}')"><i class="fas fa-edit"></i></button>
+                        <a href="${doc.data}" download="${doc.name}" class="btn-primary btn-xs"><i class="fas fa-download"></i></a>
+                        <button class="btn-danger btn-xs" onclick="hapusDokumen('${doc.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ========== UPLOAD DOKUMEN ==========
+
+    // Event listener untuk tombol upload
+    document.getElementById('btnUnggahDokumen').addEventListener('click', function() {
+        document.getElementById('inputDokumen').click();
     });
 
-    // ========== TAMPILKAN DASHBOARD ==========
+    // Event listener untuk input file (proses upload)
+    document.getElementById('inputDokumen').addEventListener('change', function(event) {
+        var files = event.target.files;
+        if (!files || files.length === 0) return;
+        
+        var docs = getDocuments();
+        var selesai = 0;
+        
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File ' + file.name + ' terlalu besar (max 10MB)');
+                selesai++;
+                if (selesai === files.length) {
+                    event.target.value = '';
+                    renderDokumen();
+                }
+                continue;
+            }
+            
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                docs.push({
+                    id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                    name: file.name,
+                    type: file.type,
+                    data: e.target.result,
+                    keterangan: ''
+                });
+                selesai++;
+                if (selesai === files.length) {
+                    saveDocuments(docs);
+                    renderDokumen();
+                    alert(selesai + ' dokumen berhasil diunggah!');
+                    event.target.value = '';
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
-    // Fungsi utama untuk mengubah tampilan dari halaman Login ke Dashboard SuperAdmin
-    function tampilkanDashboard(user) {
-        document.getElementById('pageAuth').style.display = 'none';
-        document.getElementById('pageDashboard').style.display = 'block';
-        document.getElementById('userNama').textContent = user.nama;
-        document.getElementById('dashboardNama').textContent = user.nama;
-        
-        // Tampilkan Dasbor sebagai halaman pertama
-        document.querySelectorAll('.page-content').forEach(function(el) { 
-            el.classList.remove('active'); 
-        });
-        document.getElementById('pageDasbor').classList.add('active');
-        
-        // Set active menu di sidebar
-        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) { 
-            item.classList.remove('active'); 
-        });
-        document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
-        
-        // Load data profil (agar siap saat menu Profil diklik)
-        loadProfil();
+    // ========== EDIT DOKUMEN ==========
 
-        // Render statistik dashboard (Widget & Tabel Terbaru)
-        renderDashboardStats();
+    function editDokumen(id) {
+        var docs = getDocuments();
+        var doc = null;
+        for (var i = 0; i < docs.length; i++) {
+            if (docs[i].id === id) {
+                doc = docs[i];
+                break;
+            }
+        }
+        if (doc) {
+            document.getElementById('editDocId').value = id;
+            document.getElementById('editDocName').value = doc.name;
+            document.getElementById('editDocKeterangan').value = doc.keterangan || '';
+            document.getElementById('modalEditDokumen').classList.add('active');
+        } else {
+            alert('Dokumen tidak ditemukan!');
+        }
+    }
+
+    function simpanEditDokumen() {
+        var id = document.getElementById('editDocId').value;
+        var namaBaru = document.getElementById('editDocName').value.trim();
+        var ketBaru = document.getElementById('editDocKeterangan').value.trim();
+        
+        if (!namaBaru) {
+            alert('Nama file tidak boleh kosong!');
+            return;
+        }
+        
+        var docs = getDocuments();
+        var ditemukan = false;
+        for (var i = 0; i < docs.length; i++) {
+            if (docs[i].id === id) {
+                docs[i].name = namaBaru;
+                docs[i].keterangan = ketBaru;
+                ditemukan = true;
+                break;
+            }
+        }
+        if (ditemukan) {
+            saveDocuments(docs);
+            renderDokumen();
+            document.getElementById('modalEditDokumen').classList.remove('active');
+            alert('Dokumen berhasil diperbarui!');
+        } else {
+            alert('Dokumen tidak ditemukan!');
+        }
+    }
+
+    // ========== HAPUS DOKUMEN ==========
+
+    function hapusDokumen(id) {
+        if (!confirm('Yakin ingin menghapus dokumen ini?')) return;
+        
+        var docs = getDocuments();
+        var baru = [];
+        var ditemukan = false;
+        for (var i = 0; i < docs.length; i++) {
+            if (docs[i].id !== id) {
+                baru.push(docs[i]);
+            } else {
+                ditemukan = true;
+            }
+        }
+        if (ditemukan) {
+            saveDocuments(baru);
+            renderDokumen();
+            alert('Dokumen berhasil dihapus!');
+        } else {
+            alert('Dokumen tidak ditemukan!');
+        }
+    }
+
+    // ========== PREVIEW GAMBAR ==========
+
+    function bukaPreviewGambar(src, nama) {
+        document.getElementById('modalPreviewImage').src = src;
+        document.getElementById('modalPreviewTitle').textContent = 'Preview: ' + nama;
+        document.getElementById('modalPreviewGambar').classList.add('active');
     }
 </script>
-<!-- ===== AKHIR BLOK 7 (2) - 02 AUTH & LOGIN ===================================================================== -->
+<!-- ===== AKHIR BLOK 7 (4) - 04 PROFIL & DOKUMEN ===================================================================== -->
 
 <!-- ===== BLOK 7 (3) - 03 DASHBOARD & WIDGET ===================================================================== -->
 <script>
@@ -3038,43 +3672,6 @@
         document.getElementById(id).classList.remove('active');
     }
 
-    // ========== FUNGSI UNTUK MENYEMBUNYIKAN MENU ADMIN ==========
-
-    function sembunyikanMenuAdmin() {
-        // Ambil role user dari localStorage
-        var userRole = localStorage.getItem('2r_user_role');
-        
-        // Jika role adalah TOKO atau bukan SUPERADMIN, sembunyikan menu admin
-        if (userRole !== 'superadmin') {
-            // Daftar menu admin yang harus disembunyikan
-            var menuAdminList = [
-                'daftarAkun',
-                'persetujuan',
-                'kelolaAkun',
-                'transferMenu',
-                'penagihan',
-                'settingRekening',
-                'kelolaUpgrade',
-                'settingTarifOjek',
-                'kelolaIklan'
-            ];
-
-            // Loop untuk menyembunyikan setiap menu admin
-            menuAdminList.forEach(function(menuId) {
-                var menuItem = document.querySelector('.sidebar-menu-item[data-page="' + menuId + '"]');
-                if (menuItem) {
-                    menuItem.style.display = 'none';
-                }
-            });
-
-            // Sembunyikan judul "Menu Admin"
-            var menuAdminTitle = document.querySelector('.sidebar-menu-title');
-            if (menuAdminTitle && menuAdminTitle.textContent.trim() === 'Menu Admin') {
-                menuAdminTitle.style.display = 'none';
-            }
-        }
-    }
-
     // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
 
     // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
@@ -3089,10 +3686,17 @@
             var user = JSON.parse(userData);
             tampilkanDashboard(user);
             
-            // 3. Jalankan fungsi penyembunyian menu admin SETELAH dashboard ditampilkan
+            // 3. Tampilkan sidebar yang sesuai dengan role user
             setTimeout(function() {
-                sembunyikanMenuAdmin();
-            }, 100); // Delay 100ms agar DOM sidebar sudah selesai dirender
+                var role = localStorage.getItem('2r_user_role');
+                if (role === 'superadmin') {
+                    document.getElementById('sidebarSuperAdmin').style.display = 'block';
+                    document.getElementById('sidebarUmum').style.display = 'none';
+                } else {
+                    document.getElementById('sidebarSuperAdmin').style.display = 'none';
+                    document.getElementById('sidebarUmum').style.display = 'block';
+                }
+            }, 100);
         }
 
         // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
