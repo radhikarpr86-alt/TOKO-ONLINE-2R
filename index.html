@@ -3493,6 +3493,43 @@
         document.getElementById(id).classList.remove('active');
     }
 
+    // ========== FUNGSI UNTUK MENYEMBUNYIKAN MENU ADMIN ==========
+
+    function sembunyikanMenuAdmin() {
+        // Ambil role user dari localStorage
+        var userRole = localStorage.getItem('2r_user_role');
+        
+        // Jika role adalah TOKO atau bukan SUPERADMIN, sembunyikan menu admin
+        if (userRole !== 'superadmin') {
+            // Daftar menu admin yang harus disembunyikan
+            var menuAdminList = [
+                'daftarAkun',
+                'persetujuan',
+                'kelolaAkun',
+                'transferMenu',
+                'penagihan',
+                'settingRekening',
+                'kelolaUpgrade',
+                'settingTarifOjek',
+                'kelolaIklan'
+            ];
+
+            // Loop untuk menyembunyikan setiap menu admin
+            menuAdminList.forEach(function(menuId) {
+                var menuItem = document.querySelector('.sidebar-menu-item[data-page="' + menuId + '"]');
+                if (menuItem) {
+                    menuItem.style.display = 'none';
+                }
+            });
+
+            // Sembunyikan judul "Menu Admin"
+            var menuAdminTitle = document.querySelector('.sidebar-menu-title');
+            if (menuAdminTitle && menuAdminTitle.textContent.trim() === 'Menu Admin') {
+                menuAdminTitle.style.display = 'none';
+            }
+        }
+    }
+
     // ========== EVENT LISTENER: DOM CONTENT LOADED ==========
 
     // Fungsi utama yang dijalankan saat seluruh HTML selesai dimuat
@@ -3508,16 +3545,17 @@
             tampilkanDashboard(user);
             
             // 3. Tampilkan sidebar yang sesuai dengan role user
-            setTimeout(function() {
-                var role = localStorage.getItem('2r_user_role');
-                if (role === 'superadmin') {
-                    document.getElementById('sidebarSuperAdmin').style.display = 'block';
-                    document.getElementById('sidebarUmum').style.display = 'none';
-                } else {
-                    document.getElementById('sidebarSuperAdmin').style.display = 'none';
-                    document.getElementById('sidebarUmum').style.display = 'block';
-                }
-            }, 100);
+            var role = localStorage.getItem('2r_user_role');
+            
+            if (role === 'superadmin') {
+                document.getElementById('sidebarSuperAdmin').style.display = 'block';
+                document.getElementById('sidebarUmum').style.display = 'none';
+            } else {
+                document.getElementById('sidebarSuperAdmin').style.display = 'none';
+                document.getElementById('sidebarUmum').style.display = 'block';
+                // Panggil fungsi penyembunyian menu admin
+                sembunyikanMenuAdmin();
+            }
         }
 
         // 4. Pastikan ID otomatis muncul saat halaman Daftar Akun dimuat
