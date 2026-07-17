@@ -705,14 +705,14 @@
             toggleForm('login');
         });
 
-        // ========== TAMPILKAN DASHBOARD (UNIVERSAL) ==========
-        // Fungsi ini menampilkan dashboard untuk semua Role, tapi hanya dengan menu Dasbor & Profil
+        // ========== TAMPILKAN DASHBOARD ==========
+        // Fungsi utama untuk menampilkan dashboard setelah login
         function tampilkanDashboard(user) {
             document.getElementById('pageAuth').style.display = 'none';
             document.getElementById('pageDashboard').style.display = 'block';
             document.getElementById('userNama').textContent = user.nama;
             
-            // Tampilkan halaman Dasbor untuk semua Role
+            // Tampilkan Dasbor sebagai halaman pertama
             document.querySelectorAll('.page-content').forEach(function(el) { 
                 el.classList.remove('active'); 
             });
@@ -724,7 +724,7 @@
             });
             document.querySelector('.sidebar-menu-item[data-page="dashboard"]').classList.add('active');
 
-            // Load data profil (agar siap saat menu Profil diklik)
+            // Load data profil dan statistik dashboard
             loadProfil();
             renderDashboardStats();
         }
