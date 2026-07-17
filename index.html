@@ -18,441 +18,157 @@
     <!-- Load Google Fonts (Poppins) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Link ke file CSS eksternal (pemecahan selanjutnya akan di sini) -->
+    <!-- Link ke file CSS eksternal -->
     <link rel="stylesheet" href="css/2-reset-variables.css">
     <link rel="stylesheet" href="css/3-preloader-toast.css">
     <link rel="stylesheet" href="css/4-auth.css">
     <link rel="stylesheet" href="css/5-layout.css">
     <link rel="stylesheet" href="css/6-components.css">
     <link rel="stylesheet" href="css/7-widget-custom.css">
-<!-- ================================ AKHIR BLOK 1(1) - 01 HEAD & HTML STRUCTURE ================================ -->
 
-/* ================================ BLOK 1(2) - 02 CSS RESET & VARIABEL ================================ */
-/* PENJELASAN: 
-     Sub-blok ini berisi Reset CSS untuk menghilangkan margin/padding bawaan browser,
-     serta mendefinisikan Variabel Warna Global (:root) yang akan digunakan di seluruh aplikasi.
-     Custom Scrollbar juga didefinisikan di sini agar tampilan scroll tetap konsisten. */
-
-/* Reset Dasar */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #f5f7fa;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-}
-
-/* Variabel Warna Global */
-:root {
-    --orange-primary: #FF6B00; 
-    --orange-light: #FFF0E5;
-    --white: #FFFFFF; 
-    --gray-50: #FAFAFA; 
-    --gray-100: #F5F5F5;
-    --gray-200: #EEEEEE; 
-    --gray-300: #E0E0E0; 
-    --gray-400: #BDBDBD;
-    --gray-500: #9E9E9E; 
-    --gray-600: #757575; 
-    --gray-700: #616161;
-    --gray-800: #424242; 
-    --gray-900: #212121;
-    --success: #4CAF50; 
-    --error: #F44336; 
-    --warning: #FF9800;
-    --info: #2196F3;
-    --radius-md: 12px; 
-    --radius-sm: 8px;
-    --transition: 0.3s ease;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--gray-100); }
-::-webkit-scrollbar-thumb { background: var(--orange-primary); border-radius: 10px; }
-
-/* Aturan Global untuk menyembunyikan halaman */
-.page-dashboard { display: none; }
-.page-content { display: none; }
-.page-content.active { display: block; }
-
-/* ================================ BLOK 1(3) - 03 CSS PRELOADER & TOAST ================================ */
-/* PENJELASAN: 
-     Sub-blok ini mengatur tampilan Preloader (animasi loading saat halaman dimuat)
-     dan Toast Notification (notifikasi pop-up di pojok kanan atas). */
-
-/* Preloader */
-#preloader { 
-    position: fixed; 
-    inset: 0; 
-    background: var(--white); 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 99999; 
-    transition: 0.5s; 
-}
-#preloader.hidden { opacity: 0; visibility: hidden; }
-.loader { 
-    width: 40px; 
-    height: 40px; 
-    border: 4px solid var(--gray-200); 
-    border-top: 4px solid var(--orange-primary); 
-    border-radius: 50%; 
-    animation: spin 0.8s linear infinite; 
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-/* Toast Notification */
-.toast-container { 
-    position: fixed; 
-    top: 20px; 
-    right: 20px; 
-    z-index: 10000; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; 
-}
-.toast { 
-    padding: 14px 20px; 
-    border-radius: var(--radius-sm); 
-    color: white; 
-    font-size: 14px; 
-    min-width: 250px; 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15); 
-    animation: slideInRight 0.4s; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-}
-.toast.success { background: var(--success); } 
-.toast.error { background: var(--error); } 
-.toast.warning { background: var(--warning); }
-.toast.info { background: var(--info); }
-@keyframes slideInRight { 
-    from { transform: translateX(100%); opacity: 0; } 
-    to { transform: translateX(0); opacity: 1; } 
-}
-
-/* ================================ BLOK 1(4) - 04 CSS LOGIN & REGISTER ================================ */
-/* PENJELASAN: 
-     Sub-blok ini berisi CSS khusus untuk halaman Login dan Register.
-     Menggunakan efek glassmorphism untuk tampilan yang modern dan elegan. */
-
-.auth-wrapper { width: 100%; max-width: 450px; padding: 20px; }
-.auth-box { 
-    background: rgba(255, 255, 255, 0.95); 
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-md); 
-    padding: 40px 30px; 
-    box-shadow: 0 15px 35px rgba(255, 107, 0, 0.15); 
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-}
-.auth-logo { text-align: center; margin-bottom: 25px; }
-.auth-logo i { font-size: 40px; color: var(--orange-primary); display: block; margin-bottom: 5px; }
-.auth-logo h1 { font-size: 26px; font-weight: 800; color: var(--gray-900); }
-.auth-logo h1 span { color: var(--orange-primary); }
-.auth-logo p { color: var(--gray-500); font-size: 13px; margin-top: 4px; }
-.auth-error { display: none; background: #FFEBEE; color: var(--error); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 14px; align-items: center; gap: 10px; }
-
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; font-weight: 600; font-size: 14px; color: var(--gray-800); margin-bottom: 5px; }
-
-.input-group { 
-    display: flex; align-items: center; 
-    background: var(--gray-100); 
-    border-radius: var(--radius-sm); 
-    padding: 0 14px; 
-    border: 2px solid transparent; 
-    transition: 0.3s; 
-}
-.input-group:focus-within { border-color: var(--orange-primary); background: white; box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1); }
-.input-group i { color: var(--gray-500); font-size: 16px; width: 30px; text-align: center; }
-.input-group input, .input-group select { border: none; background: transparent; padding: 13px 10px; font-size: 15px; width: 100%; outline: none; font-family: inherit; }
-
-.btn-submit { 
-    width: 100%; padding: 14px; 
-    background: linear-gradient(135deg, var(--orange-primary), #FF8C32); 
-    color: white; border: none; border-radius: var(--radius-sm); 
-    font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; 
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
-}
-.btn-submit:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
-
-.auth-footer { text-align: center; margin-top: 20px; font-size: 14px; color: var(--gray-500); }
-.auth-footer a { color: var(--orange-primary); font-weight: 600; cursor: pointer; text-decoration: none; }
-.auth-footer a:hover { text-decoration: underline; }
-.hidden-form { display: none !important; }
-
-/* ================================ BLOK 1(5) - 05 CSS LAYOUT DASHBOARD ================================ */
-/* PENJELASAN: 
-     Sub-blok ini mengatur tata letak (layout) dari Dashboard SuperAdmin.
-     Mencakup Navbar (atas), Sidebar (kiri), dan Content Area (tengah/kanan).
-     Juga mengatur responsivitas untuk tampilan mobile. */
-
-/* Navbar */
-.navbar { 
-    background: white; padding: 15px 30px; 
-    display: flex; justify-content: space-between; align-items: center; 
-    border-bottom: 2px solid var(--orange-light); 
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000; 
-}
-.navbar-brand { font-size: 20px; font-weight: 700; color: var(--orange-primary); display: flex; align-items: center; gap: 10px; }
-.navbar-user { display: flex; align-items: center; gap: 15px; }
-.btn-logout { background: transparent; border: 1px solid #ddd; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; }
-.btn-logout:hover { background: #d32f2f; color: white; }
-
-/* Sidebar */
-.sidebar { 
-    position: fixed; top: 65px; left: 0; bottom: 0; width: 230px; 
-    background: white; border-right: 1px solid #eee; padding-top: 20px; overflow-y: auto; 
-}
-.sidebar-menu-title { font-size: 11px; text-transform: uppercase; color: #aaa; padding: 10px 25px; font-weight: 700; letter-spacing: 1px; }
-.sidebar-menu-item { padding: 12px 25px; cursor: pointer; color: #555; font-weight: 500; display: flex; align-items: center; gap: 12px; }
-.sidebar-menu-item:hover { background: #f9f9f9; color: var(--orange-primary); }
-.sidebar-menu-item.active { background: #fff0e5; color: var(--orange-primary); border-right: 3px solid var(--orange-primary); }
-
-/* Content Area */
-.content { margin-left: 230px; margin-top: 65px; padding: 30px; min-height: 100vh; background: #f8f9fa; }
-.page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 22px; color: #333; }
-.page-header p { color: #888; font-size: 14px; }
-
-/* Responsivitas (Mobile) */
-@media (max-width: 768px) {
-    .sidebar { width: 100%; left: -100%; transition: 0.3s; }
-    .sidebar.active { left: 0; }
-    .content { margin-left: 0; padding: 80px 15px 15px 15px; }
-}
-
-/* ================================ BLOK 1(6) - 06 CSS COMPONENTS ================================ */
-/* PENJELASAN: 
-     Sub-blok ini berisi komponen-komponen antarmuka (UI) yang digunakan di banyak halaman.
-     Mulai dari Kartu (Card), Tombol (Buttons), Form Input, hingga Modal Pop-up. */
-
-/* Card */
-.card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; padding: 20px; border: 1px solid #eee; }
-.card-header { font-weight: 600; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-
-/* Buttons */
-.btn-primary { background: var(--orange-primary); color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 13px; }
-.btn-primary:hover { background: #e65c00; }
-.btn-secondary { background: #eee; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; }
-.btn-danger { background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
-.btn-xs { padding: 4px 12px; font-size: 12px; border-radius: 4px; }
-
-/* Form */
-.form-input { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
-.form-input:focus { border-color: var(--orange-primary); outline: none; }
-.mt-10 { margin-top: 10px; }
-
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; justify-content: center; align-items: center; }
-.modal-overlay.active { display: flex; }
-.modal { background: white; border-radius: 10px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
-.modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; }
-.modal-close:hover { color: #d32f2f; }
-.modal-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
-
-/* ================================ BLOK 1(7) - 07 CSS WIDGET & KELOLA AKUN ================================ */
-/* PENJELASAN: 
-     Sub-blok ini berisi CSS khusus untuk halaman Dashboard (Widget Statistik)
-     dan halaman-halaman manajemen akun (Tabel Kelola Akun, Setting Rekening). */
-
-/* Dashboard Widgets */
-.dashboard-widgets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-.widget-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; text-align: center; }
-.widget-card .icon { font-size: 30px; margin-bottom: 10px; }
-.widget-card .icon.total { color: #2196F3; }
-.widget-card .icon.aktif { color: #4CAF50; }
-.widget-card .icon.menunggu { color: #FF9800; }
-.widget-card .icon.nonaktif { color: #F44336; }
-.widget-card .number { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 5px; }
-.widget-card .label { font-size: 14px; color: #888; font-weight: 500; }
-
-/* Tabel Kelola Akun */
-.tabel-kelola-akun { width: 100%; border-collapse: collapse; font-size: 14px; font-family: 'Poppins', sans-serif; }
-.tabel-kelola-akun thead { background: #f8f9fa; border-bottom: 2px solid #eee; }
-.tabel-kelola-akun th, .tabel-kelola-akun td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f5f5f5; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-.status-badge.aktif { background: #e8f5e9; color: #2e7d32; }
-.status-badge.nonaktif { background: #ffebee; color: #c62828; }
-.status-badge.menunggu { background: #fff3e0; color: #e65100; }
-
-/* Setting Rekening */
-.rekening-container { max-width: 600px; margin: 0 auto; }
-.rekening-container .card { padding: 25px; }
-.rekening-container .form-group { margin-bottom: 20px; }
-.rekening-container .form-group label { display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 5px; }
-
-<!-- ===================================== BLOK 2(1) - 01 STRUKTUR DASHBOARD (WADAH) ===================================== -->
-<!-- PENJELASAN: 
-     Sub-blok ini adalah struktur utama dari Dashboard SuperAdmin.
-     Berisi Navbar, Sidebar, dan Area Konten (<main>) sebagai wadah.
-     Semua halaman lain (Dasbor, Profil, Daftar Akun, dll) akan dimuat ke dalam <main>. -->
-
-<!-- ===== HALAMAN LOGIN & REGISTER ===== -->
-<div id="pageAuth">
-    <div class="auth-wrapper">
-        <div class="auth-box">
-            <div class="auth-logo">
-                <i class="fas fa-store-alt"></i>
-                <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
-                <p style="color:#888; font-size:14px;">Platform Belanja & Layanan Serba Ada</p>
-            </div>
-            <div class="auth-error" id="authError">
-                <i class="fas fa-exclamation-circle"></i> <span id="authErrorText">Terjadi kesalahan!</span>
-            </div>
-            
-            <!-- Form Login -->
-            <form class="auth-form" id="loginForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
-                <div class="auth-footer">Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a></div>
-            </form>
-
-            <!-- Form Register -->
-            <form class="auth-form hidden-form" id="registerForm">
-                <div class="form-group">
-                    <label>ID Akun</label>
-                    <div class="input-group" style="background:#f0f0f0; border:2px solid #ddd;">
-                        <i class="fas fa-id-card"></i>
-                        <span id="regIdPreview" style="padding:15px 12px; font-weight:600; color:#555;">-</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Pilih Role</label>
-                    <div class="input-group">
-                        <i class="fas fa-user-tag"></i>
-                        <select id="regRole" onchange="updateIdPreview()">
-                            <option value="customer">Customer</option>
-                            <option value="toko">Toko</option>
-                            <option value="ojek">Ojek</option>
-                            <option value="pedagang">Pedagang Pasar</option>
-                            <option value="codseller">COD Seller</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="regUsername" placeholder="Buat username" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="regPassword" placeholder="Buat password" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <div class="input-group">
-                        <i class="fas fa-id-card"></i>
-                        <input type="text" id="regNama" placeholder="Nama lengkap Anda" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Email (Opsional)</label>
-                    <div class="input-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="regEmail" placeholder="Email">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>No HP (Opsional)</label>
-                    <div class="input-group">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="regHp" placeholder="Nomor HP">
-                    </div>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
-                <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- ===== DASHBOARD SUPERADMIN ===== -->
-<div id="pageDashboard" class="page-dashboard">
-    
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
-        <div class="navbar-user">
-            <span id="userNama" style="font-weight:600;">SuperAdmin</span>
-            <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-        </div>
-    </nav>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-menu-title">Menu Utama</div>
-        <div class="sidebar-menu-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dasbor</div>
-        <div class="sidebar-menu-item" data-page="profile"><i class="fas fa-user-circle"></i> Profil</div>
+    <style>
+        /* ================================ BLOK 1(2) - 02 CSS RESET & VARIABEL ================================ */
+        /* Reset Dasar */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f7fa; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
         
-        <div class="sidebar-menu-title">Menu Admin</div>
-        <div class="sidebar-menu-item" data-page="daftarAkun"><i class="fas fa-user-plus"></i> Daftar Akun Baru</div>
-        <div class="sidebar-menu-item" data-page="persetujuan"><i class="fas fa-check-double"></i> Persetujuan Akun</div>
-        <div class="sidebar-menu-item" data-page="kelolaAkun"><i class="fas fa-users-cog"></i> Kelola Semua Akun</div>
-        <div class="sidebar-menu-item" data-page="settingRekening"><i class="fas fa-university"></i> Setting Rekening</div>
-    </aside>
-
-    <!-- Content Area -->
-    <main class="content">
+        /* Variabel Warna Global */
+        :root {
+            --orange-primary: #FF6B00; --orange-light: #FFF0E5; --white: #FFFFFF;
+            --gray-50: #FAFAFA; --gray-100: #F5F5F5; --gray-200: #EEEEEE; --gray-300: #E0E0E0;
+            --gray-400: #BDBDBD; --gray-500: #9E9E9E; --gray-600: #757575; --gray-700: #616161;
+            --gray-800: #424242; --gray-900: #212121; --success: #4CAF50; --error: #F44336;
+            --warning: #FF9800; --info: #2196F3; --radius-md: 12px; --radius-sm: 8px; --transition: 0.3s ease;
+        }
         
-        <!-- Halaman Dasbor -->
-        <div class="page-content active" id="pageDasbor">
-            <div id="contentDashboard"></div>
-        </div>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--orange-primary); border-radius: 10px; }
+        
+        /* Aturan Global untuk menyembunyikan halaman */
+        .page-dashboard { display: none; }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
 
-        <!-- Halaman Profil -->
-        <div class="page-content" id="pageProfil">
-            <div id="contentProfile"></div>
-        </div>
+        /* ================================ BLOK 1(3) - 03 CSS PRELOADER & TOAST ================================ */
+        /* Preloader */
+        #preloader { position: fixed; inset: 0; background: var(--white); display: flex; justify-content: center; align-items: center; z-index: 99999; transition: 0.5s; }
+        #preloader.hidden { opacity: 0; visibility: hidden; }
+        .loader { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--orange-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* Toast Notification */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 14px 20px; border-radius: var(--radius-sm); color: white; font-size: 14px; min-width: 250px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); animation: slideInRight 0.4s; display: flex; align-items: center; gap: 10px; }
+        .toast.success { background: var(--success); } .toast.error { background: var(--error); } .toast.warning { background: var(--warning); } .toast.info { background: var(--info); }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        <!-- Halaman Daftar Akun -->
-        <div class="page-content" id="pageDaftarAkun">
-            <div id="contentDaftarAkun"></div>
-        </div>
+        /* ================================ BLOK 1(4) - 04 CSS LOGIN & REGISTER ================================ */
+        .auth-wrapper { width: 100%; max-width: 450px; padding: 20px; }
+        .auth-box { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--radius-md); padding: 40px 30px; box-shadow: 0 15px 35px rgba(255, 107, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .auth-logo { text-align: center; margin-bottom: 25px; }
+        .auth-logo i { font-size: 40px; color: var(--orange-primary); display: block; margin-bottom: 5px; }
+        .auth-logo h1 { font-size: 26px; font-weight: 800; color: var(--gray-900); }
+        .auth-logo h1 span { color: var(--orange-primary); }
+        .auth-logo p { color: var(--gray-500); font-size: 13px; margin-top: 4px; }
+        .auth-error { display: none; background: #FFEBEE; color: var(--error); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 14px; align-items: center; gap: 10px; }
 
-        <!-- Halaman Persetujuan -->
-        <div class="page-content" id="pagePersetujuan">
-            <div id="contentPersetujuan"></div>
-        </div>
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 600; font-size: 14px; color: var(--gray-800); margin-bottom: 5px; }
+        .input-group { display: flex; align-items: center; background: var(--gray-100); border-radius: var(--radius-sm); padding: 0 14px; border: 2px solid transparent; transition: 0.3s; }
+        .input-group:focus-within { border-color: var(--orange-primary); background: white; box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1); }
+        .input-group i { color: var(--gray-500); font-size: 16px; width: 30px; text-align: center; }
+        .input-group input, .input-group select { border: none; background: transparent; padding: 13px 10px; font-size: 15px; width: 100%; outline: none; font-family: inherit; }
+        .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--orange-primary), #FF8C32); color: white; border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3); }
+        .btn-submit:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
+        .auth-footer { text-align: center; margin-top: 20px; font-size: 14px; color: var(--gray-500); }
+        .auth-footer a { color: var(--orange-primary); font-weight: 600; cursor: pointer; text-decoration: none; }
+        .auth-footer a:hover { text-decoration: underline; }
+        .hidden-form { display: none !important; }
 
-        <!-- Halaman Kelola Akun -->
-        <div class="page-content" id="pageKelolaAkun">
-            <div id="contentKelolaAkun"></div>
-        </div>
+        /* ================================ BLOK 1(5) - 05 CSS LAYOUT DASHBOARD ================================ */
+        /* Navbar */
+        .navbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--orange-light); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
+        .navbar-brand { font-size: 20px; font-weight: 700; color: var(--orange-primary); display: flex; align-items: center; gap: 10px; }
+        .navbar-user { display: flex; align-items: center; gap: 15px; }
+        .btn-logout { background: transparent; border: 1px solid #ddd; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .btn-logout:hover { background: #d32f2f; color: white; }
 
-        <!-- Halaman Setting Rekening -->
-        <div class="page-content" id="pageSettingRekening">
-            <div id="contentSettingRekening"></div>
-        </div>
+        /* Sidebar */
+        .sidebar { position: fixed; top: 65px; left: 0; bottom: 0; width: 230px; background: white; border-right: 1px solid #eee; padding-top: 20px; overflow-y: auto; }
+        .sidebar-menu-title { font-size: 11px; text-transform: uppercase; color: #aaa; padding: 10px 25px; font-weight: 700; letter-spacing: 1px; }
+        .sidebar-menu-item { padding: 12px 25px; cursor: pointer; color: #555; font-weight: 500; display: flex; align-items: center; gap: 12px; }
+        .sidebar-menu-item:hover { background: #f9f9f9; color: var(--orange-primary); }
+        .sidebar-menu-item.active { background: #fff0e5; color: var(--orange-primary); border-right: 3px solid var(--orange-primary); }
 
-    </main>
-</div>
+        /* Content Area */
+        .content { margin-left: 230px; margin-top: 65px; padding: 30px; min-height: 100vh; background: #f8f9fa; }
+        .page-header { margin-bottom: 20px; }
+        .page-header h2 { font-size: 22px; color: #333; }
+        .page-header p { color: #888; font-size: 14px; }
+
+        /* Responsivitas (Mobile) */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; left: -100%; transition: 0.3s; }
+            .sidebar.active { left: 0; }
+            .content { margin-left: 0; padding: 80px 15px 15px 15px; }
+        }
+
+        /* ================================ BLOK 1(6) - 06 CSS COMPONENTS ================================ */
+        /* Card */
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; padding: 20px; border: 1px solid #eee; }
+        .card-header { font-weight: 600; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* Buttons */
+        .btn-primary { background: var(--orange-primary); color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn-primary:hover { background: #e65c00; }
+        .btn-secondary { background: #eee; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; }
+        .btn-danger { background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+        .btn-xs { padding: 4px 12px; font-size: 12px; border-radius: 4px; }
+
+        /* Form */
+        .form-input { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .form-input:focus { border-color: var(--orange-primary); outline: none; }
+        .mt-10 { margin-top: 10px; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 10px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; }
+        .modal-close:hover { color: #d32f2f; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
+
+        /* ================================ BLOK 1(7) - 07 CSS WIDGET & KELOLA AKUN ================================ */
+        /* Dashboard Widgets */
+        .dashboard-widgets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .widget-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; text-align: center; }
+        .widget-card .icon { font-size: 30px; margin-bottom: 10px; }
+        .widget-card .icon.total { color: #2196F3; }
+        .widget-card .icon.aktif { color: #4CAF50; }
+        .widget-card .icon.menunggu { color: #FF9800; }
+        .widget-card .icon.nonaktif { color: #F44336; }
+        .widget-card .number { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 5px; }
+        .widget-card .label { font-size: 14px; color: #888; font-weight: 500; }
+
+        /* Tabel Kelola Akun */
+        .tabel-kelola-akun { width: 100%; border-collapse: collapse; font-size: 14px; font-family: 'Poppins', sans-serif; }
+        .tabel-kelola-akun thead { background: #f8f9fa; border-bottom: 2px solid #eee; }
+        .tabel-kelola-akun th, .tabel-kelola-akun td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f5f5f5; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .status-badge.aktif { background: #e8f5e9; color: #2e7d32; }
+        .status-badge.nonaktif { background: #ffebee; color: #c62828; }
+        .status-badge.menunggu { background: #fff3e0; color: #e65100; }
+
+        /* Setting Rekening */
+        .rekening-container { max-width: 600px; margin: 0 auto; }
+        .rekening-container .card { padding: 25px; }
+        .rekening-container .form-group { margin-bottom: 20px; }
+        .rekening-container .form-group label { display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 5px; }
+    </style>
+</head>
 <!-- ===================================== AKHIR BLOK 2(1) - 01 STRUKTUR DASHBOARD (WADAH) ===================================== -->
 
 <!-- ===================================== BLOK 2(2) - 01 HALAMAN DASHBOARD ===================================== -->
