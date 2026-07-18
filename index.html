@@ -870,7 +870,7 @@ function renderDashboard() {
 
 <!-- ===== BLOK 6 (6) - 06 RENDER DASHBOARD CUSTOMER (LENGKAP + IKLAN TANPA BATAS) ===== -->
 <script>
-// ===== FUNGSI TAMPILKAN SEMUA IKLAN DI DASHBOARD (TANPA BATAS) =====
+// ===== FUNGSI TAMPILKAN SEMUA IKLAN DI DASHBOARD (DENGAN GAMBAR) =====
 function renderIklanDiDashboard() {
     var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var html = '';
@@ -880,13 +880,19 @@ function renderIklanDiDashboard() {
         return html;
     }
     html += '<div class="card"><div class="card-header">Iklan Sponsor</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;">';
+    html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">';
     for (var i = 0; i < iklan.length; i++) {
         var d = iklan[i];
-        html += '<div style="background:' + (d.warna || '#FF6B00') + ';color:white;border-radius:10px;padding:20px;text-align:center;">';
-        html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
+        var gambarHtml = '';
+        if (d.gambar) {
+            gambarHtml = '<img src="' + d.gambar + '" style="width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px;">';
+        } else {
+            gambarHtml = '<i class="fas fa-ad" style="font-size:40px; margin-bottom:10px; display:block;"></i>';
+        }
+        html += '<div style="background:' + (d.warna || '#FF6B00') + '; color:white; border-radius:10px; padding:20px; text-align:center;">';
+        html += gambarHtml;
         html += '<h4 style="font-size:14px;">' + d.judul + '</h4>';
-        html += '<p style="font-size:12px;opacity:0.9;">' + d.deskripsi + '</p>';
+        html += '<p style="font-size:12px; opacity:0.9;">' + d.deskripsi + '</p>';
         html += '</div>';
     }
     html += '</div></div>';
