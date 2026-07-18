@@ -419,11 +419,11 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
 
-<!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP (PERBAIKAN CUSTOMER) ===== -->
+<!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP (PERBAIKAN AKHIR) ===== -->
 <script>
 function buatSidebarHTML(role) {
     var menuRole = {
-        // SUPERADMIN (tidak berubah)
+        // SUPERADMIN
         'superadmin': [
             {
                 judul: 'Menu Utama',
@@ -448,7 +448,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-                // ===== CUSTOMER BARU (16 MENU) =====
+        // CUSTOMER (16 MENU)
         'customer': [
             {
                 judul: 'Menu Belanja',
@@ -483,7 +483,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // TOKO (tidak berubah)
+        // TOKO
         'toko': [
             {
                 judul: 'Menu Utama',
@@ -503,7 +503,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // OJEK (tidak berubah)
+        // OJEK
         'ojek': [
             {
                 judul: 'Menu Utama',
@@ -523,7 +523,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // PEDAGANG (tidak berubah)
+        // PEDAGANG
         'pedagang': [
             {
                 judul: 'Menu Utama',
@@ -534,7 +534,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // STAF ADMIN (tidak berubah)
+        // STAF ADMIN
         'staf_admin': [
             {
                 judul: 'Menu Utama',
@@ -547,7 +547,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // CUSTOMER SERVICE (tidak berubah)
+        // CUSTOMER SERVICE
         'customer_service': [
             {
                 judul: 'Menu Utama',
@@ -560,7 +560,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // STAF OWNER TOKO (tidak berubah)
+        // STAF OWNER TOKO
         'staf_owner_toko': [
             {
                 judul: 'Menu Utama',
@@ -574,7 +574,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // STAF OWNER OJEK (tidak berubah)
+        // STAF OWNER OJEK
         'staf_owner_ojek': [
             {
                 judul: 'Menu Utama',
@@ -588,7 +588,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // SPONSOR (tidak berubah)
+        // SPONSOR
         'sponsor': [
             {
                 judul: 'Menu Utama',
@@ -603,20 +603,21 @@ function buatSidebarHTML(role) {
         ]
     };
 
-    // Jika role tidak ditemukan, gunakan menu customer sebagai default
     var daftarMenu = menuRole[role];
     if (!daftarMenu) {
         daftarMenu = menuRole['customer'];
     }
 
-    // Bangun HTML sidebar
     var html = '';
     for (var i = 0; i < daftarMenu.length; i++) {
         var section = daftarMenu[i];
         html += '<div class="sidebar-menu-title">' + section.judul + '</div>';
         for (var j = 0; j < section.items.length; j++) {
             var item = section.items[j];
-            var classActive = (item.halaman === 'dashboardCustomer') ? ' active' : '';
+            var classActive = '';
+            if (item.halaman === 'dashboard' || item.halaman === 'dashboardCustomer') {
+                classActive = ' active';
+            }
             html += '<div class="sidebar-menu-item' + classActive + '" data-page="' + item.halaman + '">';
             html += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
         }
@@ -637,7 +638,7 @@ function setupNavigasiSidebar() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (3) ===== -->
-<!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN (PERBAIKAN CUSTOMER) ===== -->
+<!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN (PERBAIKAN AKHIR) ===== -->
 <script>
 function navigasiKeHalaman(halaman) {
     var contentArea = document.getElementById('mainContent');
@@ -645,7 +646,7 @@ function navigasiKeHalaman(halaman) {
         return;
     }
 
-    // ===== NAVIGASI UNTUK SEMUA ROLE =====
+    // ===== NAVIGASI UNTUK SEMUA ROLE (Dasbor & Profil) =====
     if (halaman === 'dashboard') {
         renderDashboard();
     } else if (halaman === 'profile') {
@@ -664,7 +665,7 @@ function navigasiKeHalaman(halaman) {
         renderPesananSaya();
     }
 
-    // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU BARU) =====
+    // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
     else if (halaman === 'dashboardCustomer') {
         renderDashboardCustomer();
     } else if (halaman === 'profilCustomer') {
@@ -699,7 +700,7 @@ function navigasiKeHalaman(halaman) {
         renderEditAkun();
     }
 
-    // ===== PLACEHOLDER UNTUK HALAMAN YANG BELUM ADA =====
+    // ===== PLACEHOLDER =====
     else {
         renderPlaceholder(halaman);
     }
@@ -722,9 +723,8 @@ function renderPlaceholder(judul) {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (4) ===== -->
-<!-- ===== BLOK 6 (5) - 05 RENDER DASHBOARD CUSTOMER (PERBAIKAN) ===== -->
+<!-- ===== BLOK 6 (5) - 05 RENDER DASHBOARD (PERBAIKAN AKHIR) ===== -->
 <script>
-// ===== FUNGSI RENDER DASHBOARD UNTUK SEMUA ROLE (SUPERADMIN, TOKO, OJEK, DLL) =====
 function renderDashboard() {
     var role = localStorage.getItem('2r_user_role');
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -868,13 +868,11 @@ function renderDashboard() {
         html += '</div>';
     }
 
-    // ===== PERHATIKAN: DASHBOARD CUSTOMER TIDAK LAGI DI SINI =====
-    // Dashboard Customer sekarang ada di fungsi renderDashboardCustomer() terpisah.
-
     contentArea.innerHTML = html;
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (5) ===== -->
+
 <!-- ===== BLOK 6 (6) - 06 RENDER DASHBOARD CUSTOMER (BARU) ===== -->
 <script>
 function renderDashboardCustomer() {
