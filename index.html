@@ -2193,8 +2193,179 @@ function prosesDaftarAkun() {
 </script>
 <!-- ===== AKHIR BLOK 6 (10) ===== -->
 
-<!-- ===== BLOK 6 (11) - 11 RENDER PERSETUJUAN & KELOLA AKUN ===== -->
-<script>
+// ===== 11. RENDER PERSETUJUAN & KELOLA AKUN (DENGAN SISTEM PENGAJUAN HAPUS) =====
+function renderKelolaAkun() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki akses ke halaman ini!', 'error');
+        return;
+    }
+
+    var akun = getDataAkun();
+    var daftar = [];
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].role !== 'superadmin') {
+            daftar.push(akun[i]);
+        }
+    }
+    var contentArea = document.getElementById('mainContent');
+    var html = '<div class="page-header"><h2>Kelola Semua Akun</h2><p>';
+    if (role === 'superadmin') {
+        html += 'Anda dapat mengaktifkan, menonaktifkan, atau menghapus akun secara permanen.';
+    } else {
+        html += 'Anda dapat mengaktifkan, menonaktifkan, atau mengajukan penghapusan akun ke SuperAdmin.';
+    }
+    html += '</p></div><div class="card">';
+    if (daftar.length === 0) {
+        html += '<div class="empty-state"><i class="fas fa-users-slash"></i><h3>Belum ada akun</h3></div>';
+    } else {
+        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+        for (var i = 0; i < daftar.length; i++) {
+            var a = daftar[i];
+            var badge = '';
+            var statusText = '';
+            if (a.status === 'AKTIF') {
+                badge = 'badge-success';
+                statusText = 'AKTIF';
+            } else if (a.status === 'NONAKTIF (Menunggu Verifikasi)') {
+                badge = 'badge-warning';
+                statusText = 'Menunggu';
+            } else {
+                badge = 'badge-danger';
+                statusText = 'Nonaktif';
+            }
+            html += '<tr><td>' + (i+1) + '</td><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td><div style="display:flex;gap:5px;">';
+            if (a.status !== 'AKTIF') {
+                html += '<button class="btn btn-success btn-xs" onclick="aktifkanAkun(\'' + a.id + '\')">Aktifkan</button>';
+            } else {
+                html += '<button class="btn btn-warning btn-xs" onclick="nonaktifkanAkun(\'' + a.id + '\')">Nonaktifkan</button>';
+            }
+            
+            // ===== TOMBOL HAPUS / AJUKAN HAPUS =====
+            if (role === 'superadmin') {
+                // SuperAdmin bisa hapus langsung
+                html += '<button class="btn btn-danger btn-xs" onclick="hapusAkun(\'' + a.id + '\')">Hapus</button>';
+            } else if (role === 'staf_admin') {
+                // Staf Admin hanya bisa mengajukan penghapusan ke SuperAdmin
+                html += '<button class="btn btn-danger btn-xs" style="background:#FF9800;" onclick="ajukanHapusAkunStaf(\'' + a.id + '\')">Ajukan Hapus</button>';
+            }
+            html += '</div></td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    html += '</div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== FUNGSI AKTIFKAN AKUN =====
+function aktifkanAkun(id) {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki hak untuk mengaktifkan akun!', 'error');
+        return;
+    }
+    if (!confirm('Aktifkan akun ini?')) {
+        return;
+    }
+    var akun = getDataAkun();
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === id) {
+            akun[i].status = 'AKTIF';
+            break;
+        }
+    }
+    simpanDataAkun(akun);
+    renderKelolaAkun();
+    tampilkanToast('Akun diaktifkan!', 'success');
+}
+
+// ===== FUNGSI NONAKTIFKAN AKUN =====
+function nonaktifkanAkun(id) {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki hak untuk menonaktifkan akun!', 'error');
+        return;
+    }
+    if (!confirm('Nonaktifkan akun ini?')) {
+        return;
+    }
+    var akun = getDataAkun();
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === id) {
+            akun[i].status = 'NONAKTIF (Dinonaktifkan)';
+            break;
+        }
+    }
+    simpanDataAkun(akun);
+    renderKelolaAkun();
+    tampilkanToast('Akun dinonaktifkan!', 'success');
+}
+
+// ===== FUNGSI HAPUS AKUN (HANYA SUPERADMIN) =====
+function hapusAkun(id) {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin') {
+        tampilkanToast('Hanya SuperAdmin yang dapat menghapus akun permanen!', 'error');
+        return;
+    }
+    if (!confirm('HAPUS permanen akun ini?')) {
+        return;
+    }
+    if (!confirm('KONFIRMASI: Yakin hapus?')) {
+        return;
+    }
+    var akun = getDataAkun();
+    var akunBaru = [];
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id !== id) {
+            akunBaru.push(akun[i]);
+        }
+    }
+    simpanDataAkun(akunBaru);
+    renderKelolaAkun();
+    tampilkanToast('Akun dihapus!', 'success');
+}
+
+// ===== FUNGSI AJUKAN HAPUS AKUN OLEH STAF ADMIN =====
+function ajukanHapusAkunStaf(id) {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki hak untuk mengajukan penghapusan!', 'error');
+        return;
+    }
+    if (!confirm('Ajukan penghapusan akun ini ke SuperAdmin?')) {
+        return;
+    }
+    var akun = getDataAkun();
+    var target = null;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === id) {
+            target = akun[i];
+            break;
+        }
+    }
+    if (!target) {
+        tampilkanToast('Akun tidak ditemukan!', 'error');
+        return;
+    }
+    
+    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+    pengajuan.push({
+        id: Date.now(),
+        targetId: target.id,
+        targetUsername: target.username,
+        targetNama: target.nama,
+        targetRole: target.role,
+        diajukanOleh: 'Staf Admin',
+        status: 'MENUNGGU',
+        diajukanPada: new Date().toISOString()
+    });
+    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuan));
+    renderKelolaAkun();
+    tampilkanToast('Pengajuan penghapusan akun telah dikirim ke SuperAdmin!', 'success');
+}
+
+// ===== FUNGSI PERSETUJUAN AKUN (TIDAK BERUBAH) =====
 function renderPersetujuanAkun() {
     var akun = getDataAkun();
     var daftar = [];
@@ -2235,10 +2406,8 @@ function renderPersetujuanAkun() {
     contentArea.innerHTML = html;
 }
 
+// ===== FUNGSI SETUJUI AKUN =====
 function setujuiAkun(id) {
-    if (!confirm('Setujui akun ini?')) {
-        return;
-    }
     var akun = getDataAkun();
     for (var i = 0; i < akun.length; i++) {
         if (akun[i].id === id) {
@@ -2251,11 +2420,13 @@ function setujuiAkun(id) {
     tampilkanToast('Akun diaktifkan!', 'success');
 }
 
+// ===== FUNGSI BUKA TOLAK AKUN =====
 function bukaTolakAkun(id) {
     document.getElementById('tolakIdAkun').value = id;
     bukaModal('modalTolakAkun');
 }
 
+// ===== FUNGSI EKSEKUSI TOLAK AKUN =====
 function eksekusiTolakAkun() {
     var id = document.getElementById('tolakIdAkun').value;
     var akun = getDataAkun();
