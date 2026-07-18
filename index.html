@@ -967,20 +967,20 @@ function renderProfil() {
     }
 }
 
-// ===== 1. PROFIL CUSTOMER (BISA DIEDIT & DISIMPAN) =====
+// ===== 1. PROFIL CUSTOMER (DENGAN ID AKUN & EDITABLE SESUAI KTP) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
     var html = '';
-    html += '<div class="page-header"><h2>Profil Customer</h2><p>Edit data registrasi, rekening, dan dokumen Anda.</p></div>';
+    html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
     
-    // Data Registrasi (BISA DIEDIT)
+    // Data Registrasi (BISA DIEDIT, SESUAI KTP)
     html += '<div class="card"><div class="card-header">Data Registrasi <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
-    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
     html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
     html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
     html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.hp || '') + '"></div>';
-    html += '<div><label class="form-label">Alamat</label><input type="text" id="editAlamatCustomer" class="form-input" value="' + (user.alamat || '') + '"></div></div></div>';
+    html += '<div><label class="form-label">Alamat Sesuai KTP / Domisili</label><input type="text" id="editAlamatCustomer" class="form-input" value="' + (user.alamat || '') + '"></div></div></div>';
     
     // Data Rekening (BISA DIEDIT)
     html += '<div class="card"><div class="card-header">Data Rekening <button class="btn btn-primary btn-sm" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
