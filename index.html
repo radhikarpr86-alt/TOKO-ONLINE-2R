@@ -950,11 +950,15 @@ function renderDashboardCustomer() {
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
 <!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (FINAL) ===== -->
 <script>
-// ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE (KECUALI CUSTOMER) =====
+// ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE =====
 function renderProfil() {
     var role = localStorage.getItem('2r_user_role');
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
+
+    if (!contentArea) {
+        return;
+    }
 
     if (role === 'superadmin') {
         renderProfilSuperAdmin(user);
@@ -1349,6 +1353,58 @@ function renderProfilSuperAdmin(user) {
 <!-- ===== AKHIR BLOK 6 (8) ===== -->
 <!-- ===== BLOK 6 (9) - 09 FUNGSI PROFIL UMUM (DENGAN REKENING) ===== -->
 <script>
+    // ===== FUNGSI RENDER PROFIL UMUM (UNTUK TOKO, OJEK, PEDAGANG, DLL) =====
+function renderProfilUmum(user, role) {
+    var contentArea = document.getElementById('mainContent');
+    if (!contentArea) {
+        return;
+    }
+
+    var namaRole = {
+        customer: 'Customer',
+        toko: 'Toko',
+        ojek: 'Ojek',
+        pedagang: 'Pedagang Pasar',
+        staf_admin: 'Staf Admin',
+        customer_service: 'Customer Service',
+        staf_owner_toko: 'Staf Owner Toko',
+        staf_owner_ojek: 'Staf Owner Ojek',
+        sponsor: 'Sponsor'
+    };
+
+    var html = '';
+    html += '<div class="page-header"><h2>Profil ' + (namaRole[role] || role) + '</h2><p>Kelola data pribadi, rekening, dan dokumen KTP Anda.</p></div>';
+    
+    html += '<div class="card"><div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi & Rekening</span><button class="btn btn-primary btn-sm" onclick="simpanDataPribadiUmum()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" value="' + (user.email || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" value="' + (user.hp || '') + '"></div>';
+    html += '<div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" value="' + (user.alamat || '') + '"></div></div>';
+    html += '<div class="grid-2" style="margin-top:10px;"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBank" class="form-input" value="' + (user.bank || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekening" class="form-input" value="' + (user.rekening || '') + '"></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRek" class="form-input" value="' + (user.pemilikRek || '') + '"></div></div></div>';
+    
+    html += '<div class="card"><div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Dokumen KTP</span></div>';
+    html += '<div class="upload-area" id="uploadKtpContainer"><div id="ktpPreview">';
+    if (user.ktp) {
+        html += '<img src="' + user.ktp + '" class="preview-img">';
+    } else {
+        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
+    }
+    html += '</div><input type="file" id="inputKtp" accept=".jpg,.jpeg,.png" style="display:none"></div>';
+    html += '<button class="btn btn-primary mt-10" onclick="simpanKTP()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+
+    contentArea.innerHTML = html;
+
+    setTimeout(function() {
+        var container = document.getElementById('uploadKtpContainer');
+        var input = document.getElementById('inputKtp');
+        if (container && input) {
+            container.onclick = function() { input.click(); };
+            input.onchange = function(e) { previewKTP(e.target.files[0]); };
+        }
+    }, 300);
+}
 function simpanDataPribadiUmum() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
