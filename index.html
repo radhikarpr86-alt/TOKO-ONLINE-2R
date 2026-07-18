@@ -1,124 +1,923 @@
+<!-- =====================================================================
+     FILE 1: SADash-01 - SUPERADMIN DASHBOARD
+     Dashboard untuk SuperAdmin dengan menu lengkap
+     ===================================================================== -->
+
 <!-- ===== BLOK 1 (1) - 01 HEADER & META ===== -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Multi Role - Toko Online 2R</title>
+    <title>SuperAdmin Dashboard - Toko Online 2R</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- ===== AKHIR BLOK 1 (1) ===== -->
 
 <!-- ===== BLOK 1 (2) - 02 CSS RESET & GLOBAL ===== -->
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #f5f7fa; min-height: 100vh; }
-    .page-dashboard { display: none; }
-    .page-content { display: none; }
-    .page-content.active { display: block; }
-    .hidden { display: none !important; }
-    .hidden-form { display: none !important; }
-    .mt-10 { margin-top: 10px; }
-    #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; min-width: 250px; display: flex; align-items: center; gap: 12px; }
-    .toast.success { background: #4CAF50; } .toast.error { background: #F44336; } .toast.warning { background: #FF9800; } .toast.info { background: #2196F3; }
-    @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    .empty-state { text-align: center; padding: 30px 20px; color: #888; }
-    .empty-state i { font-size: 40px; color: #ddd; display: block; margin-bottom: 10px; }
-    #pageAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background: linear-gradient(135deg, #fff5f0, #ffe0cc); }
+    /* Reset CSS */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+    }
+
+    .page-dashboard {
+        display: none;
+    }
+
+    .page-content {
+        display: none;
+    }
+
+    .page-content.active {
+        display: block;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .hidden-form {
+        display: none !important;
+    }
+
+    .margin-top-10 {
+        margin-top: 10px;
+    }
+
+    .margin-bottom-10 {
+        margin-bottom: 10px;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (2) ===== -->
 
-<!-- ===== BLOK 1 (3) - 03 CSS LOGIN & REGISTER ===== -->
+<!-- ===== BLOK 1 (3) - 03 CSS TOAST NOTIFICATION ===== -->
 <style>
-    .auth-wrapper { width: 100%; max-width: 450px; padding: 20px; }
-    .auth-box { background: white; border-radius: 15px; padding: 35px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
-    .auth-logo { text-align: center; margin-bottom: 25px; }
-    .auth-logo i { font-size: 45px; color: #FF6B00; margin-bottom: 10px; }
-    .auth-logo h1 { font-size: 26px; color: #333; }
-    .auth-logo p { color: #888; font-size: 14px; }
-    .auth-error { display: none; background: #ffebee; color: #d32f2f; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #555; margin-bottom: 5px; }
-    .input-group { display: flex; align-items: center; background: #f8f9fa; border-radius: 8px; padding: 0 14px; border: 2px solid transparent; }
-    .input-group:focus-within { border-color: #FF6B00; background: white; }
-    .input-group i { color: #aaa; font-size: 16px; width: 30px; text-align: center; }
-    .input-group input, .input-group select { border: none; background: transparent; padding: 13px 0; font-size: 14px; width: 100%; outline: none; font-family: 'Poppins', sans-serif; }
-    .btn-submit { width: 100%; padding: 14px; background: #FF6B00; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
-    .btn-submit:hover { background: #e65c00; }
-    .auth-footer { text-align: center; margin-top: 18px; font-size: 14px; color: #888; }
-    .auth-footer a { color: #FF6B00; cursor: pointer; font-weight: 600; }
+    /* Toast Container */
+    #toastContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Toast Item */
+    .toast {
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideInRight 0.4s ease;
+        min-width: 250px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .toast.success {
+        background: #4CAF50;
+    }
+
+    .toast.error {
+        background: #F44336;
+    }
+
+    .toast.warning {
+        background: #FF9800;
+    }
+
+    .toast.info {
+        background: #2196F3;
+    }
+
+    .toast i {
+        font-size: 20px;
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (3) ===== -->
 
-<!-- ===== BLOK 1 (4) - 04 CSS DASHBOARD ===== -->
+<!-- ===== BLOK 1 (4) - 04 CSS LOGIN & REGISTER ===== -->
 <style>
-    .navbar { background: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #FF6B00; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
-    .navbar-brand { font-size: 20px; font-weight: 700; color: #FF6B00; display: flex; align-items: center; gap: 10px; }
-    .navbar-user { display: flex; align-items: center; gap: 15px; }
-    .navbar-user .role-badge { background: #fff0e5; color: #FF6B00; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
-    .btn-logout { background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-    .sidebar { position: fixed; top: 60px; left: 0; bottom: 0; width: 250px; background: white; border-right: 1px solid #eee; padding-top: 15px; overflow-y: auto; z-index: 999; }
-    .sidebar-menu-title { font-size: 10px; text-transform: uppercase; color: #bbb; padding: 15px 25px 8px; font-weight: 700; letter-spacing: 1.5px; }
-    .sidebar-menu-item { padding: 11px 25px; cursor: pointer; color: #666; font-weight: 500; display: flex; align-items: center; gap: 12px; font-size: 14px; border-left: 3px solid transparent; }
-    .sidebar-menu-item:hover { background: #fdf6f0; color: #FF6B00; }
-    .sidebar-menu-item.active { background: #fff0e5; color: #FF6B00; border-left-color: #FF6B00; font-weight: 600; }
-    .content { margin-left: 250px; margin-top: 60px; padding: 25px; min-height: calc(100vh - 60px); background: #f8f9fa; }
-    .page-header { margin-bottom: 20px; }
-    .page-header h2 { font-size: 22px; color: #333; }
-    .page-header p { color: #888; font-size: 14px; }
+    /* Halaman Login */
+    #pageAuth {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+        background: linear-gradient(135deg, #fff5f0, #ffe0cc);
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+    }
+
+    .auth-box {
+        background: white;
+        border-radius: 15px;
+        padding: 35px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-logo {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .auth-logo i {
+        font-size: 45px;
+        color: #FF6B00;
+        margin-bottom: 10px;
+    }
+
+    .auth-logo h1 {
+        font-size: 26px;
+        color: #333;
+    }
+
+    .auth-logo p {
+        color: #888;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .auth-error {
+        display: none;
+        background: #ffebee;
+        color: #d32f2f;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .auth-error i {
+        margin-right: 8px;
+    }
+
+    /* Form Group */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    /* Input Group */
+    .input-group {
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 0 14px;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .input-group:focus-within {
+        border-color: #FF6B00;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+    }
+
+    .input-group i {
+        color: #aaa;
+        font-size: 16px;
+        width: 30px;
+        text-align: center;
+    }
+
+    .input-group input,
+    .input-group select {
+        border: none;
+        background: transparent;
+        padding: 13px 0;
+        font-size: 14px;
+        width: 100%;
+        outline: none;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #FF6B00;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: #e65c00;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 14px;
+        color: #888;
+    }
+
+    .auth-footer a {
+        color: #FF6B00;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (4) ===== -->
 
-<!-- ===== BLOK 1 (5) - 05 CSS WIDGET & TABEL ===== -->
+<!-- ===== BLOK 1 (5) - 05 CSS NAVBAR & SIDEBAR ===== -->
 <style>
-    .card { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 20px; padding: 20px; border: 1px solid #f0f0f0; }
-    .card-header { font-weight: 600; font-size: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .widget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-    .widget-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; text-align: center; }
-    .widget-card .widget-icon { font-size: 35px; margin-bottom: 10px; }
-    .widget-card .widget-number { font-size: 28px; font-weight: 700; color: #333; }
-    .widget-card .widget-label { font-size: 13px; color: #888; margin-top: 5px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
-    .table-container { overflow-x: auto; }
-    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .table thead { background: #f8f9fa; }
-    .table thead th { padding: 12px 14px; text-align: left; font-weight: 600; color: #555; border-bottom: 2px solid #eee; }
-    .table tbody td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5; }
-    .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-    .badge-success { background: #e8f5e9; color: #2e7d32; }
-    .badge-warning { background: #fff3e0; color: #e65100; }
-    .badge-danger { background: #ffebee; color: #c62828; }
+    /* Navbar */
+    .navbar {
+        background: white;
+        padding: 12px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #FF6B00;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+        font-weight: 700;
+        color: #FF6B00;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar-brand i {
+        font-size: 24px;
+    }
+
+    .navbar-user {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .navbar-user .role-badge {
+        background: #fff0e5;
+        color: #FF6B00;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .navbar-user .user-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .btn-logout {
+        background: #f44336;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-logout:hover {
+        background: #d32f2f;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        bottom: 0;
+        width: 250px;
+        background: white;
+        border-right: 1px solid #eee;
+        padding-top: 15px;
+        overflow-y: auto;
+        z-index: 999;
+    }
+
+    .sidebar-menu-title {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: #bbb;
+        padding: 15px 25px 8px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+    .sidebar-menu-item {
+        padding: 11px 25px;
+        cursor: pointer;
+        color: #666;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s;
+        font-size: 14px;
+        border-left: 3px solid transparent;
+    }
+
+    .sidebar-menu-item:hover {
+        background: #fdf6f0;
+        color: #FF6B00;
+        border-left-color: #FF6B00;
+    }
+
+    .sidebar-menu-item.active {
+        background: #fff0e5;
+        color: #FF6B00;
+        border-left-color: #FF6B00;
+        font-weight: 600;
+    }
+
+    .sidebar-menu-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    /* Content Area */
+    .content {
+        margin-left: 250px;
+        margin-top: 60px;
+        padding: 25px;
+        min-height: calc(100vh - 60px);
+        background: #f8f9fa;
+    }
+
+    .page-header {
+        margin-bottom: 20px;
+    }
+
+    .page-header h2 {
+        font-size: 22px;
+        color: #333;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        color: #888;
+        font-size: 14px;
+        margin-top: 3px;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (5) ===== -->
 
-<!-- ===== BLOK 1 (6) - 06 CSS MODAL & BUTTON ===== -->
+<!-- ===== BLOK 1 (6) - 06 CSS CARD, WIDGET & TABEL ===== -->
 <style>
-    .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: 'Poppins', sans-serif; }
-    .form-input:focus { border-color: #FF6B00; outline: none; }
-    .form-label { font-size: 12px; color: #888; margin-bottom: 4px; display: block; }
-    .btn { padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; border: none; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary { background: #FF6B00; color: white; } .btn-primary:hover { background: #e65c00; }
-    .btn-success { background: #4CAF50; color: white; } .btn-success:hover { background: #388E3C; }
-    .btn-danger { background: #F44336; color: white; } .btn-danger:hover { background: #D32F2F; }
-    .btn-warning { background: #FF9800; color: white; } .btn-xs { padding: 4px 10px; font-size: 11px; } .btn-sm { padding: 6px 14px; font-size: 12px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; justify-content: center; align-items: center; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: white; border-radius: 12px; max-width: 500px; width: 90%; padding: 25px; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 15px; }
-    .modal-header h3 { font-size: 18px; } .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #aaa; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
+    /* Card */
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .card-header {
+        font-weight: 600;
+        font-size: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #333;
+    }
+
+    .card-header i {
+        color: #FF6B00;
+        margin-right: 6px;
+    }
+
+    /* Widget Grid */
+    .widget-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .widget-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .widget-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .widget-card .widget-icon {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    .widget-card .widget-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .widget-card .widget-label {
+        font-size: 13px;
+        color: #888;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+
+    /* Grid 2 Kolom */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+    }
+
+    /* Tabel */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .table thead {
+        background: #f8f9fa;
+    }
+
+    .table thead th {
+        padding: 12px 14px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        border-bottom: 2px solid #eee;
+        white-space: nowrap;
+    }
+
+    .table tbody td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #f5f5f5;
+        color: #444;
+    }
+
+    .table tbody tr:hover {
+        background: #fdf6f0;
+    }
+
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Status Badge */
+    .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge-warning {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .badge-danger {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .badge-info {
+        background: #e3f2fd;
+        color: #1565C0;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #888;
+    }
+
+    .empty-state i {
+        font-size: 60px;
+        color: #e0e0e0;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h3 {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (6) ===== -->
 
-<!-- ===== BLOK 1 (7) - 07 CSS UPLOAD & PROFIL ===== -->
+<!-- ===== BLOK 1 (7) - 07 CSS FORM, BUTTON & MODAL ===== -->
 <style>
-    .upload-area { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; background: #fafafa; cursor: pointer; }
-    .upload-area:hover { border-color: #FF6B00; background: #fff5f0; }
-    .upload-area i { font-size: 45px; color: #ddd; display: block; margin-bottom: 10px; }
-    .preview-img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; object-fit: contain; }
+    /* Form Input */
+    .form-input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s;
+    }
+
+    .form-input:focus {
+        border-color: #FF6B00;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
+    }
+
+    .form-label {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 4px;
+        display: block;
+        font-weight: 500;
+    }
+
+    textarea.form-input {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 8px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        border: none;
+        transition: all 0.3s;
+        font-family: 'Poppins', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-primary {
+        background: #FF6B00;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #e65c00;
+    }
+
+    .btn-secondary {
+        background: #e9ecef;
+        color: #555;
+    }
+
+    .btn-secondary:hover {
+        background: #dee2e6;
+    }
+
+    .btn-success {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background: #388E3C;
+    }
+
+    .btn-danger {
+        background: #F44336;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #D32F2F;
+    }
+
+    .btn-warning {
+        background: #FF9800;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background: #F57C00;
+    }
+
+    .btn-info {
+        background: #2196F3;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background: #1976D2;
+    }
+
+    .btn-xs {
+        padding: 4px 10px;
+        font-size: 11px;
+    }
+
+    .btn-sm {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    .btn-lg {
+        padding: 12px 24px;
+        font-size: 15px;
+    }
+
+    .btn-block {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Modal */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal {
+        background: white;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-lg {
+        max-width: 700px;
+    }
+
+    .modal-sm {
+        max-width: 400px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 12px;
+        margin-bottom: 15px;
+    }
+
+    .modal-header h3 {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        color: #aaa;
+        transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+        color: #F44336;
+    }
+
+    .modal-body {
+        padding: 5px 0;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
 </style>
 <!-- ===== AKHIR BLOK 1 (7) ===== -->
+
+<!-- ===== BLOK 1 (8) - 08 CSS UPLOAD & DOKUMEN ===== -->
+<style>
+    /* Upload Area */
+    .upload-area {
+        border: 2px dashed #ddd;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        background: #fafafa;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .upload-area:hover {
+        border-color: #FF6B00;
+        background: #fff5f0;
+    }
+
+    .upload-area i {
+        font-size: 45px;
+        color: #ddd;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .upload-area p {
+        color: #888;
+        font-size: 13px;
+    }
+
+    .preview-img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        margin-top: 10px;
+        object-fit: contain;
+    }
+
+    /* Dokumen Item */
+    .doc-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .doc-item:last-child {
+        border-bottom: none;
+    }
+
+    .doc-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex: 1;
+    }
+
+    .doc-thumb {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        object-fit: cover;
+        cursor: pointer;
+        border: 1px solid #ddd;
+    }
+
+    .doc-icon {
+        width: 50px;
+        height: 50px;
+        background: #fff0e5;
+        color: #FF6B00;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: 22px;
+    }
+
+    .doc-text h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 2px;
+    }
+
+    .doc-text p {
+        font-size: 12px;
+        color: #888;
+        margin: 0;
+    }
+
+    .doc-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+        }
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .sidebar {
+            width: 55px;
+        }
+        .sidebar-menu-item span {
+            display: none;
+        }
+        .sidebar-menu-title {
+            display: none;
+        }
+        .sidebar-menu-item {
+            justify-content: center;
+            padding: 12px;
+        }
+        .content {
+            margin-left: 55px;
+            padding: 15px;
+        }
+    }
+</style>
+<!-- ===== AKHIR BLOK 1 (8) ===== -->
 </head>
 <body>
 
@@ -130,28 +929,96 @@
 <div id="pageAuth">
     <div class="auth-wrapper">
         <div class="auth-box">
+            
+            <!-- Logo -->
             <div class="auth-logo">
                 <i class="fas fa-store-alt"></i>
                 <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
                 <p>Platform Belanja & Layanan Serba Ada</p>
             </div>
+            
+            <!-- Pesan Error -->
             <div class="auth-error" id="authError">
-                <i class="fas fa-exclamation-circle"></i> <span id="authErrorText"></span>
+                <i class="fas fa-exclamation-circle"></i> 
+                <span id="authErrorText"></span>
             </div>
+            
+            <!-- Form Login -->
             <form class="auth-form" id="loginForm">
-                <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Masukkan username" required></div></div>
-                <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Masukkan password" required></div></div>
-                <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
-                <div class="auth-footer">Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a></div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                
+                <div class="auth-footer">
+                    Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
+                </div>
             </form>
+
+            <!-- Form Register -->
             <form class="auth-form hidden-form" id="registerForm">
-                <div class="form-group"><label>Pilih Role</label><div class="input-group"><i class="fas fa-user-tag"></i><select id="regRole"><option value="customer">Customer</option><option value="toko">Toko</option><option value="ojek">Ojek</option><option value="pedagang">Pedagang Pasar</option><option value="codseller">COD Seller</option></select></div></div>
-                <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="regUsername" placeholder="Buat username" required></div></div>
-                <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Buat password" required></div></div>
-                <div class="form-group"><label>Nama Lengkap</label><div class="input-group"><i class="fas fa-id-card"></i><input type="text" id="regNama" placeholder="Nama lengkap Anda" required></div></div>
-                <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
-                <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
+                <div class="form-group">
+                    <label>Pilih Role</label>
+                    <div class="input-group">
+                        <i class="fas fa-user-tag"></i>
+                        <select id="regRole">
+                            <option value="customer">Customer</option>
+                            <option value="toko">Toko</option>
+                            <option value="ojek">Ojek</option>
+                            <option value="pedagang">Pedagang Pasar</option>
+                            <option value="codseller">COD Seller</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="regUsername" placeholder="Buat username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Buat password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="regNama" placeholder="Nama lengkap Anda" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i> Daftar
+                </button>
+                
+                <div class="auth-footer">
+                    Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
+                </div>
             </form>
+            
         </div>
     </div>
 </div>
@@ -159,809 +1026,1947 @@
 
 <!-- ===== BLOK 4 (1) - 01 DASHBOARD UTAMA ===== -->
 <div id="pageDashboard" class="page-dashboard">
+    
+    <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+        <div class="navbar-brand">
+            <i class="fas fa-store-alt"></i> Toko Online 2R
+        </div>
         <div class="navbar-user">
-            <span class="role-badge" id="roleBadge">Role</span>
-            <span id="userNama" style="font-weight:600;">User</span>
-            <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            <span class="role-badge" id="roleBadge">SuperAdmin</span>
+            <span class="user-name" id="userNama">User</span>
+            <button class="btn-logout" id="btnLogout">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
         </div>
     </nav>
-    <aside class="sidebar" id="sidebarContainer"></aside>
-    <main class="content" id="mainContent"></main>
+
+    <!-- Sidebar SuperAdmin -->
+    <aside class="sidebar" id="sidebarContainer">
+        <div class="sidebar-menu-title">Menu Utama</div>
+        <div class="sidebar-menu-item active" data-page="dashboard">
+            <i class="fas fa-th-large"></i><span>Dasbor</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="profile">
+            <i class="fas fa-user-circle"></i><span>Profil</span>
+        </div>
+        
+        <div class="sidebar-menu-title">Menu Admin</div>
+        <div class="sidebar-menu-item" data-page="daftarAkun">
+            <i class="fas fa-user-plus"></i><span>Daftar Akun Baru</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="persetujuan">
+            <i class="fas fa-check-double"></i><span>Persetujuan Akun</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="kelolaAkun">
+            <i class="fas fa-users-cog"></i><span>Kelola Semua Akun</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="transferMenu">
+            <i class="fas fa-exchange-alt"></i><span>Transfer Menu</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="penagihan">
+            <i class="fas fa-file-invoice-dollar"></i><span>Penagihan</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="settingRekening">
+            <i class="fas fa-university"></i><span>Setting Rekening</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="kelolaUpgrade">
+            <i class="fas fa-crown"></i><span>Kelola Upgrade</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="settingTarifOjek">
+            <i class="fas fa-cogs"></i><span>Setting Tarif Ojek</span>
+        </div>
+        <div class="sidebar-menu-item" data-page="kelolaIklan">
+            <i class="fas fa-ad"></i><span>Kelola Iklan</span>
+        </div>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="content" id="mainContent">
+        <!-- Konten akan dirender oleh JavaScript -->
+    </main>
+    
 </div>
 <!-- ===== AKHIR BLOK 4 (1) ===== -->
 
 <!-- ===== BLOK 5 (1) - 01 MODALS ===== -->
+
+<!-- Modal Tolak Akun -->
 <div class="modal-overlay" id="modalTolakAkun">
-    <div class="modal">
-        <div class="modal-header"><h3>Konfirmasi Penolakan</h3><button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button></div>
-        <div class="modal-body"><p>Yakin ingin menolak akun ini?</p><input type="hidden" id="tolakIdAkun"></div>
-        <div class="modal-footer"><button class="btn btn-xs" style="background:#eee;" onclick="tutupModal('modalTolakAkun')">Batal</button><button class="btn btn-danger btn-xs" onclick="eksekusiTolakAkun()">Ya, Tolak</button></div>
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-exclamation-triangle" style="color:#FF9800;"></i> 
+                Konfirmasi Penolakan
+            </h3>
+            <button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Apakah Anda yakin ingin menolak dan menghapus akun ini?</p>
+            <p style="font-size:12px;color:#888;margin-top:5px;">
+                Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <input type="hidden" id="tolakIdAkun">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="tutupModal('modalTolakAkun')">
+                Batal
+            </button>
+            <button class="btn btn-danger" onclick="eksekusiTolakAkun()">
+                <i class="fas fa-trash"></i> Ya, Tolak Akun
+            </button>
+        </div>
     </div>
 </div>
 
+<!-- Modal Preview Gambar -->
 <div class="modal-overlay" id="modalPreviewGambar">
-    <div class="modal" style="background:transparent;box-shadow:none;max-width:800px;">
-        <div class="modal-header" style="background:white;border-radius:12px 12px 0 0;"><h3 id="modalPreviewTitle">Preview</h3><button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button></div>
-        <img id="modalPreviewImage" src="" style="width:100%;max-height:70vh;object-fit:contain;border-radius:0 0 12px 12px;">
+    <div class="modal modal-lg" style="background:transparent;box-shadow:none;padding:0;">
+        <div class="modal-header" style="background:white;border-radius:12px 12px 0 0;margin:0;">
+            <h3 id="modalPreviewTitle">Preview Gambar</h3>
+            <button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button>
+        </div>
+        <div style="background:#1a1a1a;border-radius:0 0 12px 12px;text-align:center;padding:20px;">
+            <img id="modalPreviewImage" src="" alt="Preview" 
+                 style="max-width:100%;max-height:70vh;object-fit:contain;">
+        </div>
     </div>
 </div>
 <!-- ===== AKHIR BLOK 5 (1) ===== -->
-<!-- ===== BLOK 6 (1) - 01 UTILITY & DATA CORE ===== -->
-<script>
-// ===== FUNGSI DASAR =====
-function getDataAkun() { var d = localStorage.getItem('2r_akun'); return d ? JSON.parse(d) : []; }
-function simpanDataAkun(a) { localStorage.setItem('2r_akun', JSON.stringify(a)); }
-function encodePassword(p) { return btoa(p); }
-function decodePassword(p) { return atob(p); }
 
+<!-- ===== BLOK 6 (1) - 01 JAVASCRIPT UTILITY ===== -->
+<script>
+// =====================================================================
+// FUNGSI UTILITY DASAR
+// =====================================================================
+
+/**
+ * Mengambil data akun dari localStorage
+ * @returns {Array} Daftar akun
+ */
+function ambilDataAkun() {
+    var data = localStorage.getItem('2r_akun');
+    if (data) {
+        return JSON.parse(data);
+    }
+    return [];
+}
+
+/**
+ * Menyimpan data akun ke localStorage
+ * @param {Array} daftarAkun - Array data akun
+ */
+function simpanDataAkun(daftarAkun) {
+    localStorage.setItem('2r_akun', JSON.stringify(daftarAkun));
+}
+
+/**
+ * Enkripsi password dengan Base64
+ * @param {string} password - Password asli
+ * @returns {string} Password terenkripsi
+ */
+function enkripsiPassword(password) {
+    return btoa(password);
+}
+
+/**
+ * Dekripsi password dari Base64
+ * @param {string} password - Password terenkripsi
+ * @returns {string} Password asli
+ */
+function dekripsiPassword(password) {
+    return atob(password);
+}
+
+/**
+ * Inisialisasi akun SuperAdmin default
+ * Dibuat saat pertama kali sistem dijalankan
+ */
 function inisialisasiSuperAdmin() {
-    var akun = getDataAkun();
-    if (!akun.find(function(a) { return a.role === 'superadmin'; })) {
-        akun.push({
-            id: 'SA-001', role: 'superadmin', username: 'admin', password: encodePassword('admin123'),
-            nama: 'SuperAdmin', email: 'admin@2r.com', hp: '081234567890', alamat: 'Kantor Pusat',
-            status: 'AKTIF', registeredAt: new Date().toISOString()
-        });
-        simpanDataAkun(akun);
+    var daftarAkun = ambilDataAkun();
+    
+    // Cek apakah SuperAdmin sudah ada
+    var superAdminDitemukan = daftarAkun.find(function(akun) {
+        return akun.role === 'superadmin';
+    });
+    
+    if (!superAdminDitemukan) {
+        // Buat akun SuperAdmin baru
+        var akunSuperAdmin = {
+            id: 'SA-001',
+            role: 'superadmin',
+            username: 'admin',
+            password: enkripsiPassword('admin123'),
+            nama: 'SuperAdmin',
+            email: 'admin@tokoonline2r.com',
+            hp: '081234567890',
+            alamat: 'Kantor Pusat Toko Online 2R',
+            jabatan: 'Administrator',
+            status: 'AKTIF',
+            registeredAt: new Date().toISOString()
+        };
+        
+        daftarAkun.push(akunSuperAdmin);
+        simpanDataAkun(daftarAkun);
+        
+        console.log('========================================');
+        console.log('Akun SuperAdmin berhasil dibuat!');
+        console.log('Username: admin');
+        console.log('Password: admin123');
+        console.log('========================================');
     }
 }
 
+/**
+ * Generate ID otomatis berdasarkan role
+ * @param {string} role - Role user (customer, toko, ojek, dll)
+ * @returns {string} ID yang digenerate (contoh: CUST-001)
+ */
 function generateId(role) {
-    var akun = getDataAkun().filter(function(a) { return a.role === role; });
-    var urut = 1;
-    akun.forEach(function(a) { var p = a.id.split('-'); if (p.length === 2) { var n = parseInt(p[1]); if (n >= urut) urut = n + 1; } });
-    var prefix = { customer:'CUST', toko:'TOKO', ojek:'OJEK', pedagang:'PEDAGANG', codseller:'COD', superadmin:'SA', staf_admin:'STA', staf_owner_ojek:'SOO', staf_owner_toko:'SOT', customer_service:'CS', sponsor:'SPN' };
-    return (prefix[role] || 'USR') + '-' + String(urut).padStart(3, '0');
+    var daftarAkun = ambilDataAkun();
+    
+    // Filter akun dengan role yang sama
+    var akunDenganRoleSama = daftarAkun.filter(function(akun) {
+        return akun.role === role;
+    });
+    
+    // Hitung nomor urut
+    var nomorUrut = 1;
+    akunDenganRoleSama.forEach(function(akun) {
+        var bagianId = akun.id.split('-');
+        if (bagianId.length === 2) {
+            var angka = parseInt(bagianId[1]);
+            if (!isNaN(angka) && angka >= nomorUrut) {
+                nomorUrut = angka + 1;
+            }
+        }
+    });
+    
+    // Prefix untuk setiap role
+    var daftarPrefix = {
+        'customer': 'CUST',
+        'toko': 'TOKO',
+        'ojek': 'OJEK',
+        'pedagang': 'PEDAGANG',
+        'codseller': 'COD',
+        'superadmin': 'SA',
+        'staf_admin': 'STA',
+        'staf_owner_ojek': 'SOO',
+        'staf_owner_toko': 'SOT',
+        'customer_service': 'CS',
+        'sponsor': 'SPN'
+    };
+    
+    var prefixRole = daftarPrefix[role] || 'USR';
+    return prefixRole + '-' + String(nomorUrut).padStart(3, '0');
 }
 
+/**
+ * Menampilkan notifikasi toast
+ * @param {string} pesan - Isi pesan notifikasi
+ * @param {string} tipe - Tipe: success, error, warning, info
+ */
 function tampilkanToast(pesan, tipe) {
-    tipe = tipe || 'success';
-    var t = document.createElement('div'); t.className = 'toast ' + tipe;
-    var icon = tipe === 'success' ? 'fa-check-circle' : (tipe === 'error' ? 'fa-times-circle' : (tipe === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'));
-    t.innerHTML = '<i class="fas ' + icon + '"></i> ' + pesan;
-    document.getElementById('toastContainer').appendChild(t);
-    setTimeout(function() { t.style.animation = 'slideInRight 0.3s ease reverse'; setTimeout(function() { t.remove(); }, 300); }, 3500);
+    if (!tipe) {
+        tipe = 'success';
+    }
+    
+    // Pilih icon sesuai tipe
+    var icon = 'fa-check-circle';
+    if (tipe === 'error') {
+        icon = 'fa-times-circle';
+    } else if (tipe === 'warning') {
+        icon = 'fa-exclamation-triangle';
+    } else if (tipe === 'info') {
+        icon = 'fa-info-circle';
+    }
+    
+    // Buat elemen toast
+    var toastElement = document.createElement('div');
+    toastElement.className = 'toast ' + tipe;
+    toastElement.innerHTML = '<i class="fas ' + icon + '"></i> ' + pesan;
+    
+    // Tambahkan ke container
+    var container = document.getElementById('toastContainer');
+    if (container) {
+        container.appendChild(toastElement);
+        
+        // Hapus setelah 3.5 detik
+        setTimeout(function() {
+            toastElement.style.animation = 'slideInRight 0.3s ease reverse';
+            setTimeout(function() {
+                toastElement.remove();
+            }, 300);
+        }, 3500);
+    }
 }
 
-function bukaModal(id) { var m = document.getElementById(id); if (m) m.classList.add('active'); }
-function tutupModal(id) { var m = document.getElementById(id); if (m) m.classList.remove('active'); }
+/**
+ * Membuka modal
+ * @param {string} modalId - ID elemen modal
+ */
+function bukaModal(modalId) {
+    var modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+/**
+ * Menutup modal
+ * @param {string} modalId - ID elemen modal
+ */
+function tutupModal(modalId) {
+    var modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
 </script>
 <!-- ===== AKHIR BLOK 6 (1) ===== -->
 
-<!-- ===== BLOK 6 (2) - 02 AUTH & LOGIN ===== -->
+<!-- ===== BLOK 6 (2) - 02 JAVASCRIPT AUTH (LOGIN & REGISTER) ===== -->
 <script>
+// =====================================================================
+// FUNGSI LOGIN DAN REGISTER
+// =====================================================================
+
+/**
+ * Toggle antara form login dan register
+ * @param {string} tipe - 'login' atau 'register'
+ */
 function toggleForm(tipe) {
+    // Sembunyikan error
     document.getElementById('authError').style.display = 'none';
-    if (tipe === 'register') { document.getElementById('loginForm').classList.add('hidden-form'); document.getElementById('registerForm').classList.remove('hidden-form'); }
-    else { document.getElementById('registerForm').classList.add('hidden-form'); document.getElementById('loginForm').classList.remove('hidden-form'); }
+    
+    var formLogin = document.getElementById('loginForm');
+    var formRegister = document.getElementById('registerForm');
+    
+    if (tipe === 'register') {
+        formLogin.classList.add('hidden-form');
+        formRegister.classList.remove('hidden-form');
+    } else {
+        formRegister.classList.add('hidden-form');
+        formLogin.classList.remove('hidden-form');
+    }
 }
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var u = document.getElementById('loginUsername').value.trim();
-    var p = document.getElementById('loginPassword').value.trim();
-    var user = getDataAkun().find(function(a) { return a.username === u && decodePassword(a.password) === p; });
-    if (user) {
-        if (user.status !== 'AKTIF' && user.role !== 'superadmin') {
+// Event listener untuk form login
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    var username = document.getElementById('loginUsername').value.trim();
+    var password = document.getElementById('loginPassword').value.trim();
+    
+    // Cari user
+    var daftarAkun = ambilDataAkun();
+    var userDitemukan = daftarAkun.find(function(akun) {
+        return akun.username === username && 
+               dekripsiPassword(akun.password) === password;
+    });
+    
+    if (userDitemukan) {
+        // Cek status akun (kecuali superadmin)
+        if (userDitemukan.status !== 'AKTIF' && 
+            userDitemukan.role !== 'superadmin') {
             document.getElementById('authError').style.display = 'block';
-            document.getElementById('authErrorText').textContent = 'Akun belum aktif. Menunggu verifikasi admin.';
+            document.getElementById('authErrorText').textContent = 
+                'Akun Anda belum aktif. Silakan tunggu verifikasi admin.';
             return;
         }
-        localStorage.setItem('2r_user', JSON.stringify(user));
-        localStorage.setItem('2r_user_role', user.role);
-        tampilkanDashboard(user);
+        
+        // Simpan session
+        localStorage.setItem('2r_user', JSON.stringify(userDitemukan));
+        localStorage.setItem('2r_user_role', userDitemukan.role);
+        
+        // Tampilkan dashboard
+        tampilkanDashboard(userDitemukan);
     } else {
         document.getElementById('authError').style.display = 'block';
-        document.getElementById('authErrorText').textContent = 'Username atau password salah!';
+        document.getElementById('authErrorText').textContent = 
+            'Username atau password salah!';
     }
 });
 
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+// Event listener untuk form register
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
     var role = document.getElementById('regRole').value;
     var username = document.getElementById('regUsername').value.trim();
     var password = document.getElementById('regPassword').value.trim();
     var nama = document.getElementById('regNama').value.trim();
-    if (!role || !username || !password || !nama) { alert('Data belum lengkap!'); return; }
-    var akun = getDataAkun();
-    if (akun.find(function(a) { return a.username === username; })) { alert('Username sudah digunakan!'); return; }
-    var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
-    akun.push({ id: generateId(role), role: role, username: username, password: encodePassword(password), nama: nama, email: '', hp: '', alamat: '', status: statusAkun, registeredAt: new Date().toISOString() });
-    simpanDataAkun(akun);
-    alert('Akun berhasil dibuat! ID: ' + akun[akun.length-1].id + '\nStatus: ' + statusAkun);
+    
+    // Validasi
+    if (!role || !username || !password || !nama) {
+        alert('Harap isi semua data!');
+        return;
+    }
+    
+    if (username.length < 4) {
+        alert('Username minimal 4 karakter!');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('Password minimal 6 karakter!');
+        return;
+    }
+    
+    var daftarAkun = ambilDataAkun();
+    
+    // Cek username sudah dipakai
+    var usernameSudahAda = daftarAkun.find(function(akun) {
+        return akun.username === username;
+    });
+    
+    if (usernameSudahAda) {
+        alert('Username sudah digunakan! Silakan pilih username lain.');
+        return;
+    }
+    
+    // Tentukan status akun
+    var statusAkun = 'AKTIF';
+    if (role === 'toko' || role === 'ojek') {
+        statusAkun = 'NONAKTIF (Menunggu Verifikasi)';
+    }
+    
+    // Buat akun baru
+    var akunBaru = {
+        id: generateId(role),
+        role: role,
+        username: username,
+        password: enkripsiPassword(password),
+        nama: nama,
+        email: '',
+        hp: '',
+        alamat: '',
+        status: statusAkun,
+        registeredAt: new Date().toISOString()
+    };
+    
+    daftarAkun.push(akunBaru);
+    simpanDataAkun(daftarAkun);
+    
+    // Tampilkan pesan sukses
+    var pesan = 'Akun berhasil dibuat!\n\n';
+    pesan += 'ID: ' + akunBaru.id + '\n';
+    pesan += 'Role: ' + role + '\n';
+    pesan += 'Status: ' + statusAkun + '\n\n';
+    pesan += 'Silakan login dengan username dan password Anda.';
+    
+    alert(pesan);
+    
+    // Reset form
+    document.getElementById('regUsername').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('regNama').value = '';
+    
+    // Kembali ke form login
     toggleForm('login');
 });
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
-
-<!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP ===== -->
+<!-- ===== BLOK 6 (3) - 03 JAVASCRIPT NAVIGASI & SIDEBAR ===== -->
 <script>
-function buatSidebarHTML(role) {
-    var menuRole = {
-        'superadmin': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] },
-            { judul: 'Menu Admin', items: [
-                { halaman: 'daftarAkun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
-                { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Semua Akun' },
-                { halaman: 'transferMenu', icon: 'fa-exchange-alt', label: 'Transfer Menu' },
-                { halaman: 'penagihan', icon: 'fa-file-invoice-dollar', label: 'Penagihan' },
-                { halaman: 'settingRekening', icon: 'fa-university', label: 'Setting Rekening' },
-                { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
-                { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
-                { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' }
-            ]}
-        ],
-        'customer': [
-            { judul: 'Menu Belanja', items: [
-                { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                { halaman: 'belanja', icon: 'fa-shopping-basket', label: 'Belanja' },
-                { halaman: 'pesananSaya', icon: 'fa-shopping-bag', label: 'Pesanan Saya' },
-                { halaman: 'favorit', icon: 'fa-heart', label: 'Favorit' },
-                { halaman: 'riwayatBelanja', icon: 'fa-clock', label: 'Riwayat' }
-            ]},
-            { judul: 'Akun', items: [{ halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'toko': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] },
-            { judul: 'Menu Toko', items: [
-                { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
-                { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
-                { halaman: 'settingToko', icon: 'fa-store', label: 'Setting Toko' }
-            ]},
-            { judul: 'Menu Superadmin', items: [
-                { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Semua Akun' },
-                { halaman: 'transferMenu', icon: 'fa-exchange-alt', label: 'Transfer Menu' },
-                { halaman: 'penagihan', icon: 'fa-file-invoice-dollar', label: 'Penagihan' },
-                { halaman: 'settingRekening', icon: 'fa-university', label: 'Setting Rekening' },
-                { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
-                { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
-                { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' }
-            ]}
-        ],
-        'ojek': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] },
-            { judul: 'Menu Ojek', items: [
-                { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' },
-                { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
-                { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
-                { halaman: 'settingOjek', icon: 'fa-cog', label: 'Setting Ojek' }
-            ]},
-            { judul: 'Menu Superadmin', items: [
-                { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Semua Akun' },
-                { halaman: 'transferMenu', icon: 'fa-exchange-alt', label: 'Transfer Menu' },
-                { halaman: 'penagihan', icon: 'fa-file-invoice-dollar', label: 'Penagihan' },
-                { halaman: 'settingRekening', icon: 'fa-university', label: 'Setting Rekening' },
-                { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
-                { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
-                { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' }
-            ]}
-        ],
-        'pedagang': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'staf_admin': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' }, { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Akun' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'customer_service': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'tiketBantuan', icon: 'fa-ticket-alt', label: 'Tiket Bantuan' }, { halaman: 'liveChat', icon: 'fa-comments', label: 'Live Chat' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'staf_owner_toko': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' }, { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' }, { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'staf_owner_ojek': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' }, { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' }, { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ],
-        'sponsor': [
-            { judul: 'Menu Utama', items: [{ halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' }, { halaman: 'iklanSaya', icon: 'fa-ad', label: 'Iklan Saya' }, { halaman: 'statistik', icon: 'fa-chart-pie', label: 'Statistik' }, { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' }, { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }] }
-        ]
-    };
-    
-    var daftarMenu = menuRole[role] || menuRole['customer'];
-    var html = '';
-    for (var i = 0; i < daftarMenu.length; i++) {
-        html += '<div class="sidebar-menu-title">' + daftarMenu[i].judul + '</div>';
-        for (var j = 0; j < daftarMenu[i].items.length; j++) {
-            var item = daftarMenu[i].items[j];
-            html += '<div class="sidebar-menu-item' + (item.halaman === 'dashboard' ? ' active' : '') + '" data-page="' + item.halaman + '"><i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
-        }
-    }
-    return html;
-}
+// =====================================================================
+// FUNGSI NAVIGASI DAN SETUP SIDEBAR
+// =====================================================================
 
+/**
+ * Setup event listener untuk semua menu sidebar
+ * Setiap menu yang diklik akan menjalankan navigasi
+ */
 function setupNavigasiSidebar() {
-    document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+    // Ambil semua elemen menu sidebar
+    var semuaMenuItem = document.querySelectorAll('.sidebar-menu-item');
+    
+    // Pasang event listener untuk setiap menu
+    semuaMenuItem.forEach(function(item) {
         item.onclick = function() {
+            // Ambil nama halaman dari atribut data-page
             var halaman = this.getAttribute('data-page');
-            if (!halaman) return;
-            document.querySelectorAll('.sidebar-menu-item').forEach(function(m) { m.classList.remove('active'); });
+            if (!halaman) {
+                return;
+            }
+            
+            // Hapus class active dari semua menu
+            var semuaMenu = document.querySelectorAll('.sidebar-menu-item');
+            semuaMenu.forEach(function(menu) {
+                menu.classList.remove('active');
+            });
+            
+            // Tambahkan class active ke menu yang diklik
             this.classList.add('active');
-            navigasiKeHalaman(halaman);
+            
+            // Pindah ke halaman yang dipilih
+            pindahKeHalaman(halaman);
         };
     });
+}
+
+/**
+ * Navigasi ke halaman tertentu
+ * @param {string} halaman - Nama halaman tujuan
+ */
+function pindahKeHalaman(halaman) {
+    var contentArea = document.getElementById('mainContent');
+    if (!contentArea) {
+        return;
+    }
+    
+    // Pilih renderer berdasarkan nama halaman
+    switch (halaman) {
+        case 'dashboard':
+            renderDashboardSuperAdmin();
+            break;
+            
+        case 'profile':
+            renderProfilSuperAdmin();
+            break;
+            
+        case 'daftarAkun':
+            renderDaftarAkunBaru();
+            break;
+            
+        case 'persetujuan':
+            renderPersetujuanAkun();
+            break;
+            
+        case 'kelolaAkun':
+            renderKelolaSemuaAkun();
+            break;
+            
+        case 'settingRekening':
+            renderSettingRekening();
+            break;
+            
+        case 'transferMenu':
+            renderPlaceholder('Transfer Menu');
+            break;
+            
+        case 'penagihan':
+            renderPlaceholder('Penagihan');
+            break;
+            
+        case 'kelolaUpgrade':
+            renderPlaceholder('Kelola Upgrade');
+            break;
+            
+        case 'settingTarifOjek':
+            renderPlaceholder('Setting Tarif Ojek');
+            break;
+            
+        case 'kelolaIklan':
+            renderPlaceholder('Kelola Iklan');
+            break;
+            
+        default:
+            renderPlaceholder(halaman);
+    }
+}
+
+/**
+ * Render halaman placeholder untuk fitur yang belum tersedia
+ * @param {string} judulHalaman - Judul halaman
+ */
+function renderPlaceholder(judulHalaman) {
+    var contentArea = document.getElementById('mainContent');
+    
+    var html = '';
+    html += '<div class="page-header">';
+    html += '<h2>' + judulHalaman + '</h2>';
+    html += '<p>Halaman ini sedang dalam pengembangan.</p>';
+    html += '</div>';
+    
+    html += '<div class="card">';
+    html += '<div class="empty-state">';
+    html += '<i class="fas fa-tools" style="color:#FF9800;"></i>';
+    html += '<h3>Fitur Sedang Dikembangkan</h3>';
+    html += '<p>Halaman <strong>' + judulHalaman + '</strong> akan segera tersedia.</p>';
+    html += '<p style="font-size:12px;color:#aaa;">Tim kami sedang bekerja untuk menyelesaikan fitur ini.</p>';
+    html += '</div>';
+    html += '</div>';
+    
+    contentArea.innerHTML = html;
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (3) ===== -->
 
-<!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN ===== -->
+<!-- ===== BLOK 6 (4) - 04 JAVASCRIPT DASHBOARD SUPERADMIN ===== -->
 <script>
-function navigasiKeHalaman(halaman) {
-    var contentArea = document.getElementById('mainContent');
-    if (!contentArea) return;
-    switch (halaman) {
-        case 'dashboard': renderDashboard(); break;
-        case 'profile': renderProfil(); break;
-        case 'daftarAkun': renderDaftarAkun(); break;
-        case 'persetujuan': renderPersetujuanAkun(); break;
-        case 'kelolaAkun': renderKelolaAkun(); break;
-        case 'settingRekening': renderSettingRekening(); break;
-        case 'belanja': renderBelanja(); break;
-        case 'pesananSaya': renderPesananSaya(); break;
-        default: renderPlaceholder(halaman);
-    }
-}
+// =====================================================================
+// RENDER DASHBOARD SUPERADMIN
+// =====================================================================
 
-function renderPlaceholder(judul) {
-    document.getElementById('mainContent').innerHTML = '<div class="page-header"><h2>' + judul + '</h2><p>Halaman ini sedang dalam pengembangan.</p></div><div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Sedang Dikembangkan</h3></div></div>';
+/**
+ * Render halaman dashboard SuperAdmin
+ * Menampilkan statistik dan 5 akun terbaru
+ */
+function renderDashboardSuperAdmin() {
+    var contentArea = document.getElementById('mainContent');
+    var daftarAkun = ambilDataAkun();
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : {};
+    
+    // Hitung statistik
+    var totalAkun = daftarAkun.length;
+    
+    var akunAktif = daftarAkun.filter(function(akun) {
+        return akun.status === 'AKTIF';
+    }).length;
+    
+    var akunMenunggu = daftarAkun.filter(function(akun) {
+        return akun.status === 'NONAKTIF (Menunggu Verifikasi)';
+    }).length;
+    
+    var akunNonaktif = daftarAkun.filter(function(akun) {
+        return akun.status !== 'AKTIF' && 
+               akun.status !== 'NONAKTIF (Menunggu Verifikasi)';
+    }).length;
+    
+    // 5 akun terbaru
+    var akunTerbaru = daftarAkun.slice().sort(function(a, b) {
+        return new Date(b.registeredAt) - new Date(a.registeredAt);
+    }).slice(0, 5);
+    
+    // Bangun HTML
+    var html = '';
+    
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Dasbor SuperAdmin</h2>';
+    html += '<p>Selamat datang, <strong>' + user.nama + '</strong>! Berikut adalah ringkasan sistem.</p>';
+    html += '</div>';
+    
+    // Widget Statistik
+    html += '<div class="widget-grid">';
+    
+    // Widget Total Akun
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#2196F3;">';
+    html += '<i class="fas fa-users"></i>';
+    html += '</div>';
+    html += '<div class="widget-number">' + totalAkun + '</div>';
+    html += '<div class="widget-label">Total Akun</div>';
+    html += '</div>';
+    
+    // Widget Akun Aktif
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#4CAF50;">';
+    html += '<i class="fas fa-check-circle"></i>';
+    html += '</div>';
+    html += '<div class="widget-number">' + akunAktif + '</div>';
+    html += '<div class="widget-label">Akun Aktif</div>';
+    html += '</div>';
+    
+    // Widget Menunggu Verifikasi
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#FF9800;">';
+    html += '<i class="fas fa-clock"></i>';
+    html += '</div>';
+    html += '<div class="widget-number">' + akunMenunggu + '</div>';
+    html += '<div class="widget-label">Menunggu Verifikasi</div>';
+    html += '</div>';
+    
+    // Widget Dinonaktifkan
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#F44336;">';
+    html += '<i class="fas fa-ban"></i>';
+    html += '</div>';
+    html += '<div class="widget-number">' + akunNonaktif + '</div>';
+    html += '<div class="widget-label">Dinonaktifkan</div>';
+    html += '</div>';
+    
+    html += '</div>'; // Akhir widget-grid
+    
+    // Tabel 5 Akun Terbaru
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span>';
+    html += '<i class="fas fa-history" style="color:#FF6B00;"></i> ';
+    html += '5 Akun Terbaru';
+    html += '</span>';
+    html += '</div>';
+    
+    if (akunTerbaru.length === 0) {
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-users-slash"></i>';
+        html += '<h3>Belum ada akun terdaftar</h3>';
+        html += '<p>Sistem masih kosong. Gunakan menu Daftar Akun Baru untuk menambahkan.</p>';
+        html += '</div>';
+    } else {
+        html += '<div class="table-container">';
+        html += '<table class="table">';
+        html += '<thead>';
+        html += '<tr>';
+        html += '<th>ID Akun</th>';
+        html += '<th>Role</th>';
+        html += '<th>Username</th>';
+        html += '<th>Nama Lengkap</th>';
+        html += '<th>Status</th>';
+        html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
+        
+        // Loop 5 akun terbaru
+        for (var i = 0; i < akunTerbaru.length; i++) {
+            var akun = akunTerbaru[i];
+            
+            // Tentukan badge status
+            var badgeClass = 'badge-success';
+            var statusText = 'AKTIF';
+            
+            if (akun.status === 'NONAKTIF (Menunggu Verifikasi)') {
+                badgeClass = 'badge-warning';
+                statusText = 'Menunggu Verifikasi';
+            } else if (akun.status !== 'AKTIF') {
+                badgeClass = 'badge-danger';
+                statusText = akun.status;
+            }
+            
+            html += '<tr>';
+            html += '<td><strong>' + akun.id + '</strong></td>';
+            html += '<td>' + akun.role + '</td>';
+            html += '<td>' + akun.username + '</td>';
+            html += '<td>' + akun.nama + '</td>';
+            html += '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>';
+            html += '</tr>';
+        }
+        
+        html += '</tbody>';
+        html += '</table>';
+        html += '</div>'; // Akhir table-container
+    }
+    
+    html += '</div>'; // Akhir card
+    
+    contentArea.innerHTML = html;
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (4) ===== -->
 
-<!-- ===== BLOK 6 (5) - 05 RENDER DASHBOARD (SADash, CustDash, TokoDash, OjekDash, PasarDash, AdminDash, CSDash, TOwnerDash, JOwnerDash, SPDash) ===== -->
+<!-- ===== BLOK 6 (5) - 05 JAVASCRIPT PROFIL SUPERADMIN ===== -->
 <script>
-function renderDashboard() {
-    var role = localStorage.getItem('2r_user_role');
-    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+// =====================================================================
+// RENDER PROFIL SUPERADMIN
+// =====================================================================
+
+/**
+ * Render halaman profil SuperAdmin
+ * Menampilkan: Data Aplikasi, Keamanan Akun, Data Pribadi, Dokumen, Keterangan
+ */
+function renderProfilSuperAdmin() {
+    var contentArea = document.getElementById('mainContent');
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : {};
+    
     var html = '';
     
-    if (role === 'superadmin') {
-        // SADash-01: SuperAdmin Dashboard
-        var akun = getDataAkun();
-        var total = akun.length;
-        var aktif = akun.filter(function(a) { return a.status === 'AKTIF'; }).length;
-        var menunggu = akun.filter(function(a) { return a.status === 'NONAKTIF (Menunggu Verifikasi)'; }).length;
-        var nonaktif = total - aktif - menunggu;
-        var terbaru = akun.slice().sort(function(a, b) { return new Date(b.registeredAt) - new Date(a.registeredAt); }).slice(0, 5);
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Profil SuperAdmin</h2>';
+    html += '<p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>';
+    html += '</div>';
+    
+    // ===== DATA APLIKASI =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-building" style="color:#FF6B00;"></i> Data Aplikasi</span>';
+    html += '<button class="btn btn-primary btn-sm" onclick="simpanDataAplikasi()">';
+    html += '<i class="fas fa-save"></i> Simpan';
+    html += '</button>';
+    html += '</div>';
+    html += '<div class="grid-2">';
+    html += '<div>';
+    html += '<label class="form-label">Nama Aplikasi</label>';
+    html += '<input type="text" id="inputNamaAplikasi" class="form-input" placeholder="Nama Aplikasi">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Penerbit</label>';
+    html += '<input type="text" id="inputPenerbit" class="form-input" placeholder="Penerbit">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Pemilik</label>';
+    html += '<input type="text" id="inputPemilik" class="form-input" placeholder="Pemilik">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Pengelola</label>';
+    html += '<input type="text" id="inputPengelola" class="form-input" placeholder="Pengelola">';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    
+    // ===== KEAMANAN AKUN =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-shield-alt" style="color:#FF6B00;"></i> Keamanan Akun</span>';
+    html += '<button class="btn btn-primary btn-sm" onclick="simpanKeamananAkun()">';
+    html += '<i class="fas fa-key"></i> Simpan Password';
+    html += '</button>';
+    html += '</div>';
+    html += '<div class="grid-2">';
+    html += '<div>';
+    html += '<label class="form-label">Username</label>';
+    html += '<input type="text" id="inputUsernameSA" class="form-input" value="' + (user.username || '') + '">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Password Baru</label>';
+    html += '<input type="password" id="inputPasswordSA" class="form-input" placeholder="Kosongkan jika tidak ingin mengubah">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Konfirmasi Password Baru</label>';
+    html += '<input type="password" id="inputPasswordKonfirmasiSA" class="form-input" placeholder="Konfirmasi password baru">';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    
+    // ===== DATA PRIBADI =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi</span>';
+    html += '<button class="btn btn-primary btn-sm" onclick="simpanDataPribadiSA()">';
+    html += '<i class="fas fa-save"></i> Simpan';
+    html += '</button>';
+    html += '</div>';
+    html += '<div class="grid-2">';
+    html += '<div>';
+    html += '<label class="form-label">Nama Lengkap</label>';
+    html += '<input type="text" id="inputNamaSA" class="form-input" value="' + (user.nama || '') + '">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Alamat</label>';
+    html += '<input type="text" id="inputAlamatSA" class="form-input" value="' + (user.alamat || '') + '">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Email</label>';
+    html += '<input type="email" id="inputEmailSA" class="form-input" value="' + (user.email || '') + '">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Nomor HP</label>';
+    html += '<input type="tel" id="inputHpSA" class="form-input" value="' + (user.hp || '') + '">';
+    html += '</div>';
+    html += '<div>';
+    html += '<label class="form-label">Jabatan</label>';
+    html += '<input type="text" id="inputJabatanSA" class="form-input" value="' + (user.jabatan || '') + '">';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    
+    // ===== DOKUMEN PERUSAHAAN =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span>';
+    html += '<button class="btn btn-primary btn-sm" id="tombolUploadDokumen">';
+    html += '<i class="fas fa-upload"></i> Unggah Dokumen';
+    html += '</button>';
+    html += '<input type="file" id="inputFileDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none">';
+    html += '</div>';
+    html += '<div id="daftarDokumenSA">';
+    html += '<div class="empty-state">';
+    html += '<i class="fas fa-cloud-upload-alt"></i>';
+    html += '<h3>Belum ada dokumen</h3>';
+    html += '<p>Klik tombol Unggah untuk menambahkan dokumen.</p>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    
+    // ===== KETERANGAN =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-sticky-note" style="color:#FF6B00;"></i> Keterangan Perusahaan</span>';
+    html += '</div>';
+    html += '<textarea id="inputKeteranganSA" rows="4" class="form-input" placeholder="Isi keterangan perusahaan..."></textarea>';
+    html += '<button class="btn btn-primary margin-top-10" onclick="simpanKeteranganSA()">';
+    html += '<i class="fas fa-save"></i> Simpan Keterangan';
+    html += '</button>';
+    html += '</div>';
+    
+    contentArea.innerHTML = html;
+    
+    // Load data setelah render
+    setTimeout(function() {
+        muatDataAplikasi();
+        muatDokumenSA();
+        muatKeteranganSA();
         
-        html += '<div class="page-header"><h2>Dasbor SuperAdmin</h2><p>Selamat datang, <strong>' + user.nama + '</strong>! Berikut ringkasan sistem.</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + total + '</div><div class="widget-label">Total Akun</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">' + aktif + '</div><div class="widget-label">Akun Aktif</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menunggu + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#F44336;"><i class="fas fa-ban"></i></div><div class="widget-number">' + nonaktif + '</div><div class="widget-label">Dinonaktifkan</div></div>';
-        html += '</div>';
-        html += '<div class="card"><div class="card-header">5 Akun Terbaru</div><div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th></tr></thead><tbody>';
-        for (var i = 0; i < terbaru.length; i++) {
-            var a = terbaru[i];
-            var badge = a.status === 'AKTIF' ? 'badge-success' : (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'badge-warning' : 'badge-danger');
-            var statusText = a.status === 'AKTIF' ? 'AKTIF' : (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'Menunggu' : 'Nonaktif');
-            html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td></tr>';
+        // Setup upload dokumen
+        var tombolUpload = document.getElementById('tombolUploadDokumen');
+        var inputFile = document.getElementById('inputFileDokumen');
+        if (tombolUpload && inputFile) {
+            tombolUpload.onclick = function() {
+                inputFile.click();
+            };
+            inputFile.onchange = function(event) {
+                uploadDokumenSA(event.target.files);
+            };
         }
-        html += '</tbody></table></div></div>';
+    }, 200);
+}
+
+// =====================================================================
+// FUNGSI SIMPAN DATA APLIKASI
+// =====================================================================
+
+function simpanDataAplikasi() {
+    var dataAplikasi = {
+        nama: document.getElementById('inputNamaAplikasi').value,
+        penerbit: document.getElementById('inputPenerbit').value,
+        pemilik: document.getElementById('inputPemilik').value,
+        pengelola: document.getElementById('inputPengelola').value
+    };
+    
+    localStorage.setItem('2r_data_aplikasi', JSON.stringify(dataAplikasi));
+    tampilkanToast('Data aplikasi berhasil disimpan!', 'success');
+}
+
+function muatDataAplikasi() {
+    var dataTersimpan = localStorage.getItem('2r_data_aplikasi');
+    if (dataTersimpan) {
+        var data = JSON.parse(dataTersimpan);
         
-    } else if (role === 'customer') {
-        // CustDash-01: Customer Dashboard
-        html += '<div class="page-header"><h2>Dasbor Customer</h2><p>Selamat datang, <strong>' + user.nama + '</strong>! Temukan produk terbaik.</p></div>';
-        html += '<div style="background:linear-gradient(135deg,#FF6B00,#FF9800);color:white;border-radius:12px;padding:25px;margin-bottom:20px;"><h2>Diskon Spesial Hari Ini!</h2><p>Dapatkan potongan hingga 50%</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card" onclick="navigasiKeHalaman(\'belanja\')"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-shopping-basket"></i></div><div class="widget-label" style="font-weight:600;">Mulai Belanja</div></div>';
-        html += '<div class="widget-card" onclick="navigasiKeHalaman(\'pesananSaya\')"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-bag"></i></div><div class="widget-label" style="font-weight:600;">Pesanan Saya</div></div>';
-        html += '<div class="widget-card" onclick="navigasiKeHalaman(\'favorit\')"><div class="widget-icon" style="color:#E91E63;"><i class="fas fa-heart"></i></div><div class="widget-label" style="font-weight:600;">Favorit</div></div>';
-        html += '<div class="widget-card" onclick="navigasiKeHalaman(\'riwayatBelanja\')"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-clock"></i></div><div class="widget-label" style="font-weight:600;">Riwayat</div></div>';
-        html += '</div>';
+        var elNama = document.getElementById('inputNamaAplikasi');
+        var elPenerbit = document.getElementById('inputPenerbit');
+        var elPemilik = document.getElementById('inputPemilik');
+        var elPengelola = document.getElementById('inputPengelola');
         
-    } else if (role === 'toko' || role === 'staf_owner_toko') {
-        // TokoDash-01 / TOwnerDash-01
-        html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">0</div><div class="widget-label">Total Produk</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div><div class="widget-number">0</div><div class="widget-label">Pesanan Baru</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
-        html += '</div>';
-        
-    } else if (role === 'ojek' || role === 'staf_owner_ojek') {
-        // OjekDash-01 / JOwnerDash-01
-        html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-motorcycle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Aktif</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Selesai</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
-        html += '</div>';
-        
-    } else if (role === 'pedagang') {
-        // PasarDash-01
-        html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="card"><p>Selamat bergabung di Toko Online 2R! Lengkapi profil Anda.</p><button class="btn btn-primary mt-10" onclick="navigasiKeHalaman(\'profile\')">Lengkapi Profil</button></div>';
-        
-    } else if (role === 'staf_admin') {
-        // AdminDash-01
-        var akun = getDataAkun();
-        var menunggu = akun.filter(function(a) { return a.status === 'NONAKTIF (Menunggu Verifikasi)'; }).length;
-        html += '<div class="page-header"><h2>Dasbor Staf Admin</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menunggu + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + akun.length + '</div><div class="widget-label">Total Akun</div></div>';
-        html += '</div>';
-        
-    } else if (role === 'customer_service') {
-        // CSDash-01
-        html += '<div class="page-header"><h2>Dasbor Customer Service</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-ticket-alt"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Masuk</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Selesai</div></div>';
-        html += '</div>';
-        
-    } else if (role === 'sponsor') {
-        // SPDash-01
-        html += '<div class="page-header"><h2>Dasbor Sponsor</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-ad"></i></div><div class="widget-number">0</div><div class="widget-label">Iklan Aktif</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-eye"></i></div><div class="widget-number">0</div><div class="widget-label">Total Impresi</div></div>';
-        html += '</div>';
-        
-    } else {
-        html += '<div class="page-header"><h2>Dasbor</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
+        if (elNama) elNama.value = data.nama || '';
+        if (elPenerbit) elPenerbit.value = data.penerbit || '';
+        if (elPemilik) elPemilik.value = data.pemilik || '';
+        if (elPengelola) elPengelola.value = data.pengelola || '';
+    }
+}
+
+// =====================================================================
+// FUNGSI KEAMANAN AKUN
+// =====================================================================
+
+function simpanKeamananAkun() {
+    var username = document.getElementById('inputUsernameSA').value.trim();
+    var password = document.getElementById('inputPasswordSA').value.trim();
+    var konfirmasi = document.getElementById('inputPasswordKonfirmasiSA').value.trim();
+    
+    // Validasi
+    if (!username) {
+        tampilkanToast('Username tidak boleh kosong!', 'warning');
+        return;
     }
     
-    document.getElementById('mainContent').innerHTML = html;
+    // Jika password diisi, lakukan validasi
+    if (password) {
+        if (password.length < 6) {
+            tampilkanToast('Password minimal 6 karakter!', 'warning');
+            return;
+        }
+        if (password !== konfirmasi) {
+            tampilkanToast('Password dan konfirmasi tidak cocok!', 'error');
+            return;
+        }
+    }
+    
+    // Update data user
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : {};
+    var daftarAkun = ambilDataAkun();
+    
+    user.username = username;
+    if (password) {
+        user.password = enkripsiPassword(password);
+    }
+    
+    // Update di daftarAkun
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id === user.id) {
+            daftarAkun[i].username = username;
+            if (password) {
+                daftarAkun[i].password = enkripsiPassword(password);
+            }
+            break;
+        }
+    }
+    
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(daftarAkun);
+    
+    // Reset field password
+    document.getElementById('inputPasswordSA').value = '';
+    document.getElementById('inputPasswordKonfirmasiSA').value = '';
+    
+    tampilkanToast('Username dan password berhasil diperbarui!', 'success');
+}
+
+// =====================================================================
+// FUNGSI DATA PRIBADI
+// =====================================================================
+
+function simpanDataPribadiSA() {
+    var userData = localStorage.getItem('2r_user');
+    var user = userData ? JSON.parse(userData) : {};
+    var daftarAkun = ambilDataAkun();
+    
+    // Ambil nilai dari form
+    user.nama = document.getElementById('inputNamaSA').value;
+    user.alamat = document.getElementById('inputAlamatSA').value;
+    user.email = document.getElementById('inputEmailSA').value;
+    user.hp = document.getElementById('inputHpSA').value;
+    user.jabatan = document.getElementById('inputJabatanSA').value;
+    
+    // Update di daftarAkun
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id === user.id) {
+            daftarAkun[i].nama = user.nama;
+            daftarAkun[i].alamat = user.alamat;
+            daftarAkun[i].email = user.email;
+            daftarAkun[i].hp = user.hp;
+            daftarAkun[i].jabatan = user.jabatan;
+            break;
+        }
+    }
+    
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(daftarAkun);
+    
+    // Update nama di navbar
+    var elNama = document.getElementById('userNama');
+    if (elNama) {
+        elNama.textContent = user.nama;
+    }
+    
+    tampilkanToast('Data pribadi berhasil disimpan!', 'success');
+}
+
+// =====================================================================
+// FUNGSI DOKUMEN
+// =====================================================================
+
+function uploadDokumenSA(fileList) {
+    if (!fileList || fileList.length === 0) {
+        return;
+    }
+    
+    var dokumenTersimpan = localStorage.getItem('2r_dokumen_sa');
+    var daftarDokumen = dokumenTersimpan ? JSON.parse(dokumenTersimpan) : [];
+    
+    var jumlahFile = fileList.length;
+    var fileDiproses = 0;
+    
+    // Loop setiap file
+    for (var i = 0; i < fileList.length; i++) {
+        // Gunakan closure untuk menyimpan referensi file
+        (function(file) {
+            var reader = new FileReader();
+            
+            reader.onload = function(event) {
+                // Tambahkan dokumen ke daftar
+                daftarDokumen.push({
+                    id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                    nama: file.name,
+                    tipe: file.type,
+                    ukuran: file.size,
+                    data: event.target.result,
+                    keterangan: '',
+                    tanggal: new Date().toLocaleDateString('id-ID')
+                });
+                
+                fileDiproses++;
+                
+                // Jika semua file sudah diproses
+                if (fileDiproses === jumlahFile) {
+                    localStorage.setItem('2r_dokumen_sa', JSON.stringify(daftarDokumen));
+                    muatDokumenSA();
+                    tampilkanToast(jumlahFile + ' dokumen berhasil diunggah!', 'success');
+                }
+            };
+            
+            reader.readAsDataURL(file);
+        })(fileList[i]);
+    }
+}
+
+function muatDokumenSA() {
+    var container = document.getElementById('daftarDokumenSA');
+    if (!container) {
+        return;
+    }
+    
+    var dokumenTersimpan = localStorage.getItem('2r_dokumen_sa');
+    var daftarDokumen = dokumenTersimpan ? JSON.parse(dokumenTersimpan) : [];
+    
+    // Jika tidak ada dokumen
+    if (daftarDokumen.length === 0) {
+        container.innerHTML = '<div class="empty-state">' +
+            '<i class="fas fa-cloud-upload-alt"></i>' +
+            '<h3>Belum ada dokumen</h3>' +
+            '<p>Klik tombol Unggah untuk menambahkan dokumen.</p>' +
+            '</div>';
+        return;
+    }
+    
+    // Bangun HTML daftar dokumen
+    var html = '';
+    
+    for (var i = 0; i < daftarDokumen.length; i++) {
+        var dokumen = daftarDokumen[i];
+        var isImage = dokumen.tipe && dokumen.tipe.startsWith('image/');
+        
+        html += '<div class="doc-item">';
+        html += '<div class="doc-info">';
+        
+        // Thumbnail atau icon
+        if (isImage) {
+            html += '<img src="' + dokumen.data + '" class="doc-thumb" ' +
+                    'onclick="previewGambarDokumen(\'' + dokumen.data + '\', \'' + dokumen.nama + '\')" ' +
+                    'alt="' + dokumen.nama + '">';
+        } else {
+            html += '<div class="doc-icon"><i class="fas fa-file-alt"></i></div>';
+        }
+        
+        // Info dokumen
+        html += '<div class="doc-text">';
+        html += '<h4>' + dokumen.nama + '</h4>';
+        html += '<p>' + (dokumen.keterangan || 'Tidak ada keterangan') + ' | ' + (dokumen.tanggal || '') + '</p>';
+        html += '</div>';
+        html += '</div>';
+        
+        // Tombol aksi
+        html += '<div class="doc-actions">';
+        html += '<button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')">';
+        html += '<i class="fas fa-edit"></i>';
+        html += '</button>';
+        html += '<button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')">';
+        html += '<i class="fas fa-trash"></i>';
+        html += '</button>';
+        html += '</div>';
+        
+        html += '</div>';
+    }
+    
+    container.innerHTML = html;
+}
+
+function previewGambarDokumen(src, title) {
+    var modalImage = document.getElementById('modalPreviewImage');
+    var modalTitle = document.getElementById('modalPreviewTitle');
+    
+    if (modalImage) modalImage.src = src;
+    if (modalTitle) modalTitle.textContent = title || 'Preview Gambar';
+    
+    bukaModal('modalPreviewGambar');
+}
+
+function editDokumenSA(index) {
+    var dokumenTersimpan = localStorage.getItem('2r_dokumen_sa');
+    var daftarDokumen = dokumenTersimpan ? JSON.parse(dokumenTersimpan) : [];
+    
+    if (index >= 0 && index < daftarDokumen.length) {
+        var dokumen = daftarDokumen[index];
+        
+        var namaBaru = prompt('Nama file:', dokumen.nama);
+        if (namaBaru !== null) {
+            var keteranganBaru = prompt('Keterangan:', dokumen.keterangan || '');
+            if (keteranganBaru !== null) {
+                daftarDokumen[index].nama = namaBaru;
+                daftarDokumen[index].keterangan = keteranganBaru;
+                localStorage.setItem('2r_dokumen_sa', JSON.stringify(daftarDokumen));
+                muatDokumenSA();
+                tampilkanToast('Dokumen berhasil diperbarui!', 'success');
+            }
+        }
+    }
+}
+
+function hapusDokumenSA(index) {
+    if (!confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
+        return;
+    }
+    
+    var dokumenTersimpan = localStorage.getItem('2r_dokumen_sa');
+    var daftarDokumen = dokumenTersimpan ? JSON.parse(dokumenTersimpan) : [];
+    
+    if (index >= 0 && index < daftarDokumen.length) {
+        daftarDokumen.splice(index, 1);
+        localStorage.setItem('2r_dokumen_sa', JSON.stringify(daftarDokumen));
+        muatDokumenSA();
+        tampilkanToast('Dokumen berhasil dihapus!', 'success');
+    }
+}
+
+// =====================================================================
+// FUNGSI KETERANGAN
+// =====================================================================
+
+function simpanKeteranganSA() {
+    var keterangan = document.getElementById('inputKeteranganSA').value;
+    localStorage.setItem('2r_keterangan_sa', keterangan);
+    tampilkanToast('Keterangan berhasil disimpan!', 'success');
+}
+
+function muatKeteranganSA() {
+    var keterangan = localStorage.getItem('2r_keterangan_sa');
+    var elKeterangan = document.getElementById('inputKeteranganSA');
+    if (keterangan && elKeterangan) {
+        elKeterangan.value = keterangan;
+    }
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (5) ===== -->
-<!-- ===== BLOK 6 (6) - 06 RENDER BELANJA & PESANAN (CUSTOMER) ===== -->
+<!-- ===== BLOK 6 (6) - 06 JAVASCRIPT DAFTAR AKUN BARU ===== -->
 <script>
-function renderBelanja() {
+// =====================================================================
+// RENDER DAFTAR AKUN BARU
+// =====================================================================
+
+/**
+ * Render halaman daftar akun baru
+ * Form untuk SuperAdmin membuat akun baru
+ */
+function renderDaftarAkunBaru() {
+    var contentArea = document.getElementById('mainContent');
+    
     var html = '';
-    html += '<div class="page-header"><h2>Belanja</h2><p>Temukan produk yang Anda butuhkan</p></div>';
-    html += '<div class="card"><div class="card-header"><span>Produk Tersedia</span></div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px;">';
     
-    var contohProduk = [
-        { nama: 'Kaos Polos Premium', harga: 'Rp 85.000', toko: 'Toko Fashion 2R' },
-        { nama: 'Sepatu Sneakers', harga: 'Rp 250.000', toko: 'Toko Sepatu 2R' },
-        { nama: 'Tas Ransel', harga: 'Rp 150.000', toko: 'Toko Aksesoris' },
-        { nama: 'Jam Tangan', harga: 'Rp 175.000', toko: 'Toko Jam 2R' },
-        { nama: 'Kemeja Formal', harga: 'Rp 200.000', toko: 'Toko Fashion 2R' },
-        { nama: 'Celana Jeans', harga: 'Rp 300.000', toko: 'Toko Fashion 2R' }
-    ];
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Daftar Akun Baru</h2>';
+    html += '<p>Form ini digunakan untuk membuat akun baru oleh SuperAdmin.</p>';
+    html += '</div>';
     
-    for (var i = 0; i < contohProduk.length; i++) {
-        var p = contohProduk[i];
-        html += '<div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid #f0f0f0;cursor:pointer;">';
-        html += '<div style="width:100%;height:140px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:45px;color:#ddd;"><i class="fas fa-box"></i></div>';
-        html += '<div style="padding:12px;"><h4 style="font-size:13px;color:#333;">' + p.nama + '</h4>';
-        html += '<p style="font-size:15px;font-weight:700;color:#FF6B00;">' + p.harga + '</p>';
-        html += '<p style="font-size:11px;color:#888;">' + p.toko + '</p>';
-        html += '<button class="btn btn-primary" style="width:100%;margin-top:8px;justify-content:center;">Beli</button></div></div>';
-    }
+    // Card Form
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-user-plus" style="color:#FF6B00;"></i> Form Pendaftaran Akun</span>';
+    html += '</div>';
     
-    html += '</div></div>';
-    document.getElementById('mainContent').innerHTML = html;
+    // Pilih Role
+    html += '<div class="form-group">';
+    html += '<label>Pilih Role</label>';
+    html += '<select id="selectDaftarRole" class="form-input" onchange="updatePreviewIdDaftar()">';
+    html += '<option value="customer">Customer</option>';
+    html += '<option value="toko">Toko (Memerlukan Verifikasi)</option>';
+    html += '<option value="ojek">Ojek (Memerlukan Verifikasi)</option>';
+    html += '<option value="pedagang">Pedagang Pasar</option>';
+    html += '<option value="staf_admin">Staf Admin</option>';
+    html += '<option value="staf_owner_ojek">Staf Owner Ojek</option>';
+    html += '<option value="staf_owner_toko">Staf Owner Toko</option>';
+    html += '<option value="customer_service">Customer Service</option>';
+    html += '<option value="sponsor">Sponsor</option>';
+    html += '</select>';
+    html += '</div>';
+    
+    // ID Akun (Otomatis)
+    html += '<div class="form-group">';
+    html += '<label>ID Akun (Otomatis)</label>';
+    html += '<div style="background:#f0f0f0;border:2px solid #ddd;border-radius:8px;padding:12px 14px;">';
+    html += '<span id="daftarIdPreview" style="font-weight:600;color:#333;">' + generateId('customer') + '</span>';
+    html += '</div>';
+    html += '</div>';
+    
+    // Username
+    html += '<div class="form-group">';
+    html += '<label>Username</label>';
+    html += '<input type="text" id="inputDaftarUsername" class="form-input" placeholder="Masukkan username" required>';
+    html += '</div>';
+    
+    // Password
+    html += '<div class="form-group">';
+    html += '<label>Password</label>';
+    html += '<input type="password" id="inputDaftarPassword" class="form-input" placeholder="Masukkan password" required>';
+    html += '</div>';
+    
+    // Nama Lengkap
+    html += '<div class="form-group">';
+    html += '<label>Nama Lengkap</label>';
+    html += '<input type="text" id="inputDaftarNama" class="form-input" placeholder="Masukkan nama lengkap" required>';
+    html += '</div>';
+    
+    // Tombol Submit
+    html += '<button class="btn btn-primary btn-block margin-top-10" onclick="prosesDaftarAkunBaru()">';
+    html += '<i class="fas fa-user-plus"></i> Buat Akun Baru';
+    html += '</button>';
+    
+    html += '</div>'; // Akhir card
+    
+    contentArea.innerHTML = html;
 }
 
-function renderPesananSaya() {
-    var html = '';
-    html += '<div class="page-header"><h2>Pesanan Saya</h2><p>Lacak status pesanan Anda</p></div>';
-    html += '<div class="card"><div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pesanan</h3><p>Anda belum melakukan pemesanan.</p>';
-    html += '<button class="btn btn-primary mt-10" onclick="navigasiKeHalaman(\'belanja\')">Mulai Belanja</button></div></div>';
-    document.getElementById('mainContent').innerHTML = html;
+/**
+ * Update preview ID saat role berubah
+ */
+function updatePreviewIdDaftar() {
+    var selectRole = document.getElementById('selectDaftarRole');
+    var previewId = document.getElementById('daftarIdPreview');
+    
+    if (selectRole && previewId) {
+        previewId.textContent = generateId(selectRole.value);
+    }
+}
+
+/**
+ * Proses pembuatan akun baru oleh SuperAdmin
+ */
+function prosesDaftarAkunBaru() {
+    // Ambil nilai dari form
+    var role = document.getElementById('selectDaftarRole').value;
+    var username = document.getElementById('inputDaftarUsername').value.trim();
+    var password = document.getElementById('inputDaftarPassword').value.trim();
+    var nama = document.getElementById('inputDaftarNama').value.trim();
+    
+    // Validasi input
+    if (!role || !username || !password || !nama) {
+        tampilkanToast('Harap isi semua data yang diperlukan!', 'warning');
+        return;
+    }
+    
+    if (username.length < 4) {
+        tampilkanToast('Username minimal 4 karakter!', 'warning');
+        return;
+    }
+    
+    if (password.length < 6) {
+        tampilkanToast('Password minimal 6 karakter!', 'warning');
+        return;
+    }
+    
+    // Cek username sudah digunakan
+    var daftarAkun = ambilDataAkun();
+    var usernameSudahAda = daftarAkun.find(function(akun) {
+        return akun.username === username;
+    });
+    
+    if (usernameSudahAda) {
+        tampilkanToast('Username sudah digunakan! Silakan pilih username lain.', 'error');
+        return;
+    }
+    
+    // Tentukan status akun
+    var statusAkun = 'AKTIF';
+    if (role === 'toko' || role === 'ojek') {
+        statusAkun = 'NONAKTIF (Menunggu Verifikasi)';
+    }
+    
+    // Buat akun baru
+    var akunBaru = {
+        id: generateId(role),
+        role: role,
+        username: username,
+        password: enkripsiPassword(password),
+        nama: nama,
+        email: '',
+        hp: '',
+        alamat: '',
+        status: statusAkun,
+        registeredAt: new Date().toISOString()
+    };
+    
+    // Simpan ke localStorage
+    daftarAkun.push(akunBaru);
+    simpanDataAkun(daftarAkun);
+    
+    // Reset form
+    document.getElementById('inputDaftarUsername').value = '';
+    document.getElementById('inputDaftarPassword').value = '';
+    document.getElementById('inputDaftarNama').value = '';
+    
+    // Update preview ID
+    updatePreviewIdDaftar();
+    
+    // Tampilkan notifikasi sukses
+    tampilkanToast('Akun ' + role + ' berhasil dibuat! ID: ' + akunBaru.id, 'success');
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
 
-<!-- ===== BLOK 6 (7) - 07 RENDER PROFIL (SUPERADMIN & UMUM) ===== -->
+<!-- ===== BLOK 6 (7) - 07 JAVASCRIPT PERSETUJUAN AKUN ===== -->
 <script>
-function renderProfil() {
-    var role = localStorage.getItem('2r_user_role');
-    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+// =====================================================================
+// RENDER PERSETUJUAN AKUN
+// =====================================================================
+
+/**
+ * Render halaman persetujuan akun
+ * Menampilkan tabel akun yang perlu diverifikasi
+ */
+function renderPersetujuanAkun() {
+    var contentArea = document.getElementById('mainContent');
+    var daftarAkun = ambilDataAkun();
     
-    if (role === 'superadmin') {
-        renderProfilSuperAdmin(user);
+    // Filter akun yang perlu persetujuan
+    // Tampilkan semua akun KECUALI superadmin dan customer
+    var daftarPending = daftarAkun.filter(function(akun) {
+        return akun.role !== 'superadmin' && akun.role !== 'customer';
+    });
+    
+    var html = '';
+    
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Persetujuan Akun</h2>';
+    html += '<p>Daftar akun yang membutuhkan persetujuan untuk diaktifkan.</p>';
+    html += '</div>';
+    
+    // Card Tabel
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-user-check" style="color:#FF6B00;"></i> Daftar Permintaan Persetujuan</span>';
+    html += '<span style="font-size:14px;color:#666;">Total: ' + daftarPending.length + ' akun</span>';
+    html += '</div>';
+    
+    // Cek apakah ada data
+    if (daftarPending.length === 0) {
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-check-circle" style="color:#4CAF50;"></i>';
+        html += '<h3>Tidak ada akun yang menunggu persetujuan</h3>';
+        html += '<p>Semua akun sudah diproses.</p>';
+        html += '</div>';
     } else {
-        renderProfilUmum(user, role);
+        // Tabel persetujuan
+        html += '<div class="table-container">';
+        html += '<table class="table">';
+        html += '<thead>';
+        html += '<tr>';
+        html += '<th>ID Akun</th>';
+        html += '<th>Role</th>';
+        html += '<th>Username</th>';
+        html += '<th>Nama Lengkap</th>';
+        html += '<th>Status</th>';
+        html += '<th style="text-align:center;">Aksi</th>';
+        html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
+        
+        // Loop setiap akun
+        for (var i = 0; i < daftarPending.length; i++) {
+            var akun = daftarPending[i];
+            
+            // Tentukan badge status
+            var badgeClass = 'badge-warning';
+            var statusText = 'Menunggu Verifikasi';
+            
+            if (akun.status === 'AKTIF') {
+                badgeClass = 'badge-success';
+                statusText = 'AKTIF';
+            } else if (akun.status !== 'NONAKTIF (Menunggu Verifikasi)') {
+                badgeClass = 'badge-danger';
+                statusText = akun.status;
+            }
+            
+            html += '<tr>';
+            html += '<td><strong>' + akun.id + '</strong></td>';
+            html += '<td>' + akun.role + '</td>';
+            html += '<td>' + akun.username + '</td>';
+            html += '<td>' + akun.nama + '</td>';
+            html += '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>';
+            html += '<td style="text-align:center;">';
+            
+            // Tombol aksi
+            if (akun.status !== 'AKTIF') {
+                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + akun.id + '\')" style="margin-right:5px;">';
+                html += '<i class="fas fa-check"></i> Setujui';
+                html += '</button>';
+                
+                html += '<button class="btn btn-danger btn-xs" onclick="bukaModalTolakAkun(\'' + akun.id + '\')">';
+                html += '<i class="fas fa-times"></i> Tolak';
+                html += '</button>';
+            } else {
+                html += '<span style="color:#888;font-size:12px;">Sudah Aktif</span>';
+            }
+            
+            html += '</td>';
+            html += '</tr>';
+        }
+        
+        html += '</tbody>';
+        html += '</table>';
+        html += '</div>'; // Akhir table-container
+    }
+    
+    html += '</div>'; // Akhir card
+    
+    contentArea.innerHTML = html;
+}
+
+/**
+ * Menyetujui akun (mengaktifkan)
+ * @param {string} idAkun - ID akun yang akan disetujui
+ */
+function setujuiAkun(idAkun) {
+    if (!confirm('Apakah Anda yakin ingin menyetujui dan mengaktifkan akun ini?')) {
+        return;
+    }
+    
+    var daftarAkun = ambilDataAkun();
+    var ditemukan = false;
+    
+    // Cari dan update status akun
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id === idAkun) {
+            daftarAkun[i].status = 'AKTIF';
+            ditemukan = true;
+            break;
+        }
+    }
+    
+    if (ditemukan) {
+        simpanDataAkun(daftarAkun);
+        renderPersetujuanAkun(); // Refresh tabel
+        tampilkanToast('Akun berhasil diaktifkan!', 'success');
+    } else {
+        tampilkanToast('Akun tidak ditemukan!', 'error');
     }
 }
 
-function renderProfilSuperAdmin(user) {
-    var html = '';
-    html += '<div class="page-header"><h2>Profil SuperAdmin</h2><p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p></div>';
-    
-    // Data Aplikasi
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-building" style="color:#FF6B00;"></i> Data Aplikasi</span><button class="btn btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan</button></div>';
-    html += '<div class="grid-2"><div><label class="form-label">Nama Aplikasi</label><input type="text" id="appNama" class="form-input"></div><div><label class="form-label">Penerbit</label><input type="text" id="appPenerbit" class="form-input"></div><div><label class="form-label">Pemilik</label><input type="text" id="appPemilik" class="form-input"></div><div><label class="form-label">Pengelola</label><input type="text" id="appPengelola" class="form-input"></div></div></div>';
-    
-    // Keamanan Akun
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-shield-alt" style="color:#FF6B00;"></i> Keamanan Akun</span><button class="btn btn-primary btn-sm" onclick="ubahPasswordSA()"><i class="fas fa-key"></i> Simpan</button></div>';
-    html += '<div class="grid-2"><div><label class="form-label">Username</label><input type="text" id="saUsername" class="form-input" value="' + (user.username || '') + '"></div><div><label class="form-label">Password Baru</label><input type="password" id="saPassword" class="form-input" placeholder="Kosongkan jika tidak diubah"></div><div><label class="form-label">Konfirmasi Password</label><input type="password" id="saPasswordKonfirmasi" class="form-input" placeholder="Konfirmasi password"></div></div></div>';
-    
-    // Data Pribadi
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi</span><button class="btn btn-primary btn-sm" onclick="simpanDataPribadiSA()"><i class="fas fa-save"></i> Simpan</button></div>';
-    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="saNama" class="form-input" value="' + (user.nama || '') + '"></div><div><label class="form-label">Alamat</label><input type="text" id="saAlamat" class="form-input" value="' + (user.alamat || '') + '"></div><div><label class="form-label">Email</label><input type="email" id="saEmail" class="form-input" value="' + (user.email || '') + '"></div><div><label class="form-label">Nomor HP</label><input type="tel" id="saHp" class="form-input" value="' + (user.hp || '') + '"></div></div></div>';
-    
-    // Dokumen Perusahaan
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span><button class="btn btn-primary btn-sm" id="btnUploadDokumen"><i class="fas fa-upload"></i> Unggah</button><input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none"></div><div id="daftarDokumen"><div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div></div></div>';
-    
-    // Keterangan
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-sticky-note" style="color:#FF6B00;"></i> Keterangan</span></div><textarea id="textKeterangan" rows="4" class="form-input" placeholder="Isi keterangan..."></textarea><button class="btn btn-primary mt-10" onclick="simpanKeteranganSA()"><i class="fas fa-save"></i> Simpan</button></div>';
-    
-    document.getElementById('mainContent').innerHTML = html;
-    
-    setTimeout(function() {
-        loadDataAplikasi();
-        loadDokumenSA();
-        loadKeteranganSA();
-        var btn = document.getElementById('btnUploadDokumen');
-        var input = document.getElementById('inputDokumen');
-        if (btn && input) { btn.onclick = function() { input.click(); }; input.onchange = function(e) { uploadDokumenSA(e.target.files); }; }
-    }, 300);
+/**
+ * Membuka modal konfirmasi tolak akun
+ * @param {string} idAkun - ID akun yang akan ditolak
+ */
+function bukaModalTolakAkun(idAkun) {
+    document.getElementById('tolakIdAkun').value = idAkun;
+    bukaModal('modalTolakAkun');
 }
 
-function renderProfilUmum(user, role) {
-    var namaRole = { customer:'Customer', toko:'Toko', ojek:'Ojek', pedagang:'Pedagang Pasar', staf_admin:'Staf Admin', customer_service:'Customer Service', staf_owner_toko:'Staf Owner Toko', staf_owner_ojek:'Staf Owner Ojek', sponsor:'Sponsor' };
-    var html = '';
-    html += '<div class="page-header"><h2>Profil ' + (namaRole[role] || role) + '</h2><p>Kelola data pribadi dan dokumen KTP Anda.</p></div>';
+/**
+ * Eksekusi tolak akun (hapus dari sistem)
+ */
+function eksekusiTolakAkun() {
+    var idAkun = document.getElementById('tolakIdAkun').value;
+    var daftarAkun = ambilDataAkun();
+    var daftarBaru = [];
+    var ditemukan = false;
     
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi</span><button class="btn btn-primary btn-sm" onclick="simpanDataPribadiUmum()"><i class="fas fa-save"></i> Simpan</button></div>';
-    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" value="' + (user.nama || '') + '"></div><div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" value="' + (user.email || '') + '"></div><div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" value="' + (user.hp || '') + '"></div><div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" value="' + (user.alamat || '') + '"></div></div></div>';
+    // Filter akun yang tidak dihapus
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id !== idAkun) {
+            daftarBaru.push(daftarAkun[i]);
+        } else {
+            ditemukan = true;
+        }
+    }
     
-    html += '<div class="card"><div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Dokumen KTP</span></div>';
-    html += '<div class="upload-area" id="uploadKtpContainer"><div id="ktpPreview">' + (user.ktp ? '<img src="' + user.ktp + '" class="preview-img">' : '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>') + '</div><input type="file" id="inputKtp" accept=".jpg,.jpeg,.png" style="display:none"></div>';
-    html += '<button class="btn btn-primary mt-10" onclick="simpanKTP()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
-    
-    document.getElementById('mainContent').innerHTML = html;
-    
-    setTimeout(function() {
-        var container = document.getElementById('uploadKtpContainer');
-        var input = document.getElementById('inputKtp');
-        if (container && input) { container.onclick = function() { input.click(); }; input.onchange = function(e) { previewKTP(e.target.files[0]); }; }
-    }, 300);
+    if (ditemukan) {
+        simpanDataAkun(daftarBaru);
+        tutupModal('modalTolakAkun');
+        renderPersetujuanAkun(); // Refresh tabel
+        tampilkanToast('Akun berhasil ditolak dan dihapus dari sistem.', 'success');
+    } else {
+        tutupModal('modalTolakAkun');
+        tampilkanToast('Akun tidak ditemukan!', 'error');
+    }
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (7) ===== -->
 
-<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN ===== -->
+<!-- ===== BLOK 6 (8) - 08 JAVASCRIPT KELOLA SEMUA AKUN ===== -->
 <script>
-function simpanDataAplikasi() {
-    var data = { nama: document.getElementById('appNama').value, penerbit: document.getElementById('appPenerbit').value, pemilik: document.getElementById('appPemilik').value, pengelola: document.getElementById('appPengelola').value };
-    localStorage.setItem('2r_data_aplikasi', JSON.stringify(data));
-    tampilkanToast('Data aplikasi disimpan!', 'success');
-}
+// =====================================================================
+// RENDER KELOLA SEMUA AKUN
+// =====================================================================
 
-function loadDataAplikasi() {
-    var d = JSON.parse(localStorage.getItem('2r_data_aplikasi') || '{}');
-    if (document.getElementById('appNama')) document.getElementById('appNama').value = d.nama || '';
-    if (document.getElementById('appPenerbit')) document.getElementById('appPenerbit').value = d.penerbit || '';
-    if (document.getElementById('appPemilik')) document.getElementById('appPemilik').value = d.pemilik || '';
-    if (document.getElementById('appPengelola')) document.getElementById('appPengelola').value = d.pengelola || '';
-}
-
-function ubahPasswordSA() {
-    var username = document.getElementById('saUsername').value.trim();
-    var password = document.getElementById('saPassword').value.trim();
-    var konfirmasi = document.getElementById('saPasswordKonfirmasi').value.trim();
-    if (!username) { tampilkanToast('Username tidak boleh kosong!', 'warning'); return; }
-    if (password && password !== konfirmasi) { tampilkanToast('Password tidak cocok!', 'error'); return; }
-    if (password && password.length < 6) { tampilkanToast('Password minimal 6 karakter!', 'warning'); return; }
+/**
+ * Render halaman kelola semua akun
+ * Menampilkan tabel semua akun dengan opsi aktifkan/nonaktifkan/hapus
+ */
+function renderKelolaSemuaAkun() {
+    var contentArea = document.getElementById('mainContent');
+    var daftarAkun = ambilDataAkun();
     
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.username = username;
-    if (password) user.password = encodePassword(password);
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === user.id) { akun[i].username = username; if (password) akun[i].password = encodePassword(password); break; } }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('saPassword').value = '';
-    document.getElementById('saPasswordKonfirmasi').value = '';
-    tampilkanToast('Keamanan akun diperbarui!', 'success');
-}
-
-function simpanDataPribadiSA() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.nama = document.getElementById('saNama').value;
-    user.alamat = document.getElementById('saAlamat').value;
-    user.email = document.getElementById('saEmail').value;
-    user.hp = document.getElementById('saHp').value;
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === user.id) { akun[i].nama = user.nama; akun[i].alamat = user.alamat; akun[i].email = user.email; akun[i].hp = user.hp; break; } }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('userNama').textContent = user.nama;
-    tampilkanToast('Data pribadi disimpan!', 'success');
-}
-
-function uploadDokumenSA(files) {
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    var total = files.length, done = 0;
-    for (var i = 0; i < files.length; i++) {
-        (function(file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                dokumen.push({ id: Date.now(), nama: file.name, tipe: file.type, data: e.target.result, keterangan: '', tanggal: new Date().toLocaleDateString('id-ID') });
-                done++;
-                if (done === total) { localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen)); loadDokumenSA(); tampilkanToast(total + ' dokumen diunggah!', 'success'); }
-            };
-            reader.readAsDataURL(file);
-        })(files[i]);
-    }
-}
-
-function loadDokumenSA() {
-    var container = document.getElementById('daftarDokumen');
-    if (!container) return;
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    if (dokumen.length === 0) { container.innerHTML = '<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div>'; return; }
+    // Filter: Tampilkan semua akun KECUALI superadmin
+    var daftarTampil = daftarAkun.filter(function(akun) {
+        return akun.role !== 'superadmin';
+    });
+    
     var html = '';
-    for (var i = 0; i < dokumen.length; i++) {
-        var d = dokumen[i];
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;">';
-        html += '<div style="display:flex;align-items:center;gap:15px;">';
-        html += (d.tipe && d.tipe.startsWith('image/')) ? '<img src="' + d.data + '" style="width:50px;height:50px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewGambar(\'' + d.data + '\',\'' + d.nama + '\')">' : '<div style="width:50px;height:50px;background:#fff0e5;color:#FF6B00;display:flex;align-items:center;justify-content:center;border-radius:6px;"><i class="fas fa-file-alt"></i></div>';
-        html += '<div><h4 style="font-size:14px;">' + d.nama + '</h4><p style="font-size:12px;color:#888;">' + (d.keterangan || 'Tidak ada keterangan') + ' | ' + d.tanggal + '</p></div></div>';
-        html += '<div style="display:flex;gap:6px;"><button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button></div></div>';
+    
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Kelola Semua Akun</h2>';
+    html += '<p>Menampilkan seluruh akun yang terdaftar di sistem. Anda dapat mengaktifkan, menonaktifkan, atau menghapus akun.</p>';
+    html += '</div>';
+    
+    // Card Tabel
+    html += '<div class="card">';
+    
+    if (daftarTampil.length === 0) {
+        // Tampilan kosong
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-users-slash"></i>';
+        html += '<h3>Belum Ada Akun Terdaftar</h3>';
+        html += '<p>Sistem saat ini masih kosong. Gunakan menu Daftar Akun Baru untuk menambahkan.</p>';
+        html += '</div>';
+    } else {
+        // Tabel akun
+        html += '<div class="table-container">';
+        html += '<table class="table">';
+        html += '<thead>';
+        html += '<tr>';
+        html += '<th style="width:50px;">No</th>';
+        html += '<th>ID Akun</th>';
+        html += '<th>Role</th>';
+        html += '<th>Username</th>';
+        html += '<th>Nama Lengkap</th>';
+        html += '<th>Status</th>';
+        html += '<th style="width:220px;">Aksi</th>';
+        html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
+        
+        // Loop setiap akun
+        for (var i = 0; i < daftarTampil.length; i++) {
+            var akun = daftarTampil[i];
+            var nomor = i + 1;
+            
+            // Tentukan badge status
+            var badgeClass = 'badge-success';
+            var statusText = 'AKTIF';
+            
+            if (akun.status === 'NONAKTIF (Menunggu Verifikasi)') {
+                badgeClass = 'badge-warning';
+                statusText = 'Menunggu Verifikasi';
+            } else if (akun.status !== 'AKTIF') {
+                badgeClass = 'badge-danger';
+                statusText = akun.status;
+            }
+            
+            html += '<tr>';
+            html += '<td style="text-align:center;">' + nomor + '</td>';
+            html += '<td><strong>' + akun.id + '</strong></td>';
+            html += '<td>' + akun.role + '</td>';
+            html += '<td>' + akun.username + '</td>';
+            html += '<td>' + akun.nama + '</td>';
+            html += '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>';
+            html += '<td>';
+            html += '<div style="display:flex;gap:5px;">';
+            
+            // Tombol Aktifkan atau Nonaktifkan
+            if (akun.status !== 'AKTIF') {
+                html += '<button class="btn btn-success btn-xs" onclick="aktifkanAkunDariKelola(\'' + akun.id + '\')">';
+                html += '<i class="fas fa-check-circle"></i> Aktifkan';
+                html += '</button>';
+            } else {
+                html += '<button class="btn btn-warning btn-xs" onclick="nonaktifkanAkunDariKelola(\'' + akun.id + '\')">';
+                html += '<i class="fas fa-pause-circle"></i> Nonaktifkan';
+                html += '</button>';
+            }
+            
+            // Tombol Hapus
+            html += '<button class="btn btn-danger btn-xs" onclick="hapusAkunDariKelola(\'' + akun.id + '\')">';
+            html += '<i class="fas fa-trash-alt"></i> Hapus';
+            html += '</button>';
+            
+            html += '</div>';
+            html += '</td>';
+            html += '</tr>';
+        }
+        
+        html += '</tbody>';
+        html += '</table>';
+        html += '</div>'; // Akhir table-container
     }
-    container.innerHTML = html;
+    
+    html += '</div>'; // Akhir card
+    
+    contentArea.innerHTML = html;
 }
 
-function editDokumenSA(index) {
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    var nama = prompt('Nama file:', dokumen[index].nama);
-    if (nama !== null) { var ket = prompt('Keterangan:', dokumen[index].keterangan || ''); if (ket !== null) { dokumen[index].nama = nama; dokumen[index].keterangan = ket; localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen)); loadDokumenSA(); tampilkanToast('Dokumen diperbarui!', 'success'); } }
+/**
+ * Mengaktifkan akun dari halaman kelola akun
+ * @param {string} idAkun - ID akun yang akan diaktifkan
+ */
+function aktifkanAkunDariKelola(idAkun) {
+    if (!confirm('Apakah Anda yakin ingin mengaktifkan akun ini?')) {
+        return;
+    }
+    
+    var daftarAkun = ambilDataAkun();
+    
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id === idAkun) {
+            daftarAkun[i].status = 'AKTIF';
+            simpanDataAkun(daftarAkun);
+            renderKelolaSemuaAkun(); // Refresh tabel
+            tampilkanToast('Akun berhasil diaktifkan!', 'success');
+            return;
+        }
+    }
+    
+    tampilkanToast('Akun tidak ditemukan!', 'error');
 }
 
-function hapusDokumenSA(index) {
-    if (!confirm('Hapus dokumen ini?')) return;
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    dokumen.splice(index, 1);
-    localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
-    loadDokumenSA();
-    tampilkanToast('Dokumen dihapus!', 'success');
+/**
+ * Menonaktifkan akun dari halaman kelola akun
+ * @param {string} idAkun - ID akun yang akan dinonaktifkan
+ */
+function nonaktifkanAkunDariKelola(idAkun) {
+    if (!confirm('Apakah Anda yakin ingin menonaktifkan akun ini?')) {
+        return;
+    }
+    
+    var daftarAkun = ambilDataAkun();
+    
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id === idAkun) {
+            daftarAkun[i].status = 'NONAKTIF (Dinonaktifkan oleh Admin)';
+            simpanDataAkun(daftarAkun);
+            renderKelolaSemuaAkun(); // Refresh tabel
+            tampilkanToast('Akun berhasil dinonaktifkan!', 'success');
+            return;
+        }
+    }
+    
+    tampilkanToast('Akun tidak ditemukan!', 'error');
 }
 
-function previewGambar(src, title) {
-    document.getElementById('modalPreviewImage').src = src;
-    document.getElementById('modalPreviewTitle').textContent = title || 'Preview';
-    bukaModal('modalPreviewGambar');
-}
-
-function simpanKeteranganSA() {
-    localStorage.setItem('2r_keterangan_sa', document.getElementById('textKeterangan').value);
-    tampilkanToast('Keterangan disimpan!', 'success');
-}
-
-function loadKeteranganSA() {
-    var k = localStorage.getItem('2r_keterangan_sa');
-    var el = document.getElementById('textKeterangan');
-    if (k && el) el.value = k;
+/**
+ * Menghapus akun dari halaman kelola akun
+ * @param {string} idAkun - ID akun yang akan dihapus
+ */
+function hapusAkunDariKelola(idAkun) {
+    // Konfirmasi ganda untuk keamanan
+    if (!confirm('PERINGATAN: Anda akan menghapus permanen akun ini. Data tidak dapat dikembalikan. Lanjutkan?')) {
+        return;
+    }
+    
+    if (!confirm('KONFIRMASI TERAKHIR: Apakah Anda benar-benar yakin ingin menghapus akun ini?')) {
+        return;
+    }
+    
+    var daftarAkun = ambilDataAkun();
+    var daftarBaru = [];
+    
+    // Filter akun yang tidak dihapus
+    for (var i = 0; i < daftarAkun.length; i++) {
+        if (daftarAkun[i].id !== idAkun) {
+            daftarBaru.push(daftarAkun[i]);
+        }
+    }
+    
+    simpanDataAkun(daftarBaru);
+    renderKelolaSemuaAkun(); // Refresh tabel
+    tampilkanToast('Akun berhasil dihapus permanen dari sistem.', 'success');
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (8) ===== -->
 
-<!-- ===== BLOK 6 (9) - 09 FUNGSI PROFIL UMUM ===== -->
+<!-- ===== BLOK 6 (9) - 09 JAVASCRIPT SETTING REKENING ===== -->
 <script>
-function simpanDataPribadiUmum() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.nama = document.getElementById('profilNama').value;
-    user.email = document.getElementById('profilEmail').value;
-    user.hp = document.getElementById('profilHp').value;
-    user.alamat = document.getElementById('profilAlamat').value;
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === user.id) { akun[i].nama = user.nama; akun[i].email = user.email; akun[i].hp = user.hp; akun[i].alamat = user.alamat; break; } }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('userNama').textContent = user.nama;
-    tampilkanToast('Data pribadi disimpan!', 'success');
+// =====================================================================
+// RENDER SETTING REKENING
+// =====================================================================
+
+/**
+ * Render halaman setting rekening master
+ * Form untuk mengatur rekening bank penerima fee
+ */
+function renderSettingRekening() {
+    var contentArea = document.getElementById('mainContent');
+    
+    // Ambil data rekening yang tersimpan
+    var dataTersimpan = localStorage.getItem('2r_rekening_master');
+    var rekening = dataTersimpan ? JSON.parse(dataTersimpan) : {};
+    
+    var html = '';
+    
+    // Page Header
+    html += '<div class="page-header">';
+    html += '<h2>Setting Rekening Master</h2>';
+    html += '<p>Kelola rekening bank utama untuk penerimaan fee sewa aplikasi, komisi, dan pembayaran lainnya.</p>';
+    html += '</div>';
+    
+    // Card Form Rekening
+    html += '<div class="card" style="max-width:600px;">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-university" style="color:#FF6B00;"></i> Data Rekening Penerima Fee</span>';
+    html += '<button class="btn btn-primary btn-sm" onclick="simpanRekeningMaster()">';
+    html += '<i class="fas fa-save"></i> Simpan';
+    html += '</button>';
+    html += '</div>';
+    
+    // Nama Bank
+    html += '<div class="form-group">';
+    html += '<label>Nama Bank</label>';
+    html += '<input type="text" id="inputNamaBank" class="form-input" ';
+    html += 'placeholder="Contoh: BCA, Mandiri, BRI" ';
+    html += 'value="' + (rekening.namaBank || '') + '">';
+    html += '</div>';
+    
+    // Nama Pemilik Rekening
+    html += '<div class="form-group">';
+    html += '<label>Nama Pemilik Rekening</label>';
+    html += '<input type="text" id="inputNamaPemilik" class="form-input" ';
+    html += 'placeholder="Masukkan nama pemilik rekening" ';
+    html += 'value="' + (rekening.namaPemilik || '') + '">';
+    html += '</div>';
+    
+    // Nomor Rekening
+    html += '<div class="form-group">';
+    html += '<label>Nomor Rekening</label>';
+    html += '<input type="text" id="inputNomorRekening" class="form-input" ';
+    html += 'placeholder="Masukkan nomor rekening" ';
+    html += 'value="' + (rekening.nomorRekening || '') + '">';
+    html += '</div>';
+    
+    html += '</div>'; // Akhir card
+    
+    // Card Informasi
+    html += '<div class="card" style="max-width:600px;">';
+    html += '<div class="card-header">';
+    html += '<span><i class="fas fa-info-circle" style="color:#2196F3;"></i> Informasi</span>';
+    html += '</div>';
+    html += '<p style="font-size:13px;color:#888;">';
+    html += 'Rekening ini akan digunakan untuk menerima pembayaran fee dari:';
+    html += '</p>';
+    html += '<ul style="font-size:13px;color:#888;padding-left:20px;margin-top:5px;">';
+    html += '<li>Sewa aplikasi oleh Toko</li>';
+    html += '<li>Komisi transaksi</li>';
+    html += '<li>Biaya upgrade akun</li>';
+    html += '<li>Pembayaran iklan oleh Sponsor</li>';
+    html += '</ul>';
+    html += '</div>';
+    
+    contentArea.innerHTML = html;
 }
 
-function previewKTP(file) {
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('ktpPreview').innerHTML = '<img src="' + e.target.result + '" class="preview-img">';
-        localStorage.setItem('2r_ktp_temp', e.target.result);
+/**
+ * Menyimpan data rekening master ke localStorage
+ */
+function simpanRekeningMaster() {
+    // Ambil nilai dari form
+    var namaBank = document.getElementById('inputNamaBank').value.trim();
+    var namaPemilik = document.getElementById('inputNamaPemilik').value.trim();
+    var nomorRekening = document.getElementById('inputNomorRekening').value.trim();
+    
+    // Validasi
+    if (!namaBank) {
+        tampilkanToast('Nama Bank tidak boleh kosong!', 'warning');
+        return;
+    }
+    
+    if (!namaPemilik) {
+        tampilkanToast('Nama Pemilik Rekening tidak boleh kosong!', 'warning');
+        return;
+    }
+    
+    if (!nomorRekening) {
+        tampilkanToast('Nomor Rekening tidak boleh kosong!', 'warning');
+        return;
+    }
+    
+    // Buat objek data rekening
+    var dataRekening = {
+        namaBank: namaBank,
+        namaPemilik: namaPemilik,
+        nomorRekening: nomorRekening
     };
-    reader.readAsDataURL(file);
-}
-
-function simpanKTP() {
-    var ktp = localStorage.getItem('2r_ktp_temp');
-    if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.ktp = ktp;
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === user.id) { akun[i].ktp = ktp; break; } }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    localStorage.removeItem('2r_ktp_temp');
-    tampilkanToast('KTP disimpan!', 'success');
+    
+    // Simpan ke localStorage
+    localStorage.setItem('2r_rekening_master', JSON.stringify(dataRekening));
+    
+    tampilkanToast('Data rekening master berhasil disimpan!', 'success');
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (9) ===== -->
 
-<!-- ===== BLOK 6 (10) - 10 RENDER DAFTAR AKUN BARU ===== -->
+<!-- ===== BLOK 6 (10) - 10 JAVASCRIPT INISIALISASI & EVENT LISTENER ===== -->
 <script>
-function renderDaftarAkun() {
-    var html = '';
-    html += '<div class="page-header"><h2>Daftar Akun Baru</h2><p>Form pendaftaran akun oleh SuperAdmin.</p></div>';
-    html += '<div class="card"><div class="card-header">Form Pendaftaran</div>';
-    html += '<div class="form-group"><label>Role</label><select id="daftarRole" class="form-input" onchange="updatePreviewId()"><option value="customer">Customer</option><option value="toko">Toko (Verifikasi)</option><option value="ojek">Ojek (Verifikasi)</option><option value="pedagang">Pedagang Pasar</option><option value="staf_admin">Staf Admin</option><option value="staf_owner_ojek">Staf Owner Ojek</option><option value="staf_owner_toko">Staf Owner Toko</option><option value="customer_service">Customer Service</option><option value="sponsor">Sponsor</option></select></div>';
-    html += '<div class="form-group"><label>ID Akun (Otomatis)</label><div style="background:#f0f0f0;border:2px solid #ddd;border-radius:8px;padding:12px;"><span id="daftarIdPreview" style="font-weight:600;">' + generateId('customer') + '</span></div></div>';
-    html += '<div class="form-group"><label>Username</label><input type="text" id="daftarUsername" class="form-input" placeholder="Username" required></div>';
-    html += '<div class="form-group"><label>Password</label><input type="password" id="daftarPassword" class="form-input" placeholder="Password" required></div>';
-    html += '<div class="form-group"><label>Nama Lengkap</label><input type="text" id="daftarNama" class="form-input" placeholder="Nama Lengkap" required></div>';
-    html += '<button class="btn btn-primary" style="width:100%;" onclick="prosesDaftarAkun()"><i class="fas fa-user-plus"></i> Buat Akun Baru</button></div>';
-    document.getElementById('mainContent').innerHTML = html;
+// =====================================================================
+// FUNGSI TAMPILKAN DASHBOARD
+// =====================================================================
+
+/**
+ * Menampilkan dashboard setelah login berhasil
+ * @param {Object} user - Data user yang login
+ */
+function tampilkanDashboard(user) {
+    // Sembunyikan halaman login
+    var halamanAuth = document.getElementById('pageAuth');
+    if (halamanAuth) {
+        halamanAuth.style.display = 'none';
+    }
+    
+    // Tampilkan dashboard
+    var halamanDashboard = document.getElementById('pageDashboard');
+    if (halamanDashboard) {
+        halamanDashboard.style.display = 'block';
+    }
+    
+    // Update informasi user di navbar
+    var elNama = document.getElementById('userNama');
+    if (elNama) {
+        elNama.textContent = user.nama;
+    }
+    
+    // Update role badge
+    var elRole = document.getElementById('roleBadge');
+    if (elRole) {
+        elRole.textContent = 'SuperAdmin';
+    }
+    
+    // Setup navigasi sidebar
+    setupNavigasiSidebar();
+    
+    // Render dashboard default
+    renderDashboardSuperAdmin();
 }
 
-function updatePreviewId() {
-    var role = document.getElementById('daftarRole').value;
-    document.getElementById('daftarIdPreview').textContent = generateId(role);
-}
+// =====================================================================
+// INISIALISASI APLIKASI
+// =====================================================================
 
-function prosesDaftarAkun() {
-    var role = document.getElementById('daftarRole').value;
-    var username = document.getElementById('daftarUsername').value.trim();
-    var password = document.getElementById('daftarPassword').value.trim();
-    var nama = document.getElementById('daftarNama').value.trim();
-    if (!role || !username || !password || !nama) { tampilkanToast('Data belum lengkap!', 'warning'); return; }
-    if (username.length < 4) { tampilkanToast('Username minimal 4 karakter!', 'warning'); return; }
-    if (password.length < 6) { tampilkanToast('Password minimal 6 karakter!', 'warning'); return; }
-    var akun = getDataAkun();
-    if (akun.find(function(a) { return a.username === username; })) { tampilkanToast('Username sudah digunakan!', 'error'); return; }
-    var statusAkun = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
-    var akunBaru = { id: generateId(role), role: role, username: username, password: encodePassword(password), nama: nama, email: '', hp: '', alamat: '', status: statusAkun, registeredAt: new Date().toISOString() };
-    akun.push(akunBaru);
-    simpanDataAkun(akun);
-    document.getElementById('daftarUsername').value = '';
-    document.getElementById('daftarPassword').value = '';
-    document.getElementById('daftarNama').value = '';
-    updatePreviewId();
-    tampilkanToast('Akun ' + role + ' berhasil dibuat! ID: ' + akunBaru.id, 'success');
-}
+/**
+ * Fungsi yang dijalankan saat halaman selesai dimuat
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. Inisialisasi akun SuperAdmin default
+    inisialisasiSuperAdmin();
+    
+    // 2. Cek apakah ada user yang sedang login
+    var userData = localStorage.getItem('2r_user');
+    
+    if (userData) {
+        // User sudah login, langsung tampilkan dashboard
+        var user = JSON.parse(userData);
+        tampilkanDashboard(user);
+    }
+    // Jika belum login, halaman login akan tetap ditampilkan
+    
+    // 3. Setup event listener untuk tombol logout
+    var tombolLogout = document.getElementById('btnLogout');
+    if (tombolLogout) {
+        tombolLogout.onclick = function() {
+            if (confirm('Apakah Anda yakin ingin keluar dari aplikasi?')) {
+                // Hapus data session
+                localStorage.removeItem('2r_user');
+                localStorage.removeItem('2r_user_role');
+                
+                // Reload halaman (kembali ke login)
+                location.reload();
+            }
+        };
+    }
+    
+    // 4. Setup event listener untuk menutup modal saat klik di luar
+    var semuaModalOverlay = document.querySelectorAll('.modal-overlay');
+    semuaModalOverlay.forEach(function(overlay) {
+        overlay.onclick = function(event) {
+            // Hanya tutup jika yang diklik adalah overlay (bukan modal content)
+            if (event.target === overlay) {
+                overlay.classList.remove('active');
+            }
+        };
+    });
+    
+    // 5. Tampilkan info di console
+    console.log('========================================');
+    console.log('Aplikasi Multi Role - Toko Online 2R');
+    console.log('Dashboard: SuperAdmin (SADash-01)');
+    console.log('========================================');
+    console.log('Default Login:');
+    console.log('Username: admin');
+    console.log('Password: admin123');
+    console.log('========================================');
+});
 </script>
 <!-- ===== AKHIR BLOK 6 (10) ===== -->
 
-<!-- ===== BLOK 6 (11) - 11 RENDER PERSETUJUAN & KELOLA AKUN ===== -->
-<script>
-function renderPersetujuanAkun() {
-    var akun = getDataAkun().filter(function(a) { return a.role !== 'superadmin' && a.role !== 'customer'; });
-    var html = '<div class="page-header"><h2>Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan.</p></div>';
-    html += '<div class="card"><div class="card-header"><span>Daftar Permintaan</span><span>Total: ' + akun.length + ' akun</span></div>';
-    if (akun.length === 0) {
-        html += '<div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Tidak ada akun menunggu</h3></div>';
-    } else {
-        html += '<div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
-        for (var i = 0; i < akun.length; i++) {
-            var a = akun[i];
-            var badge = a.status === 'AKTIF' ? 'badge-success' : 'badge-warning';
-            var statusText = a.status === 'AKTIF' ? 'AKTIF' : 'Menunggu';
-            html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td>';
-            if (a.status !== 'AKTIF') {
-                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + a.id + '\')" style="margin-right:5px;">Setujui</button><button class="btn btn-danger btn-xs" onclick="bukaTolakAkun(\'' + a.id + '\')">Tolak</button>';
-            } else { html += '<span style="color:#888;">Sudah Aktif</span>'; }
-            html += '</td></tr>';
-        }
-        html += '</tbody></table></div>';
-    }
-    html += '</div>';
-    document.getElementById('mainContent').innerHTML = html;
-}
-
-function setujuiAkun(id) {
-    if (!confirm('Setujui akun ini?')) return;
-    var akun = getDataAkun();
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === id) { akun[i].status = 'AKTIF'; break; } }
-    simpanDataAkun(akun);
-    renderPersetujuanAkun();
-    tampilkanToast('Akun diaktifkan!', 'success');
-}
-
-function bukaTolakAkun(id) { document.getElementById('tolakIdAkun').value = id; bukaModal('modalTolakAkun'); }
-
-function eksekusiTolakAkun() {
-    var id = document.getElementById('tolakIdAkun').value;
-    var akun = getDataAkun().filter(function(a) { return a.id !== id; });
-    simpanDataAkun(akun);
-    tutupModal('modalTolakAkun');
-    renderPersetujuanAkun();
-    tampilkanToast('Akun ditolak!', 'success');
-}
-
-function renderKelolaAkun() {
-    var akun = getDataAkun().filter(function(a) { return a.role !== 'superadmin'; });
-    var html = '<div class="page-header"><h2>Kelola Semua Akun</h2><p>Mengelola seluruh akun terdaftar.</p></div><div class="card">';
-    if (akun.length === 0) {
-        html += '<div class="empty-state"><i class="fas fa-users-slash"></i><h3>Belum ada akun</h3></div>';
-    } else {
-        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
-        for (var i = 0; i < akun.length; i++) {
-            var a = akun[i];
-            var badge = a.status === 'AKTIF' ? 'badge-success' : (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'badge-warning' : 'badge-danger');
-            var statusText = a.status === 'AKTIF' ? 'AKTIF' : (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'Menunggu' : 'Nonaktif');
-            html += '<tr><td>' + (i+1) + '</td><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td><div style="display:flex;gap:5px;">';
-            if (a.status !== 'AKTIF') { html += '<button class="btn btn-success btn-xs" onclick="aktifkanAkun(\'' + a.id + '\')">Aktifkan</button>'; }
-            else { html += '<button class="btn btn-warning btn-xs" onclick="nonaktifkanAkun(\'' + a.id + '\')">Nonaktifkan</button>'; }
-            html += '<button class="btn btn-danger btn-xs" onclick="hapusAkun(\'' + a.id + '\')">Hapus</button></div></td></tr>';
-        }
-        html += '</tbody></table></div>';
-    }
-    html += '</div>';
-    document.getElementById('mainContent').innerHTML = html;
-}
-
-function aktifkanAkun(id) {
-    if (!confirm('Aktifkan akun ini?')) return;
-    var akun = getDataAkun();
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === id) { akun[i].status = 'AKTIF'; break; } }
-    simpanDataAkun(akun); renderKelolaAkun(); tampilkanToast('Akun diaktifkan!', 'success');
-}
-
-function nonaktifkanAkun(id) {
-    if (!confirm('Nonaktifkan akun ini?')) return;
-    var akun = getDataAkun();
-    for (var i = 0; i < akun.length; i++) { if (akun[i].id === id) { akun[i].status = 'NONAKTIF (Dinonaktifkan)'; break; } }
-    simpanDataAkun(akun); renderKelolaAkun(); tampilkanToast('Akun dinonaktifkan!', 'success');
-}
-
-function hapusAkun(id) {
-    if (!confirm('HAPUS permanen akun ini?')) return;
-    if (!confirm('KONFIRMASI: Yakin hapus?')) return;
-    var akun = getDataAkun().filter(function(a) { return a.id !== id; });
-    simpanDataAkun(akun); renderKelolaAkun(); tampilkanToast('Akun dihapus!', 'success');
-}
-</script>
-<!-- ===== AKHIR BLOK 6 (11) ===== -->
-
-<!-- ===== BLOK 6 (12) - 12 RENDER SETTING REKENING ===== -->
-<script>
-function renderSettingRekening() {
-    var d = JSON.parse(localStorage.getItem('2r_rekening') || '{}');
-    var html = '<div class="page-header"><h2>Setting Rekening Master</h2><p>Kelola rekening bank penerima fee.</p></div>';
-    html += '<div class="card" style="max-width:600px;"><div class="card-header"><span>Data Rekening</span><button class="btn btn-primary btn-sm" onclick="simpanRekening()">Simpan</button></div>';
-    html += '<div class="form-group"><label>Nama Bank</label><input type="text" id="rekBank" class="form-input" value="' + (d.namaBank || '') + '"></div>';
-    html += '<div class="form-group"><label>Nama Pemilik</label><input type="text" id="rekPemilik" class="form-input" value="' + (d.namaPemilik || '') + '"></div>';
-    html += '<div class="form-group"><label>Nomor Rekening</label><input type="text" id="rekNomor" class="form-input" value="' + (d.nomor || '') + '"></div></div>';
-    document.getElementById('mainContent').innerHTML = html;
-}
-
-function simpanRekening() {
-    var data = { namaBank: document.getElementById('rekBank').value, namaPemilik: document.getElementById('rekPemilik').value, nomor: document.getElementById('rekNomor').value };
-    localStorage.setItem('2r_rekening', JSON.stringify(data));
-    tampilkanToast('Rekening disimpan!', 'success');
-}
-</script>
-<!-- ===== AKHIR BLOK 6 (12) ===== -->
-
-<!-- ===== BLOK 6 (13) - 13 INISIALISASI & EVENT LISTENER ===== -->
-<script>
-function tampilkanDashboard(user) {
-    document.getElementById('pageAuth').style.display = 'none';
-    document.getElementById('pageDashboard').style.display = 'block';
-    document.getElementById('userNama').textContent = user.nama;
-    var namaRole = { superadmin:'SuperAdmin', customer:'Customer', toko:'Toko', ojek:'Ojek', pedagang:'Pedagang Pasar', staf_admin:'Staf Admin', customer_service:'Customer Service', staf_owner_toko:'Staf Owner Toko', staf_owner_ojek:'Staf Owner Ojek', sponsor:'Sponsor' };
-    document.getElementById('roleBadge').textContent = namaRole[user.role] || user.role;
-    document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
-    setupNavigasiSidebar();
-    renderDashboard();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    inisialisasiSuperAdmin();
-    var userData = localStorage.getItem('2r_user');
-    if (userData) { tampilkanDashboard(JSON.parse(userData)); }
-    
-    document.getElementById('btnLogout').onclick = function() {
-        if (confirm('Keluar dari aplikasi?')) { localStorage.removeItem('2r_user'); localStorage.removeItem('2r_user_role'); location.reload(); }
-    };
-    
-    document.querySelectorAll('.modal-overlay').forEach(function(o) {
-        o.onclick = function(e) { if (e.target === this) this.classList.remove('active'); };
-    });
-});
-</script>
-<!-- ===== AKHIR BLOK 6 (13) ===== -->
 </body>
 </html>
