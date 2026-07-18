@@ -1070,6 +1070,30 @@ function tolakPengajuanHapus(index) {
     renderPengajuanHapusAkun();
     tampilkanToast('Pengajuan ditolak.', 'success');
 }
+    // ===== FUNGSI AJUKAN PENGHAPUSAN AKUN (UNTUK CUSTOMER) =====
+function ajukanPenghapusanAkun() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    if (!user) {
+        tampilkanToast('Data akun tidak ditemukan!', 'error');
+        return;
+    }
+    if (!confirm('Apakah Anda yakin ingin mengajukan penghapusan akun ini? Pengajuan akan dikirim ke SuperAdmin / Staf Admin.')) return;
+    
+    // Simpan pengajuan ke localStorage (sebagai notifikasi untuk admin)
+    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    pengajuan.push({
+        id: Date.now(),
+        userId: user.id,
+        username: user.username,
+        nama: user.nama,
+        alasan: 'Pengajuan penghapusan akun oleh user',
+        status: 'MENUNGGU',
+        diajukanPada: new Date().toISOString()
+    });
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+    
+    tampilkanToast('Pengajuan penghapusan akun telah dikirim ke admin!', 'success');
+}
 </script>
 <!-- ===== AKHIR BLOK 6 (7) (BAGIAN AWAL) ===== -->
 <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
