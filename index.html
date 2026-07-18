@@ -942,7 +942,7 @@ function renderDashboardCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
-<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (FINAL) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LENGKAP) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE =====
 function renderProfil() {
@@ -1028,48 +1028,7 @@ function simpanProfilCustomer() {
     tampilkanToast('Profil berhasil disimpan!', 'success');
 }
 
-// ===== FUNGSI SIMPAN REKENING CUSTOMER (SUDAH ADA) =====
-function simpanRekeningCustomer() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.bank = document.getElementById('profilBankCustomer').value;
-    user.rekening = document.getElementById('profilRekeningCustomer').value;
-    user.pemilikRek = document.getElementById('profilPemilikRekCustomer').value;
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) {
-            akun[i].bank = user.bank;
-            akun[i].rekening = user.rekening;
-            akun[i].pemilikRek = user.pemilikRek;
-            break;
-        }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    tampilkanToast('Rekening disimpan!', 'success');
-}
-    // Dokumen KTP
-    html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
-    html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
-    if (user.ktp) {
-        html += '<img src="' + user.ktp + '" class="preview-img">';
-    } else {
-        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
-    }
-    html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
-    html += '<button class="btn btn-primary mt-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
-    
-    contentArea.innerHTML = html;
-    
-    setTimeout(function() {
-        var container = document.getElementById('uploadKtpContainerCustomer');
-        var input = document.getElementById('inputKtpCustomer');
-        if (container && input) {
-            container.onclick = function() { input.click(); };
-            input.onchange = function(e) { previewKTPCustomer(e.target.files[0]); };
-        }
-    }, 300);
-}
-
+// ===== FUNGSI SIMPAN REKENING CUSTOMER =====
 function simpanRekeningCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
@@ -1089,6 +1048,7 @@ function simpanRekeningCustomer() {
     tampilkanToast('Rekening disimpan!', 'success');
 }
 
+// ===== FUNGSI PREVIEW KTP CUSTOMER =====
 function previewKTPCustomer(file) {
     if (!file) return;
     var reader = new FileReader();
@@ -1099,6 +1059,7 @@ function previewKTPCustomer(file) {
     reader.readAsDataURL(file);
 }
 
+// ===== FUNGSI SIMPAN KTP CUSTOMER =====
 function simpanKTPCustomer() {
     var ktp = localStorage.getItem('2r_ktp_temp_customer');
     if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
@@ -1394,6 +1355,7 @@ function hapusIklan(index) {
     renderMenuIklan();
     tampilkanToast('Iklan berhasil dihapus!', 'success');
 }
+
 // ===== 9. DAFTAR BELANJA =====
 function renderDaftarBelanja() {
     var contentArea = document.getElementById('mainContent');
@@ -1506,7 +1468,7 @@ function hapusAkunCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (7) ===== -->
-    <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (FINAL) ===== -->
+   <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL SUPERADMIN =====
 function renderProfilSuperAdmin(user) {
@@ -1592,6 +1554,209 @@ function renderProfilSuperAdmin(user) {
         }
         loadDokumenSA();
     }, 300);
+}
+
+// ===== FUNGSI SIMPAN DATA APLIKASI =====
+function simpanDataAplikasi() {
+    var data = {
+        nama: document.getElementById('appNama').value,
+        penerbit: document.getElementById('appPenerbit').value,
+        pemilik: document.getElementById('appPemilik').value,
+        pengelola: document.getElementById('appPengelola').value
+    };
+    localStorage.setItem('2r_data_aplikasi', JSON.stringify(data));
+    tampilkanToast('Data aplikasi disimpan!', 'success');
+}
+
+// ===== FUNGSI LOAD DATA APLIKASI =====
+function loadDataAplikasi() {
+    var data = JSON.parse(localStorage.getItem('2r_data_aplikasi') || '{}');
+    if (document.getElementById('appNama')) {
+        document.getElementById('appNama').value = data.nama || '';
+    }
+    if (document.getElementById('appPenerbit')) {
+        document.getElementById('appPenerbit').value = data.penerbit || '';
+    }
+    if (document.getElementById('appPemilik')) {
+        document.getElementById('appPemilik').value = data.pemilik || '';
+    }
+    if (document.getElementById('appPengelola')) {
+        document.getElementById('appPengelola').value = data.pengelola || '';
+    }
+}
+
+// ===== FUNGSI UBAH PASSWORD SUPERADMIN =====
+function ubahPasswordSA() {
+    var username = document.getElementById('saUsername').value.trim();
+    var password = document.getElementById('saPassword').value.trim();
+    var konfirmasi = document.getElementById('saPasswordKonfirmasi').value.trim();
+    if (!username) {
+        tampilkanToast('Username tidak boleh kosong!', 'warning');
+        return;
+    }
+    if (password && password !== konfirmasi) {
+        tampilkanToast('Password tidak cocok!', 'error');
+        return;
+    }
+    if (password && password.length < 6) {
+        tampilkanToast('Password minimal 6 karakter!', 'warning');
+        return;
+    }
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.username = username;
+    if (password) {
+        user.password = encodePassword(password);
+    }
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].username = username;
+            if (password) {
+                akun[i].password = encodePassword(password);
+            }
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    document.getElementById('saPassword').value = '';
+    document.getElementById('saPasswordKonfirmasi').value = '';
+    tampilkanToast('Keamanan akun diperbarui!', 'success');
+}
+
+// ===== FUNGSI SIMPAN DATA PRIBADI & REKENING SUPERADMIN =====
+function simpanDataPribadiSA() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.nama = document.getElementById('saNama').value;
+    user.alamat = document.getElementById('saAlamat').value;
+    user.email = document.getElementById('saEmail').value;
+    user.hp = document.getElementById('saHp').value;
+    user.bank = document.getElementById('saBank').value;
+    user.rekening = document.getElementById('saRekening').value;
+    user.pemilikRek = document.getElementById('saPemilikRek').value;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].nama = user.nama;
+            akun[i].alamat = user.alamat;
+            akun[i].email = user.email;
+            akun[i].hp = user.hp;
+            akun[i].bank = user.bank;
+            akun[i].rekening = user.rekening;
+            akun[i].pemilikRek = user.pemilikRek;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    document.getElementById('userNama').textContent = user.nama;
+    tampilkanToast('Data pribadi dan rekening disimpan!', 'success');
+}
+
+// ===== FUNGSI UPLOAD DOKUMEN PERUSAHAAN =====
+function uploadDokumenSA(files) {
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    var total = files.length;
+    var done = 0;
+    for (var i = 0; i < files.length; i++) {
+        (function(file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                dokumen.push({
+                    id: Date.now(),
+                    nama: file.name,
+                    tipe: file.type,
+                    data: e.target.result,
+                    keterangan: '',
+                    tanggal: new Date().toLocaleDateString('id-ID')
+                });
+                done++;
+                if (done === total) {
+                    localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
+                    loadDokumenSA();
+                    tampilkanToast(total + ' dokumen diunggah!', 'success');
+                }
+            };
+            reader.readAsDataURL(file);
+        })(files[i]);
+    }
+}
+
+// ===== FUNGSI LOAD DOKUMEN PERUSAHAAN =====
+function loadDokumenSA() {
+    var container = document.getElementById('daftarDokumen');
+    if (!container) {
+        return;
+    }
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    if (dokumen.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div>';
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < dokumen.length; i++) {
+        var d = dokumen[i];
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;">';
+        html += '<div style="display:flex;align-items:center;gap:15px;">';
+        if (d.tipe && d.tipe.startsWith('image/')) {
+            html += '<img src="' + d.data + '" style="width:50px;height:50px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewGambar(\'' + d.data + '\',\'' + d.nama + '\')">';
+        } else {
+            html += '<div style="width:50px;height:50px;background:#fff0e5;color:#FF6B00;display:flex;align-items:center;justify-content:center;border-radius:6px;"><i class="fas fa-file-alt"></i></div>';
+        }
+        html += '<div><h4 style="font-size:14px;">' + d.nama + '</h4><p style="font-size:12px;color:#888;">' + (d.keterangan || 'Tidak ada keterangan') + ' | ' + d.tanggal + '</p></div></div>';
+        html += '<div style="display:flex;gap:6px;"><button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button></div></div>';
+    }
+    container.innerHTML = html;
+}
+
+// ===== FUNGSI EDIT DOKUMEN PERUSAHAAN =====
+function editDokumenSA(index) {
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    var nama = prompt('Nama file:', dokumen[index].nama);
+    if (nama !== null) {
+        var ket = prompt('Keterangan:', dokumen[index].keterangan || '');
+        if (ket !== null) {
+            dokumen[index].nama = nama;
+            dokumen[index].keterangan = ket;
+            localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
+            loadDokumenSA();
+            tampilkanToast('Dokumen diperbarui!', 'success');
+        }
+    }
+}
+
+// ===== FUNGSI HAPUS DOKUMEN PERUSAHAAN =====
+function hapusDokumenSA(index) {
+    if (!confirm('Hapus dokumen ini?')) {
+        return;
+    }
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    dokumen.splice(index, 1);
+    localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
+    loadDokumenSA();
+    tampilkanToast('Dokumen dihapus!', 'success');
+}
+
+// ===== FUNGSI PREVIEW GAMBAR =====
+function previewGambar(src, title) {
+    document.getElementById('modalPreviewImage').src = src;
+    document.getElementById('modalPreviewTitle').textContent = title || 'Preview';
+    bukaModal('modalPreviewGambar');
+}
+
+// ===== FUNGSI SIMPAN KETERANGAN =====
+function simpanKeteranganSA() {
+    localStorage.setItem('2r_keterangan_sa', document.getElementById('textKeterangan').value);
+    tampilkanToast('Keterangan disimpan!', 'success');
+}
+
+// ===== FUNGSI LOAD KETERANGAN =====
+function loadKeteranganSA() {
+    var k = localStorage.getItem('2r_keterangan_sa');
+    var el = document.getElementById('textKeterangan');
+    if (k && el) {
+        el.value = k;
+    }
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (8) ===== -->
