@@ -961,28 +961,92 @@ function renderProfil() {
     }
 }
 
-// ===== 1. PROFIL CUSTOMER (DENGAN REKENING) =====
+// ===== 1. PROFIL CUSTOMER (BISA DIEDIT & DISIMPAN) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
     var html = '';
-    html += '<div class="page-header"><h2>Profil Customer</h2><p>Data registrasi, rekening, dan dokumen Anda.</p></div>';
+    html += '<div class="page-header"><h2>Profil Customer</h2><p>Edit data registrasi, rekening, dan dokumen Anda.</p></div>';
     
-    // Data Registrasi
-    html += '<div class="card"><div class="card-header">Data Registrasi</div>';
-    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" value="' + (user.nama || '') + '" disabled></div>';
-    html += '<div><label class="form-label">Username</label><input type="text" class="form-input" value="' + (user.username || '') + '" disabled></div>';
-    html += '<div><label class="form-label">Email</label><input type="text" class="form-input" value="' + (user.email || '') + '" disabled></div>';
-    html += '<div><label class="form-label">Nomor HP</label><input type="text" class="form-input" value="' + (user.hp || '') + '" disabled></div>';
-    html += '<div><label class="form-label">Alamat</label><input type="text" class="form-input" value="' + (user.alamat || '') + '" disabled></div></div></div>';
+    // Data Registrasi (BISA DIEDIT)
+    html += '<div class="card"><div class="card-header">Data Registrasi <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
+    html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.hp || '') + '"></div>';
+    html += '<div><label class="form-label">Alamat</label><input type="text" id="editAlamatCustomer" class="form-input" value="' + (user.alamat || '') + '"></div></div></div>';
     
-    // Data Rekening (BARU)
-    html += '<div class="card"><div class="card-header">Data Rekening</div>';
+    // Data Rekening (BISA DIEDIT)
+    html += '<div class="card"><div class="card-header">Data Rekening <button class="btn btn-primary btn-sm" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
     html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.bank || '') + '"></div>';
     html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.rekening || '') + '"></div>';
-    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRek || '') + '"></div></div>';
-    html += '<button class="btn btn-primary mt-10" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRek || '') + '"></div></div></div>';
     
+    // Dokumen KTP
+    html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
+    html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
+    if (user.ktp) {
+        html += '<img src="' + user.ktp + '" class="preview-img">';
+    } else {
+        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
+    }
+    html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
+    html += '<button class="btn btn-primary mt-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+    
+    contentArea.innerHTML = html;
+    
+    setTimeout(function() {
+        var container = document.getElementById('uploadKtpContainerCustomer');
+        var input = document.getElementById('inputKtpCustomer');
+        if (container && input) {
+            container.onclick = function() { input.click(); };
+            input.onchange = function(e) { previewKTPCustomer(e.target.files[0]); };
+        }
+    }, 300);
+}
+
+// ===== FUNGSI SIMPAN PROFIL CUSTOMER =====
+function simpanProfilCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.nama = document.getElementById('editNamaCustomer').value;
+    user.email = document.getElementById('editEmailCustomer').value;
+    user.hp = document.getElementById('editHpCustomer').value;
+    user.alamat = document.getElementById('editAlamatCustomer').value;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].nama = user.nama;
+            akun[i].email = user.email;
+            akun[i].hp = user.hp;
+            akun[i].alamat = user.alamat;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    document.getElementById('userNama').textContent = user.nama;
+    tampilkanToast('Profil berhasil disimpan!', 'success');
+}
+
+// ===== FUNGSI SIMPAN REKENING CUSTOMER (SUDAH ADA) =====
+function simpanRekeningCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.bank = document.getElementById('profilBankCustomer').value;
+    user.rekening = document.getElementById('profilRekeningCustomer').value;
+    user.pemilikRek = document.getElementById('profilPemilikRekCustomer').value;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].bank = user.bank;
+            akun[i].rekening = user.rekening;
+            akun[i].pemilikRek = user.pemilikRek;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    tampilkanToast('Rekening disimpan!', 'success');
+}
     // Dokumen KTP
     html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
     html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
