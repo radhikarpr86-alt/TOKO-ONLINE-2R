@@ -1135,7 +1135,7 @@ function renderPapanInformasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 8. MENU IKLAN (SUPERADMIN KELOLA + UPLOAD GAMBAR) =====
+// ===== 8. MENU IKLAN (SUPERADMIN KELOLA + PERBESAR, DOWNLOAD, BAGIKAN) =====
 function renderMenuIklan() {
     var role = localStorage.getItem('2r_user_role');
     var contentArea = document.getElementById('mainContent');
@@ -1148,7 +1148,7 @@ function renderMenuIklan() {
     if (role === 'superadmin') {
         html += 'Kelola iklan sponsor. Anda dapat menambah, mengedit, menghapus, dan mengunggah gambar untuk setiap iklan.';
     } else {
-        html += 'Lihat daftar iklan sponsor yang tersedia.';
+        html += 'Lihat daftar iklan sponsor yang tersedia. Anda dapat memperbesar, mendownload, dan membagikan gambar iklan.';
     }
     html += '</p>';
     html += '</div>';
@@ -1191,17 +1191,27 @@ function renderMenuIklan() {
         for (var i = 0; i < iklan.length; i++) {
             var d = iklan[i];
             var gambarHtml = '';
+            var tombolAksi = '';
 
             if (d.gambar) {
-                gambarHtml = '<img src="' + d.gambar + '" style="width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px;">';
+                gambarHtml = '<img src="' + d.gambar + '" style="width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px; cursor:pointer;" onclick="perbesarGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')">';
+                
+                // Tombol aksi untuk gambar
+                tombolAksi = '<div style="display:flex; gap:5px; justify-content:center; margin-top:5px;">';
+                tombolAksi += '<button class="btn btn-xs" style="background:#2196F3; color:white;" onclick="perbesarGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-search-plus"></i> Perbesar</button>';
+                tombolAksi += '<button class="btn btn-xs" style="background:#4CAF50; color:white;" onclick="downloadGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-download"></i> Download</button>';
+                tombolAksi += '<button class="btn btn-xs" style="background:#17a2b8; color:white;" onclick="bagikanGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-share-alt"></i> Bagikan</button>';
+                tombolAksi += '</div>';
             } else {
                 gambarHtml = '<i class="fas fa-ad" style="font-size:40px; margin-bottom:10px; display:block;"></i>';
+                tombolAksi = '<p style="font-size:11px; opacity:0.7;">Tidak ada gambar</p>';
             }
 
             html += '<div style="background:' + (d.warna || '#FF6B00') + '; color:white; border-radius:10px; padding:20px; text-align:center; position:relative;">';
             html += gambarHtml;
             html += '<h4 style="font-size:16px;">' + d.judul + '</h4>';
             html += '<p style="font-size:13px; opacity:0.9;">' + d.deskripsi + '</p>';
+            html += tombolAksi;
 
             // ===== TOMBOL EDIT DAN HAPUS HANYA UNTUK SUPERADMIN =====
             if (role === 'superadmin') {
@@ -1356,6 +1366,61 @@ function hapusIklan(index) {
     tampilkanToast('Iklan berhasil dihapus!', 'success');
 }
 
+// ===== FUNGSI PERBESAR GAMBAR IKLAN =====
+function perbesarGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk diperbesar!', 'warning');
+        return;
+    }
+    var modal = document.getElementById('modalPreviewGambar');
+    var img = document.getElementById('modalPreviewImage');
+    var title = document.getElementById('modalPreviewTitle');
+    if (modal && img && title) {
+        img.src = src;
+        title.textContent = 'Perbesar: ' + (judul || 'Iklan');
+        modal.classList.add('active');
+    } else {
+        // Fallback: buka di tab baru
+        window.open(src, '_blank');
+    }
+}
+
+// ===== FUNGSI DOWNLOAD GAMBAR IKLAN =====
+function downloadGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk didownload!', 'warning');
+        return;
+    }
+    var link = document.createElement('a');
+    link.href = src;
+    link.download = (judul || 'iklan') + '.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    tampilkanToast('Gambar sedang didownload!', 'success');
+}
+
+// ===== FUNGSI BAGIKAN GAMBAR IKLAN =====
+function bagikanGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk dibagikan!', 'warning');
+        return;
+    }
+    // Salin data base64 ke clipboard sebagai "link"
+    navigator.clipboard.writeText(src).then(function() {
+        tampilkanToast('Link gambar disalin ke clipboard!', 'success');
+    }).catch(function() {
+        // Fallback jika clipboard tidak didukung
+        var textarea = document.createElement('textarea');
+        textarea.value = src;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        tampilkanToast('Link gambar disalin!', 'success');
+    });
+}
+
 // ===== 9. DAFTAR BELANJA =====
 function renderDaftarBelanja() {
     var contentArea = document.getElementById('mainContent');
@@ -1468,7 +1533,7 @@ function hapusAkunCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (7) ===== -->
-   <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
+   <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (DENGAN DOWNLOAD & BAGIKAN DOKUMEN) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL SUPERADMIN =====
 function renderProfilSuperAdmin(user) {
@@ -1521,7 +1586,7 @@ function renderProfilSuperAdmin(user) {
     html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="saPemilikRek" class="form-input" value="' + (user.pemilikRek || '') + '"></div>';
     html += '</div></div>';
 
-    // ===== DOKUMEN PERUSAHAAN =====
+    // ===== DOKUMEN PERUSAHAAN (DENGAN DOWNLOAD & BAGIKAN) =====
     html += '<div class="card">';
     html += '<div class="card-header"><span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span>';
     html += '<button class="btn btn-primary btn-sm" id="btnUploadDokumen"><i class="fas fa-upload"></i> Unggah</button>';
@@ -1682,7 +1747,7 @@ function uploadDokumenSA(files) {
     }
 }
 
-// ===== FUNGSI LOAD DOKUMEN PERUSAHAAN =====
+// ===== FUNGSI LOAD DOKUMEN PERUSAHAAN (DENGAN DOWNLOAD & BAGIKAN) =====
 function loadDokumenSA() {
     var container = document.getElementById('daftarDokumen');
     if (!container) {
@@ -1704,9 +1769,57 @@ function loadDokumenSA() {
             html += '<div style="width:50px;height:50px;background:#fff0e5;color:#FF6B00;display:flex;align-items:center;justify-content:center;border-radius:6px;"><i class="fas fa-file-alt"></i></div>';
         }
         html += '<div><h4 style="font-size:14px;">' + d.nama + '</h4><p style="font-size:12px;color:#888;">' + (d.keterangan || 'Tidak ada keterangan') + ' | ' + d.tanggal + '</p></div></div>';
-        html += '<div style="display:flex;gap:6px;"><button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button></div></div>';
+        html += '<div style="display:flex;gap:6px;">';
+        // ===== TOMBOL DOWNLOAD =====
+        html += '<button class="btn btn-success btn-xs" onclick="downloadDokumenSA(' + i + ')"><i class="fas fa-download"></i></button>';
+        // ===== TOMBOL BAGIKAN (COPY LINK) =====
+        html += '<button class="btn btn-info btn-xs" style="background:#17a2b8;color:white;" onclick="bagikanDokumenSA(' + i + ')"><i class="fas fa-share-alt"></i></button>';
+        html += '<button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button>';
+        html += '<button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button>';
+        html += '</div></div>';
     }
     container.innerHTML = html;
+}
+
+// ===== FUNGSI DOWNLOAD DOKUMEN =====
+function downloadDokumenSA(index) {
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    var d = dokumen[index];
+    if (!d || !d.data) {
+        tampilkanToast('Dokumen tidak ditemukan!', 'error');
+        return;
+    }
+    var link = document.createElement('a');
+    link.href = d.data;
+    link.download = d.nama;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    tampilkanToast('Dokumen sedang didownload!', 'success');
+}
+
+// ===== FUNGSI BAGIKAN DOKUMEN (COPY LINK) =====
+function bagikanDokumenSA(index) {
+    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+    var d = dokumen[index];
+    if (!d || !d.data) {
+        tampilkanToast('Dokumen tidak ditemukan!', 'error');
+        return;
+    }
+    // Salin data base64 ke clipboard sebagai "link"
+    var link = d.data;
+    navigator.clipboard.writeText(link).then(function() {
+        tampilkanToast('Link dokumen disalin ke clipboard!', 'success');
+    }).catch(function() {
+        // Fallback jika clipboard tidak didukung
+        var textarea = document.createElement('textarea');
+        textarea.value = link;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        tampilkanToast('Link dokumen disalin!', 'success');
+    });
 }
 
 // ===== FUNGSI EDIT DOKUMEN PERUSAHAAN =====
