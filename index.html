@@ -967,30 +967,31 @@ function renderProfil() {
     }
 }
 
-// ===== 1. PROFIL CUSTOMER (DENGAN 2 ALAMAT: KTP & DOMISILI) =====
+// ===== 1. PROFIL CUSTOMER (ALAMAT LENGKAP: DESA, KECAMATAN, KABUPATEN, KODEPOS) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
     var html = '';
     html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
     
-    // Data Registrasi (BISA DIEDIT)
+    // Data Registrasi
     html += '<div class="card"><div class="card-header">Data Registrasi <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
     html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
     html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
     html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
     html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.hp || '') + '"></div></div></div>';
     
-    // ===== ALAMAT KTP & DOMISILI (2 ALAMAT) =====
-    html += '<div class="card"><div class="card-header">Alamat <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    // ===== ALAMAT LENGKAP (DESA, KECAMATAN, KABUPATEN, KODEPOS) =====
+    html += '<div class="card"><div class="card-header">Alamat Lengkap <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
     html += '<div class="grid-2">';
-    html += '<div><label class="form-label">Alamat Sesuai KTP</label><input type="text" id="editAlamatKTPCustomer" class="form-input" value="' + (user.alamatKTP || user.alamat || '') + '" placeholder="Contoh: Jl. Merdeka No. 1, Kec. A, Kota B, Provinsi C"></div>';
-    html += '<div><label class="form-label">Alamat Domisili / Sekarang</label><input type="text" id="editAlamatDomisiliCustomer" class="form-input" value="' + (user.alamatDomisili || '') + '" placeholder="Contoh: Jl. Sudirman No. 5, Kec. D, Kota E, Provinsi F"></div>';
+    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="editDesaCustomer" class="form-input" value="' + (user.alamatDesa || '') + '" placeholder="Contoh: Kelurahan Merdeka"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="editKecamatanCustomer" class="form-input" value="' + (user.alamatKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="editKabupatenCustomer" class="form-input" value="' + (user.alamatKabupaten || '') + '" placeholder="Contoh: Kabupaten Tangerang atau Kota Jakarta"></div>';
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="editKodeposCustomer" class="form-input" value="' + (user.alamatKodepos || '') + '" placeholder="Contoh: 15111"></div>';
     html += '</div>';
-    html += '<div style="font-size:12px; color:#888; margin-top:5px;">Jika alamat KTP sama dengan alamat domisili, isi kedua field dengan alamat yang sama.</div>';
     html += '</div>';
     
-    // Data Rekening (BISA DIEDIT)
+    // Data Rekening
     html += '<div class="card"><div class="card-header">Data Rekening <button class="btn btn-primary btn-sm" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
     html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.bank || '') + '"></div>';
     html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.rekening || '') + '"></div>';
@@ -1019,24 +1020,37 @@ function renderProfilCustomer() {
     }, 300);
 }
 
-// ===== FUNGSI SIMPAN PROFIL CUSTOMER (DENGAN 2 ALAMAT) =====
+// ===== FUNGSI SIMPAN PROFIL CUSTOMER (DENGAN ALAMAT LENGKAP) =====
 function simpanProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
     user.nama = document.getElementById('editNamaCustomer').value;
     user.email = document.getElementById('editEmailCustomer').value;
     user.hp = document.getElementById('editHpCustomer').value;
-    user.alamatKTP = document.getElementById('editAlamatKTPCustomer').value;
-    user.alamatDomisili = document.getElementById('editAlamatDomisiliCustomer').value;
-    // Tetap simpan ke field alamat lama agar kompatibel
-    user.alamat = user.alamatDomisili || user.alamatKTP;
+    
+    // Simpan alamat lengkap
+    user.alamatDesa = document.getElementById('editDesaCustomer').value;
+    user.alamatKecamatan = document.getElementById('editKecamatanCustomer').value;
+    user.alamatKabupaten = document.getElementById('editKabupatenCustomer').value;
+    user.alamatKodepos = document.getElementById('editKodeposCustomer').value;
+    
+    // Gabungkan menjadi alamat lengkap untuk kompatibilitas
+    var alamatLengkap = '';
+    if (user.alamatDesa) alamatLengkap += user.alamatDesa + ', ';
+    if (user.alamatKecamatan) alamatLengkap += user.alamatKecamatan + ', ';
+    if (user.alamatKabupaten) alamatLengkap += user.alamatKabupaten + ', ';
+    if (user.alamatKodepos) alamatLengkap += user.alamatKodepos;
+    user.alamat = alamatLengkap;
+    
     for (var i = 0; i < akun.length; i++) {
         if (akun[i].id === user.id) {
             akun[i].nama = user.nama;
             akun[i].email = user.email;
             akun[i].hp = user.hp;
-            akun[i].alamatKTP = user.alamatKTP;
-            akun[i].alamatDomisili = user.alamatDomisili;
+            akun[i].alamatDesa = user.alamatDesa;
+            akun[i].alamatKecamatan = user.alamatKecamatan;
+            akun[i].alamatKabupaten = user.alamatKabupaten;
+            akun[i].alamatKodepos = user.alamatKodepos;
             akun[i].alamat = user.alamat;
             break;
         }
