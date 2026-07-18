@@ -1250,202 +1250,98 @@ function hapusAkunCustomer() {
 </script>
 <!-- ===== AKHIR BLOK 6 (7) ===== -->
 
-<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN ===== -->
+<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
 <script>
-function simpanDataAplikasi() {
-    var data = {
-        nama: document.getElementById('appNama').value,
-        penerbit: document.getElementById('appPenerbit').value,
-        pemilik: document.getElementById('appPemilik').value,
-        pengelola: document.getElementById('appPengelola').value
-    };
-    localStorage.setItem('2r_data_aplikasi', JSON.stringify(data));
-    tampilkanToast('Data aplikasi disimpan!', 'success');
-}
-
-function loadDataAplikasi() {
-    var data = JSON.parse(localStorage.getItem('2r_data_aplikasi') || '{}');
-    if (document.getElementById('appNama')) {
-        document.getElementById('appNama').value = data.nama || '';
-    }
-    if (document.getElementById('appPenerbit')) {
-        document.getElementById('appPenerbit').value = data.penerbit || '';
-    }
-    if (document.getElementById('appPemilik')) {
-        document.getElementById('appPemilik').value = data.pemilik || '';
-    }
-    if (document.getElementById('appPengelola')) {
-        document.getElementById('appPengelola').value = data.pengelola || '';
-    }
-}
-
-function ubahPasswordSA() {
-    var username = document.getElementById('saUsername').value.trim();
-    var password = document.getElementById('saPassword').value.trim();
-    var konfirmasi = document.getElementById('saPasswordKonfirmasi').value.trim();
-    if (!username) {
-        tampilkanToast('Username tidak boleh kosong!', 'warning');
+// ===== FUNGSI RENDER PROFIL SUPERADMIN (PERBAIKAN) =====
+function renderProfilSuperAdmin(user) {
+    var contentArea = document.getElementById('mainContent');
+    if (!contentArea) {
+        console.error('mainContent tidak ditemukan!');
         return;
     }
-    if (password && password !== konfirmasi) {
-        tampilkanToast('Password tidak cocok!', 'error');
-        return;
+    
+    // Jika user tidak dikirim, ambil dari localStorage
+    if (!user) {
+        user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     }
-    if (password && password.length < 6) {
-        tampilkanToast('Password minimal 6 karakter!', 'warning');
-        return;
-    }
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.username = username;
-    if (password) {
-        user.password = encodePassword(password);
-    }
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) {
-            akun[i].username = username;
-            if (password) {
-                akun[i].password = encodePassword(password);
-            }
-            break;
-        }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('saPassword').value = '';
-    document.getElementById('saPasswordKonfirmasi').value = '';
-    tampilkanToast('Keamanan akun diperbarui!', 'success');
-}
 
-function simpanDataPribadiSA() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.nama = document.getElementById('saNama').value;
-    user.alamat = document.getElementById('saAlamat').value;
-    user.email = document.getElementById('saEmail').value;
-    user.hp = document.getElementById('saHp').value;
-    user.bank = document.getElementById('saBank').value;
-    user.rekening = document.getElementById('saRekening').value;
-    user.pemilikRek = document.getElementById('saPemilikRek').value;
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) {
-            akun[i].nama = user.nama;
-            akun[i].alamat = user.alamat;
-            akun[i].email = user.email;
-            akun[i].hp = user.hp;
-            akun[i].bank = user.bank;
-            akun[i].rekening = user.rekening;
-            akun[i].pemilikRek = user.pemilikRek;
-            break;
-        }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('userNama').textContent = user.nama;
-    tampilkanToast('Data pribadi dan rekening disimpan!', 'success');
-}
-
-function uploadDokumenSA(files) {
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    var total = files.length;
-    var done = 0;
-    for (var i = 0; i < files.length; i++) {
-        (function(file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                dokumen.push({
-                    id: Date.now(),
-                    nama: file.name,
-                    tipe: file.type,
-                    data: e.target.result,
-                    keterangan: '',
-                    tanggal: new Date().toLocaleDateString('id-ID')
-                });
-                done++;
-                if (done === total) {
-                    localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
-                    loadDokumenSA();
-                    tampilkanToast(total + ' dokumen diunggah!', 'success');
-                }
-            };
-            reader.readAsDataURL(file);
-        })(files[i]);
-    }
-}
-
-function loadDokumenSA() {
-    var container = document.getElementById('daftarDokumen');
-    if (!container) {
-        return;
-    }
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    if (dokumen.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div>';
-        return;
-    }
     var html = '';
-    for (var i = 0; i < dokumen.length; i++) {
-        var d = dokumen[i];
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;">';
-        html += '<div style="display:flex;align-items:center;gap:15px;">';
-        if (d.tipe && d.tipe.startsWith('image/')) {
-            html += '<img src="' + d.data + '" style="width:50px;height:50px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewGambar(\'' + d.data + '\',\'' + d.nama + '\')">';
-        } else {
-            html += '<div style="width:50px;height:50px;background:#fff0e5;color:#FF6B00;display:flex;align-items:center;justify-content:center;border-radius:6px;"><i class="fas fa-file-alt"></i></div>';
+    html += '<div class="page-header">';
+    html += '<h2>Profil SuperAdmin</h2>';
+    html += '<p>Kelola data aplikasi, keamanan akun, data pribadi, dan dokumen perusahaan.</p>';
+    html += '</div>';
+
+    // ===== DATA APLIKASI =====
+    html += '<div class="card">';
+    html += '<div class="card-header"><span><i class="fas fa-building" style="color:#FF6B00;"></i> Data Aplikasi</span><button class="btn btn-primary btn-sm" onclick="simpanDataAplikasi()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Aplikasi</label><input type="text" id="appNama" class="form-input" value="' + (localStorage.getItem('2r_data_aplikasi') ? JSON.parse(localStorage.getItem('2r_data_aplikasi')).nama || '' : '') + '"></div>';
+    html += '<div><label class="form-label">Penerbit</label><input type="text" id="appPenerbit" class="form-input" value="' + (localStorage.getItem('2r_data_aplikasi') ? JSON.parse(localStorage.getItem('2r_data_aplikasi')).penerbit || '' : '') + '"></div>';
+    html += '<div><label class="form-label">Pemilik</label><input type="text" id="appPemilik" class="form-input" value="' + (localStorage.getItem('2r_data_aplikasi') ? JSON.parse(localStorage.getItem('2r_data_aplikasi')).pemilik || '' : '') + '"></div>';
+    html += '<div><label class="form-label">Pengelola</label><input type="text" id="appPengelola" class="form-input" value="' + (localStorage.getItem('2r_data_aplikasi') ? JSON.parse(localStorage.getItem('2r_data_aplikasi')).pengelola || '' : '') + '"></div>';
+    html += '</div></div>';
+
+    // ===== KEAMANAN AKUN =====
+    html += '<div class="card">';
+    html += '<div class="card-header"><span><i class="fas fa-shield-alt" style="color:#FF6B00;"></i> Keamanan Akun</span><button class="btn btn-primary btn-sm" onclick="ubahPasswordSA()"><i class="fas fa-key"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Username</label><input type="text" id="saUsername" class="form-input" value="' + (user.username || '') + '"></div>';
+    html += '<div><label class="form-label">Password Baru</label><input type="password" id="saPassword" class="form-input" placeholder="Kosongkan jika tidak diubah"></div>';
+    html += '<div><label class="form-label">Konfirmasi Password</label><input type="password" id="saPasswordKonfirmasi" class="form-input" placeholder="Konfirmasi password"></div>';
+    html += '</div></div>';
+
+    // ===== DATA PRIBADI & REKENING =====
+    html += '<div class="card">';
+    html += '<div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi & Rekening</span><button class="btn btn-primary btn-sm" onclick="simpanDataPribadiSA()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Lengkap</label><input type="text" id="saNama" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div><label class="form-label">Alamat</label><input type="text" id="saAlamat" class="form-input" value="' + (user.alamat || '') + '"></div>';
+    html += '<div><label class="form-label">Email</label><input type="email" id="saEmail" class="form-input" value="' + (user.email || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="saHp" class="form-input" value="' + (user.hp || '') + '"></div>';
+    html += '</div>';
+    html += '<div class="grid-2" style="margin-top:10px;">';
+    html += '<div><label class="form-label">Nama Bank</label><input type="text" id="saBank" class="form-input" value="' + (user.bank || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="saRekening" class="form-input" value="' + (user.rekening || '') + '"></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="saPemilikRek" class="form-input" value="' + (user.pemilikRek || '') + '"></div>';
+    html += '</div></div>';
+
+    // ===== DOKUMEN PERUSAHAAN =====
+    html += '<div class="card">';
+    html += '<div class="card-header"><span><i class="fas fa-folder-open" style="color:#FF6B00;"></i> Dokumen Perusahaan</span>';
+    html += '<button class="btn btn-primary btn-sm" id="btnUploadDokumen"><i class="fas fa-upload"></i> Unggah</button>';
+    html += '<input type="file" id="inputDokumen" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none"></div>';
+    html += '<div id="daftarDokumen">';
+    html += '<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div>';
+    html += '</div></div>';
+
+    // ===== KETERANGAN =====
+    html += '<div class="card">';
+    html += '<div class="card-header"><span><i class="fas fa-sticky-note" style="color:#FF6B00;"></i> Keterangan</span></div>';
+    html += '<textarea id="textKeterangan" rows="4" class="form-input" placeholder="Isi keterangan...">' + (localStorage.getItem('2r_keterangan_sa') || '') + '</textarea>';
+    html += '<button class="btn btn-primary mt-10" onclick="simpanKeteranganSA()"><i class="fas fa-save"></i> Simpan</button>';
+    html += '</div>';
+
+    // ===== TAMPILKAN KE HALAMAN =====
+    contentArea.innerHTML = html;
+
+    // ===== SET EVENT LISTENER UNTUK UPLOAD DOKUMEN =====
+    setTimeout(function() {
+        var btn = document.getElementById('btnUploadDokumen');
+        var input = document.getElementById('inputDokumen');
+        if (btn && input) {
+            btn.onclick = function() {
+                input.click();
+            };
+            input.onchange = function(e) {
+                uploadDokumenSA(e.target.files);
+            };
         }
-        html += '<div><h4 style="font-size:14px;">' + d.nama + '</h4><p style="font-size:12px;color:#888;">' + (d.keterangan || 'Tidak ada keterangan') + ' | ' + d.tanggal + '</p></div></div>';
-        html += '<div style="display:flex;gap:6px;"><button class="btn btn-primary btn-xs" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button></div></div>';
-    }
-    container.innerHTML = html;
-}
-
-function editDokumenSA(index) {
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    var nama = prompt('Nama file:', dokumen[index].nama);
-    if (nama !== null) {
-        var ket = prompt('Keterangan:', dokumen[index].keterangan || '');
-        if (ket !== null) {
-            dokumen[index].nama = nama;
-            dokumen[index].keterangan = ket;
-            localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
-            loadDokumenSA();
-            tampilkanToast('Dokumen diperbarui!', 'success');
-        }
-    }
-}
-
-function hapusDokumenSA(index) {
-    if (!confirm('Hapus dokumen ini?')) {
-        return;
-    }
-    var dokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
-    dokumen.splice(index, 1);
-    localStorage.setItem('2r_dokumen_sa', JSON.stringify(dokumen));
-    loadDokumenSA();
-    tampilkanToast('Dokumen dihapus!', 'success');
-}
-
-function previewGambar(src, title) {
-    document.getElementById('modalPreviewImage').src = src;
-    document.getElementById('modalPreviewTitle').textContent = title || 'Preview';
-    bukaModal('modalPreviewGambar');
-}
-
-function simpanKeteranganSA() {
-    localStorage.setItem('2r_keterangan_sa', document.getElementById('textKeterangan').value);
-    tampilkanToast('Keterangan disimpan!', 'success');
-}
-
-function loadKeteranganSA() {
-    var k = localStorage.getItem('2r_keterangan_sa');
-    var el = document.getElementById('textKeterangan');
-    if (k && el) {
-        el.value = k;
-    }
+        // Load data dokumen jika ada
+        loadDokumenSA();
+    }, 300);
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (8) ===== -->
-
 <!-- ===== BLOK 6 (9) - 09 FUNGSI PROFIL UMUM (DENGAN REKENING) ===== -->
 <script>
 function simpanDataPribadiUmum() {
