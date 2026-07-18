@@ -1481,23 +1481,40 @@ function renderNotifikasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 15. EDIT / HAPUS AKUN =====
+// ===== 15. EDIT / HAPUS AKUN (HAK AKSES BERBEDA) =====
 function renderEditAkun() {
+    var role = localStorage.getItem('2r_user_role');
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
     var html = '';
-    html += '<div class="page-header"><h2>Edit / Hapus Akun</h2><p>Mengedit atau menghapus akun Customer.</p></div>';
+    html += '<div class="page-header"><h2>Edit / Hapus Akun</h2><p>';
+    if (role === 'superadmin' || role === 'staf_admin') {
+        html += 'Anda dapat mengedit atau menghapus akun ini.';
+    } else {
+        html += 'Anda dapat mengedit data akun Anda. Untuk menghapus akun, silakan ajukan permohonan ke SuperAdmin atau Staf Admin.';
+    }
+    html += '</p></div>';
+    
     html += '<div class="card"><div class="card-header">Edit Data Akun</div>';
     html += '<div class="form-group"><label>Nama Lengkap</label><input type="text" id="editNama" class="form-input" value="' + (user.nama || '') + '"></div>';
     html += '<div class="form-group"><label>Email</label><input type="email" id="editEmail" class="form-input" value="' + (user.email || '') + '"></div>';
     html += '<div class="form-group"><label>Nomor HP</label><input type="tel" id="editHp" class="form-input" value="' + (user.hp || '') + '"></div>';
     html += '<div class="form-group"><label>Alamat</label><input type="text" id="editAlamat" class="form-input" value="' + (user.alamat || '') + '"></div>';
     html += '<button class="btn btn-primary" onclick="simpanEditAkun()"><i class="fas fa-save"></i> Simpan Perubahan</button>';
-    html += '<button class="btn btn-danger" style="margin-left:10px;" onclick="hapusAkunCustomer()"><i class="fas fa-trash"></i> Hapus Akun</button>';
+    
+    // ===== TOMBOL HAPUS HANYA UNTUK SUPERADMIN DAN STAF ADMIN =====
+    if (role === 'superadmin' || role === 'staf_admin') {
+        html += '<button class="btn btn-danger" style="margin-left:10px;" onclick="hapusAkunCustomer()"><i class="fas fa-trash"></i> Hapus Akun</button>';
+    } else {
+        html += '<div style="margin-top:15px; padding:10px; background:#fff3cd; border:1px solid #ffc107; border-radius:6px; color:#856404;">';
+        html += '<i class="fas fa-info-circle"></i> Penghapusan akun hanya dapat dilakukan oleh SuperAdmin atau Staf Admin. Silakan hubungi admin untuk pengajuan penghapusan.';
+        html += '</div>';
+    }
     html += '</div>';
     contentArea.innerHTML = html;
 }
 
+// ===== FUNGSI SIMPAN EDIT AKUN (UNTUK SEMUA ROLE) =====
 function simpanEditAkun() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
@@ -1520,8 +1537,14 @@ function simpanEditAkun() {
     tampilkanToast('Data akun diperbarui!', 'success');
 }
 
+// ===== FUNGSI HAPUS AKUN (HANYA UNTUK SUPERADMIN & STAF ADMIN) =====
 function hapusAkunCustomer() {
-    if (!confirm('Yakin ingin menghapus akun Anda? Tindakan ini tidak bisa dibatalkan!')) return;
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki hak untuk menghapus akun!', 'error');
+        return;
+    }
+    if (!confirm('Yakin ingin menghapus akun ini? Tindakan ini tidak bisa dibatalkan!')) return;
     if (!confirm('KONFIRMASI: Hapus akun permanen?')) return;
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
