@@ -1116,23 +1116,32 @@ function renderPapanInformasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 8. MENU IKLAN (DINAMIS TANPA BATAS) =====
+// ===== 8. MENU IKLAN (SUPERADMIN KELOLA, CUSTOMER LIHAT SAJA) =====
 function renderMenuIklan() {
+    var role = localStorage.getItem('2r_user_role');
     var contentArea = document.getElementById('mainContent');
     var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var html = '';
-    html += '<div class="page-header"><h2>Menu Iklan</h2><p>Kelola iklan sponsor (bisa tambah, edit, hapus).</p></div>';
+    html += '<div class="page-header"><h2>Menu Iklan</h2><p>';
+    if (role === 'superadmin') {
+        html += 'Kelola iklan sponsor (tambah, edit, hapus).';
+    } else {
+        html += 'Lihat iklan sponsor yang tersedia.';
+    }
+    html += '</p></div>';
     
-    // Form tambah iklan
-    html += '<div class="card"><div class="card-header">Tambah Iklan Baru</div>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
-    html += '<input type="text" id="iklanJudul" class="form-input" placeholder="Judul Iklan" style="flex:2;">';
-    html += '<input type="text" id="iklanDeskripsi" class="form-input" placeholder="Deskripsi" style="flex:3;">';
-    html += '<input type="color" id="iklanWarna" class="form-input" value="#FF6B00" style="width:60px;padding:5px;">';
-    html += '<button class="btn btn-primary" onclick="tambahIklan()"><i class="fas fa-plus"></i> Tambah</button>';
-    html += '</div></div>';
-    
-    // Daftar iklan
+    // ===== FORM TAMBAH IKLAN (HANYA UNTUK SUPERADMIN) =====
+    if (role === 'superadmin') {
+        html += '<div class="card"><div class="card-header">Tambah Iklan Baru</div>';
+        html += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
+        html += '<input type="text" id="iklanJudul" class="form-input" placeholder="Judul Iklan" style="flex:2;">';
+        html += '<input type="text" id="iklanDeskripsi" class="form-input" placeholder="Deskripsi" style="flex:3;">';
+        html += '<input type="color" id="iklanWarna" class="form-input" value="#FF6B00" style="width:60px;padding:5px;">';
+        html += '<button class="btn btn-primary" onclick="tambahIklan()"><i class="fas fa-plus"></i> Tambah</button>';
+        html += '</div></div>';
+    }
+
+    // ===== DAFTAR IKLAN (SEMUA ROLE BISA LIHAT) =====
     html += '<div class="card"><div class="card-header">Daftar Iklan <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + iklan.length + ')</span></div>';
     if (iklan.length === 0) {
         html += '<div class="empty-state"><i class="fas fa-ad"></i><h3>Belum ada iklan</h3><p>Tambahkan iklan pertama Anda.</p></div>';
@@ -1144,10 +1153,16 @@ function renderMenuIklan() {
             html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
             html += '<h4 style="font-size:16px;">' + d.judul + '</h4>';
             html += '<p style="font-size:13px;opacity:0.9;">' + d.deskripsi + '</p>';
-            html += '<div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;">';
-            html += '<button class="btn btn-xs" style="background:rgba(255,255,255,0.3);color:white;" onclick="editIklan(' + i + ')"><i class="fas fa-edit"></i></button>';
-            html += '<button class="btn btn-xs" style="background:rgba(255,0,0,0.5);color:white;" onclick="hapusIklan(' + i + ')"><i class="fas fa-trash"></i></button>';
-            html += '</div></div>';
+            
+            // ===== TOMBOL EDIT/HAPUS HANYA UNTUK SUPERADMIN =====
+            if (role === 'superadmin') {
+                html += '<div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;">';
+                html += '<button class="btn btn-xs" style="background:rgba(255,255,255,0.3);color:white;" onclick="editIklan(' + i + ')"><i class="fas fa-edit"></i></button>';
+                html += '<button class="btn btn-xs" style="background:rgba(255,0,0,0.5);color:white;" onclick="hapusIklan(' + i + ')"><i class="fas fa-trash"></i></button>';
+                html += '</div>';
+            }
+            
+            html += '</div>';
         }
         html += '</div>';
     }
@@ -1156,7 +1171,7 @@ function renderMenuIklan() {
     contentArea.innerHTML = html;
 }
 
-// ===== FUNGSI TAMBAH IKLAN =====
+// ===== FUNGSI TAMBAH IKLAN (SUPERADMIN SAJA) =====
 function tambahIklan() {
     var judul = document.getElementById('iklanJudul').value.trim();
     var deskripsi = document.getElementById('iklanDeskripsi').value.trim();
@@ -1179,7 +1194,7 @@ function tambahIklan() {
     tampilkanToast('Iklan ditambahkan!', 'success');
 }
 
-// ===== FUNGSI EDIT IKLAN =====
+// ===== FUNGSI EDIT IKLAN (SUPERADMIN SAJA) =====
 function editIklan(index) {
     var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var d = iklan[index];
@@ -1197,7 +1212,7 @@ function editIklan(index) {
     tampilkanToast('Iklan diperbarui!', 'success');
 }
 
-// ===== FUNGSI HAPUS IKLAN =====
+// ===== FUNGSI HAPUS IKLAN (SUPERADMIN SAJA) =====
 function hapusIklan(index) {
     if (!confirm('Hapus iklan ini?')) return;
     var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
