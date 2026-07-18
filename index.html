@@ -948,8 +948,24 @@ function renderDashboardCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
-<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (16 FUNGSI LENGKAP) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LENGKAP + renderProfil) ===== -->
 <script>
+// ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE (KECUALI CUSTOMER) =====
+function renderProfil() {
+    var role = localStorage.getItem('2r_user_role');
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var contentArea = document.getElementById('mainContent');
+
+    // Jika SuperAdmin, panggil fungsi khusus SuperAdmin
+    if (role === 'superadmin') {
+        renderProfilSuperAdmin(user);
+    } 
+    // Jika role lain (Toko, Ojek, Pedagang, dll), panggil fungsi umum
+    else {
+        renderProfilUmum(user, role);
+    }
+}
+
 // ===== 1. PROFIL CUSTOMER (DENGAN REKENING) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -1043,7 +1059,7 @@ function simpanKTPCustomer() {
     tampilkanToast('KTP disimpan!', 'success');
 }
 
-// ===== 2. LIHAT TOKO TERDEKAT (YANG HILANG SEBELUMNYA) =====
+// ===== 2. LIHAT TOKO TERDEKAT =====
 function renderLihatTokoTerdekat() {
     var contentArea = document.getElementById('mainContent');
     var html = '';
