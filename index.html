@@ -92,6 +92,7 @@
     .badge-danger { background: #ffebee; color: #c62828; }
 </style>
 <!-- ===== AKHIR BLOK 1 (5) ===== -->
+
 <!-- ===== BLOK 1 (6) - 06 CSS MODAL & BUTTON ===== -->
 <style>
     .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: 'Poppins', sans-serif; }
@@ -119,10 +120,6 @@
     .preview-img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; object-fit: contain; }
 </style>
 <!-- ===== AKHIR BLOK 1 (7) ===== -->
-
-</head>
-<body>
-
 <!-- ===== BLOK 2 (1) - 01 TOAST CONTAINER ===== -->
 <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 2 (1) ===== -->
@@ -418,7 +415,6 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
 });
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
-
 <!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP (SUPER LENGKAP) ===== -->
 <script>
 function buatSidebarHTML(role) {
@@ -640,7 +636,7 @@ function setupNavigasiSidebar() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (3) ===== -->
-<!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN (FINAL) ===== -->
+<!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN ===== -->
 <script>
 function navigasiKeHalaman(halaman) {
     var contentArea = document.getElementById('mainContent');
@@ -730,7 +726,7 @@ function renderPlaceholder(judul) {
 </script>
 <!-- ===== AKHIR BLOK 6 (4) ===== -->
 
-<!-- ===== BLOK 6 (5) - 05 RENDER DASHBOARD (FINAL) ===== -->
+<!-- ===== BLOK 6 (5) - 05 RENDER DASHBOARD (SEMUA ROLE) ===== -->
 <script>
 function renderDashboard() {
     var role = localStorage.getItem('2r_user_role');
@@ -787,8 +783,8 @@ function renderDashboard() {
             html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td></tr>';
         }
         html += '</tbody></table></div></div>';
-        
-        // Notifikasi pengajuan hapus akun
+
+        // ===== NOTIFIKASI PENGAJUAN HAPUS AKUN =====
         var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
         var menungguPengajuan = pengajuan.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
         if (menungguPengajuan > 0) {
@@ -845,8 +841,8 @@ function renderDashboard() {
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menungguVerif + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + akun.length + '</div><div class="widget-label">Total Akun</div></div>';
         html += '</div>';
-        
-        // Notifikasi pengajuan hapus akun
+
+        // ===== NOTIFIKASI PENGAJUAN HAPUS AKUN =====
         var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
         var menungguPengajuan = pengajuan.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
         if (menungguPengajuan > 0) {
@@ -881,7 +877,7 @@ function renderDashboard() {
         html += '</div>';
     }
 
-    // ===== FALLBACK (jika role tidak dikenali) =====
+    // ===== FALLBACK (JIKA ROLE TIDAK DIKENALI) =====
     else {
         html += '<div class="page-header">';
         html += '<h2>Dasbor</h2>';
@@ -893,10 +889,9 @@ function renderDashboard() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (5) ===== -->
-
 <!-- ===== BLOK 6 (6) - 06 RENDER DASHBOARD CUSTOMER (LENGKAP + IKLAN TANPA BATAS) ===== -->
 <script>
-// ===== FUNGSI TAMPILKAN SEMUA IKLAN DI DASHBOARD (DENGAN GAMBAR) =====
+// ===== FUNGSI TAMPILKAN SEMUA IKLAN DI DASHBOARD (TANPA BATAS) =====
 function renderIklanDiDashboard() {
     var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var html = '';
@@ -974,7 +969,8 @@ function renderDashboardCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
-<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (BAGIAN AWAL) ===== -->
+
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (BAGIAN AWAL: PROFIL & PENGAJUAN) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE =====
 function renderProfil() {
@@ -1070,33 +1066,580 @@ function tolakPengajuanHapus(index) {
     renderPengajuanHapusAkun();
     tampilkanToast('Pengajuan ditolak.', 'success');
 }
-    // ===== FUNGSI AJUKAN PENGHAPUSAN AKUN (UNTUK CUSTOMER) =====
-function ajukanPenghapusanAkun() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    if (!user) {
-        tampilkanToast('Data akun tidak ditemukan!', 'error');
-        return;
-    }
-    if (!confirm('Apakah Anda yakin ingin mengajukan penghapusan akun ini? Pengajuan akan dikirim ke SuperAdmin / Staf Admin.')) return;
-    
-    // Simpan pengajuan ke localStorage (sebagai notifikasi untuk admin)
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    pengajuan.push({
-        id: Date.now(),
-        userId: user.id,
-        username: user.username,
-        nama: user.nama,
-        alasan: 'Pengajuan penghapusan akun oleh user',
-        status: 'MENUNGGU',
-        diajukanPada: new Date().toISOString()
-    });
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
-    
-    tampilkanToast('Pengajuan penghapusan akun telah dikirim ke admin!', 'success');
-}
 </script>
 <!-- ===== AKHIR BLOK 6 (7) (BAGIAN AWAL) ===== -->
-<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LANJUTAN) ===== -->
+<script>
+// ===== 1. PROFIL CUSTOMER (2 ALAMAT LENGKAP: DUSUN, RT, RW, JALAN, DESA, KECAMATAN, KABUPATEN, PROVINSI, KODEPOS) =====
+function renderProfilCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
+    
+    // Data Registrasi
+    html += '<div class="card"><div class="card-header">Data Registrasi <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
+    html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.hp || '') + '"></div></div></div>';
+    
+    // ===== ALAMAT SESUAI KTP (LENGKAP) =====
+    html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+    html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
+    html += '<div><label class="form-label">RW</label><input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
+    html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="ktpDesa" class="form-input" value="' + (user.ktpDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="ktpKecamatan" class="form-input" value="' + (user.ktpKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="ktpKabupaten" class="form-input" value="' + (user.ktpKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+    html += '<div><label class="form-label">Provinsi</label><input type="text" id="ktpProvinsi" class="form-input" value="' + (user.ktpProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+    html += '</div></div>';
+    
+    // ===== ALAMAT DOMISILI / SEKARANG (LENGKAP) =====
+    html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+    html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
+    html += '<div><label class="form-label">RW</label><input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
+    html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="domDesa" class="form-input" value="' + (user.domDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="domKecamatan" class="form-input" value="' + (user.domKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="domKabupaten" class="form-input" value="' + (user.domKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+    html += '<div><label class="form-label">Provinsi</label><input type="text" id="domProvinsi" class="form-input" value="' + (user.domProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+    html += '</div></div>';
+    
+    // Data Rekening
+    html += '<div class="card"><div class="card-header">Data Rekening <button class="btn btn-primary btn-sm" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.bank || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.rekening || '') + '"></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRek || '') + '"></div></div></div>';
+    
+    // Dokumen KTP
+    html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
+    html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
+    if (user.ktp) {
+        html += '<img src="' + user.ktp + '" class="preview-img">';
+    } else {
+        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
+    }
+    html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
+    html += '<button class="btn btn-primary mt-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+    
+    contentArea.innerHTML = html;
+    
+    setTimeout(function() {
+        var container = document.getElementById('uploadKtpContainerCustomer');
+        var input = document.getElementById('inputKtpCustomer');
+        if (container && input) {
+            container.onclick = function() { input.click(); };
+            input.onchange = function(e) { previewKTPCustomer(e.target.files[0]); };
+        }
+    }, 300);
+}
+
+// ===== FUNGSI SIMPAN PROFIL CUSTOMER =====
+function simpanProfilCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    
+    // Data registrasi
+    user.nama = document.getElementById('editNamaCustomer').value;
+    user.email = document.getElementById('editEmailCustomer').value;
+    user.hp = document.getElementById('editHpCustomer').value;
+    
+    // Alamat KTP
+    user.ktpDusun = document.getElementById('ktpDusun').value;
+    user.ktpRT = document.getElementById('ktpRT').value;
+    user.ktpRW = document.getElementById('ktpRW').value;
+    user.ktpJalan = document.getElementById('ktpJalan').value;
+    user.ktpDesa = document.getElementById('ktpDesa').value;
+    user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
+    user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
+    user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
+    user.ktpKodepos = document.getElementById('ktpKodepos').value;
+    
+    // Alamat Domisili
+    user.domDusun = document.getElementById('domDusun').value;
+    user.domRT = document.getElementById('domRT').value;
+    user.domRW = document.getElementById('domRW').value;
+    user.domJalan = document.getElementById('domJalan').value;
+    user.domDesa = document.getElementById('domDesa').value;
+    user.domKecamatan = document.getElementById('domKecamatan').value;
+    user.domKabupaten = document.getElementById('domKabupaten').value;
+    user.domProvinsi = document.getElementById('domProvinsi').value;
+    user.domKodepos = document.getElementById('domKodepos').value;
+    
+    // Gabungkan jadi alamat lengkap (untuk kompatibilitas)
+    var gabungKTP = '';
+    if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
+    if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
+    if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
+    if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
+    if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
+    if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
+    if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
+    if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
+    if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
+    user.alamatKTP = gabungKTP;
+    
+    var gabungDom = '';
+    if (user.domDusun) gabungDom += user.domDusun + ', ';
+    if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
+    if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
+    if (user.domJalan) gabungDom += user.domJalan + ', ';
+    if (user.domDesa) gabungDom += user.domDesa + ', ';
+    if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
+    if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
+    if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
+    if (user.domKodepos) gabungDom += user.domKodepos;
+    user.alamatDomisili = gabungDom;
+    
+    // Untuk kompatibilitas
+    user.alamat = user.alamatDomisili || user.alamatKTP;
+    
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].nama = user.nama;
+            akun[i].email = user.email;
+            akun[i].hp = user.hp;
+            
+            // Simpan alamat KTP
+            akun[i].ktpDusun = user.ktpDusun;
+            akun[i].ktpRT = user.ktpRT;
+            akun[i].ktpRW = user.ktpRW;
+            akun[i].ktpJalan = user.ktpJalan;
+            akun[i].ktpDesa = user.ktpDesa;
+            akun[i].ktpKecamatan = user.ktpKecamatan;
+            akun[i].ktpKabupaten = user.ktpKabupaten;
+            akun[i].ktpProvinsi = user.ktpProvinsi;
+            akun[i].ktpKodepos = user.ktpKodepos;
+            akun[i].alamatKTP = user.alamatKTP;
+            
+            // Simpan alamat domisili
+            akun[i].domDusun = user.domDusun;
+            akun[i].domRT = user.domRT;
+            akun[i].domRW = user.domRW;
+            akun[i].domJalan = user.domJalan;
+            akun[i].domDesa = user.domDesa;
+            akun[i].domKecamatan = user.domKecamatan;
+            akun[i].domKabupaten = user.domKabupaten;
+            akun[i].domProvinsi = user.domProvinsi;
+            akun[i].domKodepos = user.domKodepos;
+            akun[i].alamatDomisili = user.alamatDomisili;
+            
+            akun[i].alamat = user.alamat;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    document.getElementById('userNama').textContent = user.nama;
+    tampilkanToast('Profil berhasil disimpan!', 'success');
+}
+
+// ===== FUNGSI SIMPAN REKENING CUSTOMER =====
+function simpanRekeningCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.bank = document.getElementById('profilBankCustomer').value;
+    user.rekening = document.getElementById('profilRekeningCustomer').value;
+    user.pemilikRek = document.getElementById('profilPemilikRekCustomer').value;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].bank = user.bank;
+            akun[i].rekening = user.rekening;
+            akun[i].pemilikRek = user.pemilikRek;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    tampilkanToast('Rekening disimpan!', 'success');
+}
+
+// ===== FUNGSI PREVIEW KTP CUSTOMER =====
+function previewKTPCustomer(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('ktpPreviewCustomer').innerHTML = '<img src="' + e.target.result + '" class="preview-img">';
+        localStorage.setItem('2r_ktp_temp_customer', e.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+// ===== FUNGSI SIMPAN KTP CUSTOMER =====
+function simpanKTPCustomer() {
+    var ktp = localStorage.getItem('2r_ktp_temp_customer');
+    if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.ktp = ktp;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) { akun[i].ktp = ktp; break; }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    localStorage.removeItem('2r_ktp_temp_customer');
+    tampilkanToast('KTP disimpan!', 'success');
+}
+
+// ===== 2. LIHAT TOKO TERDEKAT =====
+function renderLihatTokoTerdekat() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Lihat Toko Terdekat</h2><p>Daftar toko berdasarkan jarak dari lokasi Anda.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-store"></i><h3>Belum ada data toko</h3><p>Fitur ini akan menampilkan toko di sekitar Anda.</p></div></div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== 3. LIHAT OJEK TERDEKAT =====
+function renderLihatOjekTerdekat() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Lihat Ojek Terdekat</h2><p>Daftar ojek yang sedang online di sekitar Anda.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-motorcycle"></i><h3>Belum ada ojek online</h3><p>Fitur ini akan menampilkan ojek terdekat.</p></div></div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== 4. LIHAT PRODUK =====
+function renderLihatProduk() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Lihat Produk</h2><p>Katalog produk dari semua toko.</p></div>';
+    html += '<div class="card"><div class="card-header">Filter</div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;"><select class="form-input" style="width:auto;"><option>Semua Kategori</option></select>';
+    html += '<select class="form-input" style="width:auto;"><option>Urutkan Harga</option></select>';
+    html += '<input type="text" class="form-input" placeholder="Cari produk..." style="width:auto;"></div></div>';
+    html += '<div class="card"><div class="card-header">Produk Tersedia</div>';
+    html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum ada produk</h3><p>Belum ada produk yang ditambahkan oleh toko.</p></div>';
+    html += '</div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== 5. KERANJANG =====
+function renderKeranjang() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Keranjang Belanja</h2><p>Tempat menyimpan produk sebelum checkout.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-shopping-cart"></i><h3>Keranjang kosong</h3><p>Belum ada produk di keranjang.</p></div></div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== 6. CHAT =====
+function renderChat() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Chat</h2><p>Chat end-to-end dengan CS, Toko, atau Ojek.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-comments"></i><h3>Belum ada chat</h3><p>Mulai chat dengan CS, Toko, atau Ojek.</p></div></div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== 7. PAPAN INFORMASI =====
+function renderPapanInformasi() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Papan Informasi</h2><p>Pengumuman dari Staf Admin.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-bullhorn"></i><h3>Belum ada pengumuman</h3></div></div>';
+    contentArea.innerHTML = html;
+}
+</script>
+<!-- ===== AKHIR BLOK 6 (7) (LANJUTAN) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LANJUTAN: MENU IKLAN) ===== -->
+<script>
+// ===== 8. MENU IKLAN (SUPERADMIN KELOLA + PERBESAR, DOWNLOAD, BAGIKAN) =====
+function renderMenuIklan() {
+    var role = localStorage.getItem('2r_user_role');
+    var contentArea = document.getElementById('mainContent');
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    var html = '';
+
+    html += '<div class="page-header">';
+    html += '<h2>Menu Iklan</h2>';
+    html += '<p>';
+    if (role === 'superadmin') {
+        html += 'Kelola iklan sponsor. Anda dapat menambah, mengedit, menghapus, dan mengunggah gambar untuk setiap iklan.';
+    } else {
+        html += 'Lihat daftar iklan sponsor yang tersedia. Anda dapat memperbesar, mendownload, dan membagikan gambar iklan.';
+    }
+    html += '</p>';
+    html += '</div>';
+
+    // ===== FORM TAMBAH IKLAN (HANYA UNTUK SUPERADMIN) =====
+    if (role === 'superadmin') {
+        html += '<div class="card">';
+        html += '<div class="card-header">Tambah Iklan Baru</div>';
+        html += '<div style="display:flex; gap:10px; flex-wrap:wrap;">';
+        html += '<input type="text" id="iklanJudul" class="form-input" placeholder="Judul Iklan" style="flex:2;">';
+        html += '<input type="text" id="iklanDeskripsi" class="form-input" placeholder="Deskripsi Iklan" style="flex:3;">';
+        html += '<input type="color" id="iklanWarna" class="form-input" value="#FF6B00" style="width:60px; padding:5px;">';
+        html += '<input type="file" id="iklanGambar" accept=".jpg,.jpeg,.png" style="display:none;">';
+        html += '<button class="btn btn-primary" onclick="document.getElementById(\'iklanGambar\').click();">';
+        html += '<i class="fas fa-image"></i> Pilih Gambar';
+        html += '</button>';
+        html += '<span id="iklanNamaGambar" style="font-size:12px; color:#888;">Belum ada gambar</span>';
+        html += '<button class="btn btn-primary" onclick="tambahIklan()">';
+        html += '<i class="fas fa-plus"></i> Tambah Iklan';
+        html += '</button>';
+        html += '</div>';
+        html += '</div>';
+    }
+
+    // ===== DAFTAR IKLAN (SEMUA ROLE BISA LIHAT) =====
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += 'Daftar Iklan';
+    html += '<span style="font-weight:normal; font-size:13px; color:#888;"> (Total: ' + iklan.length + ')</span>';
+    html += '</div>';
+
+    if (iklan.length === 0) {
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-ad"></i>';
+        html += '<h3>Belum ada iklan</h3>';
+        html += '<p>Tambahkan iklan pertama Anda melalui form di atas.</p>';
+        html += '</div>';
+    } else {
+        html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:15px;">';
+        for (var i = 0; i < iklan.length; i++) {
+            var d = iklan[i];
+            var gambarHtml = '';
+            var tombolAksi = '';
+
+            if (d.gambar) {
+                gambarHtml = '<img src="' + d.gambar + '" style="width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px; cursor:pointer;" onclick="perbesarGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')">';
+                
+                // Tombol aksi untuk gambar
+                tombolAksi = '<div style="display:flex; gap:5px; justify-content:center; margin-top:5px;">';
+                tombolAksi += '<button class="btn btn-xs" style="background:#2196F3; color:white;" onclick="perbesarGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-search-plus"></i> Perbesar</button>';
+                tombolAksi += '<button class="btn btn-xs" style="background:#4CAF50; color:white;" onclick="downloadGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-download"></i> Download</button>';
+                tombolAksi += '<button class="btn btn-xs" style="background:#17a2b8; color:white;" onclick="bagikanGambarIklan(\'' + d.gambar + '\', \'' + d.judul + '\')"><i class="fas fa-share-alt"></i> Bagikan</button>';
+                tombolAksi += '</div>';
+            } else {
+                gambarHtml = '<i class="fas fa-ad" style="font-size:40px; margin-bottom:10px; display:block;"></i>';
+                tombolAksi = '<p style="font-size:11px; opacity:0.7;">Tidak ada gambar</p>';
+            }
+
+            html += '<div style="background:' + (d.warna || '#FF6B00') + '; color:white; border-radius:10px; padding:20px; text-align:center; position:relative;">';
+            html += gambarHtml;
+            html += '<h4 style="font-size:16px;">' + d.judul + '</h4>';
+            html += '<p style="font-size:13px; opacity:0.9;">' + d.deskripsi + '</p>';
+            html += tombolAksi;
+
+            // ===== TOMBOL EDIT DAN HAPUS HANYA UNTUK SUPERADMIN =====
+            if (role === 'superadmin') {
+                html += '<div style="position:absolute; top:10px; right:10px; display:flex; gap:5px;">';
+                html += '<button class="btn btn-xs" style="background:rgba(255,255,255,0.3); color:white;" onclick="editIklan(' + i + ')">';
+                html += '<i class="fas fa-edit"></i>';
+                html += '</button>';
+                html += '<button class="btn btn-xs" style="background:rgba(255,0,0,0.5); color:white;" onclick="hapusIklan(' + i + ')">';
+                html += '<i class="fas fa-trash"></i>';
+                html += '</button>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+
+    html += '</div>';
+
+    // ===== TAMPILKAN KE HALAMAN =====
+    contentArea.innerHTML = html;
+
+    // ===== EVENT LISTENER UNTUK UPLOAD GAMBAR =====
+    if (role === 'superadmin') {
+        setTimeout(function() {
+            var inputGambar = document.getElementById('iklanGambar');
+            if (inputGambar) {
+                inputGambar.onchange = function(e) {
+                    var file = e.target.files[0];
+                    if (file) {
+                        document.getElementById('iklanNamaGambar').textContent = file.name;
+                        var reader = new FileReader();
+                        reader.onload = function(ev) {
+                            localStorage.setItem('2r_iklan_gambar_temp', ev.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+            }
+        }, 300);
+    }
+}
+
+// ===== FUNGSI TAMBAH IKLAN (SUPERADMIN SAJA) =====
+function tambahIklan() {
+    var judul = document.getElementById('iklanJudul').value.trim();
+    var deskripsi = document.getElementById('iklanDeskripsi').value.trim();
+    var warna = document.getElementById('iklanWarna').value;
+    var gambar = localStorage.getItem('2r_iklan_gambar_temp') || '';
+
+    if (!judul || !deskripsi) {
+        tampilkanToast('Judul dan deskripsi wajib diisi!', 'warning');
+        return;
+    }
+
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+
+    var iklanBaru = {
+        id: Date.now(),
+        judul: judul,
+        deskripsi: deskripsi,
+        warna: warna,
+        gambar: gambar
+    };
+
+    iklan.push(iklanBaru);
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+    localStorage.removeItem('2r_iklan_gambar_temp');
+
+    document.getElementById('iklanJudul').value = '';
+    document.getElementById('iklanDeskripsi').value = '';
+    document.getElementById('iklanNamaGambar').textContent = 'Belum ada gambar';
+
+    renderMenuIklan();
+    tampilkanToast('Iklan berhasil ditambahkan!', 'success');
+}
+
+// ===== FUNGSI EDIT IKLAN (SUPERADMIN SAJA) =====
+function editIklan(index) {
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    var d = iklan[index];
+
+    var judulBaru = prompt('Edit Judul Iklan:', d.judul);
+    if (judulBaru === null) {
+        return;
+    }
+
+    var deskripsiBaru = prompt('Edit Deskripsi Iklan:', d.deskripsi);
+    if (deskripsiBaru === null) {
+        return;
+    }
+
+    var warnaBaru = prompt('Edit Warna (hex, contoh #FF6B00):', d.warna || '#FF6B00');
+    if (warnaBaru === null) {
+        return;
+    }
+
+    var gantiGambar = confirm('Apakah Anda ingin mengganti gambar? (Klik OK untuk ganti, Batal untuk tetap menggunakan gambar lama)');
+    var gambarBaru = d.gambar;
+
+    if (gantiGambar) {
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.jpg,.jpeg,.png';
+
+        fileInput.onchange = function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    gambarBaru = ev.target.result;
+
+                    iklan[index].judul = judulBaru;
+                    iklan[index].deskripsi = deskripsiBaru;
+                    iklan[index].warna = warnaBaru;
+                    iklan[index].gambar = gambarBaru;
+
+                    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+                    renderMenuIklan();
+                    tampilkanToast('Iklan berhasil diperbarui!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        fileInput.click();
+        return;
+    }
+
+    // Jika tidak ganti gambar
+    iklan[index].judul = judulBaru;
+    iklan[index].deskripsi = deskripsiBaru;
+    iklan[index].warna = warnaBaru;
+
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+    renderMenuIklan();
+    tampilkanToast('Iklan berhasil diperbarui!', 'success');
+}
+
+// ===== FUNGSI HAPUS IKLAN (SUPERADMIN SAJA) =====
+function hapusIklan(index) {
+    if (!confirm('Apakah Anda yakin ingin menghapus iklan ini?')) {
+        return;
+    }
+
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    iklan.splice(index, 1);
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+
+    renderMenuIklan();
+    tampilkanToast('Iklan berhasil dihapus!', 'success');
+}
+
+// ===== FUNGSI PERBESAR GAMBAR IKLAN =====
+function perbesarGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk diperbesar!', 'warning');
+        return;
+    }
+    var modal = document.getElementById('modalPreviewGambar');
+    var img = document.getElementById('modalPreviewImage');
+    var title = document.getElementById('modalPreviewTitle');
+    if (modal && img && title) {
+        img.src = src;
+        title.textContent = 'Perbesar: ' + (judul || 'Iklan');
+        modal.classList.add('active');
+    } else {
+        // Fallback: buka di tab baru
+        window.open(src, '_blank');
+    }
+}
+
+// ===== FUNGSI DOWNLOAD GAMBAR IKLAN =====
+function downloadGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk didownload!', 'warning');
+        return;
+    }
+    var link = document.createElement('a');
+    link.href = src;
+    link.download = (judul || 'iklan') + '.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    tampilkanToast('Gambar sedang didownload!', 'success');
+}
+
+// ===== FUNGSI BAGIKAN GAMBAR IKLAN =====
+function bagikanGambarIklan(src, judul) {
+    if (!src) {
+        tampilkanToast('Tidak ada gambar untuk dibagikan!', 'warning');
+        return;
+    }
+    // Salin data base64 ke clipboard sebagai "link"
+    navigator.clipboard.writeText(src).then(function() {
+        tampilkanToast('Link gambar disalin ke clipboard!', 'success');
+    }).catch(function() {
+        // Fallback jika clipboard tidak didukung
+        var textarea = document.createElement('textarea');
+        textarea.value = src;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        tampilkanToast('Link gambar disalin!', 'success');
+    });
+}
+</script>
+<!-- ===== AKHIR BLOK 6 (7) (LANJUTAN) ===== -->
+
+<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (DENGAN DOWNLOAD & BAGIKAN DOKUMEN) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL SUPERADMIN =====
 function renderProfilSuperAdmin(user) {
@@ -1183,7 +1726,10 @@ function renderProfilSuperAdmin(user) {
         loadDokumenSA();
     }, 300);
 }
-
+</script>
+<!-- ===== AKHIR BLOK 6 (8) (FUNGSI RENDER SAJA) ===== -->
+<!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (LANJUTAN: FUNGSI PENDUKUNG) ===== -->
+<script>
 // ===== FUNGSI SIMPAN DATA APLIKASI =====
 function simpanDataAplikasi() {
     var data = {
@@ -1436,6 +1982,7 @@ function loadKeteranganSA() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (8) ===== -->
+
 <!-- ===== BLOK 6 (9) - 09 FUNGSI PROFIL UMUM (DENGAN REKENING) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL UMUM (UNTUK TOKO, OJEK, PEDAGANG, DLL) =====
@@ -1556,7 +2103,6 @@ function simpanKTP() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (9) ===== -->
-
 <!-- ===== BLOK 6 (10) - 10 RENDER DAFTAR AKUN BARU ===== -->
 <script>
 function renderDaftarAkun() {
@@ -1880,6 +2426,7 @@ function ajukanHapusAkunStaf(id) {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (11) ===== -->
+
 <!-- ===== BLOK 6 (12) - 12 RENDER SETTING REKENING ===== -->
 <script>
 function renderSettingRekening() {
