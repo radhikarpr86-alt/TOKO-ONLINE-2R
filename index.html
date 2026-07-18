@@ -1084,25 +1084,8 @@ function renderLihatProduk() {
     html += '<select class="form-input" style="width:auto;"><option>Urutkan Harga</option></select>';
     html += '<input type="text" class="form-input" placeholder="Cari produk..." style="width:auto;"></div></div>';
     html += '<div class="card"><div class="card-header">Produk Tersedia</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px;">';
-    var contohProduk = [
-        { nama: 'Kaos Polos Premium', harga: 'Rp 85.000', toko: 'Toko Fashion 2R' },
-        { nama: 'Sepatu Sneakers', harga: 'Rp 250.000', toko: 'Toko Sepatu 2R' },
-        { nama: 'Tas Ransel', harga: 'Rp 150.000', toko: 'Toko Aksesoris' },
-        { nama: 'Jam Tangan', harga: 'Rp 175.000', toko: 'Toko Jam 2R' },
-        { nama: 'Kemeja Formal', harga: 'Rp 200.000', toko: 'Toko Fashion 2R' },
-        { nama: 'Celana Jeans', harga: 'Rp 300.000', toko: 'Toko Fashion 2R' }
-    ];
-    for (var i = 0; i < contohProduk.length; i++) {
-        var p = contohProduk[i];
-        html += '<div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid #f0f0f0;cursor:pointer;">';
-        html += '<div style="width:100%;height:140px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:45px;color:#ddd;"><i class="fas fa-box"></i></div>';
-        html += '<div style="padding:12px;"><h4 style="font-size:13px;color:#333;">' + p.nama + '</h4>';
-        html += '<p style="font-size:15px;font-weight:700;color:#FF6B00;">' + p.harga + '</p>';
-        html += '<p style="font-size:11px;color:#888;">' + p.toko + '</p>';
-        html += '<button class="btn btn-primary" style="width:100%;margin-top:8px;justify-content:center;">Tambah ke Keranjang</button></div></div>';
-    }
-    html += '</div></div>';
+    html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum ada produk</h3><p>Belum ada produk yang ditambahkan oleh toko.</p></div>';
+    html += '</div>';
     contentArea.innerHTML = html;
 }
 
