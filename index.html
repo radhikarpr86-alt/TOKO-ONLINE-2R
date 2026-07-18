@@ -444,7 +444,6 @@ function buatSidebarHTML(role) {
                     { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
                     { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
                     { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' }
-                    { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' }
                 ]
             }
         ],
@@ -544,7 +543,6 @@ function buatSidebarHTML(role) {
                     { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
                     { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Akun' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' }
-                    { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' }
                 ]
             }
         ],
@@ -668,9 +666,6 @@ function navigasiKeHalaman(halaman) {
     } else if (halaman === 'kelolaIklan') {
         renderMenuIklan();
     }
-    else if (halaman === 'pengajuanHapus') {
-    renderPengajuanHapusAkun();
-    }
 
     // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
     else if (halaman === 'dashboardCustomer') {
@@ -788,15 +783,6 @@ function renderDashboard() {
         }
         html += '</tbody></table></div></div>';
     }
-        // Notifikasi pengajuan hapus akun
-var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-var menunggu = pengajuan.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
-if (menunggu > 0) {
-    html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
-    html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
-    html += '<p style="margin:0;">Ada <strong>' + menunggu + '</strong> pengajuan penghapusan akun yang perlu ditindaklanjuti. <a href="#" onclick="navigasiKeHalaman(\'pengajuanHapus\')" style="color:#856404;font-weight:600;">Lihat sekarang</a></p>';
-    html += '</div>';
-}
 
         // ===== TOKO =====
     else if (role === 'toko' || role === 'staf_owner_toko') {
@@ -844,15 +830,6 @@ if (menunggu > 0) {
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + akun.length + '</div><div class="widget-label">Total Akun</div></div>';
         html += '</div>';
     }
-        // Notifikasi pengajuan hapus akun
-var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-var menunggu = pengajuan.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
-if (menunggu > 0) {
-    html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
-    html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
-    html += '<p style="margin:0;">Ada <strong>' + menunggu + '</strong> pengajuan penghapusan akun yang perlu ditindaklanjuti. <a href="#" onclick="navigasiKeHalaman(\'pengajuanHapus\')" style="color:#856404;font-weight:600;">Lihat sekarang</a></p>';
-    html += '</div>';
-}
 
     // ===== CUSTOMER SERVICE =====
     else if (role === 'customer_service') {
@@ -973,82 +950,21 @@ function renderDashboardCustomer() {
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
 <!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LENGKAP) ===== -->
 <script>
-// ===== RENDER HALAMAN PENGAJUAN HAPUS AKUN =====
-function renderPengajuanHapusAkun() {
+// ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE =====
+function renderProfil() {
     var role = localStorage.getItem('2r_user_role');
-    if (role !== 'superadmin' && role !== 'staf_admin') {
-        tampilkanToast('Anda tidak memiliki akses!', 'error');
-        return;
-    }
-    
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    var html = '';
-    html += '<div class="page-header"><h2>Pengajuan Hapus Akun</h2><p>Daftar pengajuan penghapusan akun dari Customer.</p></div>';
-    html += '<div class="card"><div class="card-header">Daftar Pengajuan <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + pengajuan.length + ')</span></div>';
-    
-    if (pengajuan.length === 0) {
-        html += '<div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Belum ada pengajuan</h3><p>Tidak ada permintaan penghapusan akun.</p></div>';
+
+    if (!contentArea) {
+        return;
+    }
+
+    if (role === 'superadmin') {
+        renderProfilSuperAdmin(user);
     } else {
-        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>ID Akun</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
-        for (var i = 0; i < pengajuan.length; i++) {
-            var p = pengajuan[i];
-            var badge = p.status === 'MENUNGGU' ? 'badge-warning' : 'badge-success';
-            html += '<tr><td>' + (i+1) + '</td><td>' + p.userId + '</td><td>' + p.username + '</td><td>' + p.nama + '</td><td><span class="badge ' + badge + '">' + p.status + '</span></td><td>';
-            if (p.status === 'MENUNGGU') {
-                html += '<button class="btn btn-success btn-xs" onclick="setujuiPengajuanHapus(' + i + ')">Setujui</button>';
-                html += '<button class="btn btn-danger btn-xs" onclick="tolakPengajuanHapus(' + i + ')">Tolak</button>';
-            } else {
-                html += '<span style="color:#888;">Selesai</span>';
-            }
-            html += '</td></tr>';
-        }
-        html += '</tbody></table></div>';
+        renderProfilUmum(user, role);
     }
-    html += '</div>';
-    contentArea.innerHTML = html;
-}
-
-// ===== FUNGSI SETUJUI PENGAJUAN HAPUS =====
-function setujuiPengajuanHapus(index) {
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    if (index < 0 || index >= pengajuan.length) {
-        tampilkanToast('Data tidak ditemukan!', 'error');
-        return;
-    }
-    if (!confirm('Setujui penghapusan akun ini?')) return;
-    
-    var p = pengajuan[index];
-    // Hapus akun dari data akun
-    var akun = getDataAkun();
-    var akunBaru = [];
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id !== p.userId) {
-            akunBaru.push(akun[i]);
-        }
-    }
-    simpanDataAkun(akunBaru);
-    
-    // Update status pengajuan
-    pengajuan[index].status = 'DISETUJUI';
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
-    
-    renderPengajuanHapusAkun();
-    tampilkanToast('Pengajuan disetujui! Akun dihapus.', 'success');
-}
-
-// ===== FUNGSI TOLAK PENGAJUAN HAPUS =====
-function tolakPengajuanHapus(index) {
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    if (index < 0 || index >= pengajuan.length) {
-        tampilkanToast('Data tidak ditemukan!', 'error');
-        return;
-    }
-    if (!confirm('Tolak pengajuan ini?')) return;
-    pengajuan[index].status = 'DITOLAK';
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
-    renderPengajuanHapusAkun();
-    tampilkanToast('Pengajuan ditolak.', 'success');
 }
 
 // ===== 1. PROFIL CUSTOMER (2 ALAMAT LENGKAP: DUSUN, RT, RW, JALAN, DESA, KECAMATAN, KABUPATEN, PROVINSI, KODEPOS) =====
