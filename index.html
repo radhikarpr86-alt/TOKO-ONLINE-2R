@@ -1116,21 +1116,95 @@ function renderPapanInformasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 8. MENU IKLAN =====
+// ===== 8. MENU IKLAN (DINAMIS TANPA BATAS) =====
 function renderMenuIklan() {
     var contentArea = document.getElementById('mainContent');
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var html = '';
-    html += '<div class="page-header"><h2>Menu Iklan</h2><p>Menampilkan 3 iklan sponsor di atas Dasbor.</p></div>';
-    html += '<div class="card"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">';
-    for (var i = 1; i <= 3; i++) {
-        html += '<div style="background:linear-gradient(135deg,#FF6B00,#FF9800);color:white;border-radius:10px;padding:20px;text-align:center;">';
-        html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
-        html += '<h4 style="font-size:14px;">Iklan Sponsor ' + i + '</h4>';
-        html += '<p style="font-size:12px;opacity:0.8;">Promo Menarik</p>';
+    html += '<div class="page-header"><h2>Menu Iklan</h2><p>Kelola iklan sponsor (bisa tambah, edit, hapus).</p></div>';
+    
+    // Form tambah iklan
+    html += '<div class="card"><div class="card-header">Tambah Iklan Baru</div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
+    html += '<input type="text" id="iklanJudul" class="form-input" placeholder="Judul Iklan" style="flex:2;">';
+    html += '<input type="text" id="iklanDeskripsi" class="form-input" placeholder="Deskripsi" style="flex:3;">';
+    html += '<input type="color" id="iklanWarna" class="form-input" value="#FF6B00" style="width:60px;padding:5px;">';
+    html += '<button class="btn btn-primary" onclick="tambahIklan()"><i class="fas fa-plus"></i> Tambah</button>';
+    html += '</div></div>';
+    
+    // Daftar iklan
+    html += '<div class="card"><div class="card-header">Daftar Iklan <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + iklan.length + ')</span></div>';
+    if (iklan.length === 0) {
+        html += '<div class="empty-state"><i class="fas fa-ad"></i><h3>Belum ada iklan</h3><p>Tambahkan iklan pertama Anda.</p></div>';
+    } else {
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;">';
+        for (var i = 0; i < iklan.length; i++) {
+            var d = iklan[i];
+            html += '<div style="background:' + (d.warna || '#FF6B00') + ';color:white;border-radius:10px;padding:20px;text-align:center;position:relative;">';
+            html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
+            html += '<h4 style="font-size:16px;">' + d.judul + '</h4>';
+            html += '<p style="font-size:13px;opacity:0.9;">' + d.deskripsi + '</p>';
+            html += '<div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;">';
+            html += '<button class="btn btn-xs" style="background:rgba(255,255,255,0.3);color:white;" onclick="editIklan(' + i + ')"><i class="fas fa-edit"></i></button>';
+            html += '<button class="btn btn-xs" style="background:rgba(255,0,0,0.5);color:white;" onclick="hapusIklan(' + i + ')"><i class="fas fa-trash"></i></button>';
+            html += '</div></div>';
+        }
         html += '</div>';
     }
-    html += '</div></div>';
+    html += '</div>';
+    
     contentArea.innerHTML = html;
+}
+
+// ===== FUNGSI TAMBAH IKLAN =====
+function tambahIklan() {
+    var judul = document.getElementById('iklanJudul').value.trim();
+    var deskripsi = document.getElementById('iklanDeskripsi').value.trim();
+    var warna = document.getElementById('iklanWarna').value;
+    if (!judul || !deskripsi) {
+        tampilkanToast('Judul dan deskripsi wajib diisi!', 'warning');
+        return;
+    }
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    iklan.push({
+        id: Date.now(),
+        judul: judul,
+        deskripsi: deskripsi,
+        warna: warna
+    });
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+    document.getElementById('iklanJudul').value = '';
+    document.getElementById('iklanDeskripsi').value = '';
+    renderMenuIklan();
+    tampilkanToast('Iklan ditambahkan!', 'success');
+}
+
+// ===== FUNGSI EDIT IKLAN =====
+function editIklan(index) {
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    var d = iklan[index];
+    var judulBaru = prompt('Edit Judul Iklan:', d.judul);
+    if (judulBaru === null) return;
+    var deskripsiBaru = prompt('Edit Deskripsi Iklan:', d.deskripsi);
+    if (deskripsiBaru === null) return;
+    var warnaBaru = prompt('Edit Warna (hex, contoh #FF6B00):', d.warna || '#FF6B00');
+    if (warnaBaru === null) return;
+    iklan[index].judul = judulBaru;
+    iklan[index].deskripsi = deskripsiBaru;
+    iklan[index].warna = warnaBaru;
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+    renderMenuIklan();
+    tampilkanToast('Iklan diperbarui!', 'success');
+}
+
+// ===== FUNGSI HAPUS IKLAN =====
+function hapusIklan(index) {
+    if (!confirm('Hapus iklan ini?')) return;
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    iklan.splice(index, 1);
+    localStorage.setItem('2r_iklan', JSON.stringify(iklan));
+    renderMenuIklan();
+    tampilkanToast('Iklan dihapus!', 'success');
 }
 
 // ===== 9. DAFTAR BELANJA =====
