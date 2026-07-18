@@ -638,7 +638,7 @@ function setupNavigasiSidebar() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (3) ===== -->
-    <!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN (FINAL) ===== -->
+   <!-- ===== BLOK 6 (4) - 04 NAVIGASI HALAMAN (FINAL) ===== -->
 <script>
 function navigasiKeHalaman(halaman) {
     var contentArea = document.getElementById('mainContent');
@@ -646,7 +646,7 @@ function navigasiKeHalaman(halaman) {
         return;
     }
 
-    // ===== NAVIGASI UNTUK SEMUA ROLE (Dasbor & Profil) =====
+    // ===== NAVIGASI UNTUK SEMUA ROLE =====
     if (halaman === 'dashboard') {
         renderDashboard();
     } else if (halaman === 'profile') {
@@ -663,6 +663,8 @@ function navigasiKeHalaman(halaman) {
         renderBelanja();
     } else if (halaman === 'pesananSaya') {
         renderPesananSaya();
+    } else if (halaman === 'kelolaIklan') {
+        renderMenuIklan();
     }
 
     // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
