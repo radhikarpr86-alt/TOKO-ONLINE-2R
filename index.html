@@ -1538,7 +1538,7 @@ function renderNotifikasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 15. EDIT / HAPUS AKUN (DENGAN TOMBOL AJUKAN PENGHAPUSAN) =====
+// ===== 15. EDIT / HAPUS AKUN (HANYA TAMPIL DATA + AJUKAN HAPUS) =====
 function renderEditAkun() {
     var role = localStorage.getItem('2r_user_role');
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -1546,54 +1546,64 @@ function renderEditAkun() {
     var html = '';
     html += '<div class="page-header"><h2>Edit / Hapus Akun</h2><p>';
     if (role === 'superadmin' || role === 'staf_admin') {
-        html += 'Anda dapat mengedit atau menghapus akun ini.';
+        html += 'Anda dapat menghapus akun ini.';
     } else {
-        html += 'Anda dapat mengedit data akun Anda. Untuk menghapus akun, silakan ajukan permohonan ke SuperAdmin atau Staf Admin.';
+        html += 'Anda dapat melihat data profil Anda. Untuk menghapus akun, silakan ajukan permohonan ke SuperAdmin atau Staf Admin.';
     }
     html += '</p></div>';
     
-    // Edit Data Akun (data otomatis terisi dari localStorage)
-    html += '<div class="card"><div class="card-header">Edit Data Akun</div>';
-    html += '<div class="form-group"><label>Nama Lengkap</label><input type="text" id="editNama" class="form-input" value="' + (user.nama || '') + '"></div>';
-    html += '<div class="form-group"><label>Email</label><input type="email" id="editEmail" class="form-input" value="' + (user.email || '') + '"></div>';
-    html += '<div class="form-group"><label>Nomor HP</label><input type="tel" id="editHp" class="form-input" value="' + (user.hp || '') + '"></div>';
-    html += '<div class="form-group"><label>Alamat</label><input type="text" id="editAlamat" class="form-input" value="' + (user.alamat || '') + '"></div>';
-    html += '<button class="btn btn-primary" onclick="simpanEditAkun()"><i class="fas fa-save"></i> Simpan Perubahan</button>';
+    // Tampilkan data profil (read-only)
+    html += '<div class="card"><div class="card-header">Data Profil Customer</div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">ID Akun</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (user.id || '-') + '</div></div>';
+    html += '<div><label class="form-label">Username</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (user.username || '-') + '</div></div>';
+    html += '<div><label class="form-label">Nama Lengkap</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (user.nama || '-') + '</div></div>';
+    html += '<div><label class="form-label">Email</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (user.email || '-') + '</div></div>';
+    html += '<div><label class="form-label">Nomor HP</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (user.hp || '-') + '</div></div>';
+    html += '</div>';
     
-    // ===== TOMBOL HAPUS / AJUKAN =====
+    // Alamat KTP
+    var alamatKTP = '';
+    if (user.ktpDusun) alamatKTP += user.ktpDusun + ', ';
+    if (user.ktpRT) alamatKTP += 'RT ' + user.ktpRT + ', ';
+    if (user.ktpRW) alamatKTP += 'RW ' + user.ktpRW + ', ';
+    if (user.ktpJalan) alamatKTP += user.ktpJalan + ', ';
+    if (user.ktpDesa) alamatKTP += user.ktpDesa + ', ';
+    if (user.ktpKecamatan) alamatKTP += user.ktpKecamatan + ', ';
+    if (user.ktpKabupaten) alamatKTP += user.ktpKabupaten + ', ';
+    if (user.ktpProvinsi) alamatKTP += user.ktpProvinsi + ', ';
+    if (user.ktpKodepos) alamatKTP += user.ktpKodepos;
+    
+    html += '<div><label class="form-label">Alamat Sesuai KTP</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (alamatKTP || '-') + '</div></div>';
+    
+    // Alamat Domisili
+    var alamatDom = '';
+    if (user.domDusun) alamatDom += user.domDusun + ', ';
+    if (user.domRT) alamatDom += 'RT ' + user.domRT + ', ';
+    if (user.domRW) alamatDom += 'RW ' + user.domRW + ', ';
+    if (user.domJalan) alamatDom += user.domJalan + ', ';
+    if (user.domDesa) alamatDom += user.domDesa + ', ';
+    if (user.domKecamatan) alamatDom += user.domKecamatan + ', ';
+    if (user.domKabupaten) alamatDom += user.domKabupaten + ', ';
+    if (user.domProvinsi) alamatDom += user.domProvinsi + ', ';
+    if (user.domKodepos) alamatDom += user.domKodepos;
+    
+    html += '<div><label class="form-label">Alamat Domisili / Sekarang</label><div style="padding:10px; background:#f8f9fa; border-radius:6px; border:1px solid #eee;">' + (alamatDom || '-') + '</div></div>';
+    html += '</div></div>';
+    
+    // Tombol aksi
+    html += '<div style="margin-top:20px;">';
     if (role === 'superadmin' || role === 'staf_admin') {
-        html += '<button class="btn btn-danger" style="margin-left:10px;" onclick="hapusAkunCustomer()"><i class="fas fa-trash"></i> Hapus Akun</button>';
+        html += '<button class="btn btn-danger" onclick="hapusAkunCustomer()"><i class="fas fa-trash"></i> Hapus Akun</button>';
     } else {
-        html += '<button class="btn btn-warning" style="margin-left:10px;" onclick="ajukanPenghapusanAkun()"><i class="fas fa-paper-plane"></i> Ajukan Penghapusan Akun</button>';
+        html += '<button class="btn btn-warning" onclick="ajukanPenghapusanAkun()"><i class="fas fa-paper-plane"></i> Ajukan Penghapusan Akun</button>';
         html += '<div style="margin-top:15px; padding:10px; background:#fff3cd; border:1px solid #ffc107; border-radius:6px; color:#856404;">';
         html += '<i class="fas fa-info-circle"></i> Pengajuan akan dikirim ke SuperAdmin / Staf Admin untuk diproses.';
         html += '</div>';
     }
     html += '</div>';
+    
     contentArea.innerHTML = html;
-}
-
-// ===== FUNGSI SIMPAN EDIT AKUN (UNTUK SEMUA ROLE) =====
-function simpanEditAkun() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.nama = document.getElementById('editNama').value;
-    user.email = document.getElementById('editEmail').value;
-    user.hp = document.getElementById('editHp').value;
-    user.alamat = document.getElementById('editAlamat').value;
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) {
-            akun[i].nama = user.nama;
-            akun[i].email = user.email;
-            akun[i].hp = user.hp;
-            akun[i].alamat = user.alamat;
-            break;
-        }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    document.getElementById('userNama').textContent = user.nama;
-    tampilkanToast('Data akun diperbarui!', 'success');
 }
 
 // ===== FUNGSI HAPUS AKUN (HANYA UNTUK SUPERADMIN & STAF ADMIN) =====
