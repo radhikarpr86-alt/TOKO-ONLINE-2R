@@ -948,7 +948,7 @@ function renderDashboardCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
-<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LENGKAP + renderProfil) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (PERBAIKAN SYNTAX) ===== -->
 <script>
 // ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE (KECUALI CUSTOMER) =====
 function renderProfil() {
@@ -956,12 +956,9 @@ function renderProfil() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
 
-    // Jika SuperAdmin, panggil fungsi khusus SuperAdmin
     if (role === 'superadmin') {
         renderProfilSuperAdmin(user);
-    } 
-    // Jika role lain (Toko, Ojek, Pedagang, dll), panggil fungsi umum
-    else {
+    } else {
         renderProfilUmum(user, role);
     }
 }
@@ -1001,7 +998,6 @@ function renderProfilCustomer() {
     
     contentArea.innerHTML = html;
     
-    // Event listener untuk upload KTP
     setTimeout(function() {
         var container = document.getElementById('uploadKtpContainerCustomer');
         var input = document.getElementById('inputKtpCustomer');
@@ -1012,7 +1008,6 @@ function renderProfilCustomer() {
     }, 300);
 }
 
-// Fungsi simpan rekening customer
 function simpanRekeningCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
@@ -1032,7 +1027,6 @@ function simpanRekeningCustomer() {
     tampilkanToast('Rekening disimpan!', 'success');
 }
 
-// Fungsi preview KTP customer
 function previewKTPCustomer(file) {
     if (!file) return;
     var reader = new FileReader();
@@ -1043,7 +1037,6 @@ function previewKTPCustomer(file) {
     reader.readAsDataURL(file);
 }
 
-// Fungsi simpan KTP customer
 function simpanKTPCustomer() {
     var ktp = localStorage.getItem('2r_ktp_temp_customer');
     if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
