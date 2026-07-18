@@ -950,7 +950,7 @@ function renderDashboardCustomer() {
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
-<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (15 FUNGSI) ===== -->
+<!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (16 FUNGSI LENGKAP) ===== -->
 <script>
 // ===== 1. PROFIL CUSTOMER (DENGAN REKENING) =====
 function renderProfilCustomer() {
@@ -998,7 +998,7 @@ function renderProfilCustomer() {
     }, 300);
 }
 
-// Fungsi simpan rekening customer (BARU)
+// Fungsi simpan rekening customer
 function simpanRekeningCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
@@ -1018,7 +1018,7 @@ function simpanRekeningCustomer() {
     tampilkanToast('Rekening disimpan!', 'success');
 }
 
-// Fungsi preview dan simpan KTP customer (sudah ada, tetap sama)
+// Fungsi preview KTP customer
 function previewKTPCustomer(file) {
     if (!file) return;
     var reader = new FileReader();
@@ -1029,6 +1029,7 @@ function previewKTPCustomer(file) {
     reader.readAsDataURL(file);
 }
 
+// Fungsi simpan KTP customer
 function simpanKTPCustomer() {
     var ktp = localStorage.getItem('2r_ktp_temp_customer');
     if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
@@ -1042,6 +1043,15 @@ function simpanKTPCustomer() {
     simpanDataAkun(akun);
     localStorage.removeItem('2r_ktp_temp_customer');
     tampilkanToast('KTP disimpan!', 'success');
+}
+
+// ===== 2. LIHAT TOKO TERDEKAT (YANG HILANG SEBELUMNYA) =====
+function renderLihatTokoTerdekat() {
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
+    html += '<div class="page-header"><h2>Lihat Toko Terdekat</h2><p>Daftar toko berdasarkan jarak dari lokasi Anda.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-store"></i><h3>Belum ada data toko</h3><p>Fitur ini akan menampilkan toko di sekitar Anda.</p></div></div>';
+    contentArea.innerHTML = html;
 }
 
 // ===== 3. LIHAT OJEK TERDEKAT =====
