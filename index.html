@@ -1494,7 +1494,7 @@ function renderNotifikasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 15. EDIT / HAPUS AKUN (HAK AKSES BERBEDA) =====
+// ===== 15. EDIT / HAPUS AKUN (DENGAN TOMBOL AJUKAN PENGHAPUSAN) =====
 function renderEditAkun() {
     var role = localStorage.getItem('2r_user_role');
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -1508,6 +1508,7 @@ function renderEditAkun() {
     }
     html += '</p></div>';
     
+    // Edit Data Akun (data otomatis terisi dari localStorage)
     html += '<div class="card"><div class="card-header">Edit Data Akun</div>';
     html += '<div class="form-group"><label>Nama Lengkap</label><input type="text" id="editNama" class="form-input" value="' + (user.nama || '') + '"></div>';
     html += '<div class="form-group"><label>Email</label><input type="email" id="editEmail" class="form-input" value="' + (user.email || '') + '"></div>';
@@ -1515,12 +1516,13 @@ function renderEditAkun() {
     html += '<div class="form-group"><label>Alamat</label><input type="text" id="editAlamat" class="form-input" value="' + (user.alamat || '') + '"></div>';
     html += '<button class="btn btn-primary" onclick="simpanEditAkun()"><i class="fas fa-save"></i> Simpan Perubahan</button>';
     
-    // ===== TOMBOL HAPUS HANYA UNTUK SUPERADMIN DAN STAF ADMIN =====
+    // ===== TOMBOL HAPUS / AJUKAN =====
     if (role === 'superadmin' || role === 'staf_admin') {
         html += '<button class="btn btn-danger" style="margin-left:10px;" onclick="hapusAkunCustomer()"><i class="fas fa-trash"></i> Hapus Akun</button>';
     } else {
+        html += '<button class="btn btn-warning" style="margin-left:10px;" onclick="ajukanPenghapusanAkun()"><i class="fas fa-paper-plane"></i> Ajukan Penghapusan Akun</button>';
         html += '<div style="margin-top:15px; padding:10px; background:#fff3cd; border:1px solid #ffc107; border-radius:6px; color:#856404;">';
-        html += '<i class="fas fa-info-circle"></i> Penghapusan akun hanya dapat dilakukan oleh SuperAdmin atau Staf Admin. Silakan hubungi admin untuk pengajuan penghapusan.';
+        html += '<i class="fas fa-info-circle"></i> Pengajuan akan dikirim ke SuperAdmin / Staf Admin untuk diproses.';
         html += '</div>';
     }
     html += '</div>';
@@ -1572,6 +1574,31 @@ function hapusAkunCustomer() {
     localStorage.removeItem('2r_user_role');
     tampilkanToast('Akun dihapus!', 'success');
     setTimeout(function() { location.reload(); }, 1000);
+}
+
+// ===== FUNGSI AJUKAN PENGHAPUSAN AKUN (UNTUK CUSTOMER) =====
+function ajukanPenghapusanAkun() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    if (!user) {
+        tampilkanToast('Data akun tidak ditemukan!', 'error');
+        return;
+    }
+    if (!confirm('Apakah Anda yakin ingin mengajukan penghapusan akun ini? Pengajuan akan dikirim ke SuperAdmin / Staf Admin.')) return;
+    
+    // Simpan pengajuan ke localStorage (sebagai notifikasi untuk admin)
+    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    pengajuan.push({
+        id: Date.now(),
+        userId: user.id,
+        username: user.username,
+        nama: user.nama,
+        alasan: 'Pengajuan penghapusan akun oleh user',
+        status: 'MENUNGGU',
+        diajukanPada: new Date().toISOString()
+    });
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+    
+    tampilkanToast('Pengajuan penghapusan akun telah dikirim ke admin!', 'success');
 }
 </script>
 <!-- ===== AKHIR BLOK 6 (7) ===== -->
