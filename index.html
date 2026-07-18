@@ -1617,6 +1617,11 @@ function prosesDaftarAkun() {
 <script>
 // ===== RENDER HALAMAN PERSETUJUAN AKUN =====
 function renderPersetujuanAkun() {
+    var contentArea = document.getElementById('mainContent');
+    if (!contentArea) {
+        return;
+    }
+
     var akun = getDataAkun();
     var daftar = [];
     for (var i = 0; i < akun.length; i++) {
@@ -1624,27 +1629,22 @@ function renderPersetujuanAkun() {
             daftar.push(akun[i]);
         }
     }
-    var contentArea = document.getElementById('mainContent');
-    var html = '<div class="page-header"><h2>Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan.</p></div>';
+
+    var html = '';
+    html += '<div class="page-header"><h2>Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan.</p></div>';
     html += '<div class="card"><div class="card-header"><span>Daftar Permintaan</span><span>Total: ' + daftar.length + ' akun</span></div>';
+
     if (daftar.length === 0) {
         html += '<div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Tidak ada akun menunggu</h3></div>';
     } else {
         html += '<div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
         for (var i = 0; i < daftar.length; i++) {
             var a = daftar[i];
-            var badge = '';
-            var statusText = '';
-            if (a.status === 'AKTIF') {
-                badge = 'badge-success';
-                statusText = 'AKTIF';
-            } else {
-                badge = 'badge-warning';
-                statusText = 'Menunggu';
-            }
+            var badge = a.status === 'AKTIF' ? 'badge-success' : 'badge-warning';
+            var statusText = a.status === 'AKTIF' ? 'AKTIF' : 'Menunggu';
             html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td>';
             if (a.status !== 'AKTIF') {
-                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + a.id + '\')" style="margin-right:5px;">Setujui</button>';
+                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + a.id + '\')">Setujui</button>';
                 html += '<button class="btn btn-danger btn-xs" onclick="bukaTolakAkun(\'' + a.id + '\')">Tolak</button>';
             } else {
                 html += '<span style="color:#888;">Sudah Aktif</span>';
@@ -1725,31 +1725,19 @@ function renderKelolaAkun() {
         html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
         for (var i = 0; i < daftar.length; i++) {
             var a = daftar[i];
-            var badge = '';
-            var statusText = '';
-            if (a.status === 'AKTIF') {
-                badge = 'badge-success';
-                statusText = 'AKTIF';
-            } else if (a.status === 'NONAKTIF (Menunggu Verifikasi)') {
-                badge = 'badge-warning';
-                statusText = 'Menunggu';
-            } else {
-                badge = 'badge-danger';
-                statusText = 'Nonaktif';
-            }
+            var badge = a.status === 'AKTIF' ? 'badge-success' :
+                        (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'badge-warning' : 'badge-danger');
+            var statusText = a.status === 'AKTIF' ? 'AKTIF' :
+                            (a.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'Menunggu' : 'Nonaktif');
             html += '<tr><td>' + (i+1) + '</td><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td><div style="display:flex;gap:5px;">';
             if (a.status !== 'AKTIF') {
                 html += '<button class="btn btn-success btn-xs" onclick="aktifkanAkun(\'' + a.id + '\')">Aktifkan</button>';
             } else {
                 html += '<button class="btn btn-warning btn-xs" onclick="nonaktifkanAkun(\'' + a.id + '\')">Nonaktifkan</button>';
             }
-            
-            // ===== TOMBOL HAPUS / AJUKAN HAPUS =====
             if (role === 'superadmin') {
-                // SuperAdmin bisa hapus langsung
                 html += '<button class="btn btn-danger btn-xs" onclick="hapusAkun(\'' + a.id + '\')">Hapus</button>';
             } else if (role === 'staf_admin') {
-                // Staf Admin hanya bisa mengajukan penghapusan ke SuperAdmin
                 html += '<button class="btn btn-danger btn-xs" style="background:#FF9800;" onclick="ajukanHapusAkunStaf(\'' + a.id + '\')">Ajukan Hapus</button>';
             }
             html += '</div></td></tr>';
@@ -1851,7 +1839,6 @@ function ajukanHapusAkunStaf(id) {
         tampilkanToast('Akun tidak ditemukan!', 'error');
         return;
     }
-    
     var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
     pengajuan.push({
         id: Date.now(),
