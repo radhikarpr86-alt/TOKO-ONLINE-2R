@@ -1613,8 +1613,90 @@ function prosesDaftarAkun() {
 </script>
 <!-- ===== AKHIR BLOK 6 (10) ===== -->
 
-<!-- ===== BLOK 6 (11) - 11 RENDER PERSETUJUAN & KELOLA AKUN (DENGAN SISTEM PENGAJUAN HAPUS) ===== -->
+<!-- ===== BLOK 6 (11) - 11 RENDER PERSETUJUAN & KELOLA AKUN (FINAL) ===== -->
 <script>
+// ===== RENDER HALAMAN PERSETUJUAN AKUN =====
+function renderPersetujuanAkun() {
+    var akun = getDataAkun();
+    var daftar = [];
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].role !== 'superadmin' && akun[i].role !== 'customer') {
+            daftar.push(akun[i]);
+        }
+    }
+    var contentArea = document.getElementById('mainContent');
+    var html = '<div class="page-header"><h2>Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan.</p></div>';
+    html += '<div class="card"><div class="card-header"><span>Daftar Permintaan</span><span>Total: ' + daftar.length + ' akun</span></div>';
+    if (daftar.length === 0) {
+        html += '<div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Tidak ada akun menunggu</h3></div>';
+    } else {
+        html += '<div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+        for (var i = 0; i < daftar.length; i++) {
+            var a = daftar[i];
+            var badge = '';
+            var statusText = '';
+            if (a.status === 'AKTIF') {
+                badge = 'badge-success';
+                statusText = 'AKTIF';
+            } else {
+                badge = 'badge-warning';
+                statusText = 'Menunggu';
+            }
+            html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td>';
+            if (a.status !== 'AKTIF') {
+                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + a.id + '\')" style="margin-right:5px;">Setujui</button>';
+                html += '<button class="btn btn-danger btn-xs" onclick="bukaTolakAkun(\'' + a.id + '\')">Tolak</button>';
+            } else {
+                html += '<span style="color:#888;">Sudah Aktif</span>';
+            }
+            html += '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    html += '</div>';
+    contentArea.innerHTML = html;
+}
+
+// ===== FUNGSI SETUJUI AKUN =====
+function setujuiAkun(id) {
+    if (!confirm('Setujui akun ini?')) {
+        return;
+    }
+    var akun = getDataAkun();
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === id) {
+            akun[i].status = 'AKTIF';
+            break;
+        }
+    }
+    simpanDataAkun(akun);
+    renderPersetujuanAkun();
+    tampilkanToast('Akun diaktifkan!', 'success');
+}
+
+// ===== FUNGSI BUKA TOLAK AKUN =====
+function bukaTolakAkun(id) {
+    document.getElementById('tolakIdAkun').value = id;
+    bukaModal('modalTolakAkun');
+}
+
+// ===== FUNGSI EKSEKUSI TOLAK AKUN =====
+function eksekusiTolakAkun() {
+    var id = document.getElementById('tolakIdAkun').value;
+    var akun = getDataAkun();
+    var akunBaru = [];
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id !== id) {
+            akunBaru.push(akun[i]);
+        }
+    }
+    simpanDataAkun(akunBaru);
+    tutupModal('modalTolakAkun');
+    renderPersetujuanAkun();
+    tampilkanToast('Akun ditolak!', 'success');
+}
+
+// ===== RENDER HALAMAN KELOLA SEMUA AKUN =====
 function renderKelolaAkun() {
     var role = localStorage.getItem('2r_user_role');
     if (role !== 'superadmin' && role !== 'staf_admin') {
@@ -1785,86 +1867,8 @@ function ajukanHapusAkunStaf(id) {
     renderKelolaAkun();
     tampilkanToast('Pengajuan penghapusan akun telah dikirim ke SuperAdmin!', 'success');
 }
-
-// ===== FUNGSI PERSETUJUAN AKUN (TIDAK BERUBAH) =====
-function renderPersetujuanAkun() {
-    var akun = getDataAkun();
-    var daftar = [];
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].role !== 'superadmin' && akun[i].role !== 'customer') {
-            daftar.push(akun[i]);
-        }
-    }
-    var contentArea = document.getElementById('mainContent');
-    var html = '<div class="page-header"><h2>Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan.</p></div>';
-    html += '<div class="card"><div class="card-header"><span>Daftar Permintaan</span><span>Total: ' + daftar.length + ' akun</span></div>';
-    if (daftar.length === 0) {
-        html += '<div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Tidak ada akun menunggu</h3></div>';
-    } else {
-        html += '<div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
-        for (var i = 0; i < daftar.length; i++) {
-            var a = daftar[i];
-            var badge = '';
-            var statusText = '';
-            if (a.status === 'AKTIF') {
-                badge = 'badge-success';
-                statusText = 'AKTIF';
-            } else {
-                badge = 'badge-warning';
-                statusText = 'Menunggu';
-            }
-            html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusText + '</span></td><td>';
-            if (a.status !== 'AKTIF') {
-                html += '<button class="btn btn-success btn-xs" onclick="setujuiAkun(\'' + a.id + '\')" style="margin-right:5px;">Setujui</button><button class="btn btn-danger btn-xs" onclick="bukaTolakAkun(\'' + a.id + '\')">Tolak</button>';
-            } else {
-                html += '<span style="color:#888;">Sudah Aktif</span>';
-            }
-            html += '</td></tr>';
-        }
-        html += '</tbody></table></div>';
-    }
-    html += '</div>';
-    contentArea.innerHTML = html;
-}
-
-// ===== FUNGSI SETUJUI AKUN =====
-function setujuiAkun(id) {
-    var akun = getDataAkun();
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === id) {
-            akun[i].status = 'AKTIF';
-            break;
-        }
-    }
-    simpanDataAkun(akun);
-    renderPersetujuanAkun();
-    tampilkanToast('Akun diaktifkan!', 'success');
-}
-
-// ===== FUNGSI BUKA TOLAK AKUN =====
-function bukaTolakAkun(id) {
-    document.getElementById('tolakIdAkun').value = id;
-    bukaModal('modalTolakAkun');
-}
-
-// ===== FUNGSI EKSEKUSI TOLAK AKUN =====
-function eksekusiTolakAkun() {
-    var id = document.getElementById('tolakIdAkun').value;
-    var akun = getDataAkun();
-    var akunBaru = [];
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id !== id) {
-            akunBaru.push(akun[i]);
-        }
-    }
-    simpanDataAkun(akunBaru);
-    tutupModal('modalTolakAkun');
-    renderPersetujuanAkun();
-    tampilkanToast('Akun ditolak!', 'success');
-}
 </script>
 <!-- ===== AKHIR BLOK 6 (11) ===== -->
-
 <!-- ===== BLOK 6 (12) - 12 RENDER SETTING REKENING ===== -->
 <script>
 function renderSettingRekening() {
