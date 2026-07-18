@@ -782,39 +782,32 @@ function renderDashboard() {
         html += '</tbody></table></div></div>';
     }
 
-    // ===== TOKO =====
+        // ===== TOKO =====
     else if (role === 'toko' || role === 'staf_owner_toko') {
-        html += '<div class="page-header">';
-        html += '<h2>Dasbor Toko</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
-        html += '</div>';
+        html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">0</div><div class="widget-label">Total Produk</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div><div class="widget-number">0</div><div class="widget-label">Pesanan Baru</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
         html += '</div>';
+        html += renderIklanDiDashboard();
     }
 
-    // ===== OJEK =====
+        // ===== OJEK =====
     else if (role === 'ojek' || role === 'staf_owner_ojek') {
-        html += '<div class="page-header">';
-        html += '<h2>Dasbor Ojek</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
-        html += '</div>';
+        html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-motorcycle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Aktif</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Selesai</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
         html += '</div>';
+        html += renderIklanDiDashboard();
     }
-
-    // ===== PEDAGANG PASAR =====
+        // ===== PEDAGANG PASAR =====
     else if (role === 'pedagang') {
-        html += '<div class="page-header">';
-        html += '<h2>Dasbor Pedagang Pasar</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
-        html += '</div>';
+        html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
         html += '<div class="card"><p>Selamat bergabung di Toko Online 2R! Lengkapi profil Anda.</p><button class="btn btn-primary mt-10" onclick="navigasiKeHalaman(\'profile\')">Lengkapi Profil</button></div>';
+        html += renderIklanDiDashboard();
     }
 
     // ===== STAF ADMIN =====
@@ -873,8 +866,32 @@ function renderDashboard() {
 </script>
 <!-- ===== AKHIR BLOK 6 (5) ===== -->
 
-<!-- ===== BLOK 6 (6) - 06 RENDER DASHBOARD CUSTOMER (BARU) ===== -->
+<!-- ===== BLOK 6 (6) - 06 RENDER DASHBOARD CUSTOMER (LENGKAP + IKLAN TANPA BATAS) ===== -->
 <script>
+// ===== FUNGSI TAMPILKAN SEMUA IKLAN DI DASHBOARD (TANPA BATAS) =====
+function renderIklanDiDashboard() {
+    var iklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    var html = '';
+    if (iklan.length === 0) {
+        html += '<div class="card"><div class="card-header">Iklan Sponsor</div>';
+        html += '<div class="empty-state" style="padding:10px;"><p style="color:#888;">Belum ada iklan</p></div></div>';
+        return html;
+    }
+    html += '<div class="card"><div class="card-header">Iklan Sponsor</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;">';
+    for (var i = 0; i < iklan.length; i++) {
+        var d = iklan[i];
+        html += '<div style="background:' + (d.warna || '#FF6B00') + ';color:white;border-radius:10px;padding:20px;text-align:center;">';
+        html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
+        html += '<h4 style="font-size:14px;">' + d.judul + '</h4>';
+        html += '<p style="font-size:12px;opacity:0.9;">' + d.deskripsi + '</p>';
+        html += '</div>';
+    }
+    html += '</div></div>';
+    return html;
+}
+
+// ===== RENDER DASHBOARD CUSTOMER =====
 function renderDashboardCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
@@ -907,35 +924,10 @@ function renderDashboardCustomer() {
     html += '</div>';
     html += '</div>';
 
-    // ===== 3 IKLAN SPONSOR (di atas dasbor) =====
-    html += '<div class="card">';
-    html += '<div class="card-header">Iklan Sponsor</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">';
+    // ===== IKLAN SPONSOR (SEMUA IKLAN TANPA BATAS) =====
+    html += renderIklanDiDashboard();
 
-    // Iklan 1
-    html += '<div style="background:linear-gradient(135deg,#FF6B00,#FF9800);color:white;border-radius:10px;padding:20px;text-align:center;">';
-    html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
-    html += '<h4 style="font-size:14px;">Iklan Sponsor 1</h4>';
-    html += '<p style="font-size:12px;opacity:0.8;">Promo Menarik</p>';
-    html += '</div>';
-
-    // Iklan 2
-    html += '<div style="background:linear-gradient(135deg,#2196F3,#00BCD4);color:white;border-radius:10px;padding:20px;text-align:center;">';
-    html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
-    html += '<h4 style="font-size:14px;">Iklan Sponsor 2</h4>';
-    html += '<p style="font-size:12px;opacity:0.8;">Diskon Spesial</p>';
-    html += '</div>';
-
-    // Iklan 3
-    html += '<div style="background:linear-gradient(135deg,#4CAF50,#8BC34A);color:white;border-radius:10px;padding:20px;text-align:center;">';
-    html += '<i class="fas fa-ad" style="font-size:40px;margin-bottom:10px;display:block;"></i>';
-    html += '<h4 style="font-size:14px;">Iklan Sponsor 3</h4>';
-    html += '<p style="font-size:12px;opacity:0.8;">Cashback Terbaik</p>';
-    html += '</div>';
-
-    html += '</div></div>';
-
-    // ===== AKTIVITAS TERBARU (opsional, untuk mempercantik) =====
+    // ===== AKTIVITAS TERBARU =====
     html += '<div class="card">';
     html += '<div class="card-header">Aktivitas Terbaru</div>';
     html += '<div class="empty-state" style="padding:15px;">';
@@ -943,7 +935,7 @@ function renderDashboardCustomer() {
     html += '</div>';
     html += '</div>';
 
-    // ===== TAMPILKAN =====
+    // ===== TAMPILKAN KE HALAMAN =====
     contentArea.innerHTML = html;
 }
 </script>
