@@ -967,7 +967,7 @@ function renderProfil() {
     }
 }
 
-// ===== 1. PROFIL CUSTOMER (ALAMAT LENGKAP: DESA, KECAMATAN, KABUPATEN, KODEPOS) =====
+// ===== 1. PROFIL CUSTOMER (2 ALAMAT LENGKAP: DUSUN, RT, RW, JALAN, DESA, KECAMATAN, KABUPATEN, PROVINSI, KODEPOS) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
@@ -981,15 +981,33 @@ function renderProfilCustomer() {
     html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
     html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.hp || '') + '"></div></div></div>';
     
-    // ===== ALAMAT LENGKAP (DESA, KECAMATAN, KABUPATEN, KODEPOS) =====
-    html += '<div class="card"><div class="card-header">Alamat Lengkap <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    // ===== ALAMAT SESUAI KTP (LENGKAP) =====
+    html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
     html += '<div class="grid-2">';
-    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="editDesaCustomer" class="form-input" value="' + (user.alamatDesa || '') + '" placeholder="Contoh: Kelurahan Merdeka"></div>';
-    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="editKecamatanCustomer" class="form-input" value="' + (user.alamatKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
-    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="editKabupatenCustomer" class="form-input" value="' + (user.alamatKabupaten || '') + '" placeholder="Contoh: Kabupaten Tangerang atau Kota Jakarta"></div>';
-    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="editKodeposCustomer" class="form-input" value="' + (user.alamatKodepos || '') + '" placeholder="Contoh: 15111"></div>';
-    html += '</div>';
-    html += '</div>';
+    html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+    html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
+    html += '<div><label class="form-label">RW</label><input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
+    html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="ktpDesa" class="form-input" value="' + (user.ktpDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="ktpKecamatan" class="form-input" value="' + (user.ktpKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="ktpKabupaten" class="form-input" value="' + (user.ktpKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+    html += '<div><label class="form-label">Provinsi</label><input type="text" id="ktpProvinsi" class="form-input" value="' + (user.ktpProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+    html += '</div></div>';
+    
+    // ===== ALAMAT DOMISILI / SEKARANG (LENGKAP) =====
+    html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="btn btn-primary btn-sm" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+    html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
+    html += '<div><label class="form-label">RW</label><input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
+    html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+    html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="domDesa" class="form-input" value="' + (user.domDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="domKecamatan" class="form-input" value="' + (user.domKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="domKabupaten" class="form-input" value="' + (user.domKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+    html += '<div><label class="form-label">Provinsi</label><input type="text" id="domProvinsi" class="form-input" value="' + (user.domProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+    html += '</div></div>';
     
     // Data Rekening
     html += '<div class="card"><div class="card-header">Data Rekening <button class="btn btn-primary btn-sm" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
@@ -1020,37 +1038,96 @@ function renderProfilCustomer() {
     }, 300);
 }
 
-// ===== FUNGSI SIMPAN PROFIL CUSTOMER (DENGAN ALAMAT LENGKAP) =====
+// ===== FUNGSI SIMPAN PROFIL CUSTOMER (2 ALAMAT LENGKAP) =====
 function simpanProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user'));
     var akun = getDataAkun();
+    
+    // Data registrasi
     user.nama = document.getElementById('editNamaCustomer').value;
     user.email = document.getElementById('editEmailCustomer').value;
     user.hp = document.getElementById('editHpCustomer').value;
     
-    // Simpan alamat lengkap
-    user.alamatDesa = document.getElementById('editDesaCustomer').value;
-    user.alamatKecamatan = document.getElementById('editKecamatanCustomer').value;
-    user.alamatKabupaten = document.getElementById('editKabupatenCustomer').value;
-    user.alamatKodepos = document.getElementById('editKodeposCustomer').value;
+    // Alamat KTP
+    user.ktpDusun = document.getElementById('ktpDusun').value;
+    user.ktpRT = document.getElementById('ktpRT').value;
+    user.ktpRW = document.getElementById('ktpRW').value;
+    user.ktpJalan = document.getElementById('ktpJalan').value;
+    user.ktpDesa = document.getElementById('ktpDesa').value;
+    user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
+    user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
+    user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
+    user.ktpKodepos = document.getElementById('ktpKodepos').value;
     
-    // Gabungkan menjadi alamat lengkap untuk kompatibilitas
-    var alamatLengkap = '';
-    if (user.alamatDesa) alamatLengkap += user.alamatDesa + ', ';
-    if (user.alamatKecamatan) alamatLengkap += user.alamatKecamatan + ', ';
-    if (user.alamatKabupaten) alamatLengkap += user.alamatKabupaten + ', ';
-    if (user.alamatKodepos) alamatLengkap += user.alamatKodepos;
-    user.alamat = alamatLengkap;
+    // Alamat Domisili
+    user.domDusun = document.getElementById('domDusun').value;
+    user.domRT = document.getElementById('domRT').value;
+    user.domRW = document.getElementById('domRW').value;
+    user.domJalan = document.getElementById('domJalan').value;
+    user.domDesa = document.getElementById('domDesa').value;
+    user.domKecamatan = document.getElementById('domKecamatan').value;
+    user.domKabupaten = document.getElementById('domKabupaten').value;
+    user.domProvinsi = document.getElementById('domProvinsi').value;
+    user.domKodepos = document.getElementById('domKodepos').value;
+    
+    // Gabungkan jadi alamat lengkap (untuk kompatibilitas)
+    var gabungKTP = '';
+    if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
+    if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
+    if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
+    if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
+    if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
+    if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
+    if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
+    if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
+    if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
+    user.alamatKTP = gabungKTP;
+    
+    var gabungDom = '';
+    if (user.domDusun) gabungDom += user.domDusun + ', ';
+    if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
+    if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
+    if (user.domJalan) gabungDom += user.domJalan + ', ';
+    if (user.domDesa) gabungDom += user.domDesa + ', ';
+    if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
+    if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
+    if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
+    if (user.domKodepos) gabungDom += user.domKodepos;
+    user.alamatDomisili = gabungDom;
+    
+    // Untuk kompatibilitas
+    user.alamat = user.alamatDomisili || user.alamatKTP;
     
     for (var i = 0; i < akun.length; i++) {
         if (akun[i].id === user.id) {
             akun[i].nama = user.nama;
             akun[i].email = user.email;
             akun[i].hp = user.hp;
-            akun[i].alamatDesa = user.alamatDesa;
-            akun[i].alamatKecamatan = user.alamatKecamatan;
-            akun[i].alamatKabupaten = user.alamatKabupaten;
-            akun[i].alamatKodepos = user.alamatKodepos;
+            
+            // Simpan alamat KTP
+            akun[i].ktpDusun = user.ktpDusun;
+            akun[i].ktpRT = user.ktpRT;
+            akun[i].ktpRW = user.ktpRW;
+            akun[i].ktpJalan = user.ktpJalan;
+            akun[i].ktpDesa = user.ktpDesa;
+            akun[i].ktpKecamatan = user.ktpKecamatan;
+            akun[i].ktpKabupaten = user.ktpKabupaten;
+            akun[i].ktpProvinsi = user.ktpProvinsi;
+            akun[i].ktpKodepos = user.ktpKodepos;
+            akun[i].alamatKTP = user.alamatKTP;
+            
+            // Simpan alamat domisili
+            akun[i].domDusun = user.domDusun;
+            akun[i].domRT = user.domRT;
+            akun[i].domRW = user.domRW;
+            akun[i].domJalan = user.domJalan;
+            akun[i].domDesa = user.domDesa;
+            akun[i].domKecamatan = user.domKecamatan;
+            akun[i].domKabupaten = user.domKabupaten;
+            akun[i].domProvinsi = user.domProvinsi;
+            akun[i].domKodepos = user.domKodepos;
+            akun[i].alamatDomisili = user.alamatDomisili;
+            
             akun[i].alamat = user.alamat;
             break;
         }
@@ -1059,53 +1136,6 @@ function simpanProfilCustomer() {
     simpanDataAkun(akun);
     document.getElementById('userNama').textContent = user.nama;
     tampilkanToast('Profil berhasil disimpan!', 'success');
-}
-
-// ===== FUNGSI SIMPAN REKENING CUSTOMER =====
-function simpanRekeningCustomer() {
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.bank = document.getElementById('profilBankCustomer').value;
-    user.rekening = document.getElementById('profilRekeningCustomer').value;
-    user.pemilikRek = document.getElementById('profilPemilikRekCustomer').value;
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) {
-            akun[i].bank = user.bank;
-            akun[i].rekening = user.rekening;
-            akun[i].pemilikRek = user.pemilikRek;
-            break;
-        }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    tampilkanToast('Rekening disimpan!', 'success');
-}
-
-// ===== FUNGSI PREVIEW KTP CUSTOMER =====
-function previewKTPCustomer(file) {
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('ktpPreviewCustomer').innerHTML = '<img src="' + e.target.result + '" class="preview-img">';
-        localStorage.setItem('2r_ktp_temp_customer', e.target.result);
-    };
-    reader.readAsDataURL(file);
-}
-
-// ===== FUNGSI SIMPAN KTP CUSTOMER =====
-function simpanKTPCustomer() {
-    var ktp = localStorage.getItem('2r_ktp_temp_customer');
-    if (!ktp) { tampilkanToast('Upload KTP dulu!', 'warning'); return; }
-    var user = JSON.parse(localStorage.getItem('2r_user'));
-    var akun = getDataAkun();
-    user.ktp = ktp;
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id === user.id) { akun[i].ktp = ktp; break; }
-    }
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    simpanDataAkun(akun);
-    localStorage.removeItem('2r_ktp_temp_customer');
-    tampilkanToast('KTP disimpan!', 'success');
 }
 
 // ===== 2. LIHAT TOKO TERDEKAT =====
