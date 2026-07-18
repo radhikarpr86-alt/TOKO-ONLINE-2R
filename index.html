@@ -448,7 +448,7 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // ===== CUSTOMER BARU (16 MENU) =====
+                // ===== CUSTOMER BARU (16 MENU) =====
         'customer': [
             {
                 judul: 'Menu Belanja',
@@ -952,18 +952,29 @@ function renderDashboardCustomer() {
 <!-- ===== AKHIR BLOK 6 (6) ===== -->
 <!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (15 FUNGSI) ===== -->
 <script>
-// ===== 1. PROFIL CUSTOMER =====
+// ===== 1. PROFIL CUSTOMER (DENGAN REKENING) =====
 function renderProfilCustomer() {
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
     var html = '';
-    html += '<div class="page-header"><h2>Profil Customer</h2><p>Data registrasi dan dokumen Anda.</p></div>';
+    html += '<div class="page-header"><h2>Profil Customer</h2><p>Data registrasi, rekening, dan dokumen Anda.</p></div>';
+    
+    // Data Registrasi
     html += '<div class="card"><div class="card-header">Data Registrasi</div>';
     html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" value="' + (user.nama || '') + '" disabled></div>';
     html += '<div><label class="form-label">Username</label><input type="text" class="form-input" value="' + (user.username || '') + '" disabled></div>';
     html += '<div><label class="form-label">Email</label><input type="text" class="form-input" value="' + (user.email || '') + '" disabled></div>';
     html += '<div><label class="form-label">Nomor HP</label><input type="text" class="form-input" value="' + (user.hp || '') + '" disabled></div>';
     html += '<div><label class="form-label">Alamat</label><input type="text" class="form-input" value="' + (user.alamat || '') + '" disabled></div></div></div>';
+    
+    // Data Rekening (BARU)
+    html += '<div class="card"><div class="card-header">Data Rekening</div>';
+    html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.bank || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.rekening || '') + '"></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRek || '') + '"></div></div>';
+    html += '<button class="btn btn-primary mt-10" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
+    
+    // Dokumen KTP
     html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
     html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
     if (user.ktp) {
@@ -973,7 +984,10 @@ function renderProfilCustomer() {
     }
     html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
     html += '<button class="btn btn-primary mt-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+    
     contentArea.innerHTML = html;
+    
+    // Event listener untuk upload KTP
     setTimeout(function() {
         var container = document.getElementById('uploadKtpContainerCustomer');
         var input = document.getElementById('inputKtpCustomer');
@@ -984,6 +998,27 @@ function renderProfilCustomer() {
     }, 300);
 }
 
+// Fungsi simpan rekening customer (BARU)
+function simpanRekeningCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var akun = getDataAkun();
+    user.bank = document.getElementById('profilBankCustomer').value;
+    user.rekening = document.getElementById('profilRekeningCustomer').value;
+    user.pemilikRek = document.getElementById('profilPemilikRekCustomer').value;
+    for (var i = 0; i < akun.length; i++) {
+        if (akun[i].id === user.id) {
+            akun[i].bank = user.bank;
+            akun[i].rekening = user.rekening;
+            akun[i].pemilikRek = user.pemilikRek;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(akun);
+    tampilkanToast('Rekening disimpan!', 'success');
+}
+
+// Fungsi preview dan simpan KTP customer (sudah ada, tetap sama)
 function previewKTPCustomer(file) {
     if (!file) return;
     var reader = new FileReader();
@@ -1007,15 +1042,6 @@ function simpanKTPCustomer() {
     simpanDataAkun(akun);
     localStorage.removeItem('2r_ktp_temp_customer');
     tampilkanToast('KTP disimpan!', 'success');
-}
-
-// ===== 2. LIHAT TOKO TERDEKAT =====
-function renderLihatTokoTerdekat() {
-    var contentArea = document.getElementById('mainContent');
-    var html = '';
-    html += '<div class="page-header"><h2>Lihat Toko Terdekat</h2><p>Daftar toko berdasarkan jarak dari lokasi Anda.</p></div>';
-    html += '<div class="card"><div class="empty-state"><i class="fas fa-store"></i><h3>Belum ada data toko</h3><p>Fitur ini akan menampilkan toko di sekitar Anda.</p></div></div>';
-    contentArea.innerHTML = html;
 }
 
 // ===== 3. LIHAT OJEK TERDEKAT =====
