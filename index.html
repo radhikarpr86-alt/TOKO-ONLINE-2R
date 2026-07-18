@@ -1252,18 +1252,21 @@ function hapusAkunCustomer() {
 
 <!-- ===== BLOK 6 (8) - 08 FUNGSI PROFIL SUPERADMIN (PERBAIKAN) ===== -->
 <script>
-// ===== FUNGSI RENDER PROFIL SUPERADMIN (PERBAIKAN) =====
-function renderProfilSuperAdmin(user) {
+// ===== FUNGSI RENDER PROFIL UNTUK SEMUA ROLE (KECUALI CUSTOMER) =====
+function renderProfil() {
+    var role = localStorage.getItem('2r_user_role');
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var contentArea = document.getElementById('mainContent');
-    if (!contentArea) {
-        console.error('mainContent tidak ditemukan!');
-        return;
+
+    // Jika SuperAdmin, panggil fungsi khusus SuperAdmin
+    if (role === 'superadmin') {
+        renderProfilSuperAdmin(user);
+    } 
+    // Jika role lain (Toko, Ojek, Pedagang, dll), panggil fungsi umum
+    else {
+        renderProfilUmum(user, role);
     }
-    
-    // Jika user tidak dikirim, ambil dari localStorage
-    if (!user) {
-        user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-    }
+}
 
     var html = '';
     html += '<div class="page-header">';
