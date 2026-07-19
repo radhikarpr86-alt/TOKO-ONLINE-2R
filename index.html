@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Multi Role - Toko Online 2R</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <!-- ===== BLOK 1 (1) - 01 HEADER & META ===== -->
 <!-- ===== AKHIR BLOK 1 (1) ===== -->
 
@@ -120,6 +111,70 @@
     .preview-img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; object-fit: contain; }
 </style>
 <!-- ===== AKHIR BLOK 1 (7) ===== -->
+
+<!-- ===== BLOK 1 (8) - 08 CSS RESPONSIVE UNTUK HP, TABLET, PC ===== -->
+<style>
+    /* ===== TAMBAHAN RESPONSIVE UNTUK SEMUA PERANGKAT ===== */
+    
+    /* Tombol hamburger (default tersembunyi) */
+    #menuToggle { display: none; background: none; border: none; font-size: 22px; cursor: pointer; color: #FF6B00; }
+    
+    /* Overlay sidebar (default tersembunyi) */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; }
+    .sidebar-overlay.active { display: block; }
+
+    /* ===== TABLET (Lebar layar 768px sampai 1024px) ===== */
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .navbar { padding: 10px 20px; }
+        .navbar-brand { font-size: 18px; }
+        .sidebar { width: 220px; }
+        .content { margin-left: 220px; padding: 20px; }
+        .widget-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    }
+
+    /* ===== HP (Lebar layar kurang dari 768px) ===== */
+    @media (max-width: 767px) {
+        /* Navbar */
+        .navbar { padding: 10px 15px; }
+        .navbar-brand { font-size: 16px; gap: 8px; }
+        .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
+        .navbar-user span { font-size: 13px; }
+        .btn-logout { padding: 6px 12px; font-size: 12px; }
+
+        /* Tombol hamburger muncul */
+        #menuToggle { display: block; }
+
+        /* Sidebar disembunyikan ke kiri */
+        .sidebar { 
+            left: -100%; 
+            width: 80%; 
+            transition: left 0.3s ease; 
+            top: 60px; 
+            z-index: 999; 
+        }
+        .sidebar.open { left: 0; }
+
+        /* Konten utama full width */
+        .content { 
+            margin-left: 0; 
+            padding: 15px; 
+            margin-top: 60px; 
+        }
+
+        /* Widget dan grid menyesuaikan */
+        .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .widget-card .widget-number { font-size: 22px; }
+        .grid-2 { grid-template-columns: 1fr; }
+        .table { font-size: 12px; }
+        .modal { width: 95%; padding: 15px; }
+
+        /* Halaman login */
+        .auth-wrapper { padding: 10px; }
+        .auth-box { padding: 20px; }
+    }
+</style>
+<!-- ===== AKHIR BLOK 1 (8) ===== -->
 <!-- ===== BLOK 2 (1) - 01 TOAST CONTAINER ===== -->
 <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 2 (1) ===== -->
@@ -158,14 +213,27 @@
 <!-- ===== BLOK 4 (1) - 01 DASHBOARD UTAMA ===== -->
 <div id="pageDashboard" class="page-dashboard">
     <nav class="navbar">
-        <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+        <div class="navbar-brand">
+            <!-- ===== TAMBAHAN TOMBOL HAMBURGER ===== -->
+            <button id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- ===== AKHIR TAMBAHAN ===== -->
+            <i class="fas fa-store-alt"></i> Toko Online 2R
+        </div>
         <div class="navbar-user">
             <span class="role-badge" id="roleBadge">Role</span>
             <span id="userNama" style="font-weight:600;">User</span>
             <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         </div>
     </nav>
+    
     <aside class="sidebar" id="sidebarContainer"></aside>
+    
+    <!-- ===== TAMBAHAN OVERLAY SIDEBAR ===== -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <!-- ===== AKHIR TAMBAHAN ===== -->
+    
     <main class="content" id="mainContent"></main>
 </div>
 <!-- ===== AKHIR BLOK 4 (1) ===== -->
@@ -2487,6 +2555,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var user = JSON.parse(userData);
         tampilkanDashboard(user);
     }
+    
     document.getElementById('btnLogout').onclick = function() {
         if (confirm('Keluar dari aplikasi?')) {
             localStorage.removeItem('2r_user');
@@ -2494,6 +2563,7 @@ document.addEventListener('DOMContentLoaded', function() {
             location.reload();
         }
     };
+    
     var modals = document.querySelectorAll('.modal-overlay');
     for (var i = 0; i < modals.length; i++) {
         modals[i].onclick = function(e) {
@@ -2502,6 +2572,58 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
     }
+    
+    // ===== TAMBAHAN EVENT LISTENER UNTUK RESPONSIVE SIDEBAR =====
+    var menuToggle = document.getElementById('menuToggle');
+    var sidebar = document.querySelector('.sidebar');
+    var sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (menuToggle && sidebar && sidebarOverlay) {
+        // Fungsi membuka sidebar
+        function bukaSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('active');
+        }
+
+        // Fungsi menutup sidebar
+        function tutupSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+        }
+
+        // Saat tombol hamburger diklik
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) {
+                tutupSidebar();
+            } else {
+                bukaSidebar();
+            }
+        });
+
+        // Saat overlay diklik, sidebar menutup
+        sidebarOverlay.addEventListener('click', function() {
+            tutupSidebar();
+        });
+
+        // Saat menu sidebar diklik di HP, sidebar otomatis menutup
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 767) {
+                    tutupSidebar();
+                }
+            });
+        });
+
+        // Jika ukuran layar berubah dari HP ke PC, sidebar kembali terbuka
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 767) {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    }
+    // ===== AKHIR TAMBAHAN =====
 });
 </script>
 <!-- ===== AKHIR BLOK 6 (13) ===== -->
