@@ -1495,6 +1495,7 @@
                 {
                     judul: 'Menu Toko',
                     items: [
+                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
                         { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                         { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
@@ -1693,6 +1694,8 @@
             renderSettingRekening();
         } else if (namaHalaman === 'transferMenu') {
             renderTransferMenu();
+        } else if (namaHalaman === 'uploadProdukPublik') {
+            renderUploadProdukPublik();
         } else if (namaHalaman === 'belanja') {
             renderBelanja();
         } else if (namaHalaman === 'pesananSaya') {
