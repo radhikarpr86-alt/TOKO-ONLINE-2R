@@ -3208,12 +3208,11 @@
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
 	<!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
-    /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK ===== */
+        /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK (CARD VIEW) ===== */
     /*
         Fungsi ini menampilkan halaman Kelola Produk.
-        Halaman ini khusus untuk mengelola produk yang sudah ada.
-        Menampilkan tabel produk dengan kolom Tanggal Input dan Penginput.
-        Setiap produk memiliki tombol Edit dan Hapus.
+        Menampilkan produk dalam bentuk kartu (Card View).
+        Setiap kartu berisi Foto, Nama Produk, Harga, Stok, dan tombol Edit/Hapus.
     */
     function renderKelolaProduk() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -3234,32 +3233,49 @@
         } else {
             html += '<div class="card">';
             html += '<div class="card-header">Daftar Produk <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + produkSaya.length + ')</span></div>';
-            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Tanggal Input</th><th>Penginput</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
+            
+            // ===== MULAI GRID CARD VIEW =====
+            html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:20px; padding:5px;">';
+            
             for (var i = 0; i < produkSaya.length; i++) {
                 var p = produkSaya[i];
-                var statusKadaluarsa = 'badge-success';
-                var hariIni = new Date();
-                var tanggalKadaluarsa = new Date(p.tanggalKadaluarsa);
-                var selisihHari = Math.ceil((tanggalKadaluarsa - hariIni) / (1000 * 60 * 60 * 24));
-                if (selisihHari <= 30 && selisihHari >= 0) {
-                    statusKadaluarsa = 'badge-warning';
-                } else if (selisihHari < 0) {
-                    statusKadaluarsa = 'badge-danger';
+                
+                // Cek ada foto atau tidak
+                var fotoHtml = '';
+                if (p.fotoProduk && p.fotoProduk.length > 0) {
+                    fotoHtml = '<img src="' + p.fotoProduk[0] + '" style="width:100%; height:180px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
+                } else {
+                    fotoHtml = '<div style="width:100%; height:180px; background:#f0f0f0; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#aaa; margin-bottom:10px;"><i class="fas fa-image" style="font-size:40px;"></i></div>';
                 }
-                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + (p.tanggalInput || p.tanggalMasuk || '-') + '</td><td>' + (p.namaPenginput || '-') + '</td><td>' + p.totalTerjual + '</td><td>';
-                html += '<button class="button button-primary button-extra-small" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
-                html += '<button class="button button-danger button-extra-small" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
-                html += '</td></tr>';
+
+                html += '<div style="border:1px solid #eee; border-radius:10px; padding:15px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05); display:flex; flex-direction:column; justify-content:space-between;">';
+                
+                // Bagian Atas: Foto + Nama + Harga + Stok
+                html += '<div>';
+                html += fotoHtml;
+                html += '<h4 style="font-size:15px; font-weight:600; margin:0 0 5px 0; color:#333;">' + p.namaProduk + '</h4>';
+                html += '<p style="font-size:14px; font-weight:600; color:#FF6B00; margin:0 0 3px 0;">Rp ' + p.hargaJual + '</p>';
+                html += '<p style="font-size:13px; color:#888; margin:0;">Stok: ' + p.jumlahStok + ' ' + p.satuan + '</p>';
+                html += '</div>';
+                
+                // Bagian Bawah: Tombol Aksi
+                html += '<div style="display:flex; gap:8px; margin-top:15px; border-top:1px solid #f5f5f5; padding-top:12px;">';
+                html += '<button class="button button-primary button-small" style="flex:1;" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
+                html += '<button class="button button-danger button-small" style="flex:1;" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
+                html += '</div>';
+                
+                html += '</div>'; // End Card
             }
-            html += '</tbody></table></div>';
-            html += '</div>';
+            
+            html += '</div>'; // End Grid
+            // ===== AKHIR GRID CARD VIEW =====
+            
+            html += '</div>'; // End Card container
         }
 
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.10.16.1 ===== */
-</script>
-<!-- ===== AKHIR BLOK 3.10.16 ===== -->
 <!-- ===== AKHIR BLOK 3.10 ===== -->
 <!-- ===== BLOK 4.1 - JS_RENDER_EDIT_AKUN ===== -->
 <script>
