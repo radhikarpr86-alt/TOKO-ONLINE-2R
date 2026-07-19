@@ -5066,39 +5066,32 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
 
-        // ========================================================
-        // ===== REVISI: PERBAIKAN DATA PRODUK LAMA =====
-        // ========================================================
+        // ===== FITUR PERBAIKAN DATA PRODUK LAMA =====
+        // Ini akan mengisi otomatis Tanggal Input & Penginput untuk produk yang sudah tersimpan sebelumnya
         function perbaikiDataProdukLama() {
             var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
             var perluDiupdate = false;
 
             for (var i = 0; i < semuaProdukGudang.length; i++) {
-                // Jika produk tidak punya tanggalInput, isi otomatis dari tanggalMasuk atau hari ini
+                // Tanggal Input
                 if (!semuaProdukGudang[i].tanggalInput) {
                     var tanggalAsli = new Date(semuaProdukGudang[i].tanggalMasuk);
-                    // Gunakan format tanggal lokal Indonesia
                     semuaProdukGudang[i].tanggalInput = tanggalAsli.toLocaleDateString('id-ID');
                     perluDiupdate = true;
                 }
-                // Jika produk tidak punya namaPenginput, isi dengan strip '-'
+                // Penginput
                 if (!semuaProdukGudang[i].namaPenginput) {
                     semuaProdukGudang[i].namaPenginput = '-';
                     perluDiupdate = true;
                 }
             }
 
-            // Simpan kembali ke localStorage jika ada perubahan
             if (perluDiupdate) {
                 localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
-                console.log("Data produk lama berhasil diperbaiki (Tanggal Input & Penginput).");
             }
         }
-        
-        // JALANKAN FUNGSI PERBAIKAN DATA
-        perbaikiDataProdukLama(); 
-        // ========================================================
-
+        perbaikiDataProdukLama(); // Jalankan fungsi ini
+        // ===== AKHIR PERBAIKAN =====
 
         // 2. Cek apakah user sudah login
         var dataUser = localStorage.getItem('2r_user');
