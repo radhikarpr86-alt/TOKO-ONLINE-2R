@@ -1626,7 +1626,7 @@ function setujuiPengajuanStaf(index) {
     
     var p = pengajuanStaf[index];
     
-    // Hapus akun dari database utama
+    // 1. Hapus akun dari database utama
     var akun = getDataAkun();
     var akunBaru = [];
     for (var i = 0; i < akun.length; i++) {
@@ -1636,11 +1636,11 @@ function setujuiPengajuanStaf(index) {
     }
     simpanDataAkun(akunBaru);
     
-    // Update status pengajuan staf menjadi DISETUJUI
+    // 2. Update status pengajuan staf menjadi DISETUJUI (supaya tidak muncul lagi di tabel)
     pengajuanStaf[index].status = 'DISETUJUI';
     localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
     
-    // Update status pengajuan customer (jika ada) menjadi DISETUJUI
+    // 3. Update status pengajuan customer (jika ada) menjadi DISETUJUI
     var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
     for (var i = 0; i < pengajuanCustomer.length; i++) {
         if (pengajuanCustomer[i].userId === p.targetId && pengajuanCustomer[i].status === 'DITERUSKAN') {
@@ -1650,7 +1650,9 @@ function setujuiPengajuanStaf(index) {
     }
     localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuanCustomer));
     
+    // 4. Render ulang dashboard agar tabel langsung kosong
     renderDashboard();
+    
     tampilkanToast('Akun berhasil dihapus permanen!', 'success');
 }
 
