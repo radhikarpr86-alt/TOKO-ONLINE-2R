@@ -144,8 +144,15 @@
 
     /* ===== HP (Lebar layar kurang dari 768px) ===== */
     @media (max-width: 767px) {
-        /* Navbar */
-        .navbar { padding: 10px 15px; }
+        /* Navbar tetap kelihatan dan tidak tertutup */
+        .navbar { 
+            padding: 10px 15px; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            z-index: 1001; 
+        }
         .navbar-brand { font-size: 16px; gap: 8px; }
         .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
         .navbar-user span { font-size: 13px; }
@@ -154,15 +161,22 @@
         /* Tombol hamburger muncul */
         #menuToggle { display: block; }
 
-        /* Sidebar disembunyikan ke kiri */
+        /* Sidebar muncul di bawah navbar (tidak menutupi navbar) */
         .sidebar { 
             left: -100%; 
             width: 80%; 
             transition: left 0.3s ease; 
-            top: 60px; 
+            top: 60px; /* Di bawah navbar */
+            bottom: 0;
             z-index: 999; 
         }
         .sidebar.open { left: 0; }
+
+        /* Overlay tetap menutupi konten, tapi tidak menutupi navbar */
+        .sidebar-overlay { 
+            top: 60px; /* Mulai dari bawah navbar */
+            z-index: 998; 
+        }
 
         /* Konten utama full width */
         .content { 
