@@ -2820,45 +2820,18 @@
         - Menyimpan tanggal input dan nama penginput secara otomatis.
     */
     function simpanProdukGudang() {
-        // Ambil data user yang sedang login
-        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        // ... (kode di atasnya tetap sama)
         
-        // Ambil data dari form input
-        var namaProduk = document.getElementById('gudangNamaProduk').value.trim();
-        var kodeProduk = document.getElementById('gudangKodeProduk').value.trim();
-        var hargaBeli = document.getElementById('gudangHargaBeli').value.trim();
-        var hargaJual = document.getElementById('gudangHargaJual').value.trim();
-        var jumlahStok = document.getElementById('gudangJumlahStok').value.trim();
-        var jenis = document.getElementById('gudangJenis').value;
-        var satuan = document.getElementById('gudangSatuan').value;
-        var tanggalKadaluarsa = document.getElementById('gudangTanggalKadaluarsa').value;
-        var foto = localStorage.getItem('2r_produk_gudang_foto_temp') || '';
+        var tanggalInput = document.getElementById('gudangTanggalInput').value;
+        var namaPenginput = document.getElementById('gudangPenginput').value.trim();
 
-        // Validasi data wajib
-        if (!namaProduk || !hargaBeli || !hargaJual || !jumlahStok || !tanggalKadaluarsa) {
-            tampilkanToast('Nama produk, harga beli, harga jual, stok, dan tanggal kadaluarsa wajib diisi!', 'warning');
+        // Validasi tambahan
+        if (!tanggalInput || !namaPenginput) {
+            tampilkanToast('Tanggal Input dan Penginput wajib diisi!', 'warning');
             return;
         }
 
-        // Validasi harga dan stok harus angka positif
-        if (parseInt(hargaBeli) <= 0 || parseInt(hargaJual) <= 0 || parseInt(jumlahStok) < 0) {
-            tampilkanToast('Harga dan stok harus bernilai positif!', 'warning');
-            return;
-        }
-
-        // Validasi tanggal kadaluarsa tidak boleh kurang dari hari ini
-        var hariIni = new Date();
-        hariIni.setHours(0, 0, 0, 0);
-        var tanggalKadaluarsaObj = new Date(tanggalKadaluarsa);
-        if (tanggalKadaluarsaObj < hariIni) {
-            tampilkanToast('Tanggal kadaluarsa tidak boleh kurang dari hari ini!', 'warning');
-            return;
-        }
-
-        // Persiapkan foto (bisa banyak, tidak dibatasi)
-        var arrayFoto = foto ? [foto] : [];
-
-        // Buat objek produk baru dengan tanggal input dan nama penginput
+        // Buat objek produk baru
         var produkBaru = {
             id: Date.now(),
             tokoId: user.id,
@@ -2871,12 +2844,13 @@
             satuan: satuan,
             tanggalKadaluarsa: tanggalKadaluarsa,
             fotoProduk: arrayFoto,
-            tanggalInput: new Date().toLocaleDateString('id-ID'), // TANGGAL INPUT OTOMATIS
-            namaPenginput: user.nama, // NAMA PENGINPUT OTOMATIS
+            tanggalInput: tanggalInput, // DIAMBIL DARI INPUT MANUAL
+            namaPenginput: namaPenginput, // DIAMBIL DARI INPUT MANUAL
             tanggalMasuk: new Date().toISOString(),
             status: 'Aktif',
             totalTerjual: 0
         };
+        // ... (kode di bawahnya tetap sama)
 
         // Ambil data produk yang sudah ada, lalu tambahkan produk baru
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
@@ -2943,15 +2917,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.6 ===== */
 
-            /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK ===== */
-    /*
-        Fungsi ini menampilkan form edit produk yang sudah terisi data lama.
-        Data diambil dari localStorage berdasarkan ID produk yang dipilih.
-        Menampilkan:
-        - Tanggal Input (read-only)
-        - Penginput (read-only)
-        - Preview foto lama (jika ada)
-    */
+                /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK (INPUT MANUAL) ===== */
     function renderEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         var produkTarget = null;
@@ -2997,9 +2963,10 @@
         html += '</select></div>';
         html += '<div><label class="form-label">Tanggal Kadaluarsa</label><input type="date" id="editGudangTanggalKadaluarsa" class="form-input" value="' + produkTarget.tanggalKadaluarsa + '"></div>';
         
-        // Field read-only: Tanggal Input & Penginput (SUDAH DISABLED)
-        html += '<div><label class="form-label">Tanggal Input</label><input type="text" class="form-input" value="' + (produkTarget.tanggalInput || produkTarget.tanggalMasuk || '-') + '" disabled style="background:#f0f0f0; color:#666;"></div>';
-        html += '<div><label class="form-label">Penginput</label><input type="text" class="form-input" value="' + (produkTarget.namaPenginput || produkTarget.namaToko || '-') + '" disabled style="background:#f0f0f0; color:#666;"></div>';
+        // ===== BAGIAN YANG DIUBAH (MANUAL & TIDAK DISABLED) =====
+        html += '<div><label class="form-label">Tanggal Input</label><input type="date" id="editGudangTanggalInput" class="form-input" value="' + (produkTarget.tanggalInput || '') + '"></div>';
+        html += '<div><label class="form-label">Penginput</label><input type="text" id="editGudangPenginput" class="form-input" value="' + (produkTarget.namaPenginput || '') + '"></div>';
+        // ===== AKHIR PERUBAHAN =====
         
         // Preview foto lama
         html += '<div style="grid-column: 1 / -1;"><label class="form-label">Foto Produk</label>';
@@ -3034,34 +3001,27 @@
         - Foto lama tetap jika tidak diganti.
     */
     function simpanEditProdukGudang(idProduk) {
-        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
-        var indexProduk = -1;
-        for (var i = 0; i < semuaProdukGudang.length; i++) {
-            if (semuaProdukGudang[i].id === idProduk) {
-                indexProduk = i;
-                break;
-            }
-        }
-        if (indexProduk === -1) {
-            tampilkanToast('Produk tidak ditemukan!', 'error');
+        var tanggalInput = document.getElementById('editGudangTanggalInput').value;
+        var namaPenginput = document.getElementById('editGudangPenginput').value.trim();
+
+        if (!tanggalInput || !namaPenginput) {
+            tampilkanToast('Tanggal Input dan Penginput wajib diisi!', 'warning');
             return;
         }
 
-        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-        var namaProduk = document.getElementById('editGudangNamaProduk').value.trim();
-        var kodeProduk = document.getElementById('editGudangKodeProduk').value.trim();
-        var hargaBeli = document.getElementById('editGudangHargaBeli').value.trim();
-        var hargaJual = document.getElementById('editGudangHargaJual').value.trim();
-        var jumlahStok = document.getElementById('editGudangJumlahStok').value.trim();
-        var jenis = document.getElementById('editGudangJenis').value;
-        var satuan = document.getElementById('editGudangSatuan').value;
-        var tanggalKadaluarsa = document.getElementById('editGudangTanggalKadaluarsa').value;
-        var fotoBaru = localStorage.getItem('2r_edit_produk_gudang_foto_temp') || '';
-
-        if (!namaProduk || !hargaBeli || !hargaJual || !jumlahStok || !tanggalKadaluarsa) {
-            tampilkanToast('Nama produk, harga, stok, dan tanggal kadaluarsa wajib diisi!', 'warning');
-            return;
-        }
+        // Update data produk
+        semuaProdukGudang[indexProduk].namaProduk = namaProduk;
+        semuaProdukGudang[indexProduk].kodeProduk = kodeProduk || '-';
+        semuaProdukGudang[indexProduk].hargaBeli = parseInt(hargaBeli);
+        semuaProdukGudang[indexProduk].hargaJual = parseInt(hargaJual);
+        semuaProdukGudang[indexProduk].jumlahStok = parseInt(jumlahStok);
+        semuaProdukGudang[indexProduk].jenis = jenis;
+        semuaProdukGudang[indexProduk].satuan = satuan;
+        semuaProdukGudang[indexProduk].tanggalKadaluarsa = tanggalKadaluarsa;
+        
+        // Update tanggal & penginput dari form manual
+        semuaProdukGudang[indexProduk].tanggalInput = tanggalInput;
+        semuaProdukGudang[indexProduk].namaPenginput = namaPenginput;
 
         // Update data produk
         semuaProdukGudang[indexProduk].namaProduk = namaProduk;
