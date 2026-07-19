@@ -2671,7 +2671,7 @@
 </script>
 <!-- ===== BLOK 3.10.12 - JS_RENDER_MANAJEMEN_STOK_GUDANG ===== -->
 <script>
-        /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL LENGKAP + EXCEL) ===== */
+            /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL LENGKAP + TOTAL HARGA) ===== */
     function renderManajemenStokGudang() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
@@ -2682,14 +2682,25 @@
         // Hitung statistik
         var totalProduk = produkSaya.length;
         var totalStok = 0;
-        var hariIni = new Date();
+        var totalHargaBeli = 0;
+        var totalHargaJual = 0;
+
         for (var i = 0; i < produkSaya.length; i++) {
             totalStok += produkSaya[i].jumlahStok;
+            totalHargaBeli += produkSaya[i].hargaBeli * produkSaya[i].jumlahStok;
+            totalHargaJual += produkSaya[i].hargaJual * produkSaya[i].jumlahStok;
         }
+
+        var totalKeuntungan = totalHargaJual - totalHargaBeli;
 
         html += '<div class="page-header">';
         html += '<h2>Manajemen Stok Gudang</h2>';
         html += '<p>Total Produk: <strong>' + totalProduk + '</strong> | Total Stok: <strong>' + totalStok + '</strong></p>';
+        html += '<p style="font-size:14px; margin-top:5px; color:#333;">';
+        html += 'Total Modal: <strong style="color:#d32f2f;">Rp ' + totalHargaBeli.toLocaleString('id-ID') + '</strong> | ';
+        html += 'Total Jual: <strong style="color:#1976d2;">Rp ' + totalHargaJual.toLocaleString('id-ID') + '</strong> | ';
+        html += 'Keuntungan: <strong style="color:#2e7d32;">Rp ' + totalKeuntungan.toLocaleString('id-ID') + '</strong>';
+        html += '</p>';
         html += '</div>';
 
         // ===== TOMBOL ACTION =====
@@ -2717,7 +2728,7 @@
         html += '</div>';
 
         areaKonten.innerHTML = html;
-    }
+    }	
 </script>
 <!-- ===== AKHIR BLOK 3.10.12 ===== -->
 <!-- ===== BLOK 3.10.13 - JS_FUNGSI_INPUT_PRODUK_GUDANG ===== -->
@@ -3220,11 +3231,7 @@
         return html;
     }
 
-    /* ===== BLOK 3.10.14.6 - DOWNLOAD EXCEL UNTUK MANAJEMEN STOK GUDANG ===== */
-    /*
-        Fungsi ini mengekspor semua data produk yang sudah difilter
-        menjadi file CSV (Excel) yang bisa didownload.
-    */
+        /* ===== BLOK 3.10.14.6 - DOWNLOAD EXCEL (PERBAIKAN KOLOM) ===== */
     function downloadExcelStokGudang() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
@@ -3235,16 +3242,16 @@
             return;
         }
 
-        // Header Excel (Semua kolom lengkap)
-        var csv = "Nama Produk,Kode Produk,Harga Beli,Harga Jual,Stok,Jenis,Satuan,Tanggal Kadaluarsa,Tanggal Input,Penginput,Total Terjual\n";
+        // ===== GANTI KOMA (,) MENJADI TITIK KOMA (;) =====
+        var csv = "Nama Produk;Kode Produk;Harga Beli;Harga Jual;Stok;Jenis;Satuan;Tanggal Kadaluarsa;Tanggal Input;Penginput;Total Terjual\n";
 
         for (var i = 0; i < produkSaya.length; i++) {
             var p = produkSaya[i];
-            csv += '"' + p.namaProduk + '","' + p.kodeProduk + '",' + p.hargaBeli + ',' + p.hargaJual + ',' + p.jumlahStok + ',"' + p.jenis + '","' + p.satuan + '","' + p.tanggalKadaluarsa + '","' + (p.tanggalInput || '-') + '","' + (p.namaPenginput || '-') + '",' + p.totalTerjual + '\n';
+            csv += '"' + p.namaProduk + '";"' + p.kodeProduk + '";' + p.hargaBeli + ';' + p.hargaJual + ';' + p.jumlahStok + ';"' + p.jenis + '";"' + p.satuan + '";"' + p.tanggalKadaluarsa + '";"' + (p.tanggalInput || '-') + '";"' + (p.namaPenginput || '-') + '";' + p.totalTerjual + '\n';
         }
 
         // Buat file .csv dan download
-        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); // BOM untuk UTF-8
+        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
         var link = document.createElement('a');
         var url = URL.createObjectURL(blob);
         link.href = url;
@@ -3257,6 +3264,7 @@
         tampilkanToast('Data berhasil didownload sebagai CSV/Excel!', 'success');
     }
 </script>
+<!-- ===== AKHIR BLOK 3.10.14.6 ===== -->
 <!-- ===== AKHIR BLOK 3.10.14 ===== -->
 <!-- ===== BLOK 3.10.15 - JS_FUNGSI_STATISTIK_STOK ===== -->
 <script>
@@ -3304,7 +3312,7 @@
         html += '<p>Daftar produk tersimpan (Foto, Nama, Harga, Stok).</p>';
         html += '</div>';
 
-        // ===== FILTER BUTTONS (SAMA SEPERTI GUDANG) =====
+        // ===== FILTER BUTTONS =====
         html += '<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">';
         html += '<button class="button button-primary button-small" onclick="tampilkanProdukKelola(\'semua\')">Semua</button>';
         html += '<button class="button button-success button-small" onclick="tampilkanProdukKelola(\'terlaris\')">Terlaris</button>';
@@ -3318,7 +3326,7 @@
         html += '</div>';
 
         areaKonten.innerHTML = html;
-                
+    }	                
                 // Cek foto
                 var fotoHtml = '';
                 if (p.fotoProduk && p.fotoProduk.length > 0) {
@@ -5173,6 +5181,14 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 <!-- ===== BLOK 5.3 - JS_INIT_UTAMA ===== -->
 <script>
     /* ===== BLOK 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN ===== */
+    /*
+        Fungsi ini dipanggil setelah user berhasil login.
+        1. Menyembunyikan halaman Login/Register.
+        2. Menampilkan halaman Dashboard.
+        3. Mengisi nama user di navbar.
+        4. Membangun sidebar sesuai role user.
+        5. Menampilkan dashboard awal.
+    */
     function tampilkanDashboard(user) {
         // Validasi data user
         if (!user || !user.nama) {
@@ -5213,20 +5229,30 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
 
     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
+    /*
+        Event ini adalah titik awal aplikasi.
+        Saat halaman selesai dimuat oleh browser, maka:
+        1. Inisialisasi SuperAdmin (jika belum ada).
+        2. Cek apakah user sudah login (ada data di localStorage).
+        3. Jika sudah login, tampilkan dashboard.
+        4. Jika belum, biarkan halaman login tetap tampil.
+    */
     document.addEventListener('DOMContentLoaded', function() {
         
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
 
-        // ===== TAMBAHAN SAYA (PERBAIKAN DATA PRODUK LAMA) =====
+        // ===== PERBAIKAN DATA PRODUK LAMA (AGAR KOLOM TANGGAL & PENGINPUT TERISI) =====
         function perbaikiDataProdukLama() {
             var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
             var perluDiupdate = false;
             for (var i = 0; i < semuaProdukGudang.length; i++) {
+                // Jika belum ada tanggal input, ambil dari tanggal masuk
                 if (!semuaProdukGudang[i].tanggalInput) {
                     semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
                     perluDiupdate = true;
                 }
+                // Jika belum ada penginput, isi dengan strip
                 if (!semuaProdukGudang[i].namaPenginput) {
                     semuaProdukGudang[i].namaPenginput = '-';
                     perluDiupdate = true;
@@ -5236,7 +5262,8 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
                 localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
             }
         }
-        perbaikiDataProdukLama();
+        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
+        // ===== AKHIR PERBAIKAN =====
 
         // 2. Cek apakah user sudah login
         var dataUser = localStorage.getItem('2r_user');
@@ -5246,6 +5273,7 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         }
         
     });
+    /* ===== AKHIR BLOK 5.3.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 5.3 ===== -->
 
