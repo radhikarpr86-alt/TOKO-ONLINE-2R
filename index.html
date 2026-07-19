@@ -583,7 +583,7 @@ function bersihkanNotifikasi() {
 <!-- ===== BLOK 6 (2) - 02 AUTH & LOGIN ===== -->
 <script>
 function toggleForm(tipe) {
-    document.getElementById('authError').style.display = 'none';
+    document.getElementById('authenticationError').style.display = 'none';
     if (tipe === 'register') {
         document.getElementById('loginForm').classList.add('hidden-form');
         document.getElementById('registerForm').classList.remove('hidden-form');
@@ -607,33 +607,33 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     }
     if (user) {
         if (user.status !== 'AKTIF' && user.role !== 'superadmin') {
-            document.getElementById('authError').style.display = 'block';
-            document.getElementById('authErrorText').textContent = 'Akun belum aktif. Menunggu verifikasi admin.';
+            document.getElementById('authenticationError').style.display = 'block';
+            document.getElementById('authenticationErrorText').textContent = 'Akun belum aktif. Menunggu verifikasi admin.';
             return;
         }
         localStorage.setItem('2r_user', JSON.stringify(user));
         localStorage.setItem('2r_user_role', user.role);
         tampilkanDashboard(user);
     } else {
-        document.getElementById('authError').style.display = 'block';
-        document.getElementById('authErrorText').textContent = 'Username atau password salah!';
+        document.getElementById('authenticationError').style.display = 'block';
+        document.getElementById('authenticationErrorText').textContent = 'Username atau password salah!';
     }
 });
 
 document.getElementById('registerForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    var role = document.getElementById('regRole').value;
-    var username = document.getElementById('regUsername').value.trim();
-    var password = document.getElementById('regPassword').value.trim();
-    var nama = document.getElementById('regNama').value.trim();
+    var role = document.getElementById('registerRole').value;
+    var username = document.getElementById('registerUsername').value.trim();
+    var password = document.getElementById('registerPassword').value.trim();
+    var nama = document.getElementById('registerNama').value.trim();
     if (!role || !username || !password || !nama) {
-        alert('Data belum lengkap!');
+        tampilkanToast('Data belum lengkap!', 'warning');
         return;
     }
     var akun = getDataAkun();
     for (var i = 0; i < akun.length; i++) {
         if (akun[i].username === username) {
-            alert('Username sudah digunakan!');
+            tampilkanToast('Username sudah digunakan!', 'error');
             return;
         }
     }
@@ -660,18 +660,11 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     };
     akun.push(akunBaru);
     simpanDataAkun(akun);
-    alert('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + statusAkun);
+    tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + statusAkun, 'success');
     toggleForm('login');
 });
-	// ===== TAMBAHAN: Update ID otomatis saat role berubah =====
-document.getElementById('regRole').addEventListener('change', function() {
-    var role = this.value;
-    var idPreview = document.getElementById('regIdPreview');
-    if (idPreview) {
-        idPreview.value = generateId(role);
-    }
-});
-	// ===== UPDATE ID OTOMATIS SAAT ROLE BERUBAH =====
+
+// ===== UPDATE ID OTOMATIS SAAT ROLE BERUBAH =====
 document.getElementById('registerRole').addEventListener('change', function() {
     var selectedRole = this.value;
     var idPreview = document.getElementById('registerIdPreview');
@@ -679,7 +672,6 @@ document.getElementById('registerRole').addEventListener('change', function() {
         idPreview.value = generateId(selectedRole);
     }
 });
-// ===== AKHIR UPDATE ID OTOMATIS =====
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
 <!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP (SUPER LENGKAP) ===== -->
