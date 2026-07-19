@@ -2470,6 +2470,180 @@
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.10.6 ===== */
+	<!-- ===== BLOK 3.10.7 - RENDER HALAMAN UPLOAD PRODUK PUBLIK ===== -->
+<script>
+    /*
+        Fungsi ini menampilkan halaman Upload Produk Publik untuk role Toko.
+        Menampilkan form upload produk (judul, deskripsi, harga, kategori, gambar).
+        Juga menampilkan batas upload yang berlaku dan tombol ajukan tambah kapasitas.
+    */
+    function renderUploadProdukPublik() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
+
+        // Ambil data produk milik user ini
+        var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
+        var produkSaya = semuaProduk.filter(function(p) { return p.ownerId === user.id; });
+        
+        // Ambil batas maksimal produk dari data akun (default 5)
+        var dataAkun = getDataAkun();
+        var akunSaya = null;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                akunSaya = dataAkun[i];
+                break;
+            }
+        }
+        var batasMaksimal = akunSaya ? (akunSaya.maksProdukPublik || 5) : 5;
+        var sisaSlot = batasMaksimal - produkSaya.length;
+
+        html += '<div class="page-header">';
+        html += '<h2>Upload Produk Publik</h2>';
+        html += '<p>Upload produk untuk ditampilkan di direktori publik. Batas maksimal: <strong>' + batasMaksimal + ' produk</strong> per akun.</p>';
+        html += '</div>';
+
+        // Informasi sisa slot
+        html += '<div class="card" style="background:#e8f5e9; border:1px solid #c8e6c9;">';
+        html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+        html += '<span><strong>Slot tersedia:</strong> ' + sisaSlot + ' dari ' + batasMaksimal + ' produk</span>';
+        if (sisaSlot <= 0) {
+            html += '<button class="button button-primary button-small" onclick="ajukanTambahKapasitasProduk()">Ajukan Tambah Kapasitas</button>';
+        }
+        html += '</div></div>';
+
+        // Form upload produk (hanya jika masih ada slot)
+        if (sisaSlot > 0) {
+            html += '<div class="card">';
+            html += '<div class="card-header">Tambah Produk Baru</div>';
+            html += '<div class="grid-2">';
+            html += '<div><label class="form-label">Judul Produk</label><input type="text" id="produkJudul" class="form-input" placeholder="Judul produk"></div>';
+            html += '<div><label class="form-label">Kategori</label><select id="produkKategori" class="form-input"><option value="Fashion">Fashion</option><option value="Elektronik">Elektronik</option><option value="Makanan">Makanan</option><option value="Lainnya">Lainnya</option></select></div>';
+            html += '<div><label class="form-label">Harga (Rp)</label><input type="number" id="produkHarga" class="form-input" placeholder="150000"></div>';
+            html += '<div><label class="form-label">Gambar / Foto (maksimal 5)</label>';
+            html += '<input type="file" id="produkGambar" multiple accept=".jpg,.jpeg,.png" style="display:none;">';
+            html += '<button class="button button-primary button-small" onclick="document.getElementById(\'produkGambar\').click();">Pilih Gambar</button>';
+            html += '<span id="produkNamaGambar" style="font-size:12px; color:#888; margin-left:10px;">Belum ada gambar</span>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="form-group"><label class="form-label">Deskripsi</label><textarea id="produkDeskripsi" class="form-input" rows="3" placeholder="Deskripsi produk"></textarea></div>';
+            html += '<button class="button button-primary" onclick="simpanProdukPublik()"><i class="fas fa-save"></i> Simpan Produk</button>';
+            html += '</div>';
+        }
+
+        // Daftar produk yang sudah diupload
+        html += '<div class="card">';
+        html += '<div class="card-header">Daftar Produk Saya <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + produkSaya.length + ')</span></div>';
+        if (produkSaya.length === 0) {
+            html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum ada produk</h3><p>Upload produk pertama Anda.</p></div>';
+        } else {
+            html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">';
+            for (var i = 0; i < produkSaya.length; i++) {
+                var p = produkSaya[i];
+                html += '<div style="border:1px solid #eee; border-radius:8px; padding:15px; background:white;">';
+                html += '<h4 style="font-size:14px; margin:0 0 5px;">' + p.judul + '</h4>';
+                html += '<p style="font-size:12px; color:#888;">Rp ' + p.harga + ' | ' + p.kategori + '</p>';
+                html += '<p style="font-size:12px;">' + p.deskripsi.substring(0, 50) + '...</p>';
+                html += '<span style="font-size:11px; color:#888;">Gambar: ' + (p.gambar ? p.gambar.length : 0) + ' foto</span>';
+                html += '</div>';
+            }
+            html += '</div>';
+        }
+        html += '</div>';
+
+        areaKonten.innerHTML = html;
+
+        // Event listener untuk upload gambar
+        setTimeout(function() {
+            var inputGambar = document.getElementById('produkGambar');
+            if (inputGambar) {
+                inputGambar.onchange = function(e) {
+                    var file = e.target.files[0];
+                    if (file) {
+                        document.getElementById('produkNamaGambar').textContent = file.name;
+                        var pembaca = new FileReader();
+                        pembaca.onload = function(ev) {
+                            localStorage.setItem('2r_produk_gambar_temp', ev.target.result);
+                        };
+                        pembaca.readAsDataURL(file);
+                    }
+                };
+            }
+        }, 300);
+    }
+    /* ===== AKHIR BLOK 3.10.7 ===== */
+	<!-- ===== BLOK 3.10.8 - FUNGSI SIMPAN PRODUK PUBLIK ===== -->
+<script>
+    /*
+        Fungsi ini menyimpan produk baru ke localStorage.
+        Melakukan validasi:
+        - Judul, harga, deskripsi wajib diisi.
+        - Maksimal 5 gambar per produk.
+        - Total produk tidak melebihi batas maksimal akun.
+    */
+    function simpanProdukPublik() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var judul = document.getElementById('produkJudul').value.trim();
+        var kategori = document.getElementById('produkKategori').value;
+        var harga = document.getElementById('produkHarga').value.trim();
+        var deskripsi = document.getElementById('produkDeskripsi').value.trim();
+        var gambar = localStorage.getItem('2r_produk_gambar_temp') || '';
+
+        if (!judul || !harga || !deskripsi) {
+            tampilkanToast('Judul, harga, dan deskripsi wajib diisi!', 'warning');
+            return;
+        }
+
+        // Cek batas gambar (maksimal 5)
+        if (gambar) {
+            var jumlahGambar = gambar.split(',').length;
+            if (jumlahGambar > 5) {
+                tampilkanToast('Maksimal 5 gambar per produk!', 'warning');
+                return;
+            }
+        }
+
+        // Cek batas total produk akun
+        var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
+        var produkSaya = semuaProduk.filter(function(p) { return p.ownerId === user.id; });
+        var dataAkun = getDataAkun();
+        var akunSaya = null;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                akunSaya = dataAkun[i];
+                break;
+            }
+        }
+        var batasMaksimal = akunSaya ? (akunSaya.maksProdukPublik || 5) : 5;
+        if (produkSaya.length >= batasMaksimal) {
+            tampilkanToast('Batas upload produk sudah penuh! Ajukan tambah kapasitas ke SuperAdmin.', 'warning');
+            return;
+        }
+
+        var produkBaru = {
+            id: Date.now(),
+            ownerId: user.id,
+            judul: judul,
+            deskripsi: deskripsi,
+            harga: parseInt(harga),
+            kategori: kategori,
+            gambar: gambar ? [gambar] : [],
+            tanggalUpload: new Date().toISOString()
+        };
+
+        semuaProduk.push(produkBaru);
+        localStorage.setItem('2r_produk_publik', JSON.stringify(semuaProduk));
+        localStorage.removeItem('2r_produk_gambar_temp');
+
+        document.getElementById('produkJudul').value = '';
+        document.getElementById('produkHarga').value = '';
+        document.getElementById('produkDeskripsi').value = '';
+        document.getElementById('produkNamaGambar').textContent = 'Belum ada gambar';
+
+        renderUploadProdukPublik();
+        tampilkanToast('Produk berhasil ditambahkan!', 'success');
+    }
+    /* ===== AKHIR BLOK 3.10.8 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10 ===== -->
 <!-- ===== BLOK 4.1 - JS_RENDER_EDIT_AKUN ===== -->
@@ -3926,6 +4100,101 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 /* ===== AKHIR BLOK 4.10.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.10 ===== -->
+<!-- ===== BLOK 4.11 - JS_RENDER_TRANSFER_MENU ===== -->
+<script>
+    /* ===== BLOK 4.11.1 - RENDER HALAMAN TRANSFER MENU ===== */
+    /*
+        Fungsi ini menampilkan halaman Transfer Menu untuk SuperAdmin.
+        Menampilkan daftar semua akun (selain SuperAdmin) beserta status menu saat ini,
+        dan tombol untuk mengubah status menu akun target.
+    */
+    function renderTransferMenu() {
+        var role = localStorage.getItem('2r_user_role');
+        if (role !== 'superadmin') {
+            tampilkanToast('Anda tidak memiliki akses ke halaman ini!', 'error');
+            return;
+        }
+
+        var areaKonten = document.getElementById('mainContent');
+        var dataAkun = getDataAkun();
+        var daftarAkunTarget = [];
+        
+        // Filter: hanya akun selain superadmin
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].role !== 'superadmin') {
+                daftarAkunTarget.push(dataAkun[i]);
+            }
+        }
+
+        var html = '';
+        html += '<div class="page-header"><h2>Transfer Menu</h2><p>Pilih paket menu untuk akun target. Status menu akan langsung berubah setelah tombol ditekan.</p></div>';
+        html += '<div class="card"><div class="card-header">Daftar Akun <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + daftarAkunTarget.length + ')</span></div>';
+        
+        if (daftarAkunTarget.length === 0) {
+            html += '<div class="empty-state"><i class="fas fa-users-slash"></i><h3>Belum ada akun</h3></div>';
+        } else {
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Menu Saat Ini</th><th>Aksi</th></tr></thead><tbody>';
+            for (var i = 0; i < daftarAkunTarget.length; i++) {
+                var akun = daftarAkunTarget[i];
+                var statusMenu = akun.menuLevel || 'none';
+                var labelMenu = '';
+                if (statusMenu === 'none') labelMenu = '<span class="badge badge-danger">Tidak Aktif</span>';
+                else if (statusMenu === 'basic') labelMenu = '<span class="badge badge-warning">Basic</span>';
+                else if (statusMenu === 'pro') labelMenu = '<span class="badge badge-success">Pro</span>';
+                
+                html += '<tr><td>' + (i+1) + '</td><td>' + akun.id + '</td><td>' + akun.role + '</td><td>' + akun.username + '</td><td>' + akun.nama + '</td><td>' + labelMenu + '</td><td><div style="display:flex;gap:5px;flex-wrap:wrap;">';
+                html += '<button class="button button-success button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'pro\')">Pro</button>';
+                html += '<button class="button button-warning button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'basic\')">Basic</button>';
+                html += '<button class="button button-danger button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'none\')">Reset (None)</button>';
+                html += '</div></td></tr>';
+            }
+            html += '</tbody></table></div>';
+        }
+        html += '</div>';
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 4.11.1 ===== */
+
+    /* ===== BLOK 4.11.2 - FUNGSI TRANSFER MENU ===== */
+    /*
+        Fungsi ini mengubah status menu akun target.
+        Parameter:
+        - idAkun: ID akun yang akan diubah menunya.
+        - levelBaru: 'none', 'basic', atau 'pro'.
+    */
+    function transferMenu(idAkun, levelBaru) {
+        var role = localStorage.getItem('2r_user_role');
+        if (role !== 'superadmin') {
+            tampilkanToast('Anda tidak memiliki hak akses!', 'error');
+            return;
+        }
+
+        if (!confirm('Yakin ingin mengubah menu akun ini menjadi ' + levelBaru + '?')) {
+            return;
+        }
+
+        var dataAkun = getDataAkun();
+        var akunDitemukan = false;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === idAkun) {
+                dataAkun[i].menuLevel = levelBaru;
+                akunDitemukan = true;
+                break;
+            }
+        }
+
+        if (!akunDitemukan) {
+            tampilkanToast('Akun tidak ditemukan!', 'error');
+            return;
+        }
+
+        simpanDataAkun(dataAkun);
+        renderTransferMenu();
+        tampilkanToast('Menu akun berhasil diubah menjadi ' + levelBaru + '!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.11.2 ===== */
+</script>
+<!-- ===== AKHIR BLOK 4.11 ===== -->
 <!-- ===== BLOK 5.1 - JS_EVENT_LOGOUT_MODAL ===== -->
 <script>
     /* ===== BLOK 5.1.1 - EVENT TOMBOL LOGOUT ===== */
