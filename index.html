@@ -1485,7 +1485,7 @@
                 }
             ],
 
-            // ===== TOKO =====
+                        // ===== TOKO =====
             'toko': [
                 {
                     judul: 'Menu Utama',
@@ -1502,6 +1502,7 @@
                         { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                         { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
+                        { halaman: 'editAkun', icon: 'fa-user-edit', label: 'Edit / Hapus Akun' },
                         { halaman: 'settingToko', icon: 'fa-store', label: 'Setting Toko' }
                     ]
                 }
@@ -1781,27 +1782,118 @@
     }
     /* ===== AKHIR BLOK 3.5.2 ===== */
 
-    /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
+            /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
     /*
-        Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
-        Digunakan saat halaman yang dipilih belum memiliki fungsi render.
+        Fungsi ini adalah pusat routing aplikasi.
+        Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
+        Jika halaman tidak dikenali, akan menampilkan placeholder.
     */
-    function renderPlaceholder(judulHalaman) {
+    function navigasiKeHalaman(namaHalaman) {
         var areaKonten = document.getElementById('mainContent');
-        var html = '';
-        html += '<div class="page-header">';
-        html += '<h2>' + judulHalaman + '</h2>';
-        html += '<p>Halaman ini sedang dalam pengembangan.</p>';
-        html += '</div>';
-        html += '<div class="card">';
-        html += '<div class="empty-state">';
-        html += '<i class="fas fa-tools" style="color:#FF9800;"></i>';
-        html += '<h3>Fitur Sedang Dikembangkan</h3>';
-        html += '</div>';
-        html += '</div>';
-        areaKonten.innerHTML = html;
+        if (!areaKonten) {
+            return;
+        }
+
+        // ===== NAVIGASI UNTUK SEMUA ROLE =====
+        if (namaHalaman === 'dashboard') {
+            renderDashboard();
+        } else if (namaHalaman === 'profile') {
+            // ===== PERBAIKAN PROFIL AGAR TOKO MUNCUL =====
+            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+            var role = user.role;
+            
+            // Jika SuperAdmin, pakai renderProfilSuperAdmin
+            if (role === 'superadmin') {
+                renderProfilSuperAdmin(user);
+            } 
+            // Jika Customer, pakai renderProfilCustomer
+            else if (role === 'customer') {
+                renderProfilCustomer();
+            } 
+            // Jika role lainnya (Toko, Ojek, Pedagang, dll), pakai renderProfilUmum
+            else {
+                renderProfilUmum(user, role);
+            }
+            // ===== AKHIR PERBAIKAN =====
+        } else if (namaHalaman === 'daftarAkun') {
+            renderDaftarAkun();
+        } else if (namaHalaman === 'persetujuan') {
+            renderPersetujuanAkun();
+        } else if (namaHalaman === 'kelolaAkun') {
+            renderKelolaAkun();
+        } else if (namaHalaman === 'settingRekening') {
+            renderSettingRekening();
+        } else if (namaHalaman === 'belanja') {
+            renderBelanja();
+        } else if (namaHalaman === 'pesananSaya') {
+            renderPesananSaya();
+        } else if (namaHalaman === 'kelolaIklan') {
+            renderMenuIklan();
+        } else if (namaHalaman === 'pengajuanHapus') {
+            renderPengajuanHapusAkun();
+        } else if (namaHalaman === 'uploadProdukPublik') {
+            renderUploadProdukPublik();
+        } else if (namaHalaman === 'manajemenStokGudang') {
+            renderManajemenStokGudang();
+        } else if (namaHalaman === 'kelolaProduk') {
+            renderKelolaProduk();
+        } else if (namaHalaman === 'helloFriends') {
+            renderHelloFriends();
+        } else if (namaHalaman === 'transferMenu') {
+            renderTransferMenu();
+        } else if (namaHalaman === 'editAkun') {
+            // ===== PERBAIKAN UNTUK EDIT AKUN TOKO & CUSTOMER =====
+            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+            if (user.role === 'customer') {
+                renderEditAkun();
+            } else {
+                renderEditAkunToko();
+            }
+            // ===== AKHIR PERBAIKAN =====
+        }
+
+        // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
+        else if (namaHalaman === 'dashboardCustomer') {
+            renderDashboardCustomer();
+        } else if (namaHalaman === 'profilCustomer') {
+            renderProfilCustomer();
+        } else if (namaHalaman === 'lihatTokoTerdekat') {
+            renderLihatTokoTerdekat();
+        } else if (namaHalaman === 'lihatOjekTerdekat') {
+            renderLihatOjekTerdekat();
+        } else if (namaHalaman === 'lihatProduk') {
+            renderLihatProduk();
+        } else if (namaHalaman === 'keranjang') {
+            renderKeranjang();
+        } else if (namaHalaman === 'chat') {
+            renderChat();
+        } else if (namaHalaman === 'papanInformasi') {
+            renderPapanInformasi();
+        } else if (namaHalaman === 'menuIklan') {
+            renderMenuIklan();
+        } else if (namaHalaman === 'daftarBelanja') {
+            renderDaftarBelanja();
+        } else if (namaHalaman === 'riwayatBelanja') {
+            renderRiwayatBelanja();
+        } else if (namaHalaman === 'pembayaran') {
+            renderPembayaran();
+        } else if (namaHalaman === 'ulasanRating') {
+            renderUlasanRating();
+        } else if (namaHalaman === 'bantuanFAQ') {
+            renderBantuanFAQ();
+        } else if (namaHalaman === 'notifikasi') {
+            renderNotifikasi();
+        } else if (namaHalaman === 'editAkun') {
+            renderEditAkun();
+        }
+
+        // ===== PLACEHOLDER (Halaman belum siap) =====
+        else {
+            renderPlaceholder(namaHalaman);
+        }
     }
-    /* ===== AKHIR BLOK 3.5.3 ===== */	
+    /* ===== AKHIR BLOK 3.5.2 ===== */
+
     /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
     /*
         Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
@@ -3658,6 +3750,104 @@
         renderEditAkun();
     }
     /* ===== AKHIR BLOK 4.1.2 ===== */
+	/* ===== BLOK 4.1.3 - RENDER EDIT / HAPUS AKUN UNTUK TOKO & ROLE LAIN ===== */
+/*
+    Fungsi ini menampilkan halaman "Edit / Hapus Akun" untuk role selain Customer (Toko, Ojek, Pedagang, dll).
+    Menampilkan data profil (read-only) dan tombol untuk mengajukan hapus akun.
+*/
+function renderEditAkunToko() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var areaKonten = document.getElementById('mainContent');
+    var html = '';
+
+    html += '<div class="page-header">';
+    html += '<h2>Edit / Hapus Akun</h2>';
+    html += '<p>Kelola data akun Anda. Jika ingin menghapus akun, ajukan permintaan ke admin.</p>';
+    html += '</div>';
+
+    // Tampilkan data profil (read-only)
+    html += '<div class="card">';
+    html += '<div class="card-header">Data Profil Anda</div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Lengkap</label><span style="font-weight:600;">' + (user.nama || '-') + '</span></div>';
+    html += '<div><label class="form-label">Username</label><span style="font-weight:600;">' + (user.username || '-') + '</span></div>';
+    html += '<div><label class="form-label">Email</label><span>' + (user.email || '-') + '</span></div>';
+    html += '<div><label class="form-label">Nomor HP</label><span>' + (user.nomorHp || '-') + '</span></div>';
+    html += '<div><label class="form-label">Alamat</label><span>' + (user.alamat || '-') + '</span></div>';
+    html += '<div><label class="form-label">Role</label><span>' + (user.role || '-') + '</span></div>';
+    html += '</div>';
+    html += '</div>';
+
+    // Tombol ajukan hapus akun
+    html += '<div class="card" style="border-color:#f44336;">';
+    html += '<div class="card-header" style="color:#f44336;">Hapus Akun</div>';
+    html += '<p>Jika Anda ingin menghapus akun secara permanen, ajukan permintaan ke admin. Proses akan diverifikasi oleh Staf Admin dan SuperAdmin.</p>';
+    html += '<button class="button button-danger" onclick="ajukanHapusAkunToko()">';
+    html += '<i class="fas fa-trash-alt"></i> Ajukan Hapus Akun';
+    html += '</button>';
+    html += '</div>';
+
+    areaKonten.innerHTML = html;
+}
+/* ===== AKHIR BLOK 4.1.3 ===== */
+/* ===== BLOK 4.1.4 - AJUKAN HAPUS AKUN OLEH TOKO / ROLE LAIN ===== */
+/*
+    Fungsi ini dipanggil saat Toko/Ojek/Pedagang menekan tombol "Ajukan Hapus Akun".
+    Menyimpan pengajuan ke localStorage dengan status 'MENUNGGU'.
+*/
+function ajukanHapusAkunToko() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    if (!user.id) {
+        tampilkanToast('Data akun tidak ditemukan!', 'error');
+        return;
+    }
+
+    if (!confirm('Apakah Anda yakin ingin mengajukan penghapusan akun? Tindakan ini tidak dapat dibatalkan.')) {
+        return;
+    }
+
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+
+    // Cek apakah sudah ada pengajuan yang menunggu
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].userId === user.id && dataPengajuan[i].status === 'MENUNGGU') {
+            tampilkanToast('Anda sudah memiliki pengajuan yang sedang diproses!', 'warning');
+            return;
+        }
+    }
+
+    // Buat data pengajuan baru
+    var pengajuanBaru = {
+        id: Date.now(),
+        userId: user.id,
+        username: user.username,
+        nama: user.nama,
+        email: user.email,
+        nomorHp: user.nomorHp,
+        alamat: user.alamat,
+        role: user.role,
+        status: 'MENUNGGU',
+        diajukanPada: new Date().toISOString()
+    };
+
+    dataPengajuan.push(pengajuanBaru);
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(dataPengajuan));
+
+    // Kirim notifikasi ke Staf Admin dan SuperAdmin
+    var semuaAkun = getDataAkun();
+    for (var i = 0; i < semuaAkun.length; i++) {
+        var akun = semuaAkun[i];
+        if (akun.role === 'staf_admin' || akun.role === 'superadmin') {
+            simpanNotifikasi(akun.id, 'Pengajuan Hapus Akun Baru', 
+                user.nama + ' (' + user.username + ') mengajukan penghapusan akun.', 
+                'account');
+        }
+    }
+
+    tampilkanToast('Pengajuan hapus akun berhasil dikirim ke admin!', 'success');
+    renderEditAkunToko();
+}
+/* ===== AKHIR BLOK 4.1.4 ===== */	
 </script>
 <!-- ===== AKHIR BLOK 4.1 ===== -->
 <!-- ===== BLOK 4.2 - JS_STAF_SUPERADMIN_AKUN ===== -->
