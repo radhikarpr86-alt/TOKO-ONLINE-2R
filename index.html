@@ -2774,11 +2774,15 @@
     /*
         Fungsi ini menampilkan form tambah produk dengan animasi scroll.
     */
-    function bukaFormTambahProdukGudang() {
+        function bukaFormTambahProdukGudang() {
         var form = document.getElementById('formTambahProdukGudang');
         if (form) {
             form.classList.remove('hidden');
             form.scrollIntoView({ behavior: 'smooth' });
+            // Tambahkan ini agar event listener foto terpasang
+            setTimeout(function() {
+                pasangEventListenerFotoGudang();
+            }, 100);
         }
     }
     /* ===== AKHIR BLOK 3.10.13.2 ===== */
@@ -2869,6 +2873,31 @@
         document.getElementById('gudangKodeProduk').focus();
     }
     /* ===== AKHIR BLOK 3.10.13.5 ===== */
+	    /* ===== BLOK 3.10.13.6 - PASANG EVENT LISTENER FOTO SETIAP FORM DIBUKA ===== */
+    /*
+        Fungsi ini dipanggil setiap kali form tambah produk gudang ditampilkan.
+        Memastikan event listener untuk upload foto selalu terpasang dengan benar.
+    */
+    function pasangEventListenerFotoGudang() {
+        var inputFoto = document.getElementById('gudangFotoProduk');
+        if (inputFoto) {
+            // Hapus listener lama jika ada (untuk mencegah dobel)
+            var listenerBaru = function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    document.getElementById('gudangNamaFoto').textContent = file.name;
+                    var pembaca = new FileReader();
+                    pembaca.onload = function(ev) {
+                        localStorage.setItem('2r_produk_gudang_foto_temp', ev.target.result);
+                    };
+                    pembaca.readAsDataURL(file);
+                }
+            };
+            inputFoto.removeEventListener('change', listenerBaru);
+            inputFoto.addEventListener('change', listenerBaru);
+        }
+    }
+    /* ===== AKHIR BLOK 3.10.13.6 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10.13 ===== -->
 <!-- ===== BLOK 3.10.14 - JS_FUNGSI_FILTER_PRODUK ===== -->
@@ -4764,7 +4793,7 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 <!-- ===== AKHIR BLOK 5.3 ===== -->
 <!-- ===== BLOK 5.5 - JS_EVENT_SCAN_BARCODE ===== -->
 <script>
-    /* ===== BLOK 5.5.1 - EVENT UPLOAD FOTO PRODUK GUDANG ===== */
+        /* ===== BLOK 5.5.1 - EVENT UPLOAD FOTO PRODUK GUDANG ===== */
     /*
         Event listener untuk input file foto produk gudang.
         Menyimpan foto sementara ke localStorage.
