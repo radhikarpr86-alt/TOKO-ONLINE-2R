@@ -2902,10 +2902,14 @@
     }
     /* ===== AKHIR BLOK 3.10.13.6 ===== */
 
-    /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK ===== */
+        /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK ===== */
     /*
         Fungsi ini menampilkan form edit produk yang sudah terisi data lama.
         Data diambil dari localStorage berdasarkan ID produk yang dipilih.
+        Menampilkan:
+        - Tanggal Input (read-only)
+        - Penginput (read-only)
+        - Preview foto lama (jika ada)
     */
     function renderEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
@@ -2927,8 +2931,10 @@
         html += '<div class="page-header"><h2>Edit Produk Gudang</h2><p>Ubah data produk yang sudah ada.</p></div>';
         
         html += '<div class="card">';
-        html += '<div class="card-header">Form Edit Produk <button class="button button-danger button-small" onclick="renderManajemenStokGudang()"><i class="fas fa-times"></i> Batal</button></div>';
+        html += '<div class="card-header">Form Edit Produk <button class="button button-danger button-small" onclick="renderKelolaProduk()"><i class="fas fa-times"></i> Batal</button></div>';
         html += '<div class="grid-2">';
+        
+        // Field utama
         html += '<div><label class="form-label">Nama Produk</label><input type="text" id="editGudangNamaProduk" class="form-input" value="' + produkTarget.namaProduk + '"></div>';
         html += '<div><label class="form-label">Kode Produk (Barcode)</label><input type="text" id="editGudangKodeProduk" class="form-input" value="' + produkTarget.kodeProduk + '"></div>';
         html += '<div><label class="form-label">Harga Beli (Modal)</label><input type="number" id="editGudangHargaBeli" class="form-input" value="' + produkTarget.hargaBeli + '"></div>';
@@ -2949,7 +2955,19 @@
         }
         html += '</select></div>';
         html += '<div><label class="form-label">Tanggal Kadaluarsa</label><input type="date" id="editGudangTanggalKadaluarsa" class="form-input" value="' + produkTarget.tanggalKadaluarsa + '"></div>';
-        html += '<div><label class="form-label">Ganti Foto Produk</label>';
+        
+        // Field read-only: Tanggal Input & Penginput
+        html += '<div><label class="form-label">Tanggal Input</label><input type="text" class="form-input" value="' + (produkTarget.tanggalInput || produkTarget.tanggalMasuk || '-') + '" disabled style="background:#f0f0f0;"></div>';
+        html += '<div><label class="form-label">Penginput</label><input type="text" class="form-input" value="' + (produkTarget.namaPenginput || produkTarget.namaToko || '-') + '" disabled style="background:#f0f0f0;"></div>';
+        
+        // Preview foto lama
+        html += '<div style="grid-column: 1 / -1;"><label class="form-label">Foto Produk</label>';
+        if (produkTarget.fotoProduk && produkTarget.fotoProduk.length > 0) {
+            var fotoLama = produkTarget.fotoProduk[0];
+            html += '<div style="margin-bottom:10px;"><img src="' + fotoLama + '" style="width:100px; height:100px; object-fit:cover; border-radius:6px;"></div>';
+        } else {
+            html += '<p style="color:#888; font-size:13px;">Belum ada foto</p>';
+        }
         html += '<input type="file" id="editGudangFotoProduk" accept=".jpg,.jpeg,.png" style="display:none;">';
         html += '<button class="button button-primary button-small" onclick="document.getElementById(\'editGudangFotoProduk\').click();">Pilih Foto Baru</button>';
         html += '<span id="editGudangNamaFoto" style="font-size:12px; color:#888; margin-left:10px;">Kosongkan jika tidak ganti</span>';
@@ -2962,28 +2980,17 @@
 
         // Pasang event listener untuk foto edit
         setTimeout(function() {
-            var inputFotoEdit = document.getElementById('editGudangFotoProduk');
-            if (inputFotoEdit) {
-                inputFotoEdit.onchange = function(e) {
-                    var file = e.target.files[0];
-                    if (file) {
-                        document.getElementById('editGudangNamaFoto').textContent = file.name;
-                        var pembaca = new FileReader();
-                        pembaca.onload = function(ev) {
-                            localStorage.setItem('2r_edit_produk_gudang_foto_temp', ev.target.result);
-                        };
-                        pembaca.readAsDataURL(file);
-                    }
-                };
-            }
+            pasangEventListenerFotoEdit();
         }, 300);
     }
     /* ===== AKHIR BLOK 3.10.13.7 ===== */
 
-        /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG ===== */
+            /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG ===== */
     /*
         Fungsi ini menyimpan perubahan data produk yang sudah diedit.
-        Jika user mengganti foto, foto lama akan diganti dengan foto baru.
+        - Tanggal Input tetap sama.
+        - Penginput diperbarui.
+        - Foto lama tetap jika tidak diganti.
     */
     function simpanEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
@@ -3024,19 +3031,48 @@
         semuaProdukGudang[indexProduk].jenis = jenis;
         semuaProdukGudang[indexProduk].satuan = satuan;
         semuaProdukGudang[indexProduk].tanggalKadaluarsa = tanggalKadaluarsa;
-        semuaProdukGudang[indexProduk].namaPenginput = user.nama; // UPDATE NAMA PENGINPUT
+        
+        // Tanggal Input tetap (tidak diubah)
+        // Penginput diperbarui
+        semuaProdukGudang[indexProduk].namaPenginput = user.nama;
 
         // Jika user mengganti foto, update foto
         if (fotoBaru) {
             semuaProdukGudang[indexProduk].fotoProduk = [fotoBaru];
             localStorage.removeItem('2r_edit_produk_gudang_foto_temp');
         }
+        // Jika tidak ganti foto, foto lama tetap dipertahankan
 
         localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
-        renderManajemenStokGudang();
+        renderKelolaProduk();
         tampilkanToast('Produk berhasil diperbarui!', 'success');
     }
     /* ===== AKHIR BLOK 3.10.13.8 ===== */
+	    /* ===== BLOK 3.10.13.9 - PASANG EVENT LISTENER FOTO EDIT ===== */
+    /*
+        Fungsi ini dipanggil setiap kali form edit produk ditampilkan.
+        Memastikan event listener untuk upload foto edit berfungsi.
+    */
+    function pasangEventListenerFotoEdit() {
+        var inputFotoEdit = document.getElementById('editGudangFotoProduk');
+        if (inputFotoEdit) {
+            // Hapus listener lama jika ada
+            var listenerBaru = function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    document.getElementById('editGudangNamaFoto').textContent = file.name;
+                    var pembaca = new FileReader();
+                    pembaca.onload = function(ev) {
+                        localStorage.setItem('2r_edit_produk_gudang_foto_temp', ev.target.result);
+                    };
+                    pembaca.readAsDataURL(file);
+                }
+            };
+            inputFotoEdit.removeEventListener('change', listenerBaru);
+            inputFotoEdit.addEventListener('change', listenerBaru);
+        }
+    }
+    /* ===== AKHIR BLOK 3.10.13.9 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10.13 ===== -->
 <!-- ===== BLOK 3.10.14 - JS_FUNGSI_FILTER_PRODUK ===== -->
@@ -3163,6 +3199,60 @@
     /* ===== AKHIR BLOK 3.10.15.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
+	/* ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== */
+<script>
+    /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK ===== */
+    /*
+        Fungsi ini menampilkan halaman Kelola Produk.
+        Halaman ini khusus untuk mengelola produk yang sudah ada.
+        Menampilkan tabel produk dengan kolom Tanggal Input dan Penginput.
+        Setiap produk memiliki tombol Edit dan Hapus.
+    */
+    function renderKelolaProduk() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var areaKonten = document.getElementById('mainContent');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var html = '';
+
+        html += '<div class="page-header">';
+        html += '<h2>Kelola Produk</h2>';
+        html += '<p>Kelola produk yang sudah ada di gudang Anda. Edit atau hapus produk yang sudah tersimpan.</p>';
+        html += '</div>';
+
+        if (produkSaya.length === 0) {
+            html += '<div class="card">';
+            html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum ada produk</h3><p>Silakan tambahkan produk baru melalui menu Manajemen Stok Gudang.</p></div>';
+            html += '</div>';
+        } else {
+            html += '<div class="card">';
+            html += '<div class="card-header">Daftar Produk <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + produkSaya.length + ')</span></div>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Tanggal Input</th><th>Penginput</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
+            for (var i = 0; i < produkSaya.length; i++) {
+                var p = produkSaya[i];
+                var statusKadaluarsa = 'badge-success';
+                var hariIni = new Date();
+                var tanggalKadaluarsa = new Date(p.tanggalKadaluarsa);
+                var selisihHari = Math.ceil((tanggalKadaluarsa - hariIni) / (1000 * 60 * 60 * 24));
+                if (selisihHari <= 30 && selisihHari >= 0) {
+                    statusKadaluarsa = 'badge-warning';
+                } else if (selisihHari < 0) {
+                    statusKadaluarsa = 'badge-danger';
+                }
+                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + (p.tanggalInput || p.tanggalMasuk || '-') + '</td><td>' + (p.namaPenginput || '-') + '</td><td>' + p.totalTerjual + '</td><td>';
+                html += '<button class="button button-primary button-extra-small" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
+                html += '<button class="button button-danger button-extra-small" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
+                html += '</td></tr>';
+            }
+            html += '</tbody></table></div>';
+            html += '</div>';
+        }
+
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 3.10.16.1 ===== */
+</script>
+<!-- ===== AKHIR BLOK 3.10.16 ===== -->
 <!-- ===== AKHIR BLOK 3.10 ===== -->
 <!-- ===== BLOK 4.1 - JS_RENDER_EDIT_AKUN ===== -->
 <script>
