@@ -202,51 +202,107 @@
 <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 2 (1) ===== -->
 
-<!-- ===== BLOK 3 (1) - 01 HALAMAN LOGIN ===== -->
-<div id="pageAuth">
-    <div class="auth-wrapper">
-        <div class="auth-box">
-            <div class="auth-logo">
+<!-- ===== BLOK 3 (1) - 01 HALAMAN LOGIN & REGISTER ===== -->
+<div id="pageAuthentication">
+    <div class="authentication-wrapper">
+        <div class="authentication-box">
+            
+            <!-- Logo & Judul -->
+            <div class="authentication-logo">
                 <i class="fas fa-store-alt"></i>
                 <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
                 <p>Platform Belanja & Layanan Serba Ada</p>
             </div>
-            <div class="auth-error" id="authError">
-                <i class="fas fa-exclamation-circle"></i> <span id="authErrorText"></span>
+
+            <!-- Pesan Error -->
+            <div class="authentication-error" id="authenticationError">
+                <i class="fas fa-exclamation-circle"></i> 
+                <span id="authenticationErrorText"></span>
             </div>
-            <form class="auth-form" id="loginForm">
-                <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Masukkan username" required></div></div>
-                <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Masukkan password" required></div></div>
-                <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
-                <div class="auth-footer">Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a></div>
+
+            <!-- ===== FORM LOGIN ===== -->
+            <form class="authentication-form" id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+                <button type="submit" class="button-submit">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                <div class="authentication-footer">
+                    Belum punya akun? 
+                    <a onclick="toggleForm('register')">Daftar di sini</a>
+                </div>
             </form>
-            <form class="auth-form hidden-form" id="registerForm">
-    <div class="form-group"><label>Pilih Role</label><div class="input-group"><i class="fas fa-user-tag"></i><select id="regRole"><option value="customer">Customer</option><option value="toko">Toko</option><option value="ojek">Ojek</option><option value="pedagang">Pedagang Pasar</option><option value="codseller">COD Seller</option></select></div></div>
-    
-    <!-- ===== TAMBAHAN ID OTOMATIS ===== -->
-    <div class="form-group">
-        <label>ID Akun (Otomatis)</label>
-        <div class="input-group">
-            <i class="fas fa-id-card"></i>
-            <input type="text" id="regIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
+
+            <!-- ===== FORM REGISTER ===== -->
+            <form class="authentication-form hidden-form" id="registerForm">
+                
+                <div class="form-group">
+                    <label>Pilih Role</label>
+                    <div class="input-group">
+                        <i class="fas fa-user-tag"></i>
+                        <select id="registerRole">
+                            <option value="customer">Customer</option>
+                            <option value="toko">Toko</option>
+                            <option value="ojek">Ojek</option>
+                            <option value="pedagang">Pedagang Pasar</option>
+                            <option value="codseller">COD Seller</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ===== ID OTOMATIS (TAMBAHAN BARU) ===== -->
+                <div class="form-group">
+                    <label>ID Akun (Otomatis)</label>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="registerIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background-color:#f0f0f0; color:#666666;">
+                    </div>
+                </div>
+                <!-- ===== AKHIR ID OTOMATIS ===== -->
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="registerUsername" placeholder="Buat username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerPassword" placeholder="Buat password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="registerNama" placeholder="Nama lengkap Anda" required>
+                    </div>
+                </div>
+                <button type="submit" class="button-submit">
+                    <i class="fas fa-user-plus"></i> Daftar
+                </button>
+                <div class="authentication-footer">
+                    Sudah punya akun? 
+                    <a onclick="toggleForm('login')">Login di sini</a>
+                </div>
+            </form>
+
         </div>
-    </div>
-    <!-- ===== AKHIR TAMBAHAN ===== -->
-    
-    <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="regUsername" placeholder="Buat username" required></div></div>
-    <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Buat password" required></div></div>
-    <div class="form-group"><label>Nama Lengkap</label><div class="input-group"><i class="fas fa-id-card"></i><input type="text" id="regNama" placeholder="Nama lengkap Anda" required></div></div>
-    <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
-    <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
-</form>
-        </div>
-    </div>
-</div>
-		<div class="form-group">
-    <label>ID Akun (Otomatis)</label>
-    <div class="input-group">
-        <i class="fas fa-id-card"></i>
-        <input type="text" id="regIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
     </div>
 </div>
 <!-- ===== AKHIR BLOK 3 (1) ===== -->
@@ -615,6 +671,15 @@ document.getElementById('regRole').addEventListener('change', function() {
         idPreview.value = generateId(role);
     }
 });
+	// ===== UPDATE ID OTOMATIS SAAT ROLE BERUBAH =====
+document.getElementById('registerRole').addEventListener('change', function() {
+    var selectedRole = this.value;
+    var idPreview = document.getElementById('registerIdPreview');
+    if (idPreview) {
+        idPreview.value = generateId(selectedRole);
+    }
+});
+// ===== AKHIR UPDATE ID OTOMATIS =====
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
 <!-- ===== BLOK 6 (3) - 03 SIDEBAR SETUP (SUPER LENGKAP) ===== -->
