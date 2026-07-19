@@ -1680,7 +1680,7 @@
     }
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
-            /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
+             /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN (SUPER LENGKAP) ===== */
     /*
         Fungsi ini adalah pusat routing aplikasi.
         Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
@@ -1696,17 +1696,25 @@
         if (namaHalaman === 'dashboard') {
             renderDashboard();
         } else if (namaHalaman === 'transaksi') {
-            renderTransaksi(); // TAMBAHAN UNTUK MENU TRANSAKSI
+            renderTransaksi(); // <-- MENU TRANSAKSI (SUDAH BENAR)
         } else if (namaHalaman === 'profile') {
+            // ===== PERBAIKAN PROFIL AGAR TOKO MUNCUL =====
             var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
             var role = user.role;
+            
+            // Jika SuperAdmin, pakai renderProfilSuperAdmin
             if (role === 'superadmin') {
                 renderProfilSuperAdmin(user);
-            } else if (role === 'customer') {
+            } 
+            // Jika Customer, pakai renderProfilCustomer
+            else if (role === 'customer') {
                 renderProfilCustomer();
-            } else {
+            } 
+            // Jika role lainnya (Toko, Ojek, Pedagang, dll), pakai renderProfilUmum
+            else {
                 renderProfilUmum(user, role);
             }
+            // ===== AKHIR PERBAIKAN =====
         } else if (namaHalaman === 'daftarAkun') {
             renderDaftarAkun();
         } else if (namaHalaman === 'persetujuan') {
@@ -1734,12 +1742,14 @@
         } else if (namaHalaman === 'transferMenu') {
             renderTransferMenu();
         } else if (namaHalaman === 'editAkun') {
+            // ===== PERBAIKAN UNTUK EDIT AKUN TOKO & CUSTOMER =====
             var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
             if (user.role === 'customer') {
                 renderEditAkun();
             } else {
                 renderEditAkunToko();
             }
+            // ===== AKHIR PERBAIKAN =====
         }
 
         // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
@@ -1783,6 +1793,7 @@
         }
     }
     /* ===== AKHIR BLOK 3.5.2 ===== */
+
     /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
     /*
         Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
@@ -2747,7 +2758,6 @@
     }
 </script>
 <!-- ===== AKHIR BLOK 3.10.8 ===== -->
-</script>
 <!-- ===== BLOK 3.10.12 - JS_RENDER_MANAJEMEN_STOK_GUDANG ===== -->
 <script>
               /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL + TOTAL DI BAWAH) ===== */
