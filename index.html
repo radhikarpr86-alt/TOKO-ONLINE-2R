@@ -4256,13 +4256,13 @@
     /* ===== AKHIR BLOK 4.4.13 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.4 ===== -->
-<!-- ===== BLOK 4.5 - JS_RENDER_PROFIL_UMUM ===== -->
+<!-- ===== BLOK 4.5 - JS_RENDER_PROFIL_UMUM (LENGKAP DENGAN ALAMAT KTP & DOMISILI) ===== -->
 <script>
-    /* ===== BLOK 4.5.1 - RENDER PROFIL UMUM ===== */
+    /* ===== BLOK 4.5.1 - RENDER PROFIL UMUM (TOKO, OJEK, PEDAGANG, DLL) ===== */
     /*
         Fungsi ini menampilkan halaman profil untuk role selain SuperAdmin dan Customer.
         Digunakan untuk Toko, Ojek, Pedagang, Staf Admin, Customer Service, Sponsor.
-        Menampilkan data pribadi, rekening, dan upload KTP.
+        Menampilkan data pribadi, rekening, alamat KTP, alamat domisili, dan upload KTP.
     */
     function renderProfilUmum(user, role) {
         var areaKonten = document.getElementById('mainContent');
@@ -4284,9 +4284,9 @@
         };
 
         var html = '';
-        html += '<div class="page-header"><h2>Profil ' + (namaRole[role] || role) + '</h2><p>Kelola data pribadi, rekening, dan dokumen KTP Anda.</p></div>';
+        html += '<div class="page-header"><h2>Profil ' + (namaRole[role] || role) + '</h2><p>Kelola data pribadi, rekening, alamat KTP, alamat domisili, dan dokumen KTP.</p></div>';
         
-        // Data Pribadi & Rekening
+        // ===== DATA PRIBADI & REKENING =====
         html += '<div class="card"><div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi & Rekening</span><button class="button button-primary button-small" onclick="simpanDataPribadiUmum()"><i class="fas fa-save"></i> Simpan</button></div>';
         html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" value="' + (user.nama || '') + '"></div>';
         html += '<div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" value="' + (user.email || '') + '"></div>';
@@ -4296,7 +4296,35 @@
         html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekening" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
         html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRek" class="form-input" value="' + (user.pemilikRekening || '') + '"></div></div></div>';
         
-        // Dokumen KTP
+        // ===== ALAMAT SESUAI KTP =====
+        html += '<div class="card"><div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Alamat Sesuai KTP</span><button class="button button-primary button-small" onclick="simpanAlamatKTPUmum()"><i class="fas fa-save"></i> Simpan Alamat KTP</button></div>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+        html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
+        html += '<div><label class="form-label">RW</label><input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
+        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="ktpDesa" class="form-input" value="' + (user.ktpDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kecamatan</label><input type="text" id="ktpKecamatan" class="form-input" value="' + (user.ktpKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="ktpKabupaten" class="form-input" value="' + (user.ktpKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+        html += '<div><label class="form-label">Provinsi</label><input type="text" id="ktpProvinsi" class="form-input" value="' + (user.ktpProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+        html += '</div></div>';
+        
+        // ===== ALAMAT DOMISILI / SEKARANG =====
+        html += '<div class="card"><div class="card-header"><span><i class="fas fa-home" style="color:#FF6B00;"></i> Alamat Domisili / Sekarang</span><button class="button button-primary button-small" onclick="simpanAlamatDomisiliUmum()"><i class="fas fa-save"></i> Simpan Alamat Domisili</button></div>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+        html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
+        html += '<div><label class="form-label">RW</label><input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
+        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="domDesa" class="form-input" value="' + (user.domDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kecamatan</label><input type="text" id="domKecamatan" class="form-input" value="' + (user.domKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="domKabupaten" class="form-input" value="' + (user.domKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+        html += '<div><label class="form-label">Provinsi</label><input type="text" id="domProvinsi" class="form-input" value="' + (user.domProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+        html += '</div></div>';
+        
+        // ===== DOKUMEN KTP =====
         html += '<div class="card"><div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Dokumen KTP</span></div>';
         html += '<div class="upload-area" id="uploadKtpContainer"><div id="ktpPreview">';
         if (user.ktp) {
@@ -4323,9 +4351,8 @@
             }
         }, 300);
     }
-    /* ===== AKHIR BLOK 4.5.1 ===== */
 
-    /* ===== BLOK 4.5.2 - SIMPAN DATA PRIBADI UMUM ===== */
+    /* ===== BLOK 4.5.2 - SIMPAN DATA PRIBADI DAN REKENING ===== */
     /*
         Fungsi ini menyimpan data pribadi dan rekening dari form profil umum
         ke localStorage dan database akun.
@@ -4360,9 +4387,118 @@
         document.getElementById('userNama').textContent = user.nama;
         tampilkanToast('Data pribadi dan rekening disimpan!', 'success');
     }
-    /* ===== AKHIR BLOK 4.5.2 ===== */
 
-    /* ===== BLOK 4.5.3 - PREVIEW KTP ===== */
+    /* ===== BLOK 4.5.3 - SIMPAN ALAMAT KTP ===== */
+    /*
+        Fungsi ini menyimpan data alamat KTP dari form profil umum
+        ke localStorage dan database akun.
+    */
+    function simpanAlamatKTPUmum() {
+        var user = JSON.parse(localStorage.getItem('2r_user'));
+        var dataAkun = getDataAkun();
+        
+        user.ktpDusun = document.getElementById('ktpDusun').value;
+        user.ktpRT = document.getElementById('ktpRT').value;
+        user.ktpRW = document.getElementById('ktpRW').value;
+        user.ktpJalan = document.getElementById('ktpJalan').value;
+        user.ktpDesa = document.getElementById('ktpDesa').value;
+        user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
+        user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
+        user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
+        user.ktpKodepos = document.getElementById('ktpKodepos').value;
+        
+        // Gabungkan alamat KTP jadi satu string
+        var gabungKTP = '';
+        if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
+        if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
+        if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
+        if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
+        if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
+        if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
+        if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
+        if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
+        if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
+        user.alamatKTP = gabungKTP;
+        
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                dataAkun[i].ktpDusun = user.ktpDusun;
+                dataAkun[i].ktpRT = user.ktpRT;
+                dataAkun[i].ktpRW = user.ktpRW;
+                dataAkun[i].ktpJalan = user.ktpJalan;
+                dataAkun[i].ktpDesa = user.ktpDesa;
+                dataAkun[i].ktpKecamatan = user.ktpKecamatan;
+                dataAkun[i].ktpKabupaten = user.ktpKabupaten;
+                dataAkun[i].ktpProvinsi = user.ktpProvinsi;
+                dataAkun[i].ktpKodepos = user.ktpKodepos;
+                dataAkun[i].alamatKTP = user.alamatKTP;
+                break;
+            }
+        }
+        
+        localStorage.setItem('2r_user', JSON.stringify(user));
+        simpanDataAkun(dataAkun);
+        tampilkanToast('Alamat KTP berhasil disimpan!', 'success');
+    }
+
+    /* ===== BLOK 4.5.4 - SIMPAN ALAMAT DOMISILI ===== */
+    /*
+        Fungsi ini menyimpan data alamat domisili dari form profil umum
+        ke localStorage dan database akun.
+    */
+    function simpanAlamatDomisiliUmum() {
+        var user = JSON.parse(localStorage.getItem('2r_user'));
+        var dataAkun = getDataAkun();
+        
+        user.domDusun = document.getElementById('domDusun').value;
+        user.domRT = document.getElementById('domRT').value;
+        user.domRW = document.getElementById('domRW').value;
+        user.domJalan = document.getElementById('domJalan').value;
+        user.domDesa = document.getElementById('domDesa').value;
+        user.domKecamatan = document.getElementById('domKecamatan').value;
+        user.domKabupaten = document.getElementById('domKabupaten').value;
+        user.domProvinsi = document.getElementById('domProvinsi').value;
+        user.domKodepos = document.getElementById('domKodepos').value;
+        
+        // Gabungkan alamat domisili jadi satu string
+        var gabungDom = '';
+        if (user.domDusun) gabungDom += user.domDusun + ', ';
+        if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
+        if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
+        if (user.domJalan) gabungDom += user.domJalan + ', ';
+        if (user.domDesa) gabungDom += user.domDesa + ', ';
+        if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
+        if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
+        if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
+        if (user.domKodepos) gabungDom += user.domKodepos;
+        user.alamatDomisili = gabungDom;
+        
+        // Untuk kompatibilitas dengan sistem lama
+        user.alamat = user.alamatDomisili || user.alamatKTP;
+        
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                dataAkun[i].domDusun = user.domDusun;
+                dataAkun[i].domRT = user.domRT;
+                dataAkun[i].domRW = user.domRW;
+                dataAkun[i].domJalan = user.domJalan;
+                dataAkun[i].domDesa = user.domDesa;
+                dataAkun[i].domKecamatan = user.domKecamatan;
+                dataAkun[i].domKabupaten = user.domKabupaten;
+                dataAkun[i].domProvinsi = user.domProvinsi;
+                dataAkun[i].domKodepos = user.domKodepos;
+                dataAkun[i].alamatDomisili = user.alamatDomisili;
+                dataAkun[i].alamat = user.alamat;
+                break;
+            }
+        }
+        
+        localStorage.setItem('2r_user', JSON.stringify(user));
+        simpanDataAkun(dataAkun);
+        tampilkanToast('Alamat domisili berhasil disimpan!', 'success');
+    }
+
+    /* ===== BLOK 4.5.5 - PREVIEW KTP ===== */
     /*
         Fungsi ini menampilkan preview gambar KTP saat user memilih file.
     */
@@ -4377,9 +4513,8 @@
         };
         pembaca.readAsDataURL(file);
     }
-    /* ===== AKHIR BLOK 4.5.3 ===== */
 
-    /* ===== BLOK 4.5.4 - SIMPAN KTP ===== */
+    /* ===== BLOK 4.5.6 - SIMPAN KTP ===== */
     /*
         Fungsi ini menyimpan gambar KTP yang sudah di-preview ke database akun.
     */
@@ -4403,7 +4538,6 @@
         localStorage.removeItem('2r_ktp_temp');
         tampilkanToast('KTP disimpan!', 'success');
     }
-    /* ===== AKHIR BLOK 4.5.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.5 ===== -->
 <!-- ===== BLOK 4.6 - JS_RENDER_DAFTAR_AKUN ===== -->
