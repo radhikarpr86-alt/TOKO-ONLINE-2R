@@ -436,6 +436,91 @@ function tutupModal(id) {
         modal.classList.remove('active');
     }
 }
+	// ===== FUNGSI NOTIFIKASI LENGKAP =====
+
+// Ambil semua notifikasi, filter berdasarkan userId
+function ambilNotifikasi(userId) {
+    var semua = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+    if (userId) {
+        return semua.filter(function(n) { 
+            return n.userId === userId || n.userId === 'ALL'; 
+        });
+    }
+    return semua;
+}
+
+// Simpan notifikasi baru
+function simpanNotifikasi(userId, judul, pesan, jenis) {
+    if (!jenis) jenis = 'system';
+    var semua = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+    var notifBaru = {
+        id: Date.now(),
+        userId: userId,
+        judul: judul,
+        pesan: pesan,
+        jenis: jenis,
+        status: 'BELUM_DIBACA',
+        tanggal: new Date().toISOString()
+    };
+    semua.push(notifBaru);
+    localStorage.setItem('2r_notifikasi', JSON.stringify(semua));
+}
+
+// Tandai satu notifikasi sudah dibaca
+function tandaiNotifikasiDibaca(id) {
+    var semua = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+    for (var i = 0; i < semua.length; i++) {
+        if (semua[i].id === id) {
+            semua[i].status = 'SUDAH_DIBACA';
+            break;
+        }
+    }
+    localStorage.setItem('2r_notifikasi', JSON.stringify(semua));
+}
+
+// Tandai semua notifikasi untuk user tertentu sudah dibaca
+function tandaiSemuaNotifikasiDibaca(userId) {
+    var semua = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+    for (var i = 0; i < semua.length; i++) {
+        if ((semua[i].userId === userId || semua[i].userId === 'ALL') && semua[i].status === 'BELUM_DIBACA') {
+            semua[i].status = 'SUDAH_DIBACA';
+        }
+    }
+    localStorage.setItem('2r_notifikasi', JSON.stringify(semua));
+}
+
+// Kirim notifikasi ke semua akun dengan role tertentu
+function kirimNotifikasiKeRole(roleTarget, judul, pesan, jenis) {
+    var semuaAkun = getDataAkun();
+    for (var i = 0; i < semuaAkun.length; i++) {
+        if (semuaAkun[i].role === roleTarget) {
+            simpanNotifikasi(semuaAkun[i].id, judul, pesan, jenis);
+        }
+    }
+}
+
+// Kirim notifikasi ke semua akun (ALL)
+function kirimNotifikasiKeSemua(judul, pesan, jenis) {
+    var semuaAkun = getDataAkun();
+    for (var i = 0; i < semuaAkun.length; i++) {
+        simpanNotifikasi(semuaAkun[i].id, judul, pesan, jenis);
+    }
+}
+
+// Hapus notifikasi yang sudah dibaca lebih dari 7 hari (opsional, untuk kebersihan data)
+function bersihkanNotifikasi() {
+    var semua = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+    var sekarang = new Date();
+    var baru = [];
+    for (var i = 0; i < semua.length; i++) {
+        var tanggal = new Date(semua[i].tanggal);
+        var selisihHari = (sekarang - tanggal) / (1000 * 60 * 60 * 24);
+        if (selisihHari < 7 || semua[i].status === 'BELUM_DIBACA') {
+            baru.push(semua[i]);
+        }
+    }
+    localStorage.setItem('2r_notifikasi', JSON.stringify(baru));
+}
 </script>
 <!-- ===== AKHIR BLOK 6 (1) ===== -->
 
@@ -1584,7 +1669,20 @@ function renderEditAkun() {
     tampilkanToast('Pengajuan hapus akun berhasil dikirim ke admin!', 'success');
     renderEditAkun();
 }
-
+	// Kirim notifikasi ke Staf Admin dan SuperAdmin
+var semuaAkun = getDataAkun();
+for (var i = 0; i < semuaAkun.length; i++) {
+    var akun = semuaAkun[i];
+    if (akun.role === 'staf_admin' || akun.role === 'superadmin') {
+        simpanNotifikasi(akun.id, 'Pengajuan Hapus Akun Baru', 
+            'Customer ' + user.username + ' (' + user.nama + ') mengajukan penghapusan akun.', 
+            'account');
+    }
+}
+// Kirim notifikasi ke Customer
+simpanNotifikasi(pengajuan[index].userId, 'Pengajuan Hapus Akun Ditolak', 
+    'Pengajuan hapus akun Anda telah ditolak oleh Staf Admin.', 
+    'account');
 	// ===== FUNGSI UNTUK STAF ADMIN & SUPERADMIN =====
 
 // ===== FUNGSI TERUSKAN PENGAJUAN DARI STAF ADMIN KE SUPERADMIN =====
@@ -1622,7 +1720,10 @@ function teruskanPengajuanHapus(index) {
     renderDashboard();
     tampilkanToast('Pengajuan diteruskan ke SuperAdmin!', 'success');
 }
-
+// Kirim notifikasi ke SuperAdmin
+simpanNotifikasi(p.targetId, 'Pengajuan Diteruskan ke SuperAdmin', 
+    'Pengajuan hapus akun Anda telah diteruskan ke SuperAdmin untuk diproses.', 
+    'account');
 // ===== FUNGSI TOLAK PENGAJUAN OLEH STAF ADMIN =====
 function tolakPengajuanHapusStaf(index) {
     var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
@@ -1638,7 +1739,10 @@ function tolakPengajuanHapusStaf(index) {
     renderDashboard();
     tampilkanToast('Pengajuan ditolak.', 'success');
 }
-
+// Kirim notifikasi ke Customer
+simpanNotifikasi(pengajuanStaf[index].targetId, 'Pengajuan Hapus Akun Ditolak', 
+    'Pengajuan hapus akun Anda telah ditolak oleh SuperAdmin.', 
+    'account');
 // ===== FUNGSI SETUJUI PENGAJUAN OLEH SUPERADMIN =====
 function setujuiPengajuanStaf(index) {
     var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
@@ -1681,7 +1785,10 @@ function setujuiPengajuanStaf(index) {
     
     tampilkanToast('Akun berhasil dihapus permanen!', 'success');
 }
-
+// Kirim notifikasi ke Customer
+simpanNotifikasi(p.targetId, 'Pengajuan Hapus Akun Disetujui', 
+    'Pengajuan hapus akun Anda telah disetujui oleh SuperAdmin. Akun Anda telah dihapus permanen.', 
+    'account');
 // ===== FUNGSI TOLAK PENGAJUAN OLEH SUPERADMIN =====
 function tolakPengajuanStaf(index) {
     var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
@@ -1710,6 +1817,86 @@ function tolakPengajuanStaf(index) {
     renderDashboard();
     tampilkanToast('Pengajuan ditolak.', 'success');
 }
+	// ===== RENDER HALAMAN NOTIFIKASI =====
+function renderNotifikasi() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var contentArea = document.getElementById('mainContent');
+    var notifikasi = ambilNotifikasi(user.id);
+    var html = '';
+
+    html += '<div class="page-header">';
+    html += '<h2>Notifikasi</h2>';
+    html += '<p>Semua pemberitahuan penting untuk akun Anda.</p>';
+    html += '</div>';
+
+    // Tombol tandai semua sudah dibaca
+    if (notifikasi.length > 0) {
+        html += '<div style="text-align:right; margin-bottom:10px;">';
+        html += '<button class="btn btn-primary btn-sm" onclick="tandaiSemuaNotifikasiDibaca(\'' + user.id + '\'); renderNotifikasi();">';
+        html += '<i class="fas fa-check-double"></i> Tandai Semua Sudah Dibaca';
+        html += '</button>';
+        html += '</div>';
+    }
+
+    html += '<div class="card">';
+    html += '<div class="card-header">Daftar Notifikasi <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + notifikasi.length + ')</span></div>';
+
+    if (notifikasi.length === 0) {
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-bell-slash" style="color:#4CAF50;"></i>';
+        html += '<h3>Belum ada notifikasi</h3>';
+        html += '<p>Notifikasi akan muncul di sini jika ada aktivitas terkait akun Anda.</p>';
+        html += '</div>';
+    } else {
+        // Urutkan dari yang terbaru
+        notifikasi.sort(function(a, b) { 
+            return new Date(b.tanggal) - new Date(a.tanggal); 
+        });
+
+        html += '<div style="max-height:500px; overflow-y:auto;">';
+        for (var i = 0; i < notifikasi.length; i++) {
+            var n = notifikasi[i];
+            var style = 'background:#f8f9fa; border-left:4px solid #FF6B00;';
+            var labelStatus = '<span style="background:#FF6B00; color:white; padding:2px 10px; border-radius:12px; font-size:10px;">Baru</span>';
+            
+            if (n.status === 'SUDAH_DIBACA') {
+                style = 'background:white; border-left:4px solid #ccc; opacity:0.7;';
+                labelStatus = '<span style="background:#ccc; color:#666; padding:2px 10px; border-radius:12px; font-size:10px;">Sudah Dibaca</span>';
+            }
+
+            // Icon berdasarkan jenis
+            var iconJenis = 'fa-info-circle';
+            if (n.jenis === 'order') iconJenis = 'fa-shopping-cart';
+            else if (n.jenis === 'account') iconJenis = 'fa-user';
+            else if (n.jenis === 'promo') iconJenis = 'fa-tag';
+            else if (n.jenis === 'system') iconJenis = 'fa-cog';
+
+            html += '<div style="padding:15px; margin-bottom:10px; border-radius:8px; ' + style + '">';
+            html += '<div style="display:flex; justify-content:space-between; align-items:flex-start;">';
+            html += '<div style="display:flex; gap:10px; align-items:center;">';
+            html += '<i class="fas ' + iconJenis + '" style="color:#FF6B00; font-size:18px;"></i>';
+            html += '<h4 style="font-size:15px; margin:0;">' + n.judul + '</h4>';
+            html += '</div>';
+            html += '<div style="text-align:right;">';
+            html += '<span style="font-size:11px; color:#888;">' + new Date(n.tanggal).toLocaleString('id-ID') + '</span>';
+            html += ' ' + labelStatus;
+            html += '</div>';
+            html += '</div>';
+            html += '<p style="font-size:13px; margin:5px 0 0; color:#555;">' + n.pesan + '</p>';
+            if (n.status === 'BELUM_DIBACA') {
+                html += '<button class="btn btn-xs" style="background:#eee; margin-top:8px;" onclick="tandaiNotifikasiDibaca(' + n.id + '); renderNotifikasi();">';
+                html += '<i class="fas fa-check"></i> Tandai sudah dibaca';
+                html += '</button>';
+            }
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    html += '</div>';
+
+    contentArea.innerHTML = html;
+}
+	
 </script>
 <!-- ===== AKHIR BLOK 6 (7) (LANJUTAN) ===== -->
 <!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LANJUTAN: MENU IKLAN) ===== -->
