@@ -1559,6 +1559,44 @@ function renderEditAkun() {
     renderEditAkun();
 }
 
+	// ===== FUNGSI UNTUK STAF ADMIN & SUPERADMIN =====
+
+// ===== FUNGSI TERUSKAN PENGAJUAN DARI STAF ADMIN KE SUPERADMIN =====
+function teruskanPengajuanHapus(index) {
+    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    if (index < 0 || index >= pengajuan.length) {
+        tampilkanToast('Data tidak ditemukan!', 'error');
+        return;
+    }
+    if (!confirm('Teruskan pengajuan ini ke SuperAdmin?')) {
+        return;
+    }
+    
+    // Ubah status pengajuan customer menjadi DITERUSKAN
+    pengajuan[index].status = 'DITERUSKAN';
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+    
+    // Ambil data pengajuan yang diteruskan
+    var p = pengajuan[index];
+    
+    // Simpan ke dalam database pengajuan staf (untuk SuperAdmin)
+    var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+    pengajuanStaf.push({
+        id: Date.now(),
+        targetId: p.userId,
+        targetUsername: p.username,
+        targetNama: p.nama,
+        targetRole: p.role,
+        diajukanOleh: 'Staf Admin',
+        status: 'MENUNGGU',
+        diajukanPada: new Date().toISOString()
+    });
+    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
+    
+    renderDashboard();
+    tampilkanToast('Pengajuan diteruskan ke SuperAdmin!', 'success');
+}
+
 // ===== FUNGSI TOLAK PENGAJUAN OLEH STAF ADMIN =====
 function tolakPengajuanHapusStaf(index) {
     var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
