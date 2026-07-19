@@ -3208,11 +3208,11 @@
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
 	<!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
-        /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK (CARD VIEW) ===== */
+            /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK (KATALOG VIEW) ===== */
     /*
         Fungsi ini menampilkan halaman Kelola Produk.
-        Menampilkan produk dalam bentuk kartu (Card View).
-        Setiap kartu berisi Foto, Nama Produk, Harga, Stok, dan tombol Edit/Hapus.
+        Hanya menampilkan Foto, Nama, Harga, dan Stok.
+        Tombol Edit dan Hapus tetap tersedia.
     */
     function renderKelolaProduk() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -3223,7 +3223,7 @@
 
         html += '<div class="page-header">';
         html += '<h2>Kelola Produk</h2>';
-        html += '<p>Kelola produk yang sudah ada di gudang Anda. Edit atau hapus produk yang sudah tersimpan.</p>';
+        html += '<p>Daftar produk yang tersimpan di gudang Anda.</p>';
         html += '</div>';
 
         if (produkSaya.length === 0) {
@@ -3234,13 +3234,13 @@
             html += '<div class="card">';
             html += '<div class="card-header">Daftar Produk <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + produkSaya.length + ')</span></div>';
             
-            // ===== MULAI GRID CARD VIEW =====
-            html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:20px; padding:5px;">';
+            // ===== GRID PRODUK =====
+            html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:20px; padding:5px;">';
             
             for (var i = 0; i < produkSaya.length; i++) {
                 var p = produkSaya[i];
                 
-                // Cek ada foto atau tidak
+                // Cek foto
                 var fotoHtml = '';
                 if (p.fotoProduk && p.fotoProduk.length > 0) {
                     fotoHtml = '<img src="' + p.fotoProduk[0] + '" style="width:100%; height:180px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
@@ -3250,32 +3250,31 @@
 
                 html += '<div style="border:1px solid #eee; border-radius:10px; padding:15px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05); display:flex; flex-direction:column; justify-content:space-between;">';
                 
-                // Bagian Atas: Foto + Nama + Harga + Stok
+                // ===== ISI KARTU (FOTO, NAMA, HARGA, STOK) =====
                 html += '<div>';
                 html += fotoHtml;
-                html += '<h4 style="font-size:15px; font-weight:600; margin:0 0 5px 0; color:#333;">' + p.namaProduk + '</h4>';
-                html += '<p style="font-size:14px; font-weight:600; color:#FF6B00; margin:0 0 3px 0;">Rp ' + p.hargaJual + '</p>';
-                html += '<p style="font-size:13px; color:#888; margin:0;">Stok: ' + p.jumlahStok + ' ' + p.satuan + '</p>';
+                html += '<h4 style="font-size:15px; font-weight:600; margin:0 0 5px 0; color:#333; text-align:center;">' + p.namaProduk + '</h4>';
+                html += '<p style="font-size:14px; font-weight:600; color:#FF6B00; margin:0 0 3px 0; text-align:center;">Rp ' + p.hargaJual + '</p>';
+                html += '<p style="font-size:13px; color:#888; margin:0; text-align:center;">Stok: ' + p.jumlahStok + ' ' + p.satuan + '</p>';
                 html += '</div>';
+                // ===== AKHIR ISI KARTU =====
                 
-                // Bagian Bawah: Tombol Aksi
+                // ===== TOMBOL EDIT & HAPUS =====
                 html += '<div style="display:flex; gap:8px; margin-top:15px; border-top:1px solid #f5f5f5; padding-top:12px;">';
                 html += '<button class="button button-primary button-small" style="flex:1;" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
                 html += '<button class="button button-danger button-small" style="flex:1;" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
                 html += '</div>';
+                // ===== AKHIR TOMBOL =====
                 
                 html += '</div>'; // End Card
             }
             
             html += '</div>'; // End Grid
-            // ===== AKHIR GRID CARD VIEW =====
-            
             html += '</div>'; // End Card container
         }
 
         areaKonten.innerHTML = html;
     }
-    /* ===== AKHIR BLOK 3.10.16.1 ===== */
 <!-- ===== AKHIR BLOK 3.10 ===== -->
 <!-- ===== BLOK 4.1 - JS_RENDER_EDIT_AKUN ===== -->
 <script>
