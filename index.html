@@ -1485,7 +1485,7 @@
                 }
             ],
 
-            // ===== TOKO =====
+                        // ===== TOKO =====
             'toko': [
                 {
                     judul: 'Menu Utama',
@@ -1499,7 +1499,7 @@
                     judul: 'Menu Toko',
                     items: [
                         { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
+                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' }, // <-- TAMBAHKAN INI
                         { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                         { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
@@ -2494,7 +2494,7 @@
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.10.6 ===== */
-	<!-- ===== BLOK 3.10.7 - RENDER HALAMAN UPLOAD PRODUK PUBLIK ===== -->
+	<!-- ===== BLOK 3.10.7 - RENDER HALAMAN UPLOAD PRODUK PUBLIK (DENGAN BATAS 5 & AJUAN) ===== -->
 <script>
     /*
         Fungsi ini menampilkan halaman Upload Produk Publik untuk role Toko.
@@ -2583,7 +2583,7 @@
 
         areaKonten.innerHTML = html;
 
-        // Event listener untuk upload gambar
+        // Event listener untuk upload gambar	
         setTimeout(function() {
             var inputGambar = document.getElementById('produkGambar');
             if (inputGambar) {
