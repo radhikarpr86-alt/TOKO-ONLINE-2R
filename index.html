@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Multi Role - Toko Online 2R</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <!-- ===== BLOK 1 (1) - 01 HEADER & META ===== -->
 <!-- ===== AKHIR BLOK 1 (1) ===== -->
 
@@ -19,14 +10,14 @@
     .page-content.active { display: block; }
     .hidden { display: none !important; }
     .hidden-form { display: none !important; }
-    .mt-10 { margin-top: 10px; }
-    #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; min-width: 250px; display: flex; align-items: center; gap: 12px; }
+    .margin-top-10 { margin-top: 10px; }
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slide-in-right 0.4s ease; min-width: 250px; display: flex; align-items: center; gap: 12px; }
     .toast.success { background: #4CAF50; } .toast.error { background: #F44336; } .toast.warning { background: #FF9800; } .toast.info { background: #2196F3; }
-    @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slide-in-right { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     .empty-state { text-align: center; padding: 30px 20px; color: #888; }
     .empty-state i { font-size: 40px; color: #ddd; display: block; margin-bottom: 10px; }
-    #pageAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background: linear-gradient(135deg, #fff5f0, #ffe0cc); }
+    #page-auth { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background: linear-gradient(135deg, #fff5f0, #ffe0cc); }
 </style>
 <!-- ===== AKHIR BLOK 1 (2) ===== -->
 
@@ -45,8 +36,8 @@
     .input-group:focus-within { border-color: #FF6B00; background: white; }
     .input-group i { color: #aaa; font-size: 16px; width: 30px; text-align: center; }
     .input-group input, .input-group select { border: none; background: transparent; padding: 13px 0; font-size: 14px; width: 100%; outline: none; font-family: 'Poppins', sans-serif; }
-    .btn-submit { width: 100%; padding: 14px; background: #FF6B00; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
-    .btn-submit:hover { background: #e65c00; }
+    .button-submit { width: 100%; padding: 14px; background: #FF6B00; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .button-submit:hover { background: #e65c00; }
     .auth-footer { text-align: center; margin-top: 18px; font-size: 14px; color: #888; }
     .auth-footer a { color: #FF6B00; cursor: pointer; font-weight: 600; }
 </style>
@@ -58,7 +49,7 @@
     .navbar-brand { font-size: 20px; font-weight: 700; color: #FF6B00; display: flex; align-items: center; gap: 10px; }
     .navbar-user { display: flex; align-items: center; gap: 15px; }
     .navbar-user .role-badge { background: #fff0e5; color: #FF6B00; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
-    .btn-logout { background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+    .button-logout { background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
     .sidebar { position: fixed; top: 60px; left: 0; bottom: 0; width: 250px; background: white; border-right: 1px solid #eee; padding-top: 15px; overflow-y: auto; z-index: 999; }
     .sidebar-menu-title { font-size: 10px; text-transform: uppercase; color: #bbb; padding: 15px 25px 8px; font-weight: 700; letter-spacing: 1.5px; }
     .sidebar-menu-item { padding: 11px 25px; cursor: pointer; color: #666; font-weight: 500; display: flex; align-items: center; gap: 12px; font-size: 14px; border-left: 3px solid transparent; }
@@ -98,11 +89,13 @@
     .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: 'Poppins', sans-serif; }
     .form-input:focus { border-color: #FF6B00; outline: none; }
     .form-label { font-size: 12px; color: #888; margin-bottom: 4px; display: block; }
-    .btn { padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; border: none; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary { background: #FF6B00; color: white; } .btn-primary:hover { background: #e65c00; }
-    .btn-success { background: #4CAF50; color: white; } .btn-success:hover { background: #388E3C; }
-    .btn-danger { background: #F44336; color: white; } .btn-danger:hover { background: #D32F2F; }
-    .btn-warning { background: #FF9800; color: white; } .btn-xs { padding: 4px 10px; font-size: 11px; } .btn-sm { padding: 6px 14px; font-size: 12px; }
+    .button { padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; border: none; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
+    .button-primary { background: #FF6B00; color: white; } .button-primary:hover { background: #e65c00; }
+    .button-success { background: #4CAF50; color: white; } .button-success:hover { background: #388E3C; }
+    .button-danger { background: #F44336; color: white; } .button-danger:hover { background: #D32F2F; }
+    .button-warning { background: #FF9800; color: white; } 
+    .button-extra-small { padding: 4px 10px; font-size: 11px; } 
+    .button-small { padding: 6px 14px; font-size: 12px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; justify-content: center; align-items: center; }
     .modal-overlay.active { display: flex; }
     .modal { background: white; border-radius: 12px; max-width: 500px; width: 90%; padding: 25px; }
@@ -117,9 +110,52 @@
     .upload-area { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; background: #fafafa; cursor: pointer; }
     .upload-area:hover { border-color: #FF6B00; background: #fff5f0; }
     .upload-area i { font-size: 45px; color: #ddd; display: block; margin-bottom: 10px; }
-    .preview-img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; object-fit: contain; }
+    .preview-image { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; object-fit: contain; }
 </style>
 <!-- ===== AKHIR BLOK 1 (7) ===== -->
+
+<!-- ===== BLOK 1 (8) - 08 CSS RESPONSIVE (TAMBAHAN BARU) ===== -->
+<style>
+    /* ===== TAMBAHAN RESPONSIVE UNTUK PERANGKAT MOBILE ===== */
+    #menu-toggle { display: none; background: none; border: none; font-size: 22px; cursor: pointer; color: #FF6B00; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; }
+    .sidebar-overlay.active { display: block; }
+
+    @media (max-width: 768px) {
+        .navbar { padding: 10px 15px; }
+        .navbar-brand { font-size: 16px; gap: 8px; }
+        .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
+        .navbar-user span { font-size: 13px; }
+        .button-logout { padding: 6px 12px; font-size: 12px; }
+
+        #menu-toggle { display: block; }
+
+        .sidebar { 
+            left: -100%; 
+            width: 80%; 
+            transition: left 0.3s ease; 
+            top: 60px; 
+            z-index: 999; 
+        }
+        .sidebar.open { left: 0; }
+
+        .content { 
+            margin-left: 0; 
+            padding: 15px; 
+            margin-top: 60px; 
+        }
+
+        .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .widget-card .widget-number { font-size: 22px; }
+        .grid-2 { grid-template-columns: 1fr; }
+        .table { font-size: 12px; }
+        .modal { width: 95%; padding: 15px; }
+
+        .auth-wrapper { padding: 10px; }
+        .auth-box { padding: 20px; }
+    }
+</style>
+<!-- ===== AKHIR BLOK 1 (8) ===== -->
 <!-- ===== BLOK 2 (1) - 01 TOAST CONTAINER ===== -->
 <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 2 (1) ===== -->
@@ -156,36 +192,52 @@
 <!-- ===== AKHIR BLOK 3 (1) ===== -->
 
 <!-- ===== BLOK 4 (1) - 01 DASHBOARD UTAMA ===== -->
-<div id="pageDashboard" class="page-dashboard">
+<div id="page-dashboard" class="page-dashboard">
     <nav class="navbar">
-        <div class="navbar-brand"><i class="fas fa-store-alt"></i> Toko Online 2R</div>
+        <div class="navbar-brand">
+            <!-- ===== TAMBAHAN TOMBOL HAMBURGER UNTUK MOBILE ===== -->
+            <button id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- ===== AKHIR TAMBAHAN ===== -->
+            <i class="fas fa-store-alt"></i> Toko Online 2R
+        </div>
         <div class="navbar-user">
-            <span class="role-badge" id="roleBadge">Role</span>
-            <span id="userNama" style="font-weight:600;">User</span>
-            <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            <span class="role-badge" id="role-badge">Role</span>
+            <span id="user-nama" style="font-weight:600;">User</span>
+            <button class="button-logout" id="button-logout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         </div>
     </nav>
-    <aside class="sidebar" id="sidebarContainer"></aside>
-    <main class="content" id="mainContent"></main>
+    
+    <aside class="sidebar" id="sidebar-container"></aside>
+    
+    <!-- ===== TAMBAHAN OVERLAY UNTUK SIDEBAR SAAT DI MOBILE ===== -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <!-- ===== AKHIR TAMBAHAN ===== -->
+    
+    <main class="content" id="main-content"></main>
 </div>
-<!-- ===== AKHIR BLOK 4 (1) ===== -->
+<!-- ===== AKHIR BLOK 4 (1) ===== -->    
 
 <!-- ===== BLOK 5 (1) - 01 MODALS ===== -->
-<div class="modal-overlay" id="modalTolakAkun">
+<!-- ===== OVERLAY SIDEBAR SUDAH DITAMBAHKAN DI BLOK 4, JADI DI SINI TIDAK ADA TAMBAHAN ELEMEN BARU ===== -->
+<!-- ===== NAMUN MODAL YANG ADA TETAP PERTAHANKAN SEPERTI INI ===== -->
+
+<div class="modal-overlay" id="modal-tolak-akun">
     <div class="modal">
-        <div class="modal-header"><h3>Konfirmasi Penolakan</h3><button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button></div>
-        <div class="modal-body"><p>Yakin ingin menolak akun ini?</p><input type="hidden" id="tolakIdAkun"></div>
-        <div class="modal-footer"><button class="btn btn-xs" style="background:#eee;" onclick="tutupModal('modalTolakAkun')">Batal</button><button class="btn btn-danger btn-xs" onclick="eksekusiTolakAkun()">Ya, Tolak</button></div>
+        <div class="modal-header"><h3>Konfirmasi Penolakan</h3><button class="modal-close" onclick="tutupModal('modal-tolak-akun')">&times;</button></div>
+        <div class="modal-body"><p>Yakin ingin menolak akun ini?</p><input type="hidden" id="tolak-id-akun"></div>
+        <div class="modal-footer"><button class="button button-extra-small" style="background:#eee;" onclick="tutupModal('modal-tolak-akun')">Batal</button><button class="button button-danger button-extra-small" onclick="eksekusiTolakAkun()">Ya, Tolak</button></div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalPreviewGambar">
+<div class="modal-overlay" id="modal-preview-gambar">
     <div class="modal" style="background:transparent;box-shadow:none;max-width:800px;">
-        <div class="modal-header" style="background:white;border-radius:12px 12px 0 0;"><h3 id="modalPreviewTitle">Preview</h3><button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button></div>
-        <img id="modalPreviewImage" src="" style="width:100%;max-height:70vh;object-fit:contain;border-radius:0 0 12px 12px;">
+        <div class="modal-header" style="background:white;border-radius:12px 12px 0 0;"><h3 id="modal-preview-title">Preview</h3><button class="modal-close" onclick="tutupModal('modal-preview-gambar')">&times;</button></div>
+        <img id="modal-preview-image" src="" style="width:100%;max-height:70vh;object-fit:contain;border-radius:0 0 12px 12px;">
     </div>
 </div>
-<!-- ===== AKHIR BLOK 5 (1) ===== -->
+<!-- ===== AKHIR BLOK 5 (1) ===== -->    
 <!-- ===== BLOK 6 (1) - 01 UTILITY & DATA CORE ===== -->
 <script>
 // ===== FUNGSI DASAR =====
@@ -2454,10 +2506,10 @@ function simpanRekening() {
 
 <!-- ===== BLOK 6 (13) - 13 INISIALISASI & EVENT LISTENER ===== -->
 <script>
-function tampilkanDashboard(user) {
-    document.getElementById('pageAuth').style.display = 'none';
-    document.getElementById('pageDashboard').style.display = 'block';
-    document.getElementById('userNama').textContent = user.nama;
+function tampilkanDashboard(pengguna) {
+    document.getElementById('page-auth').style.display = 'none';
+    document.getElementById('page-dashboard').style.display = 'block';
+    document.getElementById('user-nama').textContent = pengguna.nama;
     var namaRole = {
         superadmin: 'SuperAdmin',
         customer: 'Customer',
@@ -2470,10 +2522,10 @@ function tampilkanDashboard(user) {
         staf_owner_ojek: 'Staf Owner Ojek',
         sponsor: 'Sponsor'
     };
-    document.getElementById('roleBadge').textContent = namaRole[user.role] || user.role;
+    document.getElementById('role-badge').textContent = namaRole[pengguna.role] || pengguna.role;
     
     // Render sidebar
-    document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
+    document.getElementById('sidebar-container').innerHTML = buatSidebarHTML(pengguna.role);
     setupNavigasiSidebar();
     
     // Tampilkan dashboard awal
@@ -2482,18 +2534,20 @@ function tampilkanDashboard(user) {
 
 document.addEventListener('DOMContentLoaded', function() {
     inisialisasiSuperAdmin();
-    var userData = localStorage.getItem('2r_user');
-    if (userData) {
-        var user = JSON.parse(userData);
-        tampilkanDashboard(user);
+    var dataPengguna = localStorage.getItem('2r_user');
+    if (dataPengguna) {
+        var pengguna = JSON.parse(dataPengguna);
+        tampilkanDashboard(pengguna);
     }
-    document.getElementById('btnLogout').onclick = function() {
+    
+    document.getElementById('button-logout').onclick = function() {
         if (confirm('Keluar dari aplikasi?')) {
             localStorage.removeItem('2r_user');
             localStorage.removeItem('2r_user_role');
             location.reload();
         }
     };
+    
     var modals = document.querySelectorAll('.modal-overlay');
     for (var i = 0; i < modals.length; i++) {
         modals[i].onclick = function(e) {
@@ -2502,6 +2556,60 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
     }
+    
+    // ===== TAMBAHAN RESPONSIVE SIDEBAR UNTUK PERANGKAT MOBILE (MULAI) =====
+    var tombolMenu = document.getElementById('menu-toggle');
+    var sidebar = document.querySelector('.sidebar');
+    var overlaySidebar = document.getElementById('sidebar-overlay');
+
+    if (tombolMenu && sidebar && overlaySidebar) {
+        // Fungsi untuk membuka sidebar
+        function bukaSidebar() {
+            sidebar.classList.add('open');
+            overlaySidebar.classList.add('active');
+        }
+
+        // Fungsi untuk menutup sidebar
+        function tutupSidebar() {
+            sidebar.classList.remove('open');
+            overlaySidebar.classList.remove('active');
+        }
+
+        // Saat tombol hamburger diklik
+        tombolMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) {
+                tutupSidebar();
+            } else {
+                bukaSidebar();
+            }
+        });
+
+        // Saat overlay diklik, sidebar menutup
+        overlaySidebar.addEventListener('click', function() {
+            tutupSidebar();
+        });
+
+        // Saat salah satu menu sidebar diklik, sidebar otomatis menutup (agar lebih nyaman di perangkat mobile)
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                // Cek apakah sedang dalam mode perangkat mobile (lebar layar kurang dari atau sama dengan 768 pixel)
+                if (window.innerWidth <= 768) {
+                    tutupSidebar();
+                }
+            });
+        });
+
+        // Jika ukuran layar berubah (misal dari perangkat mobile ke komputer), pastikan sidebar kembali ke posisi awal
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                // Di komputer atau laptop, sidebar harus selalu terbuka, dan overlay harus hilang
+                sidebar.classList.remove('open');
+                overlaySidebar.classList.remove('active');
+            }
+        });
+    }
+    // ===== TAMBAHAN RESPONSIVE SIDEBAR UNTUK PERANGKAT MOBILE (SELESAI) =====
 });
 </script>
 <!-- ===== AKHIR BLOK 6 (13) ===== -->
