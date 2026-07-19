@@ -2527,12 +2527,12 @@
         html += '<p>Upload produk untuk ditampilkan di direktori publik. Batas maksimal: <strong>' + batasMaksimal + ' produk</strong> per akun.</p>';
         html += '</div>';
 
-        // Informasi sisa slot
+        // Informasi sisa slot dan tombol ajukan
         html += '<div class="card" style="background:#e8f5e9; border:1px solid #c8e6c9;">';
-        html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+        html += '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">';
         html += '<span><strong>Slot tersedia:</strong> ' + sisaSlot + ' dari ' + batasMaksimal + ' produk</span>';
         if (sisaSlot <= 0) {
-            html += '<button class="button button-primary button-small" onclick="ajukanTambahKapasitasProduk()">Ajukan Tambah Kapasitas</button>';
+            html += '<button class="button button-warning button-small" onclick="ajukanTambahKapasitasProduk()"><i class="fas fa-paper-plane"></i> Ajukan Tambah Kapasitas</button>';
         }
         html += '</div></div>';
 
@@ -2552,6 +2552,12 @@
             html += '</div>';
             html += '<div class="form-group"><label class="form-label">Deskripsi</label><textarea id="produkDeskripsi" class="form-input" rows="3" placeholder="Deskripsi produk"></textarea></div>';
             html += '<button class="button button-primary" onclick="simpanProdukPublik()"><i class="fas fa-save"></i> Simpan Produk</button>';
+            html += '</div>';
+        } else {
+            // Jika slot penuh, tampilkan pesan
+            html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
+            html += '<div class="card-header" style="color:#856404;"><i class="fas fa-exclamation-triangle"></i> Slot Penuh</div>';
+            html += '<p>Anda telah mencapai batas maksimal upload produk publik. Klik tombol "Ajukan Tambah Kapasitas" di atas untuk meminta penambahan slot ke SuperAdmin.</p>';
             html += '</div>';
         }
 
@@ -2595,8 +2601,9 @@
             }
         }, 300);
     }
-    /* ===== AKHIR BLOK 3.10.7 ===== */
-	<!-- ===== BLOK 3.10.8 - FUNGSI SIMPAN PRODUK PUBLIK ===== -->
+</script>
+<!-- ===== AKHIR BLOK 3.10.7 ===== -->
+	<!-- ===== BLOK 3.10.8 - FUNGSI SIMPAN PRODUK PUBLIK & AJUAN TAMBAH KAPASITAS ===== -->
 <script>
     /*
         Fungsi ini menyimpan produk baru ke localStorage.
@@ -2627,7 +2634,7 @@
             }
         }
 
-        // Cek batas total produk akun
+        // ===== CEK BATAS TOTAL PRODUK AKUN =====
         var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
         var produkSaya = semuaProduk.filter(function(p) { return p.ownerId === user.id; });
         var dataAkun = getDataAkun();
@@ -2643,6 +2650,7 @@
             tampilkanToast('Batas upload produk sudah penuh! Ajukan tambah kapasitas ke SuperAdmin.', 'warning');
             return;
         }
+        // ============================================
 
         var produkBaru = {
             id: Date.now(),
@@ -2667,7 +2675,62 @@
         renderUploadProdukPublik();
         tampilkanToast('Produk berhasil ditambahkan!', 'success');
     }
-    /* ===== AKHIR BLOK 3.10.8 ===== */
+
+    /* ===== BLOK 3.10.8.1 - AJUKAN TAMBAH KAPASITAS KE SUPERADMIN ===== */
+    /*
+        Fungsi ini mengirimkan pengajuan penambahan kapasitas upload produk publik
+        ke akun SuperAdmin.
+    */
+    function ajukanTambahKapasitasProduk() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        if (!user.id) {
+            tampilkanToast('Data akun tidak ditemukan!', 'error');
+            return;
+        }
+
+        if (!confirm('Anda akan mengajukan permintaan tambah kapasitas upload produk publik ke SuperAdmin. Lanjutkan?')) {
+            return;
+        }
+
+        // Ambil data produk saat ini
+        var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
+        var produkSaya = semuaProduk.filter(function(p) { return p.ownerId === user.id; });
+        var dataAkun = getDataAkun();
+        var akunSaya = null;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                akunSaya = dataAkun[i];
+                break;
+            }
+        }
+        var batasSaatIni = akunSaya ? (akunSaya.maksProdukPublik || 5) : 5;
+
+        // Simpan pengajuan ke database pengajuan kapasitas
+        var dataPengajuanKapasitas = JSON.parse(localStorage.getItem('2r_pengajuan_kapasitas_publik') || '[]');
+        dataPengajuanKapasitas.push({
+            id: Date.now(),
+            tokoId: user.id,
+            tokoNama: user.nama,
+            tokoUsername: user.username,
+            batasSaatIni: batasSaatIni,
+            totalProdukSaatIni: produkSaya.length,
+            status: 'MENUNGGU',
+            diajukanPada: new Date().toISOString()
+        });
+        localStorage.setItem('2r_pengajuan_kapasitas_publik', JSON.stringify(dataPengajuanKapasitas));
+
+        // Kirim notifikasi ke SuperAdmin (jika fungsi notifikasi ada)
+        if (typeof simpanNotifikasi === 'function') {
+            simpanNotifikasi('ALL', 'Pengajuan Tambah Kapasitas Produk Publik', 
+                user.nama + ' (' + user.username + ') mengajukan tambah kapasitas upload produk publik dari ' + batasSaatIni + ' produk.', 
+                'account');
+        }
+
+        tampilkanToast('Pengajuan tambah kapasitas berhasil dikirim ke SuperAdmin!', 'success');
+        renderUploadProdukPublik();
+    }
+</script>
+<!-- ===== AKHIR BLOK 3.10.8 ===== -->
 </script>
 <!-- ===== BLOK 3.10.12 - JS_RENDER_MANAJEMEN_STOK_GUDANG ===== -->
 <script>
