@@ -1485,7 +1485,7 @@
                 }
             ],
 
-                        // ===== TOKO =====
+            // ===== TOKO =====
             'toko': [
                 {
                     judul: 'Menu Utama',
@@ -1499,7 +1499,6 @@
                     judul: 'Menu Toko',
                     items: [
                         { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' }, // <-- TAMBAHKAN INI
                         { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                         { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
@@ -1577,7 +1576,6 @@
                     items: [
                         { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
                         { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
                         { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                         { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan' },
@@ -1680,7 +1678,7 @@
     }
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
-    /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
+        /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
     /*
         Fungsi ini adalah pusat routing aplikasi.
         Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
@@ -1696,7 +1694,23 @@
         if (namaHalaman === 'dashboard') {
             renderDashboard();
         } else if (namaHalaman === 'profile') {
-            renderProfil();
+            // ===== PERBAIKAN PROFIL AGAR TOKO MUNCUL =====
+            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+            var role = user.role;
+            
+            // Jika SuperAdmin, pakai renderProfilSuperAdmin
+            if (role === 'superadmin') {
+                renderProfilSuperAdmin(user);
+            } 
+            // Jika Customer, pakai renderProfilCustomer
+            else if (role === 'customer') {
+                renderProfilCustomer();
+            } 
+            // Jika role lainnya (Toko, Ojek, Pedagang, dll), pakai renderProfilUmum
+            else {
+                renderProfilUmum(user, role);
+            }
+            // ===== AKHIR PERBAIKAN =====
         } else if (namaHalaman === 'daftarAkun') {
             renderDaftarAkun();
         } else if (namaHalaman === 'persetujuan') {
@@ -1767,6 +1781,27 @@
     }
     /* ===== AKHIR BLOK 3.5.2 ===== */
 
+    /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
+    /*
+        Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
+        Digunakan saat halaman yang dipilih belum memiliki fungsi render.
+    */
+    function renderPlaceholder(judulHalaman) {
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
+        html += '<div class="page-header">';
+        html += '<h2>' + judulHalaman + '</h2>';
+        html += '<p>Halaman ini sedang dalam pengembangan.</p>';
+        html += '</div>';
+        html += '<div class="card">';
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-tools" style="color:#FF9800;"></i>';
+        html += '<h3>Fitur Sedang Dikembangkan</h3>';
+        html += '</div>';
+        html += '</div>';
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 3.5.3 ===== */	
     /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
     /*
         Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
