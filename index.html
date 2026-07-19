@@ -1416,50 +1416,79 @@ function renderPapanInformasi() {
     contentArea.innerHTML = html;
 }
 
-// ===== 8. EDIT / HAPUS AKUN CUSTOMER (TAMBAHAN BARU) =====
+// ===== 8. EDIT / HAPUS AKUN CUSTOMER =====
 function renderEditAkun() {
-    // ... (kode di atas)
-}
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var contentArea = document.getElementById('mainContent');
+    var html = '';
 
-function ajukanHapusAkunCustomer() {
-    // ... (kode di atas)
-}
-	// ===== 9. FUNGSI UNTUK STAF ADMIN & SUPERADMIN (TAMBAHAN BARU) =====
+    html += '<div class="page-header">';
+    html += '<h2>Edit / Hapus Akun</h2>';
+    html += '<p>Kelola data akun Anda. Jika ingin menghapus akun, ajukan permintaan ke admin.</p>';
+    html += '</div>';
 
-// ===== FUNGSI TERUSKAN PENGAJUAN DARI STAF ADMIN KE SUPERADMIN =====
-function teruskanPengajuanHapus(index) {
+    // Tampilkan data profil
+    html += '<div class="card">';
+    html += '<div class="card-header">Data Profil Anda</div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Lengkap</label><span style="font-weight:600;">' + (user.nama || '-') + '</span></div>';
+    html += '<div><label class="form-label">Username</label><span style="font-weight:600;">' + (user.username || '-') + '</span></div>';
+    html += '<div><label class="form-label">Email</label><span>' + (user.email || '-') + '</span></div>';
+    html += '<div><label class="form-label">Nomor HP</label><span>' + (user.hp || '-') + '</span></div>';
+    html += '<div><label class="form-label">Alamat</label><span>' + (user.alamat || '-') + '</span></div>';
+    html += '<div><label class="form-label">Role</label><span>' + (user.role || '-') + '</span></div>';
+    html += '</div>';
+    html += '</div>';
+
+    // Tombol ajukan hapus akun
+    html += '<div class="card" style="border-color:#f44336;">';
+    html += '<div class="card-header" style="color:#f44336;">Hapus Akun</div>';
+    html += '<p>Jika Anda ingin menghapus akun secara permanen, ajukan permintaan ke admin. Proses akan diverifikasi oleh Staf Admin dan SuperAdmin.</p>';
+    html += '<button class="btn btn-danger" onclick="ajukanHapusAkunCustomer()">';
+    html += '<i class="fas fa-trash-alt"></i> Ajukan Hapus Akun';
+    html += '</button>';
+    html += '</div>';
+
+    contentArea.innerHTML = html;
+}
+	function ajukanHapusAkunCustomer() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    if (!user.id) {
+        tampilkanToast('Data akun tidak ditemukan!', 'error');
+        return;
+    }
+
+    if (!confirm('Apakah Anda yakin ingin mengajukan penghapusan akun? Tindakan ini tidak dapat dibatalkan.')) {
+        return;
+    }
+
     var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    if (index < 0 || index >= pengajuan.length) {
-        tampilkanToast('Data tidak ditemukan!', 'error');
-        return;
+
+    for (var i = 0; i < pengajuan.length; i++) {
+        if (pengajuan[i].userId === user.id && pengajuan[i].status === 'MENUNGGU') {
+            tampilkanToast('Anda sudah memiliki pengajuan yang sedang diproses!', 'warning');
+            return;
+        }
     }
-    if (!confirm('Teruskan pengajuan ini ke SuperAdmin?')) {
-        return;
-    }
-    
-    // Ubah status pengajuan customer menjadi DITERUSKAN
-    pengajuan[index].status = 'DITERUSKAN';
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
-    
-    // Ambil data pengajuan yang diteruskan
-    var p = pengajuan[index];
-    
-    // Simpan ke dalam database pengajuan staf (untuk SuperAdmin)
-    var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-    pengajuanStaf.push({
+
+    var pengajuanBaru = {
         id: Date.now(),
-        targetId: p.userId,
-        targetUsername: p.username,
-        targetNama: p.nama,
-        targetRole: p.role,
-        diajukanOleh: 'Staf Admin',
+        userId: user.id,
+        username: user.username,
+        nama: user.nama,
+        email: user.email,
+        hp: user.hp,
+        alamat: user.alamat,
+        role: user.role,
         status: 'MENUNGGU',
         diajukanPada: new Date().toISOString()
-    });
-    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
-    
-    renderDashboard();
-    tampilkanToast('Pengajuan diteruskan ke SuperAdmin!', 'success');
+    };
+
+    pengajuan.push(pengajuanBaru);
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+
+    tampilkanToast('Pengajuan hapus akun berhasil dikirim ke admin!', 'success');
+    renderEditAkun();
 }
 
 // ===== FUNGSI TOLAK PENGAJUAN OLEH STAF ADMIN =====
