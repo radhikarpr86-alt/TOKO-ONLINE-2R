@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 	<html lang="id">
 	<head>
 		<meta charset="UTF-8">
@@ -2689,12 +2689,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     document.getElementById('btnLogout').onclick = function() {
-        if (confirm('Keluar dari aplikasi?')) {
-            localStorage.removeItem('2r_user');
-            localStorage.removeItem('2r_user_role');
-            location.reload();
-        }
-    };
+    if (confirm('Keluar dari aplikasi?')) {
+        localStorage.removeItem('2r_user');
+        localStorage.removeItem('2r_user_role');
+        location.reload();
+    }
+};
     
     var modals = document.querySelectorAll('.modal-overlay');
     for (var i = 0; i < modals.length; i++) {
