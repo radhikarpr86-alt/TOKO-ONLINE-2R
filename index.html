@@ -31,31 +31,44 @@
             </div>
             <!-- ===== AKHIR BLOK 1.2.2 ===== -->
 
-            <!-- ===== BLOK 1.2.3 - FORM LOGIN ===== -->
-            <form class="authentication-form" id="loginForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
-                    </div>
-                </div>
-                <button type="submit" class="button-submit">
-                    <i class="fas fa-sign-in-alt"></i> Masuk
-                </button>
-                <div class="authentication-footer">
-                    Belum punya akun? 
-                    <a onclick="toggleForm('register')">Daftar di sini</a>
-                </div>
-            </form>
-            <!-- ===== AKHIR BLOK 1.2.3 ===== -->
+           <!-- ===== BLOK 1.2.3 - FORM LOGIN ===== -->
+<form class="authentication-form" id="loginForm">
+    
+    <div class="form-group">
+        <label>Username</label>
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Password</label>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+        </div>
+    </div>
+    
+    <button type="submit" class="button-submit">
+        <i class="fas fa-sign-in-alt"></i> Masuk
+    </button>
+
+    <!-- ===== TAMBAHAN TOMBOL LUPA PASSWORD ===== -->
+    <div style="text-align:right; margin-top:5px;">
+        <a id="tombolLupaPassword" style="color:#FF6B00; cursor:pointer; font-size:13px; font-weight:600;">
+            Lupa Password?
+        </a>
+    </div>
+    <!-- ===== AKHIR TAMBAHAN ===== -->
+
+    <div class="authentication-footer">
+        Belum punya akun? 
+        <a onclick="toggleForm('register')">Daftar di sini</a>
+    </div>
+
+</form>
+<!-- ===== AKHIR BLOK 1.2.3 ===== -->
 
             <!-- ===== BLOK 1.2.4 - FORM REGISTER ===== -->
             <form class="authentication-form hidden-form" id="registerForm">
@@ -3542,14 +3555,9 @@
     /* ===== AKHIR BLOK 4.7.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.7 ===== -->
-<!-- ===== BLOK 4.8 - JS_RENDER_KELOLA_AKUN ===== -->
+<!-- ===== BLOK 4.8 - JS_RENDER_KELOLA_AKUN (REVISI) ===== -->
 <script>
     /* ===== BLOK 4.8.1 - RENDER HALAMAN KELOLA SEMUA AKUN ===== */
-    /*
-        Fungsi ini menampilkan daftar semua akun (kecuali SuperAdmin)
-        beserta tombol aksi untuk mengelola status akun.
-        Hak akses dibedakan antara SuperAdmin dan Staf Admin.
-    */
     function renderKelolaAkun() {
         var role = localStorage.getItem('2r_user_role');
         if (role !== 'superadmin' && role !== 'staf_admin') {
@@ -3575,14 +3583,16 @@
         if (daftarAkun.length === 0) {
             html += '<div class="empty-state"><i class="fas fa-users-slash"></i><h3>Belum ada akun</h3></div>';
         } else {
-            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Batas Produk</th><th>Aksi</th></tr></thead><tbody>';
             for (var i = 0; i < daftarAkun.length; i++) {
                 var akun = daftarAkun[i];
                 var badgeStatus = akun.status === 'AKTIF' ? 'badge-success' :
                                   (akun.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'badge-warning' : 'badge-danger');
                 var teksStatus = akun.status === 'AKTIF' ? 'AKTIF' :
                                  (akun.status === 'NONAKTIF (Menunggu Verifikasi)' ? 'Menunggu' : 'Nonaktif');
-                html += '<tr><td>' + (i+1) + '</td><td>' + akun.id + '</td><td>' + akun.role + '</td><td>' + akun.username + '</td><td>' + akun.nama + '</td><td><span class="badge ' + badgeStatus + '">' + teksStatus + '</span></td><td><div style="display:flex;gap:5px;">';
+                html += '<tr><td>' + (i+1) + '</td><td>' + akun.id + '</td><td>' + akun.role + '</td><td>' + akun.username + '</td><td>' + akun.nama + '</td><td><span class="badge ' + badgeStatus + '">' + teksStatus + '</span></td>';
+                html += '<td>' + (akun.maksProdukPublik || 5) + '</td>';
+                html += '<td><div style="display:flex;gap:5px;">';
                 if (akun.status !== 'AKTIF') {
                     html += '<button class="button button-success button-extra-small" onclick="aktifkanAkun(\'' + akun.id + '\')">Aktifkan</button>';
                 } else {
@@ -3603,9 +3613,6 @@
     /* ===== AKHIR BLOK 4.8.1 ===== */
 
     /* ===== BLOK 4.8.2 - AKTIFKAN AKUN ===== */
-    /*
-        Fungsi ini mengubah status akun menjadi 'AKTIF'.
-    */
     function aktifkanAkun(idAkun) {
         var role = localStorage.getItem('2r_user_role');
         if (role !== 'superadmin' && role !== 'staf_admin') {
@@ -3629,10 +3636,6 @@
     /* ===== AKHIR BLOK 4.8.2 ===== */
 
     /* ===== BLOK 4.8.3 - NONAKTIFKAN AKUN (SUSPEN) ===== */
-    /*
-        Fungsi ini mengubah status akun menjadi 'NONAKTIF (Disuspen)'.
-        Hanya SuperAdmin yang dapat melakukan ini.
-    */
     function nonaktifkanAkun(idAkun) {
         var role = localStorage.getItem('2r_user_role');
         if (role !== 'superadmin') {
@@ -3656,10 +3659,6 @@
     /* ===== AKHIR BLOK 4.8.3 ===== */
 
     /* ===== BLOK 4.8.4 - HAPUS AKUN (HANYA SUPERADMIN) ===== */
-    /*
-        Fungsi ini menghapus akun secara permanen dari database.
-        Hanya SuperAdmin yang dapat melakukan ini.
-    */
     function hapusAkun(idAkun) {
         var role = localStorage.getItem('2r_user_role');
         if (role !== 'superadmin') {
@@ -3686,10 +3685,6 @@
     /* ===== AKHIR BLOK 4.8.4 ===== */
 
     /* ===== BLOK 4.8.5 - AJUKAN HAPUS AKUN OLEH STAF ADMIN ===== */
-    /*
-        Fungsi ini mengajukan penghapusan akun ke SuperAdmin.
-        Hanya Staf Admin yang dapat melakukan ini.
-    */
     function ajukanHapusAkunStaf(idAkun) {
         var role = localStorage.getItem('2r_user_role');
         if (role !== 'staf_admin') {
