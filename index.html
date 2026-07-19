@@ -2902,7 +2902,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.6 ===== */
 
-        /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK ===== */
+            /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK ===== */
     /*
         Fungsi ini menampilkan form edit produk yang sudah terisi data lama.
         Data diambil dari localStorage berdasarkan ID produk yang dipilih.
@@ -2956,9 +2956,9 @@
         html += '</select></div>';
         html += '<div><label class="form-label">Tanggal Kadaluarsa</label><input type="date" id="editGudangTanggalKadaluarsa" class="form-input" value="' + produkTarget.tanggalKadaluarsa + '"></div>';
         
-        // Field read-only: Tanggal Input & Penginput
-        html += '<div><label class="form-label">Tanggal Input</label><input type="text" class="form-input" value="' + (produkTarget.tanggalInput || produkTarget.tanggalMasuk || '-') + '" disabled style="background:#f0f0f0;"></div>';
-        html += '<div><label class="form-label">Penginput</label><input type="text" class="form-input" value="' + (produkTarget.namaPenginput || produkTarget.namaToko || '-') + '" disabled style="background:#f0f0f0;"></div>';
+        // Field read-only: Tanggal Input & Penginput (SUDAH DISABLED)
+        html += '<div><label class="form-label">Tanggal Input</label><input type="text" class="form-input" value="' + (produkTarget.tanggalInput || produkTarget.tanggalMasuk || '-') + '" disabled style="background:#f0f0f0; color:#666;"></div>';
+        html += '<div><label class="form-label">Penginput</label><input type="text" class="form-input" value="' + (produkTarget.namaPenginput || produkTarget.namaToko || '-') + '" disabled style="background:#f0f0f0; color:#666;"></div>';
         
         // Preview foto lama
         html += '<div style="grid-column: 1 / -1;"><label class="form-label">Foto Produk</label>';
@@ -3200,6 +3200,8 @@
 </script>
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
 	/* ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== */
+<script>
+    <!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
     /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK ===== */
     /*
