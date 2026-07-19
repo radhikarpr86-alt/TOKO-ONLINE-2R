@@ -5059,7 +5059,8 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
     /* ===== AKHIR BLOK 5.3.1 ===== */
 
-     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
+    <!-- ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== -->
+<script>
     /*
         Event ini adalah titik awal aplikasi.
         Saat halaman selesai dimuat oleh browser, maka:
@@ -5072,8 +5073,30 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
-        
-        // 2. Cek apakah user sudah login
+
+        // ===== TAMBAHAN SAYA (PERBAIKAN DATA PRODUK LAMA) =====
+        // Fungsi ini memastikan produk lama memiliki Tanggal & Penginput
+        function perbaikiDataProdukLama() {
+            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+            var perluDiupdate = false;
+            for (var i = 0; i < semuaProdukGudang.length; i++) {
+                if (!semuaProdukGudang[i].tanggalInput) {
+                    semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
+                    perluDiupdate = true;
+                }
+                if (!semuaProdukGudang[i].namaPenginput) {
+                    semuaProdukGudang[i].namaPenginput = '-';
+                    perluDiupdate = true;
+                }
+            }
+            if (perluDiupdate) {
+                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+            }
+        }
+        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
+        // ===== AKHIR TAMBAHAN SAYA =====
+
+        // 2. Cek apakah user sudah login (KODE ASLI ANDA TETAP UTUH)
         var dataUser = localStorage.getItem('2r_user');
         if (dataUser) {
             var user = JSON.parse(dataUser);
@@ -5086,7 +5109,7 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     });
     /* ===== AKHIR BLOK 5.3.2 ===== */
 </script>
-<!-- ===== AKHIR BLOK 5.3 ===== -->
+
 <!-- ===== BLOK 5.5 - JS_EVENT_SCAN_BARCODE ===== -->
 <script>
     /* ===== BLOK 5.5.1 - HELLOFRIENDS PLACEHOLDER ===== */
@@ -5110,6 +5133,8 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
     /* ===== AKHIR BLOK 5.5.1 ===== */
 </script>
+
 <!-- ===== AKHIR BLOK 5.5 ===== -->
+
 </body>
-</html
+</html>
