@@ -2799,7 +2799,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.3 ===== */
 
-    /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG ===== */
+        /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG ===== */
     /*
         Fungsi ini menyimpan produk gudang baru ke localStorage.
         Tidak ada batasan jumlah produk atau foto.
@@ -2836,6 +2836,8 @@
             satuan: satuan,
             tanggalKadaluarsa: tanggalKadaluarsa,
             fotoProduk: arrayFoto,
+            tanggalInput: new Date().toLocaleDateString('id-ID'), // TAMBAHAN
+            namaPenginput: user.nama, // TAMBAHAN
             tanggalMasuk: new Date().toISOString(),
             status: 'Aktif',
             totalTerjual: 0
@@ -2978,7 +2980,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.7 ===== */
 
-    /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG ===== */
+        /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG ===== */
     /*
         Fungsi ini menyimpan perubahan data produk yang sudah diedit.
         Jika user mengganti foto, foto lama akan diganti dengan foto baru.
@@ -2997,6 +2999,7 @@
             return;
         }
 
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var namaProduk = document.getElementById('editGudangNamaProduk').value.trim();
         var kodeProduk = document.getElementById('editGudangKodeProduk').value.trim();
         var hargaBeli = document.getElementById('editGudangHargaBeli').value.trim();
@@ -3021,6 +3024,7 @@
         semuaProdukGudang[indexProduk].jenis = jenis;
         semuaProdukGudang[indexProduk].satuan = satuan;
         semuaProdukGudang[indexProduk].tanggalKadaluarsa = tanggalKadaluarsa;
+        semuaProdukGudang[indexProduk].namaPenginput = user.nama; // UPDATE NAMA PENGINPUT
 
         // Jika user mengganti foto, update foto
         if (fotoBaru) {
@@ -3037,7 +3041,7 @@
 <!-- ===== AKHIR BLOK 3.10.13 ===== -->
 <!-- ===== BLOK 3.10.14 - JS_FUNGSI_FILTER_PRODUK ===== -->
 <script>
-    /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG ===== */
+            /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG ===== */
     /*
         Fungsi ini menghasilkan tabel produk gudang berdasarkan filter yang dipilih.
         Filter: semua, terlaris, tidakLaku, kadaluarsa.
@@ -3066,7 +3070,7 @@
         if (dataFilter.length === 0) {
             html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Tidak ada produk</h3><p>Belum ada produk dengan filter ini.</p></div>';
         } else {
-            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Tanggal Input</th><th>Penginput</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
             for (var i = 0; i < dataFilter.length; i++) {
                 var p = dataFilter[i];
                 var statusKadaluarsa = 'badge-success';
@@ -3078,7 +3082,7 @@
                 } else if (selisihHari < 0) {
                     statusKadaluarsa = 'badge-danger';
                 }
-                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + p.totalTerjual + '</td><td>';
+                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + (p.tanggalInput || '-') + '</td><td>' + (p.namaPenginput || '-') + '</td><td>' + p.totalTerjual + '</td><td>';
                 html += '<button class="button button-primary button-extra-small" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
                 html += '<button class="button button-danger button-extra-small" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
                 html += '</td></tr>';
