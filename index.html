@@ -2671,57 +2671,34 @@
 </script>
 <!-- ===== BLOK 3.10.12 - JS_RENDER_MANAJEMEN_STOK_GUDANG ===== -->
 <script>
-    /* ===== BLOK 3.10.12.1 - RENDER HALAMAN MANAJEMEN STOK GUDANG ===== */
-    /*
-        Fungsi ini menampilkan halaman utama Manajemen Stok Gudang.
-        Terdiri dari:
-        - Widget ringkasan (Total Produk, Total Stok, Produk Kadaluarsa).
-        - Tombol "Tambah Produk Baru" (untuk membuka form input).
-        - Tab filter (Semua, Terlaris, Tidak Laku, Kadaluarsa).
-        - Tabel produk yang berubah sesuai filter.
-    */
+        /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL LENGKAP + EXCEL) ===== */
     function renderManajemenStokGudang() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
-        var html = '';
-
-        // Ambil semua produk gudang milik user ini
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var html = '';
 
         // Hitung statistik
         var totalProduk = produkSaya.length;
         var totalStok = 0;
-        var produkKadaluarsa = 0;
         var hariIni = new Date();
-
         for (var i = 0; i < produkSaya.length; i++) {
             totalStok += produkSaya[i].jumlahStok;
-            var tanggalKadaluarsa = new Date(produkSaya[i].tanggalKadaluarsa);
-            var selisihHari = Math.ceil((tanggalKadaluarsa - hariIni) / (1000 * 60 * 60 * 24));
-            if (selisihHari <= 30 && selisihHari >= 0) {
-                produkKadaluarsa++;
-            }
         }
 
         html += '<div class="page-header">';
         html += '<h2>Manajemen Stok Gudang</h2>';
-        html += '<p>Kelola stok produk di gudang Anda tanpa batasan.</p>';
+        html += '<p>Total Produk: <strong>' + totalProduk + '</strong> | Total Stok: <strong>' + totalStok + '</strong></p>';
         html += '</div>';
 
-        // Widget ringkasan
-        html += '<div class="widget-grid">';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-boxes"></i></div><div class="widget-number">' + totalProduk + '</div><div class="widget-label">Total Produk</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-cubes"></i></div><div class="widget-number">' + totalStok + '</div><div class="widget-label">Total Stok</div></div>';
-        html += '<div class="widget-card"><div class="widget-icon" style="color:#F44336;"><i class="fas fa-exclamation-triangle"></i></div><div class="widget-number">' + produkKadaluarsa + '</div><div class="widget-label">Produk Kadaluarsa</div></div>';
-        html += '</div>';
-
-        // Tombol Tambah Produk
-        html += '<div style="text-align:right; margin-bottom:15px;">';
+        // ===== TOMBOL ACTION =====
+        html += '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">';
         html += '<button class="button button-primary" onclick="bukaFormTambahProdukGudang()"><i class="fas fa-plus"></i> Tambah Produk Baru</button>';
+        html += '<button class="button button-success" onclick="downloadExcelStokGudang()"><i class="fas fa-file-excel"></i> Download Excel</button>';
         html += '</div>';
 
-        // Tab filter
+        // ===== FILTER BUTTONS =====
         html += '<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">';
         html += '<button class="button button-primary button-small" onclick="tampilkanProdukGudang(\'semua\')">Semua</button>';
         html += '<button class="button button-success button-small" onclick="tampilkanProdukGudang(\'terlaris\')">Terlaris</button>';
@@ -2729,19 +2706,18 @@
         html += '<button class="button button-danger button-small" onclick="tampilkanProdukGudang(\'kadaluarsa\')">Mendekati Kadaluarsa</button>';
         html += '</div>';
 
-        // Tabel produk (akan diisi oleh fungsi filter)
+        // ===== TABEL PRODUK =====
         html += '<div id="tabelProdukGudang">';
         html += tampilkanTabelProdukGudang(produkSaya, 'semua');
         html += '</div>';
 
-        // Form tambah produk (tersembunyi, akan muncul saat tombol diklik)
+        // ===== FORM TAMBAH PRODUK =====
         html += '<div id="formTambahProdukGudang" class="hidden" style="margin-top:20px;">';
         html += renderFormTambahProdukGudang();
         html += '</div>';
 
         areaKonten.innerHTML = html;
     }
-    /* ===== AKHIR BLOK 3.10.12.1 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10.12 ===== -->
 <!-- ===== BLOK 3.10.13 - JS_FUNGSI_INPUT_PRODUK_GUDANG ===== -->
@@ -2923,7 +2899,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.6 ===== */
 
-             /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK (INPUT MANUAL) ===== */
+                     /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK (INPUT MANUAL) ===== */
     function renderEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         var produkTarget = null;
@@ -2944,7 +2920,9 @@
         html += '<div class="page-header"><h2>Edit Produk Gudang</h2><p>Ubah data produk yang sudah ada.</p></div>';
         
         html += '<div class="card">';
+        // ===== PERBAIKAN TOMBOL BATAL =====
         html += '<div class="card-header">Form Edit Produk <button class="button button-danger button-small" onclick="renderKelolaProduk()"><i class="fas fa-times"></i> Batal</button></div>';
+        // ===== =====
         html += '<div class="grid-2">';
         
         // Field utama
@@ -2999,7 +2977,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.7 ===== */
 
-                /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG (MANUAL) ===== */
+                            /* ===== BLOK 3.10.13.8 - SIMPAN EDIT PRODUK GUDANG (MANUAL) ===== */
     function simpanEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         var indexProduk = -1;
@@ -3313,7 +3291,7 @@
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
 	<!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
-                /* ===== BLOK 3.10.16.1 - RENDER KELOLA PRODUK (CARD VIEW + FILTER) ===== */
+    /* ===== BLOK 3.10.16.1 - RENDER KELOLA PRODUK (CARD VIEW + FILTER) ===== */
     function renderKelolaProduk() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
@@ -3340,7 +3318,6 @@
         html += '</div>';
 
         areaKonten.innerHTML = html;
-    }
                 
                 // Cek foto
                 var fotoHtml = '';
@@ -5196,14 +5173,6 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 <!-- ===== BLOK 5.3 - JS_INIT_UTAMA ===== -->
 <script>
     /* ===== BLOK 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN ===== */
-    /*
-        Fungsi ini dipanggil setelah user berhasil login.
-        1. Menyembunyikan halaman Login/Register.
-        2. Menampilkan halaman Dashboard.
-        3. Mengisi nama user di navbar.
-        4. Membangun sidebar sesuai role user.
-        5. Menampilkan dashboard awal.
-    */
     function tampilkanDashboard(user) {
         // Validasi data user
         if (!user || !user.nama) {
@@ -5244,21 +5213,12 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
 
     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
-    /*
-        Event ini adalah titik awal aplikasi.
-        Saat halaman selesai dimuat oleh browser, maka:
-        1. Inisialisasi SuperAdmin (jika belum ada).
-        2. Cek apakah user sudah login (ada data di localStorage).
-        3. Jika sudah login, tampilkan dashboard.
-        4. Jika belum, biarkan halaman login tetap tampil.
-    */
     document.addEventListener('DOMContentLoaded', function() {
         
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
 
         // ===== TAMBAHAN SAYA (PERBAIKAN DATA PRODUK LAMA) =====
-        // Fungsi ini memastikan produk lama memiliki Tanggal & Penginput
         function perbaikiDataProdukLama() {
             var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
             var perluDiupdate = false;
@@ -5276,18 +5236,14 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
                 localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
             }
         }
-        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
-        // ===== AKHIR TAMBAHAN SAYA =====
+        perbaikiDataProdukLama();
 
-        // 2. Cek apakah user sudah login (KODE ASLI ANDA TETAP UTUH)
+        // 2. Cek apakah user sudah login
         var dataUser = localStorage.getItem('2r_user');
         if (dataUser) {
             var user = JSON.parse(dataUser);
             tampilkanDashboard(user);
         }
-        
-        // 3. Event logout dan modal sudah ditangani di BLOK 5.1
-        // 4. Event responsive sidebar sudah ditangani di BLOK 5.2
         
     });
 </script>
