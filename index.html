@@ -1485,7 +1485,7 @@
                 }
             ],
 
-                        // ===== TOKO =====
+                                    // ===== TOKO =====
             'toko': [
                 {
                     judul: 'Menu Utama',
@@ -1498,6 +1498,7 @@
                 {
                     judul: 'Menu Toko',
                     items: [
+                        { halaman: 'transaksi', icon: 'fa-cash-register', label: 'Transaksi' }, // TAMBAHKAN INI
                         { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
                         { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
                         { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
@@ -1702,7 +1703,9 @@
             // Jika SuperAdmin, pakai renderProfilSuperAdmin
             if (role === 'superadmin') {
                 renderProfilSuperAdmin(user);
-            } 
+            }
+			else if (namaHalaman === 'transaksi') {
+            renderTransaksi();
             // Jika Customer, pakai renderProfilCustomer
             else if (role === 'customer') {
                 renderProfilCustomer();
@@ -5714,6 +5717,308 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
 </script>
 <!-- ===== AKHIR BLOK 5.5 ===== -->
+<!-- ===== BLOK 5.6 - JS_RENDER_TRANSAKSI TOKO ===== -->
+<script>
+    /* ===== BLOK 5.6.1 - RENDER HALAMAN TRANSAKSI TOKO ===== */
+    /*
+        Fungsi ini menampilkan halaman Transaksi untuk Toko (Kasir Offline).
+        Toko dapat mencari produk, memasukkan jumlah, dan menghitung total bayar.
+    */
+    function renderTransaksi() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var areaKonten = document.getElementById('mainContent');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var html = '';
 
+        html += '<div class="page-header">';
+        html += '<h2>Transaksi Kasir</h2>';
+        html += '<p>Lakukan transaksi penjualan langsung untuk pelanggan yang datang ke toko.</p>';
+        html += '</div>';
+
+        // ===== FORM SEARCH PRODUK =====
+        html += '<div class="card">';
+        html += '<div class="card-header">Cari Produk</div>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Nama Produk / Kode</label><input type="text" id="cariProdukTransaksi" class="form-input" placeholder="Ketik nama atau kode produk" onkeyup="cariProdukTransaksi()"></div>';
+        html += '<div><label class="form-label">Jumlah</label><input type="number" id="jumlahProdukTransaksi" class="form-input" value="1" min="1"></div>';
+        html += '<div style="grid-column: 1 / -1; text-align:right;"><button class="button button-success" onclick="tambahProdukKeKeranjangTransaksi()"><i class="fas fa-cart-plus"></i> Tambah ke Keranjang</button></div>';
+        html += '</div>';
+        html += '</div>';
+
+        // ===== HASIL PENCARIAN =====
+        html += '<div id="hasilCariTransaksi" class="card" style="display:none;">';
+        html += '<div class="card-header">Hasil Pencarian</div>';
+        html += '<div id="daftarHasilCariTransaksi"></div>';
+        html += '</div>';
+
+        // ===== KERANJANG TRANSAKSI =====
+        html += '<div class="card">';
+        html += '<div class="card-header">Keranjang Transaksi</div>';
+        html += '<div id="keranjangTransaksiContainer">';
+        html += '<div class="empty-state"><i class="fas fa-shopping-cart"></i><h3>Keranjang kosong</h3><p>Tambahkan produk untuk memulai transaksi.</p></div>';
+        html += '</div>';
+        html += '</div>';
+
+        // ===== TOTAL & BAYAR =====
+        html += '<div class="card" style="background:#f0fdf4; border:1px solid #bbf7d0;">';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Total Belanja</label><h2 id="totalBelanjaTransaksi" style="color:#FF6B00; margin:0;">Rp 0</h2></div>';
+        html += '<div><label class="form-label">Uang yang Diterima</label><input type="number" id="uangDiterimaTransaksi" class="form-input" placeholder="Masukkan uang pelanggan" oninput="hitungKembalian()"></div>';
+        html += '<div><label class="form-label">Kembalian</label><h2 id="kembalianTransaksi" style="color:#d32f2f; margin:0;">Rp 0</h2></div>';
+        html += '</div>';
+        html += '<div style="text-align:right; margin-top:15px;">';
+        html += '<button class="button button-success" onclick="prosesTransaksi()" style="padding:12px 30px; font-size:16px;"><i class="fas fa-check-circle"></i> Selesaikan Transaksi</button>';
+        html += '<button class="button button-danger" onclick="batalTransaksi()" style="padding:12px 30px; font-size:16px; margin-left:10px;"><i class="fas fa-times-circle"></i> Batal</button>';
+        html += '</div>';
+        html += '</div>';
+
+        areaKonten.innerHTML = html;
+    }
+
+    /* ===== BLOK 5.6.2 - FUNGSI CARI PRODUK TRANSAKSI ===== */
+    function cariProdukTransaksi() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var keyword = document.getElementById('cariProdukTransaksi').value.trim().toLowerCase();
+        var hasilContainer = document.getElementById('hasilCariTransaksi');
+        var daftarHasil = document.getElementById('daftarHasilCariTransaksi');
+
+        if (keyword.length === 0) {
+            hasilContainer.style.display = 'none';
+            return;
+        }
+
+        var hasilFilter = produkSaya.filter(function(p) {
+            return p.namaProduk.toLowerCase().includes(keyword) || p.kodeProduk.toLowerCase().includes(keyword);
+        });
+
+        if (hasilFilter.length === 0) {
+            hasilContainer.style.display = 'block';
+            daftarHasil.innerHTML = '<p style="color:#888;">Produk tidak ditemukan.</p>';
+            return;
+        }
+
+        hasilContainer.style.display = 'block';
+        var html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:10px;">';
+        for (var i = 0; i < hasilFilter.length; i++) {
+            var p = hasilFilter[i];
+            html += '<div style="border:1px solid #eee; border-radius:8px; padding:10px; cursor:pointer; background:white;" onclick="pilihProdukTransaksi(' + p.id + ')">';
+            html += '<h4 style="font-size:14px; margin:0;">' + p.namaProduk + '</h4>';
+            html += '<p style="font-size:12px; color:#888; margin:5px 0;">Rp ' + p.hargaJual + '</p>';
+            html += '<p style="font-size:11px; color:#888;">Stok: ' + p.jumlahStok + ' ' + p.satuan + '</p>';
+            html += '</div>';
+        }
+        html += '</div>';
+        daftarHasil.innerHTML = html;
+    }
+
+    /* ===== BLOK 5.6.3 - FUNGSI PILIH PRODUK ===== */
+    function pilihProdukTransaksi(idProduk) {
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produk = null;
+        for (var i = 0; i < semuaProdukGudang.length; i++) {
+            if (semuaProdukGudang[i].id === idProduk) {
+                produk = semuaProdukGudang[i];
+                break;
+            }
+        }
+        if (produk) {
+            document.getElementById('cariProdukTransaksi').value = produk.namaProduk;
+            document.getElementById('hasilCariTransaksi').style.display = 'none';
+            document.getElementById('jumlahProdukTransaksi').focus();
+        }
+    }
+
+    /* ===== BLOK 5.6.4 - FUNGSI TAMBAH PRODUK KE KERANJANG ===== */
+    function tambahProdukKeKeranjangTransaksi() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var keyword = document.getElementById('cariProdukTransaksi').value.trim();
+        var jumlah = parseInt(document.getElementById('jumlahProdukTransaksi').value) || 1;
+
+        if (!keyword) {
+            tampilkanToast('Silakan cari dan pilih produk terlebih dahulu!', 'warning');
+            return;
+        }
+
+        // Cari produk berdasarkan nama/kode
+        var produkDipilih = null;
+        for (var i = 0; i < produkSaya.length; i++) {
+            if (produkSaya[i].namaProduk.toLowerCase() === keyword.toLowerCase() || produkSaya[i].kodeProduk.toLowerCase() === keyword.toLowerCase()) {
+                produkDipilih = produkSaya[i];
+                break;
+            }
+        }
+
+        if (!produkDipilih) {
+            tampilkanToast('Produk tidak ditemukan!', 'error');
+            return;
+        }
+
+        if (produkDipilih.jumlahStok < jumlah) {
+            tampilkanToast('Stok tidak mencukupi! Stok tersedia: ' + produkDipilih.jumlahStok, 'warning');
+            return;
+        }
+
+        // Ambil keranjang dari localStorage
+        var keranjang = JSON.parse(localStorage.getItem('2r_transaksi_keranjang') || '[]');
+        
+        // Cek apakah produk sudah ada di keranjang
+        var indexProduk = -1;
+        for (var i = 0; i < keranjang.length; i++) {
+            if (keranjang[i].id === produkDipilih.id) {
+                indexProduk = i;
+                break;
+            }
+        }
+
+        if (indexProduk !== -1) {
+            // Jika sudah ada, tambah jumlah
+            keranjang[indexProduk].jumlah += jumlah;
+        } else {
+            // Jika belum, tambah baru
+            keranjang.push({
+                id: produkDipilih.id,
+                namaProduk: produkDipilih.namaProduk,
+                hargaJual: produkDipilih.hargaJual,
+                jumlah: jumlah
+            });
+        }
+
+        localStorage.setItem('2r_transaksi_keranjang', JSON.stringify(keranjang));
+        
+        // Reset input
+        document.getElementById('cariProdukTransaksi').value = '';
+        document.getElementById('jumlahProdukTransaksi').value = 1;
+        document.getElementById('hasilCariTransaksi').style.display = 'none';
+
+        renderKeranjangTransaksi();
+        tampilkanToast('Produk ditambahkan ke keranjang!', 'success');
+    }
+
+    /* ===== BLOK 5.6.5 - RENDER KERANJANG TRANSAKSI ===== */
+    function renderKeranjangTransaksi() {
+        var keranjang = JSON.parse(localStorage.getItem('2r_transaksi_keranjang') || '[]');
+        var container = document.getElementById('keranjangTransaksiContainer');
+        var totalBelanja = 0;
+
+        if (!container) return;
+
+        if (keranjang.length === 0) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><h3>Keranjang kosong</h3><p>Tambahkan produk untuk memulai transaksi.</p></div>';
+            document.getElementById('totalBelanjaTransaksi').textContent = 'Rp 0';
+            document.getElementById('kembalianTransaksi').textContent = 'Rp 0';
+            return;
+        }
+
+        var html = '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Harga</th><th>Jumlah</th><th>Subtotal</th><th>Aksi</th></tr></thead><tbody>';
+        for (var i = 0; i < keranjang.length; i++) {
+            var item = keranjang[i];
+            var subtotal = item.hargaJual * item.jumlah;
+            totalBelanja += subtotal;
+            html += '<tr><td>' + item.namaProduk + '</td><td>Rp ' + item.hargaJual + '</td><td>' + item.jumlah + '</td><td>Rp ' + subtotal + '</td><td>';
+            html += '<button class="button button-danger button-extra-small" onclick="hapusItemKeranjangTransaksi(' + i + ')"><i class="fas fa-trash"></i></button>';
+            html += '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+        document.getElementById('totalBelanjaTransaksi').textContent = 'Rp ' + totalBelanja.toLocaleString('id-ID');
+    }
+
+    /* ===== BLOK 5.6.6 - HAPUS ITEM KERANJANG ===== */
+    function hapusItemKeranjangTransaksi(index) {
+        var keranjang = JSON.parse(localStorage.getItem('2r_transaksi_keranjang') || '[]');
+        keranjang.splice(index, 1);
+        localStorage.setItem('2r_transaksi_keranjang', JSON.stringify(keranjang));
+        renderKeranjangTransaksi();
+    }
+
+    /* ===== BLOK 5.6.7 - HITUNG KEMBALIAN ===== */
+    function hitungKembalian() {
+        var keranjang = JSON.parse(localStorage.getItem('2r_transaksi_keranjang') || '[]');
+        var totalBelanja = 0;
+        for (var i = 0; i < keranjang.length; i++) {
+            totalBelanja += keranjang[i].hargaJual * keranjang[i].jumlah;
+        }
+        var uangDiterima = parseInt(document.getElementById('uangDiterimaTransaksi').value) || 0;
+        var kembalian = uangDiterima - totalBelanja;
+        document.getElementById('kembalianTransaksi').textContent = 'Rp ' + kembalian.toLocaleString('id-ID');
+    }
+
+    /* ===== BLOK 5.6.8 - PROSES TRANSAKSI ===== */
+    function prosesTransaksi() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var keranjang = JSON.parse(localStorage.getItem('2r_transaksi_keranjang') || '[]');
+        var uangDiterima = parseInt(document.getElementById('uangDiterimaTransaksi').value) || 0;
+
+        if (keranjang.length === 0) {
+            tampilkanToast('Keranjang masih kosong!', 'warning');
+            return;
+        }
+
+        var totalBelanja = 0;
+        for (var i = 0; i < keranjang.length; i++) {
+            totalBelanja += keranjang[i].hargaJual * keranjang[i].jumlah;
+        }
+
+        if (uangDiterima < totalBelanja) {
+            tampilkanToast('Uang yang diterima kurang dari total belanja!', 'warning');
+            return;
+        }
+
+        if (!confirm('Konfirmasi transaksi ini? Total belanja: Rp ' + totalBelanja.toLocaleString('id-ID'))) {
+            return;
+        }
+
+        // 1. Kurangi stok produk di gudang
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        for (var i = 0; i < keranjang.length; i++) {
+            var item = keranjang[i];
+            for (var j = 0; j < semuaProdukGudang.length; j++) {
+                if (semuaProdukGudang[j].id === item.id) {
+                    semuaProdukGudang[j].jumlahStok -= item.jumlah;
+                    semuaProdukGudang[j].totalTerjual += item.jumlah;
+                    break;
+                }
+            }
+        }
+        localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+
+        // 2. Simpan riwayat transaksi
+        var riwayatTransaksi = JSON.parse(localStorage.getItem('2r_transaksi_riwayat') || '[]');
+        riwayatTransaksi.push({
+            id: Date.now(),
+            tokoId: user.id,
+            tokoNama: user.nama,
+            items: keranjang,
+            totalBelanja: totalBelanja,
+            uangDiterima: uangDiterima,
+            kembalian: uangDiterima - totalBelanja,
+            waktuTransaksi: new Date().toISOString()
+        });
+        localStorage.setItem('2r_transaksi_riwayat', JSON.stringify(riwayatTransaksi));
+
+        // 3. Reset keranjang
+        localStorage.removeItem('2r_transaksi_keranjang');
+        document.getElementById('uangDiterimaTransaksi').value = '';
+
+        tampilkanToast('Transaksi berhasil! Total: Rp ' + totalBelanja.toLocaleString('id-ID'), 'success');
+        renderTransaksi();
+    }
+
+    /* ===== BLOK 5.6.9 - BATAL TRANSAKSI ===== */
+    function batalTransaksi() {
+        if (!confirm('Batalkan transaksi? Keranjang akan dikosongkan.')) {
+            return;
+        }
+        localStorage.removeItem('2r_transaksi_keranjang');
+        renderTransaksi();
+        tampilkanToast('Transaksi dibatalkan.', 'info');
+    }
+</script>
+<!-- ===== AKHIR BLOK 5.6 ===== -->
 </body>
 </html>
