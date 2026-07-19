@@ -5059,7 +5059,7 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
     /* ===== AKHIR BLOK 5.3.1 ===== */
 
-     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
+         /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
     /*
         Event ini adalah titik awal aplikasi.
         Saat halaman selesai dimuat oleh browser, maka:
@@ -5072,19 +5072,10 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
-        
-        // 2. Cek apakah user sudah login
-        var dataUser = localStorage.getItem('2r_user');
-        if (dataUser) {
-            var user = JSON.parse(dataUser);
-            tampilkanDashboard(user);
-        }
-        
-        // 3. Event logout dan modal sudah ditangani di BLOK 5.1
-        // 4. Event responsive sidebar sudah ditangani di BLOK 5.2
-        
-    });
-	function perbaikiDataProdukLama() {
+
+        // ===== TAMBAHKAN INI (MULAI) =====
+        // Memperbaiki produk lama agar memiliki tanggal input & penginput
+        function perbaikiDataProdukLama() {
             var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
             var perluDiupdate = false;
             for (var i = 0; i < semuaProdukGudang.length; i++) {
@@ -5102,7 +5093,6 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
             }
         }
         perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
-        // ===== TAMBAHKAN INI (SELESAI) =====
         
         // 2. Cek apakah user sudah login (INI TETAP ASLI, JANGAN DIHAPUS!)
         var dataUser = localStorage.getItem('2r_user');
