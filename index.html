@@ -1744,12 +1744,12 @@ function ajukanHapusAkunCustomer() {
     renderEditAkun();
 }
 
-// ===== FUNGSI UNTUK STAF ADMIN & SUPERADMIN =====
+// ===== FUNGSI UNTUK STAF ADMIN DAN SUPERADMIN =====
 
-// ===== FUNGSI TERUSKAN PENGAJUAN DARI STAF ADMIN KE SUPERADMIN =====
+// ===== FUNGSI UNTUK STAF ADMIN MENERUSKAN PENGAJUAN KE SUPERADMIN =====
 function teruskanPengajuanHapus(index) {
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    if (index < 0 || index >= pengajuan.length) {
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    if (index < 0 || index >= dataPengajuan.length) {
         tampilkanToast('Data tidak ditemukan!', 'error');
         return;
     }
@@ -1758,50 +1758,50 @@ function teruskanPengajuanHapus(index) {
     }
     
     // Ubah status pengajuan customer menjadi DITERUSKAN
-    pengajuan[index].status = 'DITERUSKAN';
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+    dataPengajuan[index].status = 'DITERUSKAN';
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(dataPengajuan));
     
     // Ambil data pengajuan yang diteruskan
-    var p = pengajuan[index];
+    var pengajuanTerpilih = dataPengajuan[index];
     
     // Simpan ke dalam database pengajuan staf (untuk SuperAdmin)
-    var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-    pengajuanStaf.push({
+    var dataPengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+    dataPengajuanStaf.push({
         id: Date.now(),
-        targetId: p.userId,
-        targetUsername: p.username,
-        targetNama: p.nama,
-        targetRole: p.role,
+        targetId: pengajuanTerpilih.userId,
+        targetUsername: pengajuanTerpilih.username,
+        targetNama: pengajuanTerpilih.nama,
+        targetRole: pengajuanTerpilih.role,
         diajukanOleh: 'Staf Admin',
         status: 'MENUNGGU',
         diajukanPada: new Date().toISOString()
     });
-    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
+    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(dataPengajuanStaf));
     
     // Kirim notifikasi ke SuperAdmin
     simpanNotifikasi('ALL', 'Pengajuan Diteruskan ke SuperAdmin', 
-        'Staf Admin meneruskan pengajuan hapus akun dari Customer ' + p.username + ' (' + p.nama + ') ke SuperAdmin.', 
+        'Staf Admin meneruskan pengajuan hapus akun dari Customer ' + pengajuanTerpilih.username + ' (' + pengajuanTerpilih.nama + ') ke SuperAdmin.', 
         'account');
     
     renderDashboard();
     tampilkanToast('Pengajuan diteruskan ke SuperAdmin!', 'success');
 }
 
-// ===== FUNGSI TOLAK PENGAJUAN OLEH STAF ADMIN =====
+// ===== FUNGSI UNTUK STAF ADMIN MENOLAK PENGAJUAN =====
 function tolakPengajuanHapusStaf(index) {
-    var pengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    if (index < 0 || index >= pengajuan.length) {
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    if (index < 0 || index >= dataPengajuan.length) {
         tampilkanToast('Data tidak ditemukan!', 'error');
         return;
     }
     if (!confirm('Tolak pengajuan ini?')) {
         return;
     }
-    pengajuan[index].status = 'DITOLAK';
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuan));
+    dataPengajuan[index].status = 'DITOLAK';
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(dataPengajuan));
     
     // Kirim notifikasi ke Customer
-    simpanNotifikasi(pengajuan[index].userId, 'Pengajuan Hapus Akun Ditolak', 
+    simpanNotifikasi(dataPengajuan[index].userId, 'Pengajuan Hapus Akun Ditolak', 
         'Pengajuan hapus akun Anda telah ditolak oleh Staf Admin.', 
         'account');
     
@@ -1809,10 +1809,10 @@ function tolakPengajuanHapusStaf(index) {
     tampilkanToast('Pengajuan ditolak.', 'success');
 }
 
-// ===== FUNGSI SETUJUI PENGAJUAN OLEH SUPERADMIN =====
+// ===== FUNGSI UNTUK SUPERADMIN MENYETUJUI PENGAJUAN =====
 function setujuiPengajuanStaf(index) {
-    var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-    if (index < 0 || index >= pengajuanStaf.length) {
+    var dataPengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+    if (index < 0 || index >= dataPengajuanStaf.length) {
         tampilkanToast('Data tidak ditemukan!', 'error');
         return;
     }
@@ -1820,34 +1820,34 @@ function setujuiPengajuanStaf(index) {
         return;
     }
     
-    var p = pengajuanStaf[index];
+    var pengajuanTerpilih = dataPengajuanStaf[index];
     
     // 1. Hapus akun dari database utama
-    var akun = getDataAkun();
-    var akunBaru = [];
-    for (var i = 0; i < akun.length; i++) {
-        if (akun[i].id !== p.targetId) {
-            akunBaru.push(akun[i]);
+    var dataAkun = getDataAkun();
+    var dataAkunBaru = [];
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id !== pengajuanTerpilih.targetId) {
+            dataAkunBaru.push(dataAkun[i]);
         }
     }
-    simpanDataAkun(akunBaru);
+    simpanDataAkun(dataAkunBaru);
     
     // 2. Update status pengajuan staf menjadi DISETUJUI (supaya tidak muncul lagi di tabel)
-    pengajuanStaf[index].status = 'DISETUJUI';
-    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
+    dataPengajuanStaf[index].status = 'DISETUJUI';
+    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(dataPengajuanStaf));
     
     // 3. Update status pengajuan customer (jika ada) menjadi DISETUJUI
-    var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    for (var i = 0; i < pengajuanCustomer.length; i++) {
-        if (pengajuanCustomer[i].userId === p.targetId && pengajuanCustomer[i].status === 'DITERUSKAN') {
-            pengajuanCustomer[i].status = 'DISETUJUI';
+    var dataPengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    for (var i = 0; i < dataPengajuanCustomer.length; i++) {
+        if (dataPengajuanCustomer[i].userId === pengajuanTerpilih.targetId && dataPengajuanCustomer[i].status === 'DITERUSKAN') {
+            dataPengajuanCustomer[i].status = 'DISETUJUI';
             break;
         }
     }
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuanCustomer));
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(dataPengajuanCustomer));
     
     // Kirim notifikasi ke Customer
-    simpanNotifikasi(p.targetId, 'Pengajuan Hapus Akun Disetujui', 
+    simpanNotifikasi(pengajuanTerpilih.targetId, 'Pengajuan Hapus Akun Disetujui', 
         'Pengajuan hapus akun Anda telah disetujui oleh SuperAdmin. Akun Anda telah dihapus permanen.', 
         'account');
     
@@ -1857,10 +1857,10 @@ function setujuiPengajuanStaf(index) {
     tampilkanToast('Akun berhasil dihapus permanen!', 'success');
 }
 
-// ===== FUNGSI TOLAK PENGAJUAN OLEH SUPERADMIN =====
+// ===== FUNGSI UNTUK SUPERADMIN MENOLAK PENGAJUAN =====
 function tolakPengajuanStaf(index) {
-    var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-    if (index < 0 || index >= pengajuanStaf.length) {
+    var dataPengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+    if (index < 0 || index >= dataPengajuanStaf.length) {
         tampilkanToast('Data tidak ditemukan!', 'error');
         return;
     }
@@ -1869,21 +1869,21 @@ function tolakPengajuanStaf(index) {
     }
     
     // Update status pengajuan staf menjadi DITOLAK
-    pengajuanStaf[index].status = 'DITOLAK';
-    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(pengajuanStaf));
+    dataPengajuanStaf[index].status = 'DITOLAK';
+    localStorage.setItem('2r_pengajuan_hapus_staf', JSON.stringify(dataPengajuanStaf));
     
     // Update status pengajuan customer (jika ada) menjadi DITOLAK
-    var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-    for (var i = 0; i < pengajuanCustomer.length; i++) {
-        if (pengajuanCustomer[i].userId === pengajuanStaf[index].targetId && pengajuanCustomer[i].status === 'DITERUSKAN') {
-            pengajuanCustomer[i].status = 'DITOLAK';
+    var dataPengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+    for (var i = 0; i < dataPengajuanCustomer.length; i++) {
+        if (dataPengajuanCustomer[i].userId === dataPengajuanStaf[index].targetId && dataPengajuanCustomer[i].status === 'DITERUSKAN') {
+            dataPengajuanCustomer[i].status = 'DITOLAK';
             break;
         }
     }
-    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(pengajuanCustomer));
+    localStorage.setItem('2r_pengajuan_hapus', JSON.stringify(dataPengajuanCustomer));
     
     // Kirim notifikasi ke Customer
-    simpanNotifikasi(pengajuanStaf[index].targetId, 'Pengajuan Hapus Akun Ditolak', 
+    simpanNotifikasi(dataPengajuanStaf[index].targetId, 'Pengajuan Hapus Akun Ditolak', 
         'Pengajuan hapus akun Anda telah ditolak oleh SuperAdmin.', 
         'account');
     
@@ -1893,9 +1893,9 @@ function tolakPengajuanStaf(index) {
 
 // ===== RENDER HALAMAN NOTIFIKASI =====
 function renderNotifikasi() {
-    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-    var contentArea = document.getElementById('mainContent');
-    var notifikasi = ambilNotifikasi(user.id);
+    var pengguna = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var areaKonten = document.getElementById('mainContent');
+    var dataNotifikasi = ambilNotifikasi(pengguna.id);
     var html = '';
 
     html += '<div class="page-header">';
@@ -1904,18 +1904,18 @@ function renderNotifikasi() {
     html += '</div>';
 
     // Tombol tandai semua sudah dibaca
-    if (notifikasi.length > 0) {
+    if (dataNotifikasi.length > 0) {
         html += '<div style="text-align:right; margin-bottom:10px;">';
-        html += '<button class="btn btn-primary btn-sm" onclick="tandaiSemuaNotifikasiDibaca(\'' + user.id + '\'); renderNotifikasi();">';
+        html += '<button class="btn btn-primary btn-sm" onclick="tandaiSemuaNotifikasiDibaca(\'' + pengguna.id + '\'); renderNotifikasi();">';
         html += '<i class="fas fa-check-double"></i> Tandai Semua Sudah Dibaca';
         html += '</button>';
         html += '</div>';
     }
 
     html += '<div class="card">';
-    html += '<div class="card-header">Daftar Notifikasi <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + notifikasi.length + ')</span></div>';
+    html += '<div class="card-header">Daftar Notifikasi <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + dataNotifikasi.length + ')</span></div>';
 
-    if (notifikasi.length === 0) {
+    if (dataNotifikasi.length === 0) {
         html += '<div class="empty-state">';
         html += '<i class="fas fa-bell-slash" style="color:#4CAF50;"></i>';
         html += '<h3>Belum ada notifikasi</h3>';
@@ -1923,42 +1923,42 @@ function renderNotifikasi() {
         html += '</div>';
     } else {
         // Urutkan dari yang terbaru
-        notifikasi.sort(function(a, b) { 
+        dataNotifikasi.sort(function(a, b) { 
             return new Date(b.tanggal) - new Date(a.tanggal); 
         });
 
         html += '<div style="max-height:500px; overflow-y:auto;">';
-        for (var i = 0; i < notifikasi.length; i++) {
-            var n = notifikasi[i];
-            var style = 'background:#f8f9fa; border-left:4px solid #FF6B00;';
+        for (var i = 0; i < dataNotifikasi.length; i++) {
+            var notifikasi = dataNotifikasi[i];
+            var gaya = 'background:#f8f9fa; border-left:4px solid #FF6B00;';
             var labelStatus = '<span style="background:#FF6B00; color:white; padding:2px 10px; border-radius:12px; font-size:10px;">Baru</span>';
             
-            if (n.status === 'SUDAH_DIBACA') {
-                style = 'background:white; border-left:4px solid #ccc; opacity:0.7;';
-                labelStatus = '<span style="background:#ccc; color:#666; padding:2px 10px; border-radius:12px; font-size:10px;">Sudah Dibaca</span>';
+            if (notifikasi.status === 'SUDAH_DIBACA') {
+                gaya = 'background:white; border-left:4px solid #cccccc; opacity:0.7;';
+                labelStatus = '<span style="background:#cccccc; color:#666666; padding:2px 10px; border-radius:12px; font-size:10px;">Sudah Dibaca</span>';
             }
 
             // Icon berdasarkan jenis
             var iconJenis = 'fa-info-circle';
-            if (n.jenis === 'order') iconJenis = 'fa-shopping-cart';
-            else if (n.jenis === 'account') iconJenis = 'fa-user';
-            else if (n.jenis === 'promo') iconJenis = 'fa-tag';
-            else if (n.jenis === 'system') iconJenis = 'fa-cog';
+            if (notifikasi.jenis === 'order') iconJenis = 'fa-shopping-cart';
+            else if (notifikasi.jenis === 'account') iconJenis = 'fa-user';
+            else if (notifikasi.jenis === 'promo') iconJenis = 'fa-tag';
+            else if (notifikasi.jenis === 'system') iconJenis = 'fa-cog';
 
-            html += '<div style="padding:15px; margin-bottom:10px; border-radius:8px; ' + style + '">';
+            html += '<div style="padding:15px; margin-bottom:10px; border-radius:8px; ' + gaya + '">';
             html += '<div style="display:flex; justify-content:space-between; align-items:flex-start;">';
             html += '<div style="display:flex; gap:10px; align-items:center;">';
             html += '<i class="fas ' + iconJenis + '" style="color:#FF6B00; font-size:18px;"></i>';
-            html += '<h4 style="font-size:15px; margin:0;">' + n.judul + '</h4>';
+            html += '<h4 style="font-size:15px; margin:0;">' + notifikasi.judul + '</h4>';
             html += '</div>';
             html += '<div style="text-align:right;">';
-            html += '<span style="font-size:11px; color:#888;">' + new Date(n.tanggal).toLocaleString('id-ID') + '</span>';
+            html += '<span style="font-size:11px; color:#888888;">' + new Date(notifikasi.tanggal).toLocaleString('id-ID') + '</span>';
             html += ' ' + labelStatus;
             html += '</div>';
             html += '</div>';
-            html += '<p style="font-size:13px; margin:5px 0 0; color:#555;">' + n.pesan + '</p>';
-            if (n.status === 'BELUM_DIBACA') {
-                html += '<button class="btn btn-xs" style="background:#eee; margin-top:8px;" onclick="tandaiNotifikasiDibaca(' + n.id + '); renderNotifikasi();">';
+            html += '<p style="font-size:13px; margin:5px 0 0; color:#555555;">' + notifikasi.pesan + '</p>';
+            if (notifikasi.status === 'BELUM_DIBACA') {
+                html += '<button class="btn btn-xs" style="background:#eeeeee; margin-top:8px;" onclick="tandaiNotifikasiDibaca(' + notifikasi.id + '); renderNotifikasi();">';
                 html += '<i class="fas fa-check"></i> Tandai sudah dibaca';
                 html += '</button>';
             }
@@ -1968,9 +1968,8 @@ function renderNotifikasi() {
     }
     html += '</div>';
 
-    contentArea.innerHTML = html;
+    areaKonten.innerHTML = html;
 }
-
 </script>
 <!-- ===== AKHIR BLOK 6 (7) (LANJUTAN) ===== -->
 <!-- ===== BLOK 6 (7) - 07 RENDER HALAMAN CUSTOMER (LANJUTAN) ===== -->
