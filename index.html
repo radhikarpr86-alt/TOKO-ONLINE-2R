@@ -3663,6 +3663,13 @@ function simpanRekening() {
 <!-- ===== BLOK 6 (13) - 13 INISIALISASI & EVENT LISTENER ===== -->
 <script>
 function tampilkanDashboard(user) {
+    if (!user || !user.nama) {
+        // Jika user tidak valid, logout dan reload
+        localStorage.removeItem('2r_user');
+        localStorage.removeItem('2r_user_role');
+        location.reload();
+        return;
+    }
     document.getElementById('pageAuth').style.display = 'none';
     document.getElementById('pageDashboard').style.display = 'block';
     document.getElementById('userNama').textContent = user.nama;
@@ -3697,12 +3704,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     document.getElementById('btnLogout').onclick = function() {
-    if (confirm('Keluar dari aplikasi?')) {
-        localStorage.removeItem('2r_user');
-        localStorage.removeItem('2r_user_role');
-        location.reload();
-    }
-};
+        if (confirm('Keluar dari aplikasi?')) {
+            localStorage.removeItem('2r_user');
+            localStorage.removeItem('2r_user_role');
+            location.reload();
+        }
+    };
     
     var modals = document.querySelectorAll('.modal-overlay');
     for (var i = 0; i < modals.length; i++) {
