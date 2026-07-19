@@ -4105,13 +4105,15 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 /* ===== AKHIR BLOK 4.10.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.10 ===== -->
-<!-- ===== BLOK 4.11 - JS_RENDER_TRANSFER_MENU ===== -->
+<!-- ===== BLOK 4.11 - JS_RENDER_TRANSFER_MENU (REVISI) ===== -->
 <script>
-    /* ===== BLOK 4.11.1 - RENDER HALAMAN TRANSFER MENU ===== */
+    /* ===== BLOK 4.11.1 - HALAMAN INDUK TRANSFER MENU ===== */
     /*
-        Fungsi ini menampilkan halaman Transfer Menu untuk SuperAdmin.
-        Menampilkan daftar semua akun (selain SuperAdmin) beserta status menu saat ini,
-        dan tombol untuk mengubah status menu akun target.
+        Halaman utama Transfer Menu.
+        Menampilkan 3 tombol kategori:
+        1. Transfer Upload Produk Publik
+        2. Transfer Transaksi
+        3. Transfer Menu Lainnya
     */
     function renderTransferMenu() {
         var role = localStorage.getItem('2r_user_role');
@@ -4121,83 +4123,138 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         }
 
         var areaKonten = document.getElementById('mainContent');
-        var dataAkun = getDataAkun();
-        var daftarAkunTarget = [];
+        var html = '';
+        html += '<div class="page-header"><h2>Transfer Menu</h2><p>Pilih kategori menu yang ingin Anda transfer ke akun target.</p></div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card" style="cursor:pointer;" onclick="renderTransferUploadProduk()">';
+        html += '<div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-upload"></i></div>';
+        html += '<div class="widget-number" style="font-size:18px;">Upload Produk Publik</div>';
+        html += '<div class="widget-label">Atur akses upload produk untuk toko</div>';
+        html += '</div>';
         
-        // Filter: hanya akun selain superadmin
+        html += '<div class="widget-card" style="cursor:pointer;" onclick="renderTransferTransaksi()">';
+        html += '<div class="widget-icon" style="color:#2196F3;"><i class="fas fa-credit-card"></i></div>';
+        html += '<div class="widget-number" style="font-size:18px;">Transaksi</div>';
+        html += '<div class="widget-label">Atur akses kasir, pembayaran, laporan</div>';
+        html += '</div>';
+        
+        html += '<div class="widget-card" style="cursor:pointer;" onclick="renderTransferLainnya()">';
+        html += '<div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-cogs"></i></div>';
+        html += '<div class="widget-number" style="font-size:18px;">Menu Lainnya</div>';
+        html += '<div class="widget-label">Atur akses menu tambahan lainnya</div>';
+        html += '</div>';
+        html += '</div>';
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 4.11.1 ===== */
+
+    /* ===== BLOK 4.11.2 - TRANSFER UPLOAD PRODUK PUBLIK ===== */
+    /*
+        Halaman Transfer Upload Produk Publik.
+        Menampilkan daftar semua akun dengan role 'toko'.
+        SuperAdmin bisa mengaktifkan atau menonaktifkan fitur upload produk publik.
+    */
+    function renderTransferUploadProduk() {
+        var role = localStorage.getItem('2r_user_role');
+        if (role !== 'superadmin') {
+            tampilkanToast('Anda tidak memiliki akses!', 'error');
+            return;
+        }
+
+        var areaKonten = document.getElementById('mainContent');
+        var dataAkun = getDataAkun();
+        var daftarToko = [];
         for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].role !== 'superadmin') {
-                daftarAkunTarget.push(dataAkun[i]);
+            if (dataAkun[i].role === 'toko') {
+                daftarToko.push(dataAkun[i]);
             }
         }
 
         var html = '';
-        html += '<div class="page-header"><h2>Transfer Menu</h2><p>Pilih paket menu untuk akun target. Status menu akan langsung berubah setelah tombol ditekan.</p></div>';
-        html += '<div class="card"><div class="card-header">Daftar Akun <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + daftarAkunTarget.length + ')</span></div>';
+        html += '<div class="page-header"><h2>Transfer Upload Produk Publik</h2><p>Pilih toko yang ingin Anda aktifkan/nonaktifkan fitur upload produk publik.</p>';
+        html += '<button class="button button-primary button-small" onclick="renderTransferMenu()"><i class="fas fa-arrow-left"></i> Kembali</button>';
+        html += '</div>';
+        html += '<div class="card"><div class="card-header">Daftar Toko <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + daftarToko.length + ')</span></div>';
         
-        if (daftarAkunTarget.length === 0) {
-            html += '<div class="empty-state"><i class="fas fa-users-slash"></i><h3>Belum ada akun</h3></div>';
+        if (daftarToko.length === 0) {
+            html += '<div class="empty-state"><i class="fas fa-store"></i><h3>Belum ada toko</h3></div>';
         } else {
-            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Menu Saat Ini</th><th>Aksi</th></tr></thead><tbody>';
-            for (var i = 0; i < daftarAkunTarget.length; i++) {
-                var akun = daftarAkunTarget[i];
-                var statusMenu = akun.menuLevel || 'none';
-                var labelMenu = '';
-                if (statusMenu === 'none') labelMenu = '<span class="badge badge-danger">Tidak Aktif</span>';
-                else if (statusMenu === 'basic') labelMenu = '<span class="badge badge-warning">Basic</span>';
-                else if (statusMenu === 'pro') labelMenu = '<span class="badge badge-success">Pro</span>';
-                
-                html += '<tr><td>' + (i+1) + '</td><td>' + akun.id + '</td><td>' + akun.role + '</td><td>' + akun.username + '</td><td>' + akun.nama + '</td><td>' + labelMenu + '</td><td><div style="display:flex;gap:5px;flex-wrap:wrap;">';
-                html += '<button class="button button-success button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'pro\')">Pro</button>';
-                html += '<button class="button button-warning button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'basic\')">Basic</button>';
-                html += '<button class="button button-danger button-extra-small" onclick="transferMenu(\'' + akun.id + '\', \'none\')">Reset (None)</button>';
-                html += '</div></td></tr>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>ID</th><th>Username</th><th>Nama</th><th>Status Upload Publik</th><th>Aksi</th></tr></thead><tbody>';
+            for (var i = 0; i < daftarToko.length; i++) {
+                var toko = daftarToko[i];
+                var statusUpload = toko.fitur && toko.fitur.uploadProdukPublik ? 'Aktif' : 'Nonaktif';
+                var badgeUpload = statusUpload === 'Aktif' ? 'badge-success' : 'badge-danger';
+                html += '<tr><td>' + (i+1) + '</td><td>' + toko.id + '</td><td>' + toko.username + '</td><td>' + toko.nama + '</td><td><span class="badge ' + badgeUpload + '">' + statusUpload + '</span></td><td>';
+                if (statusUpload === 'Aktif') {
+                    html += '<button class="button button-danger button-extra-small" onclick="nonaktifkanUploadPublik(\'' + toko.id + '\')">Nonaktifkan</button>';
+                } else {
+                    html += '<button class="button button-success button-extra-small" onclick="aktifkanUploadPublik(\'' + toko.id + '\')">Aktifkan</button>';
+                }
+                html += '</td></tr>';
             }
             html += '</tbody></table></div>';
         }
         html += '</div>';
         areaKonten.innerHTML = html;
     }
-    /* ===== AKHIR BLOK 4.11.1 ===== */
+    /* ===== AKHIR BLOK 4.11.2 ===== */
 
-    /* ===== BLOK 4.11.2 - FUNGSI TRANSFER MENU ===== */
-    /*
-        Fungsi ini mengubah status menu akun target.
-        Parameter:
-        - idAkun: ID akun yang akan diubah menunya.
-        - levelBaru: 'none', 'basic', atau 'pro'.
-    */
-    function transferMenu(idAkun, levelBaru) {
-        var role = localStorage.getItem('2r_user_role');
-        if (role !== 'superadmin') {
-            tampilkanToast('Anda tidak memiliki hak akses!', 'error');
-            return;
-        }
-
-        if (!confirm('Yakin ingin mengubah menu akun ini menjadi ' + levelBaru + '?')) {
-            return;
-        }
-
+    /* ===== BLOK 4.11.3 - FUNGSI AKTIFKAN/NONAKTIFKAN UPLOAD PUBLIK ===== */
+    function aktifkanUploadPublik(idToko) {
+        if (!confirm('Aktifkan fitur Upload Produk Publik untuk toko ini?')) return;
         var dataAkun = getDataAkun();
-        var akunDitemukan = false;
         for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].id === idAkun) {
-                dataAkun[i].menuLevel = levelBaru;
-                akunDitemukan = true;
+            if (dataAkun[i].id === idToko) {
+                if (!dataAkun[i].fitur) dataAkun[i].fitur = {};
+                dataAkun[i].fitur.uploadProdukPublik = true;
                 break;
             }
         }
-
-        if (!akunDitemukan) {
-            tampilkanToast('Akun tidak ditemukan!', 'error');
-            return;
-        }
-
         simpanDataAkun(dataAkun);
-        renderTransferMenu();
-        tampilkanToast('Menu akun berhasil diubah menjadi ' + levelBaru + '!', 'success');
+        renderTransferUploadProduk();
+        tampilkanToast('Fitur Upload Produk Publik telah diaktifkan!', 'success');
     }
-    /* ===== AKHIR BLOK 4.11.2 ===== */
+
+    function nonaktifkanUploadPublik(idToko) {
+        if (!confirm('Nonaktifkan fitur Upload Produk Publik untuk toko ini?')) return;
+        var dataAkun = getDataAkun();
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === idToko) {
+                if (dataAkun[i].fitur) {
+                    dataAkun[i].fitur.uploadProdukPublik = false;
+                }
+                break;
+            }
+        }
+        simpanDataAkun(dataAkun);
+        renderTransferUploadProduk();
+        tampilkanToast('Fitur Upload Produk Publik telah dinonaktifkan!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.11.3 ===== */
+
+    /* ===== BLOK 4.11.4 - TRANSFER TRANSAKSI (PLACEHOLDER) ===== */
+    function renderTransferTransaksi() {
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
+        html += '<div class="page-header"><h2>Transfer Transaksi</h2><p>Halaman ini sedang dalam pengembangan.</p>';
+        html += '<button class="button button-primary button-small" onclick="renderTransferMenu()"><i class="fas fa-arrow-left"></i> Kembali</button>';
+        html += '</div>';
+        html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Transfer Transaksi</h3><p>Segera hadir.</p></div></div>';
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 4.11.4 ===== */
+
+    /* ===== BLOK 4.11.5 - TRANSFER MENU LAINNYA (PLACEHOLDER) ===== */
+    function renderTransferLainnya() {
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
+        html += '<div class="page-header"><h2>Transfer Menu Lainnya</h2><p>Halaman ini sedang dalam pengembangan.</p>';
+        html += '<button class="button button-primary button-small" onclick="renderTransferMenu()"><i class="fas fa-arrow-left"></i> Kembali</button>';
+        html += '</div>';
+        html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Transfer Menu Lainnya</h3><p>Segera hadir.</p></div></div>';
+        areaKonten.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 4.11.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.11 ===== -->
 <!-- ===== BLOK 5.1 - JS_EVENT_LOGOUT_MODAL ===== -->
