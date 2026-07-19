@@ -5084,6 +5084,37 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
         // 4. Event responsive sidebar sudah ditangani di BLOK 5.2
         
     });
+	function perbaikiDataProdukLama() {
+            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+            var perluDiupdate = false;
+            for (var i = 0; i < semuaProdukGudang.length; i++) {
+                if (!semuaProdukGudang[i].tanggalInput) {
+                    semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
+                    perluDiupdate = true;
+                }
+                if (!semuaProdukGudang[i].namaPenginput) {
+                    semuaProdukGudang[i].namaPenginput = '-';
+                    perluDiupdate = true;
+                }
+            }
+            if (perluDiupdate) {
+                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+            }
+        }
+        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
+        // ===== TAMBAHKAN INI (SELESAI) =====
+        
+        // 2. Cek apakah user sudah login (INI TETAP ASLI, JANGAN DIHAPUS!)
+        var dataUser = localStorage.getItem('2r_user');
+        if (dataUser) {
+            var user = JSON.parse(dataUser);
+            tampilkanDashboard(user);
+        }
+        
+        // 3. Event logout dan modal sudah ditangani di BLOK 5.1
+        // 4. Event responsive sidebar sudah ditangani di BLOK 5.2
+        
+    });
     /* ===== AKHIR BLOK 5.3.2 ===== */
 </script>
 </script>
