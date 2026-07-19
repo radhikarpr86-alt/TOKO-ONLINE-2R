@@ -3084,7 +3084,7 @@
 <!-- ===== AKHIR BLOK 3.10.13 ===== -->
 <!-- ===== BLOK 3.10.14 - JS_FUNGSI_FILTER_PRODUK ===== -->
 <script>
-            /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG ===== */
+    /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG (MANAJEMEN STOK) ===== */
     /*
         Fungsi ini menghasilkan tabel produk gudang berdasarkan filter yang dipilih.
         Filter: semua, terlaris, tidakLaku, kadaluarsa.
@@ -3134,12 +3134,11 @@
         }
         return html;
     }
-    /* ===== AKHIR BLOK 3.10.14.1 ===== */
 
     /* ===== BLOK 3.10.14.2 - TAMPILKAN PRODUK GUDANG DENGAN FILTER ===== */
     /*
         Fungsi ini memanggil tampilkanTabelProdukGudang dengan filter tertentu
-        dan memperbarui area tabel di halaman.
+        dan memperbarui area tabel di halaman Manajemen Stok Gudang.
     */
     function tampilkanProdukGudang(filter) {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -3150,7 +3149,6 @@
             tabel.innerHTML = tampilkanTabelProdukGudang(produkSaya, filter);
         }
     }
-    /* ===== AKHIR BLOK 3.10.14.2 ===== */
 
     /* ===== BLOK 3.10.14.3 - HAPUS PRODUK GUDANG ===== */
     /*
@@ -3172,7 +3170,114 @@
         renderManajemenStokGudang();
         tampilkanToast('Produk berhasil dihapus!', 'success');
     }
-    /* ===== AKHIR BLOK 3.10.14.3 ===== */
+
+    /* ===== BLOK 3.10.14.4 - FUNGSI FILTER UNTUK KELOLA PRODUK (CARD VIEW) ===== */
+    /*
+        Fungsi ini memfilter data produk untuk halaman Kelola Produk (Card View)
+        berdasarkan kategori filter: semua, terlaris, tidakLaku, kadaluarsa.
+    */
+    function tampilkanProdukKelola(filter) {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var grid = document.getElementById('gridProdukKelola');
+        if (grid) {
+            grid.innerHTML = tampilkanGridProdukKelola(produkSaya, filter);
+        }
+    }
+
+    /* ===== BLOK 3.10.14.5 - RENDER GRID KELOLA PRODUK ===== */
+    /*
+        Fungsi ini menghasilkan grid kartu produk untuk halaman Kelola Produk.
+        Hanya menampilkan Foto, Nama Produk, Harga, dan Stok.
+        Setiap kartu memiliki tombol Edit dan Hapus.
+    */
+    function tampilkanGridProdukKelola(dataProduk, filter) {
+        var dataFilter = [];
+
+        if (filter === 'semua') {
+            dataFilter = dataProduk;
+        } else if (filter === 'terlaris') {
+            dataFilter = dataProduk.slice().sort(function(a, b) { return b.totalTerjual - a.totalTerjual; });
+            dataFilter = dataFilter.slice(0, 10);
+        } else if (filter === 'tidakLaku') {
+            dataFilter = dataProduk.filter(function(p) { return p.totalTerjual === 0 && p.jumlahStok > 10; });
+        } else if (filter === 'kadaluarsa') {
+            var hariIni = new Date();
+            dataFilter = dataProduk.filter(function(p) {
+                var tanggalKadaluarsa = new Date(p.tanggalKadaluarsa);
+                var selisihHari = Math.ceil((tanggalKadaluarsa - hariIni) / (1000 * 60 * 60 * 24));
+                return selisihHari <= 30 && selisihHari >= 0;
+            });
+        }
+
+        if (dataFilter.length === 0) {
+            return '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Tidak ada produk</h3><p>Belum ada produk dengan filter ini.</p></div>';
+        }
+
+        var html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:20px; padding:5px;">';
+        for (var i = 0; i < dataFilter.length; i++) {
+            var p = dataFilter[i];
+            var fotoHtml = '';
+            if (p.fotoProduk && p.fotoProduk.length > 0) {
+                fotoHtml = '<img src="' + p.fotoProduk[0] + '" style="width:100%; height:180px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
+            } else {
+                fotoHtml = '<div style="width:100%; height:180px; background:#f0f0f0; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#aaa; margin-bottom:10px;"><i class="fas fa-image" style="font-size:40px;"></i></div>';
+            }
+
+            html += '<div style="border:1px solid #eee; border-radius:10px; padding:15px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05); display:flex; flex-direction:column; justify-content:space-between;">';
+            html += '<div>';
+            html += fotoHtml;
+            html += '<h4 style="font-size:15px; font-weight:600; margin:0 0 5px 0; color:#333; text-align:center;">' + p.namaProduk + '</h4>';
+            html += '<p style="font-size:14px; font-weight:600; color:#FF6B00; margin:0 0 3px 0; text-align:center;">Rp ' + p.hargaJual + '</p>';
+            html += '<p style="font-size:13px; color:#888; margin:0; text-align:center;">Stok: ' + p.jumlahStok + ' ' + p.satuan + '</p>';
+            html += '</div>';
+            html += '<div style="display:flex; gap:8px; margin-top:15px; border-top:1px solid #f5f5f5; padding-top:12px;">';
+            html += '<button class="button button-primary button-small" style="flex:1;" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="button button-danger button-small" style="flex:1;" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '</div>';
+            html += '</div>';
+        }
+        html += '</div>';
+        return html;
+    }
+
+    /* ===== BLOK 3.10.14.6 - DOWNLOAD EXCEL UNTUK MANAJEMEN STOK GUDANG ===== */
+    /*
+        Fungsi ini mengekspor semua data produk yang sudah difilter
+        menjadi file CSV (Excel) yang bisa didownload.
+    */
+    function downloadExcelStokGudang() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+
+        if (produkSaya.length === 0) {
+            tampilkanToast('Belum ada produk untuk di-download!', 'warning');
+            return;
+        }
+
+        // Header Excel (Semua kolom lengkap)
+        var csv = "Nama Produk,Kode Produk,Harga Beli,Harga Jual,Stok,Jenis,Satuan,Tanggal Kadaluarsa,Tanggal Input,Penginput,Total Terjual\n";
+
+        for (var i = 0; i < produkSaya.length; i++) {
+            var p = produkSaya[i];
+            csv += '"' + p.namaProduk + '","' + p.kodeProduk + '",' + p.hargaBeli + ',' + p.hargaJual + ',' + p.jumlahStok + ',"' + p.jenis + '","' + p.satuan + '","' + p.tanggalKadaluarsa + '","' + (p.tanggalInput || '-') + '","' + (p.namaPenginput || '-') + '",' + p.totalTerjual + '\n';
+        }
+
+        // Buat file .csv dan download
+        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); // BOM untuk UTF-8
+        var link = document.createElement('a');
+        var url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = 'Laporan_Stok_Gudang_' + new Date().toISOString().slice(0,10) + '.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        tampilkanToast('Data berhasil didownload sebagai CSV/Excel!', 'success');
+    }
 </script>
 <!-- ===== AKHIR BLOK 3.10.14 ===== -->
 <!-- ===== BLOK 3.10.15 - JS_FUNGSI_STATISTIK_STOK ===== -->
@@ -3208,12 +3313,7 @@
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
 	<!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
-            /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK (KATALOG VIEW) ===== */
-    /*
-        Fungsi ini menampilkan halaman Kelola Produk.
-        Hanya menampilkan Foto, Nama, Harga, dan Stok.
-        Tombol Edit dan Hapus tetap tersedia.
-    */
+                /* ===== BLOK 3.10.16.1 - RENDER KELOLA PRODUK (CARD VIEW + FILTER) ===== */
     function renderKelolaProduk() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
@@ -3223,22 +3323,24 @@
 
         html += '<div class="page-header">';
         html += '<h2>Kelola Produk</h2>';
-        html += '<p>Daftar produk yang tersimpan di gudang Anda.</p>';
+        html += '<p>Daftar produk tersimpan (Foto, Nama, Harga, Stok).</p>';
         html += '</div>';
 
-        if (produkSaya.length === 0) {
-            html += '<div class="card">';
-            html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum ada produk</h3><p>Silakan tambahkan produk baru melalui menu Manajemen Stok Gudang.</p></div>';
-            html += '</div>';
-        } else {
-            html += '<div class="card">';
-            html += '<div class="card-header">Daftar Produk <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + produkSaya.length + ')</span></div>';
-            
-            // ===== GRID PRODUK =====
-            html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:20px; padding:5px;">';
-            
-            for (var i = 0; i < produkSaya.length; i++) {
-                var p = produkSaya[i];
+        // ===== FILTER BUTTONS (SAMA SEPERTI GUDANG) =====
+        html += '<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">';
+        html += '<button class="button button-primary button-small" onclick="tampilkanProdukKelola(\'semua\')">Semua</button>';
+        html += '<button class="button button-success button-small" onclick="tampilkanProdukKelola(\'terlaris\')">Terlaris</button>';
+        html += '<button class="button button-warning button-small" onclick="tampilkanProdukKelola(\'tidakLaku\')">Tidak Laku</button>';
+        html += '<button class="button button-danger button-small" onclick="tampilkanProdukKelola(\'kadaluarsa\')">Mendekati Kadaluarsa</button>';
+        html += '</div>';
+
+        // ===== GRID PRODUK =====
+        html += '<div id="gridProdukKelola">';
+        html += tampilkanGridProdukKelola(produkSaya, 'semua');
+        html += '</div>';
+
+        areaKonten.innerHTML = html;
+    }
                 
                 // Cek foto
                 var fotoHtml = '';
