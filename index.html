@@ -2671,7 +2671,7 @@
 </script>
 <!-- ===== BLOK 3.10.12 - JS_RENDER_MANAJEMEN_STOK_GUDANG ===== -->
 <script>
-            /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL LENGKAP + TOTAL HARGA) ===== */
+                /* ===== BLOK 3.10.12.1 - RENDER MANAJEMEN STOK GUDANG (TABEL LENGKAP + TOTAL HARGA) ===== */
     function renderManajemenStokGudang() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
@@ -2679,7 +2679,7 @@
         var produkSaya = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
         var html = '';
 
-        // Hitung statistik
+        // Hitung statistik total stok dan total harga
         var totalProduk = produkSaya.length;
         var totalStok = 0;
         var totalHargaBeli = 0;
@@ -2696,6 +2696,7 @@
         html += '<div class="page-header">';
         html += '<h2>Manajemen Stok Gudang</h2>';
         html += '<p>Total Produk: <strong>' + totalProduk + '</strong> | Total Stok: <strong>' + totalStok + '</strong></p>';
+        // ===== TAMBAHKAN RINGKASAN HARGA DI SINI =====
         html += '<p style="font-size:14px; margin-top:5px; color:#333;">';
         html += 'Total Modal: <strong style="color:#d32f2f;">Rp ' + totalHargaBeli.toLocaleString('id-ID') + '</strong> | ';
         html += 'Total Jual: <strong style="color:#1976d2;">Rp ' + totalHargaJual.toLocaleString('id-ID') + '</strong> | ';
@@ -2730,6 +2731,7 @@
         areaKonten.innerHTML = html;
     }	
 </script>
+<!-- ===== AKHIR BLOK 3.10.12.1 ===== -->
 <!-- ===== AKHIR BLOK 3.10.12 ===== -->
 <!-- ===== BLOK 3.10.13 - JS_FUNGSI_INPUT_PRODUK_GUDANG ===== -->
 <script>
@@ -3073,7 +3075,7 @@
 <!-- ===== AKHIR BLOK 3.10.13 ===== -->
 <!-- ===== BLOK 3.10.14 - JS_FUNGSI_FILTER_PRODUK ===== -->
 <script>
-    /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG (MANAJEMEN STOK) ===== */
+        /* ===== BLOK 3.10.14.1 - TAMPILKAN TABEL PRODUK GUDANG (MANAJEMEN STOK) ===== */
     /*
         Fungsi ini menghasilkan tabel produk gudang berdasarkan filter yang dipilih.
         Filter: semua, terlaris, tidakLaku, kadaluarsa.
@@ -3102,7 +3104,7 @@
         if (dataFilter.length === 0) {
             html += '<div class="empty-state"><i class="fas fa-box-open"></i><h3>Tidak ada produk</h3><p>Belum ada produk dengan filter ini.</p></div>';
         } else {
-            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Tanggal Input</th><th>Penginput</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nama Produk</th><th>Kode</th><th>Harga Beli</th><th>Harga Jual</th><th>Stok</th><th>Jenis</th><th>Satuan</th><th>Kadaluarsa</th><th>Tanggal Input</th><th>Penginput</th><th>Terjual</th><th>Aksi</th></tr></thead><tbody>';
             for (var i = 0; i < dataFilter.length; i++) {
                 var p = dataFilter[i];
                 var statusKadaluarsa = 'badge-success';
@@ -3114,7 +3116,8 @@
                 } else if (selisihHari < 0) {
                     statusKadaluarsa = 'badge-danger';
                 }
-                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + (p.tanggalInput || '-') + '</td><td>' + (p.namaPenginput || '-') + '</td><td>' + p.totalTerjual + '</td><td>';
+                // ===== TAMBAHKAN KOLOM HARGA BELI DI SINI =====
+                html += '<tr><td>' + p.namaProduk + '</td><td>' + p.kodeProduk + '</td><td>Rp ' + p.hargaBeli + '</td><td>Rp ' + p.hargaJual + '</td><td>' + p.jumlahStok + '</td><td>' + p.jenis + '</td><td>' + p.satuan + '</td><td><span class="badge ' + statusKadaluarsa + '">' + p.tanggalKadaluarsa + '</span></td><td>' + (p.tanggalInput || '-') + '</td><td>' + (p.namaPenginput || '-') + '</td><td>' + p.totalTerjual + '</td><td>';
                 html += '<button class="button button-primary button-extra-small" onclick="renderEditProdukGudang(' + p.id + ')"><i class="fas fa-edit"></i> Edit</button>';
                 html += '<button class="button button-danger button-extra-small" onclick="hapusProdukGudang(' + p.id + ')"><i class="fas fa-trash"></i> Hapus</button>';
                 html += '</td></tr>';
@@ -3123,7 +3126,7 @@
         }
         return html;
     }
-
+	/* ===== AKHIR BLOK 3.10.14.1 ===== */
     /* ===== BLOK 3.10.14.2 - TAMPILKAN PRODUK GUDANG DENGAN FILTER ===== */
     /*
         Fungsi ini memanggil tampilkanTabelProdukGudang dengan filter tertentu
