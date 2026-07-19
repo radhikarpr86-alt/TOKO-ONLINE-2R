@@ -221,14 +221,32 @@
                 <div class="auth-footer">Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a></div>
             </form>
             <form class="auth-form hidden-form" id="registerForm">
-                <div class="form-group"><label>Pilih Role</label><div class="input-group"><i class="fas fa-user-tag"></i><select id="regRole"><option value="customer">Customer</option><option value="toko">Toko</option><option value="ojek">Ojek</option><option value="pedagang">Pedagang Pasar</option><option value="codseller">COD Seller</option></select></div></div>
-                <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="regUsername" placeholder="Buat username" required></div></div>
-                <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Buat password" required></div></div>
-                <div class="form-group"><label>Nama Lengkap</label><div class="input-group"><i class="fas fa-id-card"></i><input type="text" id="regNama" placeholder="Nama lengkap Anda" required></div></div>
-                <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
-                <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
-            </form>
+    <div class="form-group"><label>Pilih Role</label><div class="input-group"><i class="fas fa-user-tag"></i><select id="regRole"><option value="customer">Customer</option><option value="toko">Toko</option><option value="ojek">Ojek</option><option value="pedagang">Pedagang Pasar</option><option value="codseller">COD Seller</option></select></div></div>
+    
+    <!-- ===== TAMBAHAN ID OTOMATIS ===== -->
+    <div class="form-group">
+        <label>ID Akun (Otomatis)</label>
+        <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="regIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
         </div>
+    </div>
+    <!-- ===== AKHIR TAMBAHAN ===== -->
+    
+    <div class="form-group"><label>Username</label><div class="input-group"><i class="fas fa-user"></i><input type="text" id="regUsername" placeholder="Buat username" required></div></div>
+    <div class="form-group"><label>Password</label><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Buat password" required></div></div>
+    <div class="form-group"><label>Nama Lengkap</label><div class="input-group"><i class="fas fa-id-card"></i><input type="text" id="regNama" placeholder="Nama lengkap Anda" required></div></div>
+    <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> Daftar</button>
+    <div class="auth-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
+</form>
+        </div>
+    </div>
+</div>
+		<div class="form-group">
+    <label>ID Akun (Otomatis)</label>
+    <div class="input-group">
+        <i class="fas fa-id-card"></i>
+        <input type="text" id="regIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
     </div>
 </div>
 <!-- ===== AKHIR BLOK 3 (1) ===== -->
@@ -503,6 +521,14 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     simpanDataAkun(akun);
     alert('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + statusAkun);
     toggleForm('login');
+});
+	// ===== TAMBAHAN: Update ID otomatis saat role berubah =====
+document.getElementById('regRole').addEventListener('change', function() {
+    var role = this.value;
+    var idPreview = document.getElementById('regIdPreview');
+    if (idPreview) {
+        idPreview.value = generateId(role);
+    }
 });
 </script>
 <!-- ===== AKHIR BLOK 6 (2) ===== -->
