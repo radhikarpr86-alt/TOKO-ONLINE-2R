@@ -2801,13 +2801,19 @@
     }
     /* ===== AKHIR BLOK 3.10.13.3 ===== */
 
-        /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG ===== */
+            /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG ===== */
     /*
         Fungsi ini menyimpan produk gudang baru ke localStorage.
-        Tidak ada batasan jumlah produk atau foto.
+        Melakukan validasi lengkap:
+        - Nama produk, harga, stok, dan tanggal kadaluarsa wajib diisi.
+        - Tidak ada batasan jumlah produk atau foto.
+        - Menyimpan tanggal input dan nama penginput secara otomatis.
     */
     function simpanProdukGudang() {
+        // Ambil data user yang sedang login
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        
+        // Ambil data dari form input
         var namaProduk = document.getElementById('gudangNamaProduk').value.trim();
         var kodeProduk = document.getElementById('gudangKodeProduk').value.trim();
         var hargaBeli = document.getElementById('gudangHargaBeli').value.trim();
@@ -2818,14 +2824,31 @@
         var tanggalKadaluarsa = document.getElementById('gudangTanggalKadaluarsa').value;
         var foto = localStorage.getItem('2r_produk_gudang_foto_temp') || '';
 
+        // Validasi data wajib
         if (!namaProduk || !hargaBeli || !hargaJual || !jumlahStok || !tanggalKadaluarsa) {
-            tampilkanToast('Nama produk, harga, stok, dan tanggal kadaluarsa wajib diisi!', 'warning');
+            tampilkanToast('Nama produk, harga beli, harga jual, stok, dan tanggal kadaluarsa wajib diisi!', 'warning');
             return;
         }
 
-        // Simpan foto (bisa banyak, tidak dibatasi)
+        // Validasi harga dan stok harus angka positif
+        if (parseInt(hargaBeli) <= 0 || parseInt(hargaJual) <= 0 || parseInt(jumlahStok) < 0) {
+            tampilkanToast('Harga dan stok harus bernilai positif!', 'warning');
+            return;
+        }
+
+        // Validasi tanggal kadaluarsa tidak boleh kurang dari hari ini
+        var hariIni = new Date();
+        hariIni.setHours(0, 0, 0, 0);
+        var tanggalKadaluarsaObj = new Date(tanggalKadaluarsa);
+        if (tanggalKadaluarsaObj < hariIni) {
+            tampilkanToast('Tanggal kadaluarsa tidak boleh kurang dari hari ini!', 'warning');
+            return;
+        }
+
+        // Persiapkan foto (bisa banyak, tidak dibatasi)
         var arrayFoto = foto ? [foto] : [];
 
+        // Buat objek produk baru dengan tanggal input dan nama penginput
         var produkBaru = {
             id: Date.now(),
             tokoId: user.id,
@@ -2838,19 +2861,22 @@
             satuan: satuan,
             tanggalKadaluarsa: tanggalKadaluarsa,
             fotoProduk: arrayFoto,
-            tanggalInput: new Date().toLocaleDateString('id-ID'), // TAMBAHAN
-            namaPenginput: user.nama, // TAMBAHAN
+            tanggalInput: new Date().toLocaleDateString('id-ID'), // TANGGAL INPUT OTOMATIS
+            namaPenginput: user.nama, // NAMA PENGINPUT OTOMATIS
             tanggalMasuk: new Date().toISOString(),
             status: 'Aktif',
             totalTerjual: 0
         };
 
+        // Ambil data produk yang sudah ada, lalu tambahkan produk baru
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         semuaProdukGudang.push(produkBaru);
         localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+        
+        // Hapus foto sementara dari localStorage
         localStorage.removeItem('2r_produk_gudang_foto_temp');
 
-        // Reset form
+        // Reset semua field form
         document.getElementById('gudangNamaProduk').value = '';
         document.getElementById('gudangKodeProduk').value = '';
         document.getElementById('gudangHargaBeli').value = '';
@@ -2859,8 +2885,11 @@
         document.getElementById('gudangTanggalKadaluarsa').value = '';
         document.getElementById('gudangNamaFoto').textContent = 'Belum ada foto';
 
+        // Tutup form tambah produk dan refresh halaman
         tutupFormTambahProdukGudang();
         renderManajemenStokGudang();
+        
+        // Tampilkan notifikasi sukses
         tampilkanToast('Produk berhasil ditambahkan ke gudang!', 'success');
     }
     /* ===== AKHIR BLOK 3.10.13.4 ===== */
@@ -3201,9 +3230,7 @@
     /* ===== AKHIR BLOK 3.10.15.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.10.15 ===== -->
-	/* ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== */
-<script>
-    <!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
+	<!-- ===== BLOK 3.10.16 - JS_RENDER_KELOLA_PRODUK ===== -->
 <script>
     /* ===== BLOK 3.10.16.1 - RENDER HALAMAN KELOLA PRODUK ===== */
     /*
