@@ -5059,20 +5059,47 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     }
     /* ===== AKHIR BLOK 5.3.1 ===== */
 
-    /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
-    /*
-        Event ini adalah titik awal aplikasi.
-        Saat halaman selesai dimuat oleh browser, maka:
-        1. Inisialisasi SuperAdmin (jika belum ada).
-        2. Cek apakah user sudah login (ada data di localStorage).
-        3. Jika sudah login, tampilkan dashboard.
-        4. Jika belum, biarkan halaman login tetap tampil.
-    */
+    <!-- ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== -->
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         
         // 1. Pastikan SuperAdmin selalu ada
         inisialisasiSuperAdmin();
+
+        // ========================================================
+        // ===== REVISI: PERBAIKAN DATA PRODUK LAMA =====
+        // ========================================================
+        function perbaikiDataProdukLama() {
+            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+            var perluDiupdate = false;
+
+            for (var i = 0; i < semuaProdukGudang.length; i++) {
+                // Jika produk tidak punya tanggalInput, isi otomatis dari tanggalMasuk atau hari ini
+                if (!semuaProdukGudang[i].tanggalInput) {
+                    var tanggalAsli = new Date(semuaProdukGudang[i].tanggalMasuk);
+                    // Gunakan format tanggal lokal Indonesia
+                    semuaProdukGudang[i].tanggalInput = tanggalAsli.toLocaleDateString('id-ID');
+                    perluDiupdate = true;
+                }
+                // Jika produk tidak punya namaPenginput, isi dengan strip '-'
+                if (!semuaProdukGudang[i].namaPenginput) {
+                    semuaProdukGudang[i].namaPenginput = '-';
+                    perluDiupdate = true;
+                }
+            }
+
+            // Simpan kembali ke localStorage jika ada perubahan
+            if (perluDiupdate) {
+                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+                console.log("Data produk lama berhasil diperbaiki (Tanggal Input & Penginput).");
+            }
+        }
         
+        // JALANKAN FUNGSI PERBAIKAN DATA
+        perbaikiDataProdukLama(); 
+        // ========================================================
+
+
         // 2. Cek apakah user sudah login
         var dataUser = localStorage.getItem('2r_user');
         if (dataUser) {
@@ -5080,11 +5107,9 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
             tampilkanDashboard(user);
         }
         
-        // 3. Event logout dan modal sudah ditangani di BLOK 5.1
-        // 4. Event responsive sidebar sudah ditangani di BLOK 5.2
-        
     });
-    /* ===== AKHIR BLOK 5.3.2 ===== */
+</script>
+<!-- ===== AKHIR BLOK 5.3.2 ===== -->
 </script>
 <!-- ===== AKHIR BLOK 5.3 ===== -->
 <!-- ===== BLOK 5.5 - JS_EVENT_SCAN_BARCODE ===== -->
