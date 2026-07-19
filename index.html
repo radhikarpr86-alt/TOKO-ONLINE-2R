@@ -1021,7 +1021,7 @@ function renderDashboard() {
         var limaTerbaru = terbaru.slice(0, 5);
         html += '<div class="page-header">';
         html += '<h2>Dasbor SuperAdmin</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>! Berikut ringkasan sistem.</p>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'SuperAdmin') + '</strong>! Berikut ringkasan sistem.</p>';
         html += '</div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + total + '</div><div class="widget-label">Total Akun</div></div>';
@@ -1093,7 +1093,7 @@ function renderDashboard() {
         
         html += '<div class="page-header">';
         html += '<h2>Dasbor Staf Admin</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Staf Admin') + '</strong>!</p>';
         html += '</div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menungguVerif + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
@@ -1130,7 +1130,7 @@ function renderDashboard() {
 
     // ===== TOKO =====
     else if (role === 'toko' || role === 'staf_owner_toko') {
-        html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
+        html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + (user.nama || 'Toko') + '</strong>!</p></div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">0</div><div class="widget-label">Total Produk</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div><div class="widget-number">0</div><div class="widget-label">Pesanan Baru</div></div>';
@@ -1141,7 +1141,7 @@ function renderDashboard() {
 
     // ===== OJEK =====
     else if (role === 'ojek' || role === 'staf_owner_ojek') {
-        html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
+        html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + (user.nama || 'Ojek') + '</strong>!</p></div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-motorcycle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Aktif</div></div>';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Selesai</div></div>';
@@ -1152,7 +1152,7 @@ function renderDashboard() {
 
     // ===== PEDAGANG PASAR =====
     else if (role === 'pedagang') {
-        html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + user.nama + '</strong>!</p></div>';
+        html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + (user.nama || 'Pedagang') + '</strong>!</p></div>';
         html += '<div class="card"><p>Selamat bergabung di Toko Online 2R! Lengkapi profil Anda.</p><button class="btn btn-primary mt-10" onclick="navigasiKeHalaman(\'profile\')">Lengkapi Profil</button></div>';
         html += renderIklanDiDashboard();
     }
@@ -1161,7 +1161,7 @@ function renderDashboard() {
     else if (role === 'customer_service') {
         html += '<div class="page-header">';
         html += '<h2>Dasbor Customer Service</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Customer Service') + '</strong>!</p>';
         html += '</div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-ticket-alt"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Masuk</div></div>';
@@ -1173,7 +1173,7 @@ function renderDashboard() {
     else if (role === 'sponsor') {
         html += '<div class="page-header">';
         html += '<h2>Dasbor Sponsor</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Sponsor') + '</strong>!</p>';
         html += '</div>';
         html += '<div class="widget-grid">';
         html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-ad"></i></div><div class="widget-number">0</div><div class="widget-label">Iklan Aktif</div></div>';
@@ -1185,7 +1185,7 @@ function renderDashboard() {
     else {
         html += '<div class="page-header">';
         html += '<h2>Dasbor</h2>';
-        html += '<p>Selamat datang, <strong>' + user.nama + '</strong>!</p>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'User') + '</strong>!</p>';
         html += '</div>';
     }
 
