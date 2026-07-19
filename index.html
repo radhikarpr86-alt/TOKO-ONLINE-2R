@@ -2746,14 +2746,9 @@
 <!-- ===== AKHIR BLOK 3.10.12 ===== -->
 <!-- ===== BLOK 3.10.13 - JS_FUNGSI_INPUT_PRODUK_GUDANG ===== -->
 <script>
-        /* ===== BLOK 3.10.13.1 - RENDER FORM TAMBAH PRODUK ===== */
-    /*
-        Fungsi ini mengembalikan HTML form untuk menambahkan produk baru.
-        Form ini akan dimunculkan saat tombol "Tambah Produk Baru" diklik.
-    */
+            /* ===== BLOK 3.10.13.1 - RENDER FORM TAMBAH PRODUK (INPUT MANUAL) ===== */
     function renderFormTambahProdukGudang() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-        var tanggalSekarang = new Date().toLocaleDateString('id-ID');
         var html = '';
         html += '<div class="card">';
         html += '<div class="card-header">Tambah Produk Baru <button class="button button-danger button-small" onclick="tutupFormTambahProdukGudang()"><i class="fas fa-times"></i> Tutup</button></div>';
@@ -2769,12 +2764,12 @@
         html += '<div><label class="form-label">Upload Foto Produk</label><input type="file" id="gudangFotoProduk" multiple accept=".jpg,.jpeg,.png" style="display:none;"><button class="button button-primary button-small" onclick="document.getElementById(\'gudangFotoProduk\').click();">Pilih Foto</button><span id="gudangNamaFoto" style="font-size:12px; color:#888; margin-left:10px;">Belum ada foto</span></div>';
         html += '</div>';
         
-        // ===== TAMBAHAN: Tanggal Input & Penginput =====
+        // ===== BAGIAN YANG DIUBAH MENJADI INPUT MANUAL =====
         html += '<div class="grid-2" style="margin-top:10px;">';
-        html += '<div><label class="form-label">Tanggal Input</label><input type="text" class="form-input" value="' + tanggalSekarang + '" disabled style="background:#f0f0f0; color:#666;"></div>';
-        html += '<div><label class="form-label">Penginput</label><input type="text" class="form-input" value="' + (user.nama || user.username || 'System') + '" disabled style="background:#f0f0f0; color:#666;"></div>';
+        html += '<div><label class="form-label">Tanggal Input</label><input type="date" id="gudangTanggalInput" class="form-input"></div>';
+        html += '<div><label class="form-label">Penginput</label><input type="text" id="gudangPenginput" class="form-input" placeholder="Nama penginput"></div>';
         html += '</div>';
-        // ===== AKHIR TAMBAHAN =====
+        // ===== AKHIR PERUBAHAN =====
         
         html += '<button class="button button-primary margin-top-10" onclick="simpanProdukGudang()"><i class="fas fa-save"></i> Simpan Produk</button>';
         html += '</div>';
@@ -2811,27 +2806,52 @@
     }
     /* ===== AKHIR BLOK 3.10.13.3 ===== */
 
-            /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG ===== */
-    /*
-        Fungsi ini menyimpan produk gudang baru ke localStorage.
-        Melakukan validasi lengkap:
-        - Nama produk, harga, stok, dan tanggal kadaluarsa wajib diisi.
-        - Tidak ada batasan jumlah produk atau foto.
-        - Menyimpan tanggal input dan nama penginput secara otomatis.
-    */
+                /* ===== BLOK 3.10.13.4 - SIMPAN PRODUK GUDANG (INPUT MANUAL) ===== */
     function simpanProdukGudang() {
-        // ... (kode di atasnya tetap sama)
+        // Ambil data user yang sedang login
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         
+        // Ambil data dari form input
+        var namaProduk = document.getElementById('gudangNamaProduk').value.trim();
+        var kodeProduk = document.getElementById('gudangKodeProduk').value.trim();
+        var hargaBeli = document.getElementById('gudangHargaBeli').value.trim();
+        var hargaJual = document.getElementById('gudangHargaJual').value.trim();
+        var jumlahStok = document.getElementById('gudangJumlahStok').value.trim();
+        var jenis = document.getElementById('gudangJenis').value;
+        var satuan = document.getElementById('gudangSatuan').value;
+        var tanggalKadaluarsa = document.getElementById('gudangTanggalKadaluarsa').value;
+        var foto = localStorage.getItem('2r_produk_gudang_foto_temp') || '';
+
+        // ===== AMBIL DATA INPUT MANUAL =====
         var tanggalInput = document.getElementById('gudangTanggalInput').value;
         var namaPenginput = document.getElementById('gudangPenginput').value.trim();
+        // ===== =====
 
-        // Validasi tambahan
-        if (!tanggalInput || !namaPenginput) {
-            tampilkanToast('Tanggal Input dan Penginput wajib diisi!', 'warning');
+        // Validasi data wajib (termasuk tanggal input dan penginput)
+        if (!namaProduk || !hargaBeli || !hargaJual || !jumlahStok || !tanggalKadaluarsa || !tanggalInput || !namaPenginput) {
+            tampilkanToast('Semua data wajib diisi!', 'warning');
             return;
         }
 
-        // Buat objek produk baru
+        // Validasi harga dan stok harus angka positif
+        if (parseInt(hargaBeli) <= 0 || parseInt(hargaJual) <= 0 || parseInt(jumlahStok) < 0) {
+            tampilkanToast('Harga dan stok harus bernilai positif!', 'warning');
+            return;
+        }
+
+        // Validasi tanggal kadaluarsa tidak boleh kurang dari hari ini
+        var hariIni = new Date();
+        hariIni.setHours(0, 0, 0, 0);
+        var tanggalKadaluarsaObj = new Date(tanggalKadaluarsa);
+        if (tanggalKadaluarsaObj < hariIni) {
+            tampilkanToast('Tanggal kadaluarsa tidak boleh kurang dari hari ini!', 'warning');
+            return;
+        }
+
+        // Persiapkan foto (bisa banyak, tidak dibatasi)
+        var arrayFoto = foto ? [foto] : [];
+
+        // Buat objek produk baru dengan data input manual
         var produkBaru = {
             id: Date.now(),
             tokoId: user.id,
@@ -2844,13 +2864,12 @@
             satuan: satuan,
             tanggalKadaluarsa: tanggalKadaluarsa,
             fotoProduk: arrayFoto,
-            tanggalInput: tanggalInput, // DIAMBIL DARI INPUT MANUAL
-            namaPenginput: namaPenginput, // DIAMBIL DARI INPUT MANUAL
+            tanggalInput: tanggalInput, // TANGGAL DARI INPUT MANUAL
+            namaPenginput: namaPenginput, // PENGINPUT DARI INPUT MANUAL
             tanggalMasuk: new Date().toISOString(),
             status: 'Aktif',
             totalTerjual: 0
         };
-        // ... (kode di bawahnya tetap sama)
 
         // Ambil data produk yang sudah ada, lalu tambahkan produk baru
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
@@ -2867,6 +2886,8 @@
         document.getElementById('gudangHargaJual').value = '';
         document.getElementById('gudangJumlahStok').value = '';
         document.getElementById('gudangTanggalKadaluarsa').value = '';
+        document.getElementById('gudangTanggalInput').value = '';
+        document.getElementById('gudangPenginput').value = '';
         document.getElementById('gudangNamaFoto').textContent = 'Belum ada foto';
 
         // Tutup form tambah produk dan refresh halaman
@@ -2875,19 +2896,6 @@
         
         // Tampilkan notifikasi sukses
         tampilkanToast('Produk berhasil ditambahkan ke gudang!', 'success');
-    }
-    /* ===== AKHIR BLOK 3.10.13.4 ===== */
-
-    /* ===== BLOK 3.10.13.5 - SCAN BARCODE PRODUK ===== */
-    /*
-        Fungsi ini membuka kamera untuk scan barcode.
-        Jika berhasil, kode produk otomatis terisi.
-        Jika gagal, user bisa input manual.
-    */
-    function scanBarcodeProduk() {
-        // Placeholder: library scan barcode akan ditambahkan nanti
-        tampilkanToast('Fitur scan barcode akan segera hadir! Untuk sementara, input manual.', 'info');
-        document.getElementById('gudangKodeProduk').focus();
     }
     /* ===== AKHIR BLOK 3.10.13.5 ===== */
 
@@ -2917,7 +2925,7 @@
     }
     /* ===== AKHIR BLOK 3.10.13.6 ===== */
 
-                /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK (INPUT MANUAL) ===== */
+             /* ===== BLOK 3.10.13.7 - RENDER FORM EDIT PRODUK (INPUT MANUAL) ===== */
     function renderEditProdukGudang(idProduk) {
         var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
         var produkTarget = null;
