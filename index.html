@@ -6232,134 +6232,85 @@ function editWilayah(index) {
 </script>
 
 <script>
-/* ===== BLOK 5.3 - JS_INIT_UTAMA ===== */
+<!-- ===== BLOK 5.3 - JS_INIT_UTAMA ===== -->
+<script>
+    /* ===== BLOK 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN ===== */
+    function tampilkanDashboard(user) {
+        // Validasi data user
+        if (!user || !user.nama) {
+            localStorage.removeItem('2r_user');
+            localStorage.removeItem('2r_user_role');
+            location.reload();
+            return;
+        }
 
-// ===== 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN =====
-/*
-    Fungsi ini dipanggil setelah user berhasil login.
-    1. Menyembunyikan halaman Login/Register.
-    2. Menampilkan halaman Dashboard.
-    3. Mengisi nama user di navbar.
-    4. Membangun sidebar sesuai role user.
-    5. Memanggil setupNavigasiSidebar() agar sidebar bisa diklik.
-    6. Menampilkan dashboard awal.
-*/
-function tampilkanDashboard(user) {
-    // ===== 1. VALIDASI DATA USER =====
-    // Jika data user tidak valid, hapus session dan reload halaman
-    if (!user || !user.nama) {
-        localStorage.removeItem('2r_user');
-        localStorage.removeItem('2r_user_role');
-        location.reload();
-        return;
-    }
-
-    // ===== 2. SEMBUNYIKAN HALAMAN AUTH, TAMPILKAN DASHBOARD =====
-    document.getElementById('pageAuthentication').style.display = 'none';
-    document.getElementById('pageDashboard').style.display = 'block';
-    
-    // ===== 3. TAMPILKAN NAMA USER DI NAVBAR =====
-    document.getElementById('userNama').textContent = user.nama;
-    
-    // ===== 4. TAMPILKAN ROLE BADGE =====
-    var daftarRole = {
-        superadmin: 'SuperAdmin',
-        customer: 'Customer',
-        toko: 'Toko',
-        ojek: 'Ojek',
-        pedagang: 'Pedagang Pasar',
-        staf_admin: 'Staf Admin',
-        customer_service: 'Customer Service',
-        staf_owner_toko: 'Staf Owner Toko',
-        staf_owner_ojek: 'Staf Owner Ojek',
-        sponsor: 'Sponsor'
-    };
-    document.getElementById('roleBadge').textContent = daftarRole[user.role] || user.role;
-    
-    // ===== 5. BANGUN SIDEBAR =====
-    // Sidebar akan diisi dengan menu yang sesuai dengan role user
-    document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
-    
-    // ===== 6. PANGGIL SETUP NAVIGASI SIDEBAR (PENTING!) =====
-    /*
-        Fungsi ini memberikan event listener ke setiap item menu di sidebar.
-        Tanpa ini, menu sidebar tidak bisa diklik.
-    */
-    setupNavigasiSidebar();
-    
-    // ===== 7. TAMPILKAN DASHBOARD AWAL =====
-    renderDashboard();
-}
-/* ===== AKHIR BLOK 5.3.1 ===== */
-
-
-// ===== 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) =====
-/*
-    Event ini adalah titik awal aplikasi.
-    Saat halaman selesai dimuat oleh browser, maka:
-    1. Inisialisasi SuperAdmin (jika belum ada).
-    2. Perbaiki data produk lama agar kolom tanggal input dan penginput terisi.
-    3. Cek apakah user sudah login (ada data di localStorage).
-    4. Jika sudah login, tampilkan dashboard.
-    5. Jika belum, biarkan halaman login tetap tampil.
-*/
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // ===== 1. PASTIKAN SUPERADMIN SELALU ADA =====
-    // Jika belum ada akun SuperAdmin, buat akun default (admin/admin123)
-    inisialisasiSuperAdmin();
-
-    // ===== 2. PERBAIKAN DATA PRODUK LAMA =====
-    /*
-        Fungsi ini memastikan produk lama yang tersimpan di localStorage
-        memiliki kolom 'tanggalInput' dan 'namaPenginput' agar kompatibel
-        dengan fitur Manajemen Stok Gudang.
-    */
-    function perbaikiDataProdukLama() {
-        // Ambil semua data produk gudang dari localStorage
-        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
-        var perluDiupdate = false;
+        // Sembunyikan halaman auth, tampilkan dashboard
+        document.getElementById('pageAuthentication').style.display = 'none';
+        document.getElementById('pageDashboard').style.display = 'block';
         
-        // Loop melalui semua produk
-        for (var i = 0; i < semuaProdukGudang.length; i++) {
-            // Jika belum ada tanggal input, ambil dari tanggal masuk
-            if (!semuaProdukGudang[i].tanggalInput) {
-                semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
-                perluDiupdate = true;
+        // Tampilkan nama user di navbar
+        document.getElementById('userNama').textContent = user.nama;
+        
+        // Tampilkan role badge
+        var daftarRole = {
+            superadmin: 'SuperAdmin',
+            customer: 'Customer',
+            toko: 'Toko',
+            ojek: 'Ojek',
+            pedagang: 'Pedagang Pasar',
+            staf_admin: 'Staf Admin',
+            customer_service: 'Customer Service',
+            staf_owner_toko: 'Staf Owner Toko',
+            staf_owner_ojek: 'Staf Owner Ojek',
+            sponsor: 'Sponsor'
+        };
+        document.getElementById('roleBadge').textContent = daftarRole[user.role] || user.role;
+        
+        // Bangun sidebar
+        document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
+        setupNavigasiSidebar();
+        
+        // Tampilkan dashboard awal
+        renderDashboard();
+    }
+    /* ===== AKHIR BLOK 5.3.1 ===== */
+
+    /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. Pastikan SuperAdmin selalu ada
+        inisialisasiSuperAdmin();
+
+        // ===== TAMBAHAN SAYA (PERBAIKAN DATA PRODUK LAMA) =====
+        function perbaikiDataProdukLama() {
+            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+            var perluDiupdate = false;
+            for (var i = 0; i < semuaProdukGudang.length; i++) {
+                if (!semuaProdukGudang[i].tanggalInput) {
+                    semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
+                    perluDiupdate = true;
+                }
+                if (!semuaProdukGudang[i].namaPenginput) {
+                    semuaProdukGudang[i].namaPenginput = '-';
+                    perluDiupdate = true;
+                }
             }
-            // Jika belum ada penginput, isi dengan strip (-)
-            if (!semuaProdukGudang[i].namaPenginput) {
-                semuaProdukGudang[i].namaPenginput = '-';
-                perluDiupdate = true;
+            if (perluDiupdate) {
+                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
             }
         }
-        
-        // Jika ada perubahan, simpan kembali ke localStorage
-        if (perluDiupdate) {
-            localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+        perbaikiDataProdukLama();
+
+        // 2. Cek apakah user sudah login
+        var dataUser = localStorage.getItem('2r_user');
+        if (dataUser) {
+            var user = JSON.parse(dataUser);
+            tampilkanDashboard(user);
         }
-    }
-    // Jalankan fungsi perbaikan data produk lama
-    perbaikiDataProdukLama();
-
-    // ===== 3. CEK APAKAH USER SUDAH LOGIN =====
-    // Ambil data user dari localStorage
-    var dataUser = localStorage.getItem('2r_user');
-    
-    // Jika data user ada, berarti user sudah login
-    if (dataUser) {
-        // Parse data user dari string JSON menjadi objek
-        var user = JSON.parse(dataUser);
-        
-        // Tampilkan dashboard dengan data user tersebut
-        tampilkanDashboard(user);
-    }
-    // Jika tidak ada data user, biarkan halaman login tetap tampil
-    
-});
-/* ===== AKHIR BLOK 5.3.2 ===== */
-
-/* ===== AKHIR BLOK 5.3 ===== */
+    });
+    /* ===== AKHIR BLOK 5.3.2 ===== */
+</script>
+<!-- ===== AKHIR BLOK 5.3 ===== -->
 </script>
 
 <!-- ===== BLOK 5.5 - JS_EVENT_SCAN_BARCODE ===== -->
