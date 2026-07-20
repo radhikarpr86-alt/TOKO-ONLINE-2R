@@ -2478,10 +2478,11 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
         
         // ===== PANGGIL LOAD DATA TERSIMPAN =====
-        setTimeout(function() {
-            loadDataWilayahTersimpan('ktp', user);
-            loadDataWilayahTersimpan('dom', user);
-        }, 500);
+setTimeout(function() {
+    loadDataWilayahTersimpan('ktp', user);
+    loadDataWilayahTersimpan('dom', user);
+    loadDataProfilCustomer(user);   // <-- TAMBAHKAN INI
+}, 500);
         
         // ===== EVENT LISTENER UPLOAD KTP =====
         setTimeout(function() {
