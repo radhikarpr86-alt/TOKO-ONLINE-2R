@@ -357,7 +357,24 @@
         background: linear-gradient(135deg, #fff5f0, #ffe0cc);
     }
     /* ===== AKHIR BLOK 2.1.5 ===== */
+	/* ===== BLOK 2.1.6 - ANIMASI NOTIFIKASI TERSIMPAN ===== */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
 
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.notif-berkedip {
+    animation: blink 0.5s ease-in-out 3;
+}
+/* ===== AKHIR BLOK 2.1.6 ===== */
 </style>
 <!-- ===== AKHIR BLOK 2.1 ===== -->
 <!-- ===== BLOK 2.2 - CSS_LOGIN_REGISTER ===== -->
@@ -2295,35 +2312,83 @@ function navigasiKeHalaman(namaHalaman) {
     }
     /* ===== AKHIR BLOK 3.6.11 ===== */
 
-    /* ===== BLOK 3.6.12 - FUNGSI RENDER PROFIL CUSTOMER ===== */
+        /* ===== BLOK 3.6.12 - FUNGSI RENDER PROFIL CUSTOMER ===== */
     function renderProfilCustomer() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         var areaKonten = document.getElementById('mainContent');
         var html = '';
         
-        html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
+        html += '<div class="page-header">';
+        html += '<h2>Profil Customer</h2>';
+        html += '<p>ID Akun: <strong>' + (user.id || '-') + '</strong></p>';
+        html += '</div>';
+        
+        // ===== NOTIFIKASI TERSIMPAN DI ATAS FORM =====
+        html += '<div id="notifikasiSimpanProfil" style="display:none; background:#4CAF50; color:white; padding:12px 20px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:600; font-size:15px; animation: fadeInOut 1.5s ease-in-out;">';
+        html += '<i class="fas fa-check-circle"></i> Profil berhasil disimpan!';
+        html += '</div>';
         
         // ===== DATA REGISTRASI =====
-        html += '<div class="card"><div class="card-header">Data Registrasi <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
-        html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
-        html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
-        html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div></div></div>';
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += 'Data Registrasi';
+        html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
+        html += '<i class="fas fa-save"></i> Simpan Profil';
+        html += '</button>';
+        html += '</div>';
+        html += '<div class="grid-2">';
+        html += '<div>';
+        html += '<label class="form-label">Nama Lengkap (Sesuai KTP)</label>';
+        html += '<input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Username</label>';
+        html += '<input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled>';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Email</label>';
+        html += '<input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Nomor HP</label>';
+        html += '<input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '">';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
         
         // ==========================================================
         // ALAMAT SESUAI KTP (DROPDOWN + MANUAL)
         // ==========================================================
-        html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += 'Alamat Sesuai KTP';
+        html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
+        html += '<i class="fas fa-save"></i> Simpan';
+        html += '</button>';
+        html += '</div>';
         html += '<div class="grid-2">';
         
         // Dusun, RT, RW, Jalan (tetap input teks)
-        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
-        html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
-        html += '<div><label class="form-label">RW</label><input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
-        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div>';
+        html += '<label class="form-label">Dusun / Dukuh</label>';
+        html += '<input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">RT</label>';
+        html += '<input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">RW</label>';
+        html += '<input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Jalan / Gang</label>';
+        html += '<input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5">';
+        html += '</div>';
         
         // PROVINSI (Dropdown + Manual)
-        html += '<div><label class="form-label">Provinsi</label>';
+        html += '<div>';
+        html += '<label class="form-label">Provinsi</label>';
         html += '<select id="ktpProvinsi" class="form-input" onchange="onChangeProvinsiManual(\'ktp\')">';
         html += '<option value="">-- Pilih Provinsi --</option>';
         var provinsiList = getProvinsiList();
@@ -2332,11 +2397,14 @@ function navigasiKeHalaman(namaHalaman) {
             html += '<option value="' + provinsiList[p] + '" ' + selected + '>' + provinsiList[p] + '</option>';
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="ktpProvinsiManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpProvinsiManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="ktpProvinsiManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpProvinsiManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KABUPATEN (Dropdown + Manual)
-        html += '<div><label class="form-label">Kabupaten / Kota</label>';
+        html += '<div>';
+        html += '<label class="form-label">Kabupaten / Kota</label>';
         html += '<select id="ktpKabupaten" class="form-input" onchange="onChangeKabupatenManual(\'ktp\')">';
         html += '<option value="">-- Pilih Kabupaten --</option>';
         if (user.ktpProvinsi) {
@@ -2347,11 +2415,14 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="ktpKabupatenManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpKabupatenManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="ktpKabupatenManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpKabupatenManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KECAMATAN (Dropdown + Manual)
-        html += '<div><label class="form-label">Kecamatan</label>';
+        html += '<div>';
+        html += '<label class="form-label">Kecamatan</label>';
         html += '<select id="ktpKecamatan" class="form-input" onchange="onChangeKecamatanManual(\'ktp\')">';
         html += '<option value="">-- Pilih Kecamatan --</option>';
         if (user.ktpProvinsi && user.ktpKabupaten) {
@@ -2362,11 +2433,14 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="ktpKecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpKecamatanManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="ktpKecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpKecamatanManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KELURAHAN (Dropdown + Manual)
-        html += '<div><label class="form-label">Desa / Kelurahan</label>';
+        html += '<div>';
+        html += '<label class="form-label">Desa / Kelurahan</label>';
         html += '<select id="ktpDesa" class="form-input">';
         html += '<option value="">-- Pilih Kelurahan --</option>';
         if (user.ktpProvinsi && user.ktpKabupaten && user.ktpKecamatan) {
@@ -2377,27 +2451,52 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="ktpDesaManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpDesaManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="ktpDesaManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.ktpDesaManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // Kode Pos (input teks)
-        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
-        html += '</div></div>';
+        html += '<div>';
+        html += '<label class="form-label">Kode Pos</label>';
+        html += '<input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230">';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
         
         // ==========================================================
         // ALAMAT DOMISILI (DROPDOWN + MANUAL)
         // ==========================================================
-        html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += 'Alamat Domisili / Sekarang';
+        html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
+        html += '<i class="fas fa-save"></i> Simpan';
+        html += '</button>';
+        html += '</div>';
         html += '<div class="grid-2">';
         
         // Dusun, RT, RW, Jalan (input teks)
-        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
-        html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
-        html += '<div><label class="form-label">RW</label><input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
-        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div>';
+        html += '<label class="form-label">Dusun / Dukuh</label>';
+        html += '<input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">RT</label>';
+        html += '<input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">RW</label>';
+        html += '<input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Jalan / Gang</label>';
+        html += '<input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5">';
+        html += '</div>';
         
         // PROVINSI DOMISILI (Dropdown + Manual)
-        html += '<div><label class="form-label">Provinsi</label>';
+        html += '<div>';
+        html += '<label class="form-label">Provinsi</label>';
         html += '<select id="domProvinsi" class="form-input" onchange="onChangeProvinsiManual(\'dom\')">';
         html += '<option value="">-- Pilih Provinsi --</option>';
         var provinsiListDom = getProvinsiList();
@@ -2406,11 +2505,14 @@ function navigasiKeHalaman(namaHalaman) {
             html += '<option value="' + provinsiListDom[p] + '" ' + selected + '>' + provinsiListDom[p] + '</option>';
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="domProvinsiManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domProvinsiManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="domProvinsiManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domProvinsiManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KABUPATEN DOMISILI (Dropdown + Manual)
-        html += '<div><label class="form-label">Kabupaten / Kota</label>';
+        html += '<div>';
+        html += '<label class="form-label">Kabupaten / Kota</label>';
         html += '<select id="domKabupaten" class="form-input" onchange="onChangeKabupatenManual(\'dom\')">';
         html += '<option value="">-- Pilih Kabupaten --</option>';
         if (user.domProvinsi) {
@@ -2421,11 +2523,14 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="domKabupatenManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domKabupatenManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="domKabupatenManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domKabupatenManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KECAMATAN DOMISILI (Dropdown + Manual)
-        html += '<div><label class="form-label">Kecamatan</label>';
+        html += '<div>';
+        html += '<label class="form-label">Kecamatan</label>';
         html += '<select id="domKecamatan" class="form-input" onchange="onChangeKecamatanManual(\'dom\')">';
         html += '<option value="">-- Pilih Kecamatan --</option>';
         if (user.domProvinsi && user.domKabupaten) {
@@ -2436,11 +2541,14 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="domKecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domKecamatanManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="domKecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domKecamatanManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // KELURAHAN DOMISILI (Dropdown + Manual)
-        html += '<div><label class="form-label">Desa / Kelurahan</label>';
+        html += '<div>';
+        html += '<label class="form-label">Desa / Kelurahan</label>';
         html += '<select id="domDesa" class="form-input">';
         html += '<option value="">-- Pilih Kelurahan --</option>';
         if (user.domProvinsi && user.domKabupaten && user.domKecamatan) {
@@ -2451,38 +2559,70 @@ function navigasiKeHalaman(namaHalaman) {
             }
         }
         html += '</select>';
-        html += '<div style="margin-top:5px;"><input type="text" id="domDesaManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domDesaManual || '') + '"></div>';
+        html += '<div style="margin-top:5px;">';
+        html += '<input type="text" id="domDesaManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user.domDesaManual || '') + '">';
+        html += '</div>';
         html += '</div>';
 
         // Kode Pos Domisili (input teks)
-        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
-        html += '</div></div>';
+        html += '<div>';
+        html += '<label class="form-label">Kode Pos</label>';
+        html += '<input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230">';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
         
         // ===== DATA REKENING =====
-        html += '<div class="card"><div class="card-header">Data Rekening <button class="button button-primary button-small" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
-        html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
-        html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '"></div></div></div>';
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += 'Data Rekening';
+        html += '<button class="button button-primary button-small" onclick="simpanRekeningCustomer()">';
+        html += '<i class="fas fa-save"></i> Simpan Rekening';
+        html += '</button>';
+        html += '</div>';
+        html += '<div class="grid-2">';
+        html += '<div>';
+        html += '<label class="form-label">Nama Bank</label>';
+        html += '<input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Nomor Rekening</label>';
+        html += '<input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '">';
+        html += '</div>';
+        html += '<div>';
+        html += '<label class="form-label">Nama Pemilik Rekening</label>';
+        html += '<input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '">';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
         
         // ===== DOKUMEN KTP =====
-        html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
-        html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
+        html += '<div class="card">';
+        html += '<div class="card-header">Dokumen KTP & Domisili</div>';
+        html += '<div class="upload-area" id="uploadKtpContainerCustomer">';
+        html += '<div id="ktpPreviewCustomer">';
         if (user.ktp) {
             html += '<img src="' + user.ktp + '" class="preview-image">';
         } else {
-            html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
+            html += '<i class="fas fa-cloud-upload-alt"></i>';
+            html += '<p>Klik untuk upload KTP</p>';
         }
-        html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
-        html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+        html += '</div>';
+        html += '<input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none">';
+        html += '</div>';
+        html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()">';
+        html += '<i class="fas fa-save"></i> Simpan KTP';
+        html += '</button>';
+        html += '</div>';
         
         areaKonten.innerHTML = html;
         
         // ===== PANGGIL LOAD DATA TERSIMPAN =====
-setTimeout(function() {
-    loadDataWilayahTersimpan('ktp', user);
-    loadDataWilayahTersimpan('dom', user);
-    loadDataProfilCustomer(user);   // <-- HARUS ADA
-}, 500);
+        setTimeout(function() {
+            loadDataWilayahTersimpan('ktp', user);
+            loadDataWilayahTersimpan('dom', user);
+            loadDataProfilCustomer(user);
+        }, 500);
         
         // ===== EVENT LISTENER UPLOAD KTP =====
         setTimeout(function() {
@@ -3515,10 +3655,20 @@ function simpanProfilCustomer() {
     // Update nama di navbar
     document.getElementById('userNama').textContent = user.nama;
     
-    // Tampilkan notifikasi sukses
-    tampilkanToast('Profil berhasil disimpan!', 'success');
+    // ===== 8. TAMPILKAN NOTIFIKASI TERSIMPAN DI ATAS FORM =====
+    var notif = document.getElementById('notifikasiSimpanProfil');
+    if (notif) {
+        notif.style.display = 'block';
+        notif.classList.add('notif-berkedip');
+        
+        // Hilangkan setelah 3 detik
+        setTimeout(function() {
+            notif.style.display = 'none';
+            notif.classList.remove('notif-berkedip');
+        }, 3000);
+    }
     
-    // ===== 8. REFRESH HALAMAN PROFIL =====
+    // ===== 9. REFRESH HALAMAN PROFIL =====
     renderProfilCustomer();
 }
 /* ===== AKHIR BLOK 3.9.2 ===== */
