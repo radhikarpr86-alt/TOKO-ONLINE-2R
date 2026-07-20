@@ -1539,13 +1539,15 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // ===== TOKO =====
+        // ===== TOKO (ditambahkan Chat) =====
         'toko': [
             {
                 judul: 'Menu Utama',
                 items: [
                     { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             },
@@ -1563,13 +1565,15 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // ===== OJEK =====
+        // ===== OJEK (ditambahkan Chat) =====
         'ojek': [
             {
                 judul: 'Menu Utama',
                 items: [
                     { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             },
@@ -1584,19 +1588,35 @@ function buatSidebarHTML(role) {
             }
         ],
 
-        // ===== PEDAGANG =====
+        // ===== PEDAGANG PASAR (ditambahkan Chat) =====
         'pedagang': [
             {
                 judul: 'Menu Utama',
                 items: [
                     { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
         ],
 
-        // ===== STAF ADMIN =====
+        // ===== COD SELLER (ditambahkan Chat) =====
+        'codseller': [
+            {
+                judul: 'Menu Utama',
+                items: [
+                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
+                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                ]
+            }
+        ],
+
+        // ===== STAF ADMIN (TIDAK DITAMBAHKAN CHAT) =====
         'staf_admin': [
             {
                 judul: 'Menu Utama',
@@ -1606,12 +1626,13 @@ function buatSidebarHTML(role) {
                     { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Akun' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
                     { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
         ],
 
-        // ===== CUSTOMER SERVICE =====
+        // ===== CUSTOMER SERVICE (ditambahkan Chat) =====
         'customer_service': [
             {
                 judul: 'Menu Utama',
@@ -1620,12 +1641,14 @@ function buatSidebarHTML(role) {
                     { halaman: 'tiketBantuan', icon: 'fa-ticket-alt', label: 'Tiket Bantuan' },
                     { halaman: 'liveChat', icon: 'fa-comments', label: 'Live Chat' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
         ],
 
-        // ===== STAF OWNER TOKO =====
+        // ===== STAF OWNER TOKO (ditambahkan Chat) =====
         'staf_owner_toko': [
             {
                 judul: 'Menu Utama',
@@ -1637,12 +1660,14 @@ function buatSidebarHTML(role) {
                     { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
                     { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
         ],
 
-        // ===== STAF OWNER OJEK =====
+        // ===== STAF OWNER OJEK (ditambahkan Chat) =====
         'staf_owner_ojek': [
             {
                 judul: 'Menu Utama',
@@ -1652,21 +1677,24 @@ function buatSidebarHTML(role) {
                     { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
                     { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
         ],
 
-        // ===== SPONSOR =====
+        // ===== SPONSOR (ditambahkan Chat) =====
         'sponsor': [
             {
                 judul: 'Menu Utama',
                 items: [
                     { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'iklanSaya', icon: 'fa-ad', label: 'Iklan Saya' },
+                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' },
                     { halaman: 'statistik', icon: 'fa-chart-pie', label: 'Statistik' },
                     { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' },
                     { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
                     { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
                 ]
             }
@@ -1981,229 +2009,268 @@ function navigasiKeHalaman(namaHalaman) {
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
 <script>
     /* ===== BLOK 3.6.1 - FUNGSI RENDER DASHBOARD UTAMA ===== */
-    /*
-        Fungsi ini adalah jantung dari halaman dashboard.
-        Mengecek role user yang sedang login, lalu menampilkan widget dan konten
-        yang sesuai dengan role tersebut.
-    */
-    function renderDashboard() {
-        var role = localStorage.getItem('2r_user_role');
-        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-        var areaKonten = document.getElementById('mainContent');
-        var html = '';
+/*
+    Fungsi ini adalah jantung dari halaman dashboard.
+    Mengecek role user yang sedang login, lalu menampilkan widget dan konten
+    yang sesuai dengan role tersebut.
+*/
+function renderDashboard() {
+    var role = localStorage.getItem('2r_user_role');
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var areaKonten = document.getElementById('mainContent');
+    var html = '';
 
-        /* ===== BLOK 3.6.2 - DASHBOARD SUPERADMIN ===== */
-        if (role === 'superadmin') {
-            var dataAkun = getDataAkun();
-            var totalAkun = dataAkun.length;
-            var jumlahAktif = 0;
-            var jumlahMenunggu = 0;
-            var jumlahNonaktif = 0;
-            
-            for (var i = 0; i < dataAkun.length; i++) {
-                if (dataAkun[i].status === 'AKTIF') {
-                    jumlahAktif++;
-                } else if (dataAkun[i].status === 'NONAKTIF (Menunggu Verifikasi)') {
-                    jumlahMenunggu++;
-                } else {
-                    jumlahNonaktif++;
-                }
+    /* ===== BLOK 3.6.2 - DASHBOARD SUPERADMIN ===== */
+    if (role === 'superadmin') {
+        var dataAkun = getDataAkun();
+        var totalAkun = dataAkun.length;
+        var jumlahAktif = 0;
+        var jumlahMenunggu = 0;
+        var jumlahNonaktif = 0;
+        
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].status === 'AKTIF') {
+                jumlahAktif++;
+            } else if (dataAkun[i].status === 'NONAKTIF (Menunggu Verifikasi)') {
+                jumlahMenunggu++;
+            } else {
+                jumlahNonaktif++;
             }
-            
-            // Ambil data pengajuan yang diteruskan dari Staf Admin
-            var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-            var jumlahDiteruskan = pengajuanStaf.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
-            
-            // Ambil 5 akun terbaru
-            var akunTerbaru = dataAkun.slice();
-            akunTerbaru.sort(function(a, b) {
-                return new Date(b.waktuRegistrasi) - new Date(a.waktuRegistrasi);
-            });
-            var limaAkunTerbaru = akunTerbaru.slice(0, 5);
-            
-            html += '<div class="page-header">';
-            html += '<h2>Dasbor SuperAdmin</h2>';
-            html += '<p>Selamat datang, <strong>' + (user.nama || 'SuperAdmin') + '</strong>! Berikut ringkasan sistem.</p>';
-            html += '</div>';
-            
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + totalAkun + '</div><div class="widget-label">Total Akun</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">' + jumlahAktif + '</div><div class="widget-label">Akun Aktif</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + jumlahMenunggu + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#F44336;"><i class="fas fa-ban"></i></div><div class="widget-number">' + jumlahNonaktif + '</div><div class="widget-label">Dinonaktifkan</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-trash-alt"></i></div><div class="widget-number">' + jumlahDiteruskan + '</div><div class="widget-label">Pengajuan Hapus</div></div>';
-            html += '</div>';
-
-            // Tampilkan tabel pengajuan dari Staf Admin
-            if (jumlahDiteruskan > 0) {
-                html += '<div class="card">';
-                html += '<div class="card-header">Pengajuan Hapus Akun dari Staf Admin</div>';
-                html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>Username</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead><tbody>';
-                for (var i = 0; i < pengajuanStaf.length; i++) {
-                    if (pengajuanStaf[i].status === 'MENUNGGU') {
-                        var p = pengajuanStaf[i];
-                        html += '<tr><td>' + (i+1) + '</td><td>' + p.targetUsername + '</td><td>' + p.targetNama + '</td><td>' + p.targetRole + '</td><td>';
-                        html += '<button class="button button-success button-extra-small" onclick="setujuiPengajuanStaf(' + i + ')">Setujui & Hapus</button>';
-                        html += '<button class="button button-danger button-extra-small" onclick="tolakPengajuanStaf(' + i + ')">Tolak</button>';
-                        html += '</td></tr>';
-                    }
-                }
-                html += '</tbody></table></div>';
-                html += '</div>';
-            }
-
-            // Notifikasi pengajuan dari Customer
-            var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-            var menungguCustomer = pengajuanCustomer.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
-            if (menungguCustomer > 0) {
-                html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
-                html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
-                html += '<p style="margin:0;">Ada <strong>' + menungguCustomer + '</strong> pengajuan hapus akun dari Customer. Staf Admin akan meneruskannya.</p>';
-                html += '</div>';
-            }
-
-            // Tabel 5 akun terbaru
-            html += '<div class="card"><div class="card-header">5 Akun Terbaru</div><div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th></tr></thead><tbody>';
-            for (var i = 0; i < limaAkunTerbaru.length; i++) {
-                var a = limaAkunTerbaru[i];
-                var badge = '';
-                var statusTeks = '';
-                if (a.status === 'AKTIF') {
-                    badge = 'badge-success';
-                    statusTeks = 'AKTIF';
-                } else if (a.status === 'NONAKTIF (Menunggu Verifikasi)') {
-                    badge = 'badge-warning';
-                    statusTeks = 'Menunggu';
-                } else {
-                    badge = 'badge-danger';
-                    statusTeks = 'Nonaktif';
-                }
-                html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusTeks + '</span></td></tr>';
-            }
-            html += '</tbody></table></div></div>';
         }
-        /* ===== AKHIR BLOK 3.6.2 ===== */
+        
+        // Ambil data pengajuan yang diteruskan dari Staf Admin
+        var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+        var jumlahDiteruskan = pengajuanStaf.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
+        
+        // Ambil 5 akun terbaru
+        var akunTerbaru = dataAkun.slice();
+        akunTerbaru.sort(function(a, b) {
+            return new Date(b.waktuRegistrasi) - new Date(a.waktuRegistrasi);
+        });
+        var limaAkunTerbaru = akunTerbaru.slice(0, 5);
+        
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor SuperAdmin</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'SuperAdmin') + '</strong>! Berikut ringkasan sistem.</p>';
+        html += '</div>';
+        
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + totalAkun + '</div><div class="widget-label">Total Akun</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">' + jumlahAktif + '</div><div class="widget-label">Akun Aktif</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + jumlahMenunggu + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#F44336;"><i class="fas fa-ban"></i></div><div class="widget-number">' + jumlahNonaktif + '</div><div class="widget-label">Dinonaktifkan</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-trash-alt"></i></div><div class="widget-number">' + jumlahDiteruskan + '</div><div class="widget-label">Pengajuan Hapus</div></div>';
+        html += '</div>';
 
-        /* ===== BLOK 3.6.3 - DASHBOARD STAF ADMIN ===== */
-        else if (role === 'staf_admin') {
-            var dataAkun = getDataAkun();
-            var menungguVerif = 0;
-            for (var i = 0; i < dataAkun.length; i++) {
-                if (dataAkun[i].status === 'NONAKTIF (Menunggu Verifikasi)') {
-                    menungguVerif++;
-                }
-            }
-            
-            var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
-            var pengajuanMenunggu = pengajuanCustomer.filter(function(p) { return p.status === 'MENUNGGU'; });
-            
-            html += '<div class="page-header">';
-            html += '<h2>Dasbor Staf Admin</h2>';
-            html += '<p>Selamat datang, <strong>' + (user.nama || 'Staf Admin') + '</strong>!</p>';
-            html += '</div>';
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menungguVerif + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + dataAkun.length + '</div><div class="widget-label">Total Akun</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#f44336;"><i class="fas fa-trash-alt"></i></div><div class="widget-number">' + pengajuanMenunggu.length + '</div><div class="widget-label">Pengajuan Hapus</div></div>';
-            html += '</div>';
-
-            if (pengajuanMenunggu.length > 0) {
-                html += '<div class="card">';
-                html += '<div class="card-header">Pengajuan Hapus Akun dari Customer</div>';
-                html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>Nama</th><th>Username</th><th>Email</th><th>Nomor HP</th><th>Aksi</th></tr></thead><tbody>';
-                for (var i = 0; i < pengajuanMenunggu.length; i++) {
-                    var p = pengajuanMenunggu[i];
-                    html += '<tr><td>' + (i+1) + '</td><td>' + p.nama + '</td><td>' + p.username + '</td><td>' + p.email + '</td><td>' + p.nomorHp + '</td><td>';
-                    html += '<button class="button button-warning button-extra-small" onclick="teruskanPengajuanHapus(' + i + ')">Teruskan ke SuperAdmin</button>';
-                    html += '<button class="button button-danger button-extra-small" onclick="tolakPengajuanHapusStaf(' + i + ')">Tolak</button>';
+        // Tampilkan tabel pengajuan dari Staf Admin
+        if (jumlahDiteruskan > 0) {
+            html += '<div class="card">';
+            html += '<div class="card-header">Pengajuan Hapus Akun dari Staf Admin</div>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>Username</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead><tbody>';
+            for (var i = 0; i < pengajuanStaf.length; i++) {
+                if (pengajuanStaf[i].status === 'MENUNGGU') {
+                    var p = pengajuanStaf[i];
+                    html += '<tr><td>' + (i+1) + '</td><td>' + p.targetUsername + '</td><td>' + p.targetNama + '</td><td>' + p.targetRole + '</td><td>';
+                    html += '<button class="button button-success button-extra-small" onclick="setujuiPengajuanStaf(' + i + ')">Setujui & Hapus</button>';
+                    html += '<button class="button button-danger button-extra-small" onclick="tolakPengajuanStaf(' + i + ')">Tolak</button>';
                     html += '</td></tr>';
                 }
-                html += '</tbody></table></div>';
-                html += '</div>';
             }
+            html += '</tbody></table></div>';
+            html += '</div>';
+        }
 
-            var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
-            var menungguPengajuanStaf = pengajuanStaf.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
-            if (menungguPengajuanStaf > 0) {
-                html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
-                html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
-                html += '<p style="margin:0;">Ada <strong>' + menungguPengajuanStaf + '</strong> pengajuan yang sudah Anda teruskan ke SuperAdmin. Menunggu keputusan.</p>';
-                html += '</div>';
+        // Notifikasi pengajuan dari Customer
+        var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+        var menungguCustomer = pengajuanCustomer.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
+        if (menungguCustomer > 0) {
+            html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
+            html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
+            html += '<p style="margin:0;">Ada <strong>' + menungguCustomer + '</strong> pengajuan hapus akun dari Customer. Staf Admin akan meneruskannya.</p>';
+            html += '</div>';
+        }
+
+        // Tabel 5 akun terbaru
+        html += '<div class="card"><div class="card-header">5 Akun Terbaru</div><div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th></tr></thead><tbody>';
+        for (var i = 0; i < limaAkunTerbaru.length; i++) {
+            var a = limaAkunTerbaru[i];
+            var badge = '';
+            var statusTeks = '';
+            if (a.status === 'AKTIF') {
+                badge = 'badge-success';
+                statusTeks = 'AKTIF';
+            } else if (a.status === 'NONAKTIF (Menunggu Verifikasi)') {
+                badge = 'badge-warning';
+                statusTeks = 'Menunggu';
+            } else {
+                badge = 'badge-danger';
+                statusTeks = 'Nonaktif';
             }
+            html += '<tr><td>' + a.id + '</td><td>' + a.role + '</td><td>' + a.username + '</td><td>' + a.nama + '</td><td><span class="badge ' + badge + '">' + statusTeks + '</span></td></tr>';
         }
-        /* ===== AKHIR BLOK 3.6.3 ===== */
-
-        /* ===== BLOK 3.6.4 - DASHBOARD TOKO ===== */
-        else if (role === 'toko' || role === 'staf_owner_toko') {
-            html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + (user.nama || 'Toko') + '</strong>!</p></div>';
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">0</div><div class="widget-label">Total Produk</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div><div class="widget-number">0</div><div class="widget-label">Pesanan Baru</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
-            html += '</div>';
-            html += renderIklanDiDashboard();
-        }
-        /* ===== AKHIR BLOK 3.6.4 ===== */
-
-        /* ===== BLOK 3.6.5 - DASHBOARD OJEK ===== */
-        else if (role === 'ojek' || role === 'staf_owner_ojek') {
-            html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + (user.nama || 'Ojek') + '</strong>!</p></div>';
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-motorcycle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Aktif</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Selesai</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
-            html += '</div>';
-            html += renderIklanDiDashboard();
-        }
-        /* ===== AKHIR BLOK 3.6.5 ===== */
-
-        /* ===== BLOK 3.6.6 - DASHBOARD PEDAGANG PASAR ===== */
-        else if (role === 'pedagang') {
-            html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + (user.nama || 'Pedagang') + '</strong>!</p></div>';
-            html += '<div class="card"><p>Selamat bergabung di Toko Online 2R! Lengkapi profil Anda.</p><button class="button button-primary margin-top-10" onclick="navigasiKeHalaman(\'profile\')">Lengkapi Profil</button></div>';
-            html += renderIklanDiDashboard();
-        }
-        /* ===== AKHIR BLOK 3.6.6 ===== */
-
-        /* ===== BLOK 3.6.7 - DASHBOARD CUSTOMER SERVICE ===== */
-        else if (role === 'customer_service') {
-            html += '<div class="page-header">';
-            html += '<h2>Dasbor Customer Service</h2>';
-            html += '<p>Selamat datang, <strong>' + (user.nama || 'Customer Service') + '</strong>!</p>';
-            html += '</div>';
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-ticket-alt"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Masuk</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Selesai</div></div>';
-            html += '</div>';
-        }
-        /* ===== AKHIR BLOK 3.6.7 ===== */
-
-        /* ===== BLOK 3.6.8 - DASHBOARD SPONSOR ===== */
-        else if (role === 'sponsor') {
-            html += '<div class="page-header">';
-            html += '<h2>Dasbor Sponsor</h2>';
-            html += '<p>Selamat datang, <strong>' + (user.nama || 'Sponsor') + '</strong>!</p>';
-            html += '</div>';
-            html += '<div class="widget-grid">';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-ad"></i></div><div class="widget-number">0</div><div class="widget-label">Iklan Aktif</div></div>';
-            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-eye"></i></div><div class="widget-number">0</div><div class="widget-label">Total Impresi</div></div>';
-            html += '</div>';
-        }
-        /* ===== AKHIR BLOK 3.6.8 ===== */
-
-        /* ===== BLOK 3.6.9 - FALLBACK (ROLE TIDAK DIKENALI) ===== */
-        else {
-            html += '<div class="page-header">';
-            html += '<h2>Dasbor</h2>';
-            html += '<p>Selamat datang, <strong>' + (user.nama || 'User') + '</strong>!</p>';
-            html += '</div>';
-        }
-        /* ===== AKHIR BLOK 3.6.9 ===== */
-
-        // Tampilkan hasil render ke area konten
-        areaKonten.innerHTML = html;
+        html += '</tbody></table></div></div>';
     }
-    /* ===== AKHIR BLOK 3.6.1 ===== */
+    /* ===== AKHIR BLOK 3.6.2 ===== */
+
+    /* ===== BLOK 3.6.3 - DASHBOARD STAF ADMIN ===== */
+    else if (role === 'staf_admin') {
+        var dataAkun = getDataAkun();
+        var menungguVerif = 0;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].status === 'NONAKTIF (Menunggu Verifikasi)') {
+                menungguVerif++;
+            }
+        }
+        
+        var pengajuanCustomer = JSON.parse(localStorage.getItem('2r_pengajuan_hapus') || '[]');
+        var pengajuanMenunggu = pengajuanCustomer.filter(function(p) { return p.status === 'MENUNGGU'; });
+        
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor Staf Admin</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Staf Admin') + '</strong>!</p>';
+        html += '</div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menungguVerif + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + dataAkun.length + '</div><div class="widget-label">Total Akun</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#f44336;"><i class="fas fa-trash-alt"></i></div><div class="widget-number">' + pengajuanMenunggu.length + '</div><div class="widget-label">Pengajuan Hapus</div></div>';
+        html += '</div>';
+
+        if (pengajuanMenunggu.length > 0) {
+            html += '<div class="card">';
+            html += '<div class="card-header">Pengajuan Hapus Akun dari Customer</div>';
+            html += '<div class="table-container"><table class="table"><thead><tr><th>Nomor</th><th>Nama</th><th>Username</th><th>Email</th><th>Nomor HP</th><th>Aksi</th></tr></thead><tbody>';
+            for (var i = 0; i < pengajuanMenunggu.length; i++) {
+                var p = pengajuanMenunggu[i];
+                html += '<tr><td>' + (i+1) + '</td><td>' + p.nama + '</td><td>' + p.username + '</td><td>' + p.email + '</td><td>' + p.nomorHp + '</td><td>';
+                html += '<button class="button button-warning button-extra-small" onclick="teruskanPengajuanHapus(' + i + ')">Teruskan ke SuperAdmin</button>';
+                html += '<button class="button button-danger button-extra-small" onclick="tolakPengajuanHapusStaf(' + i + ')">Tolak</button>';
+                html += '</td></tr>';
+            }
+            html += '</tbody></table></div>';
+            html += '</div>';
+        }
+
+        var pengajuanStaf = JSON.parse(localStorage.getItem('2r_pengajuan_hapus_staf') || '[]');
+        var menungguPengajuanStaf = pengajuanStaf.filter(function(p) { return p.status === 'MENUNGGU'; }).length;
+        if (menungguPengajuanStaf > 0) {
+            html += '<div class="card" style="background:#fff3cd; border:1px solid #ffc107;">';
+            html += '<div class="card-header"><i class="fas fa-bell" style="color:#856404;"></i> Notifikasi</div>';
+            html += '<p style="margin:0;">Ada <strong>' + menungguPengajuanStaf + '</strong> pengajuan yang sudah Anda teruskan ke SuperAdmin. Menunggu keputusan.</p>';
+            html += '</div>';
+        }
+    }
+    /* ===== AKHIR BLOK 3.6.3 ===== */
+
+    /* ===== BLOK 3.6.4 - DASHBOARD TOKO / STAF OWNER TOKO (DIPERBAIKI DENGAN DATA DINAMIS) ===== */
+    else if (role === 'toko' || role === 'staf_owner_toko') {
+        // Ambil data produk gudang milik toko
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var produkToko = semuaProdukGudang.filter(function(p) { return p.tokoId === user.id; });
+        var totalProduk = produkToko.length;
+        
+        // Ambil data transaksi toko
+        var semuaTransaksi = JSON.parse(localStorage.getItem('2r_transaksi_toko') || '[]');
+        var transaksiToko = semuaTransaksi.filter(function(t) { return t.tokoId === user.id; });
+        var totalPendapatan = 0;
+        for (var i = 0; i < transaksiToko.length; i++) {
+            totalPendapatan += transaksiToko[i].totalHargaJual;
+        }
+        
+        // Hitung pesanan baru (transaksi hari ini)
+        var hariIni = new Date().toISOString().slice(0, 10);
+        var pesananBaru = 0;
+        for (var i = 0; i < transaksiToko.length; i++) {
+            if (transaksiToko[i].tanggalTransaksi.slice(0, 10) === hariIni) {
+                pesananBaru++;
+            }
+        }
+        
+        html += '<div class="page-header"><h2>Dasbor Toko</h2><p>Selamat datang, <strong>' + (user.nama || 'Toko') + '</strong>!</p></div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">' + totalProduk + '</div><div class="widget-label">Total Produk</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div><div class="widget-number">' + pesananBaru + '</div><div class="widget-label">Pesanan Baru (Hari Ini)</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp ' + totalPendapatan.toLocaleString('id-ID') + '</div><div class="widget-label">Pendapatan</div></div>';
+        html += '</div>';
+        html += renderIklanDiDashboard();
+    }
+    /* ===== AKHIR BLOK 3.6.4 ===== */
+
+    /* ===== BLOK 3.6.5 - DASHBOARD OJEK / STAF OWNER OJEK ===== */
+    else if (role === 'ojek' || role === 'staf_owner_ojek') {
+        // Data masih placeholder karena belum ada struktur order ojek
+        html += '<div class="page-header"><h2>Dasbor Ojek</h2><p>Selamat datang, <strong>' + (user.nama || 'Ojek') + '</strong>!</p></div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-motorcycle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Aktif</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Order Selesai</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
+        html += '</div>';
+        html += renderIklanDiDashboard();
+    }
+    /* ===== AKHIR BLOK 3.6.5 ===== */
+
+    /* ===== BLOK 3.6.6 - DASHBOARD PEDAGANG PASAR ===== */
+    else if (role === 'pedagang') {
+        html += '<div class="page-header"><h2>Dasbor Pedagang Pasar</h2><p>Selamat datang, <strong>' + (user.nama || 'Pedagang') + '</strong>!</p></div>';
+        html += '<div class="card"><p>Selamat bergabung di Toko Online 2R! Lengkapi profil Anda.</p><button class="button button-primary margin-top-10" onclick="navigasiKeHalaman(\'profile\')">Lengkapi Profil</button></div>';
+        html += renderIklanDiDashboard();
+    }
+    /* ===== AKHIR BLOK 3.6.6 ===== */
+
+    /* ===== BLOK 3.6.7 - DASHBOARD CUSTOMER SERVICE ===== */
+    else if (role === 'customer_service') {
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor Customer Service</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Customer Service') + '</strong>!</p>';
+        html += '</div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-ticket-alt"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Masuk</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Tiket Selesai</div></div>';
+        html += '</div>';
+    }
+    /* ===== AKHIR BLOK 3.6.7 ===== */
+
+    /* ===== BLOK 3.6.8 - DASHBOARD SPONSOR ===== */
+    else if (role === 'sponsor') {
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor Sponsor</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'Sponsor') + '</strong>!</p>';
+        html += '</div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-ad"></i></div><div class="widget-number">0</div><div class="widget-label">Iklan Aktif</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-eye"></i></div><div class="widget-number">0</div><div class="widget-label">Total Impresi</div></div>';
+        html += '</div>';
+    }
+    /* ===== AKHIR BLOK 3.6.8 ===== */
+
+    /* ===== BLOK 3.6.9 - DASHBOARD COD SELLER (BARU) ===== */
+    else if (role === 'codseller') {
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor COD Seller</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'COD Seller') + '</strong>! Kelola pesanan COD Anda di sini.</p>';
+        html += '</div>';
+        html += '<div class="widget-grid">';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-box"></i></div><div class="widget-number">0</div><div class="widget-label">Total Pesanan COD</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">0</div><div class="widget-label">Belum Dibayar</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">0</div><div class="widget-label">Selesai</div></div>';
+        html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-money-bill-wave"></i></div><div class="widget-number">Rp 0</div><div class="widget-label">Pendapatan</div></div>';
+        html += '</div>';
+        html += renderIklanDiDashboard();
+    }
+    /* ===== AKHIR BLOK 3.6.9 ===== */
+
+    /* ===== BLOK 3.6.10 - FALLBACK (ROLE TIDAK DIKENALI) ===== */
+    else {
+        html += '<div class="page-header">';
+        html += '<h2>Dasbor</h2>';
+        html += '<p>Selamat datang, <strong>' + (user.nama || 'User') + '</strong>!</p>';
+        html += '</div>';
+    }
+    /* ===== AKHIR BLOK 3.6.10 ===== */
+
+    // Tampilkan hasil render ke area konten
+    areaKonten.innerHTML = html;
+}
+/* ===== AKHIR BLOK 3.6.1 ===== */
 
     /* ===== BLOK 3.6.10 - FUNGSI RENDER PROFIL UNTUK SEMUA ROLE ===== */
     function renderProfil() {
