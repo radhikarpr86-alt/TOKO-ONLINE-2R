@@ -3309,6 +3309,12 @@ function renderProfilCustomer() {
     
     html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
     
+    // ===== TAMBAHKAN INI: NOTIFIKASI TERSIMPAN DI ATAS FORM =====
+    html += '<div id="notifikasiSimpanProfil" style="display:none; background:#4CAF50; color:white; padding:12px 20px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:600; font-size:15px; animation: fadeInOut 1.5s ease-in-out;">';
+    html += '<i class="fas fa-check-circle"></i> Profil berhasil disimpan!';
+    html += '</div>';
+    // ===== AKHIR TAMBAHAN =====
+    
     // ===== DATA REGISTRASI =====
     html += '<div class="card"><div class="card-header">Data Registrasi <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
     html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
@@ -3316,9 +3322,7 @@ function renderProfilCustomer() {
     html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
     html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div></div></div>';
     
-    // ==========================================================
-    // ALAMAT SESUAI KTP (DROPDOWN + MANUAL)
-    // ==========================================================
+    // ===== ALAMAT SESUAI KTP (DROPDOWN + MANUAL) =====
     html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
     html += '<div class="grid-2">';
     
@@ -3390,9 +3394,7 @@ function renderProfilCustomer() {
     html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
     html += '</div></div>';
     
-    // ==========================================================
-    // ALAMAT DOMISILI (DROPDOWN + MANUAL)
-    // ==========================================================
+    // ===== ALAMAT DOMISILI (DROPDOWN + MANUAL) =====
     html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
     html += '<div class="grid-2">';
     
@@ -3504,7 +3506,6 @@ function renderProfilCustomer() {
     }, 300);
 }
 /* ===== AKHIR BLOK 3.9.1 ===== */
-
     /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER (DENGAN NILAI MANUAL) ===== */
 function simpanProfilCustomer() {
     // Ambil data user yang sedang login dari localStorage
