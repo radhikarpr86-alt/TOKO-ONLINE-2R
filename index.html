@@ -5742,43 +5742,249 @@ function simpanProfilCustomer() {
     }
     /* ===== AKHIR BLOK 4.5.1 ===== */
 
-    /* ===== BLOK 4.5.2 - SIMPAN DATA PRIBADI UMUM ===== */
-    /*
-        Fungsi ini menyimpan data pribadi dan rekening dari form profil umum
-        ke localStorage dan database akun.
-    */
-    function simpanDataPribadiUmum() {
-        var user = JSON.parse(localStorage.getItem('2r_user'));
-        var dataAkun = getDataAkun();
-        
-        user.nama = document.getElementById('profilNama').value;
-        user.email = document.getElementById('profilEmail').value;
-        user.nomorHp = document.getElementById('profilHp').value;
-        user.alamat = document.getElementById('profilAlamat').value;
-        user.namaBank = document.getElementById('profilBank').value;
-        user.nomorRekening = document.getElementById('profilRekening').value;
-        user.pemilikRekening = document.getElementById('profilPemilikRek').value;
-        
-        for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].id === user.id) {
-                dataAkun[i].nama = user.nama;
-                dataAkun[i].email = user.email;
-                dataAkun[i].nomorHp = user.nomorHp;
-                dataAkun[i].alamat = user.alamat;
-                dataAkun[i].namaBank = user.namaBank;
-                dataAkun[i].nomorRekening = user.nomorRekening;
-                dataAkun[i].pemilikRekening = user.pemilikRekening;
-                break;
-            }
-        }
-        
-        localStorage.setItem('2r_user', JSON.stringify(user));
-        simpanDataAkun(dataAkun);
-        document.getElementById('userNama').textContent = user.nama;
-        tampilkanToast('Data pribadi dan rekening disimpan!', 'success');
+    /* ===== BLOK 4.5.2 - SIMPAN PROFIL LENGKAP UNTUK SEMUA ROLE NON-SUPERADMIN ===== */
+/*
+    Fungsi ini menyimpan data profil lengkap (registrasi, alamat KTP, alamat domisili,
+    rekening, dan KTP) dari form ke localStorage dan database akun.
+    Setelah berhasil menyimpan, akan menampilkan notifikasi di atas form,
+    toast sukses, dan merender ulang halaman dengan data terbaru.
+*/
+function simpanProfilLengkap() {
+    // ===== 1. AMBIL DATA USER YANG SEDANG LOGIN =====
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    if (!user || !user.id) {
+        tampilkanToast('Data user tidak ditemukan!', 'error');
+        return;
     }
-    /* ===== AKHIR BLOK 4.5.2 ===== */
 
+    // ===== 2. AMBIL SELURUH DATA AKUN DARI DATABASE =====
+    var dataAkun = getDataAkun();
+
+    // ===== 3. SIMPAN DATA REGISTRASI =====
+    user.nama = document.getElementById('editNamaProfilUmum').value.trim();
+    user.email = document.getElementById('editEmailProfilUmum').value.trim();
+    user.nomorHp = document.getElementById('editHpProfilUmum').value.trim();
+    
+    // Username tidak diubah (disabled)
+
+    // ===== 4. SIMPAN ALAMAT KTP =====
+    user.ktpDusun = document.getElementById('ktpDusun').value.trim();
+    user.ktpRT = document.getElementById('ktpRT').value.trim();
+    user.ktpRW = document.getElementById('ktpRW').value.trim();
+    user.ktpJalan = document.getElementById('ktpJalan').value.trim();
+    user.ktpDesa = document.getElementById('ktpDesa').value;
+    user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
+    user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
+    user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
+    user.ktpKodepos = document.getElementById('ktpKodepos').value.trim();
+    user.ktpProvinsiManual = document.getElementById('ktpProvinsiManual').value.trim();
+    user.ktpKabupatenManual = document.getElementById('ktpKabupatenManual').value.trim();
+    user.ktpKecamatanManual = document.getElementById('ktpKecamatanManual').value.trim();
+    user.ktpDesaManual = document.getElementById('ktpDesaManual').value.trim();
+
+    // Gabungkan alamat KTP menjadi satu string
+    var gabungKTP = '';
+    if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
+    if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
+    if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
+    if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
+    if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
+    if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
+    if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
+    if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
+    if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
+    user.alamatKTP = gabungKTP;
+
+    // ===== 5. SIMPAN ALAMAT DOMISILI =====
+    user.domDusun = document.getElementById('domDusun').value.trim();
+    user.domRT = document.getElementById('domRT').value.trim();
+    user.domRW = document.getElementById('domRW').value.trim();
+    user.domJalan = document.getElementById('domJalan').value.trim();
+    user.domDesa = document.getElementById('domDesa').value;
+    user.domKecamatan = document.getElementById('domKecamatan').value;
+    user.domKabupaten = document.getElementById('domKabupaten').value;
+    user.domProvinsi = document.getElementById('domProvinsi').value;
+    user.domKodepos = document.getElementById('domKodepos').value.trim();
+    user.domProvinsiManual = document.getElementById('domProvinsiManual').value.trim();
+    user.domKabupatenManual = document.getElementById('domKabupatenManual').value.trim();
+    user.domKecamatanManual = document.getElementById('domKecamatanManual').value.trim();
+    user.domDesaManual = document.getElementById('domDesaManual').value.trim();
+
+    // Gabungkan alamat domisili menjadi satu string
+    var gabungDom = '';
+    if (user.domDusun) gabungDom += user.domDusun + ', ';
+    if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
+    if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
+    if (user.domJalan) gabungDom += user.domJalan + ', ';
+    if (user.domDesa) gabungDom += user.domDesa + ', ';
+    if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
+    if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
+    if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
+    if (user.domKodepos) gabungDom += user.domKodepos;
+    user.alamatDomisili = gabungDom;
+
+    // Set alamat utama menggunakan alamat domisili, jika kosong gunakan alamat KTP
+    user.alamat = user.alamatDomisili || user.alamatKTP;
+
+    // ===== 6. SIMPAN DATA REKENING =====
+    user.namaBank = document.getElementById('profilBankUmum').value.trim();
+    user.nomorRekening = document.getElementById('profilRekeningUmum').value.trim();
+    user.pemilikRekening = document.getElementById('profilPemilikRekUmum').value.trim();
+
+    // ===== 7. VALIDASI DATA =====
+    // Pastikan nama lengkap tidak kosong
+    if (!user.nama) {
+        tampilkanToast('Nama lengkap wajib diisi!', 'warning');
+        return;
+    }
+
+    // ===== 8. SIMPAN KE DATABASE AKUN =====
+    // Cari akun user berdasarkan ID, lalu update semua field
+    var akunDitemukan = false;
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === user.id) {
+            // Update data registrasi
+            dataAkun[i].nama = user.nama;
+            dataAkun[i].email = user.email;
+            dataAkun[i].nomorHp = user.nomorHp;
+            
+            // Update alamat KTP
+            dataAkun[i].ktpDusun = user.ktpDusun;
+            dataAkun[i].ktpRT = user.ktpRT;
+            dataAkun[i].ktpRW = user.ktpRW;
+            dataAkun[i].ktpJalan = user.ktpJalan;
+            dataAkun[i].ktpDesa = user.ktpDesa;
+            dataAkun[i].ktpKecamatan = user.ktpKecamatan;
+            dataAkun[i].ktpKabupaten = user.ktpKabupaten;
+            dataAkun[i].ktpProvinsi = user.ktpProvinsi;
+            dataAkun[i].ktpKodepos = user.ktpKodepos;
+            dataAkun[i].ktpProvinsiManual = user.ktpProvinsiManual;
+            dataAkun[i].ktpKabupatenManual = user.ktpKabupatenManual;
+            dataAkun[i].ktpKecamatanManual = user.ktpKecamatanManual;
+            dataAkun[i].ktpDesaManual = user.ktpDesaManual;
+            dataAkun[i].alamatKTP = user.alamatKTP;
+            
+            // Update alamat domisili
+            dataAkun[i].domDusun = user.domDusun;
+            dataAkun[i].domRT = user.domRT;
+            dataAkun[i].domRW = user.domRW;
+            dataAkun[i].domJalan = user.domJalan;
+            dataAkun[i].domDesa = user.domDesa;
+            dataAkun[i].domKecamatan = user.domKecamatan;
+            dataAkun[i].domKabupaten = user.domKabupaten;
+            dataAkun[i].domProvinsi = user.domProvinsi;
+            dataAkun[i].domKodepos = user.domKodepos;
+            dataAkun[i].domProvinsiManual = user.domProvinsiManual;
+            dataAkun[i].domKabupatenManual = user.domKabupatenManual;
+            dataAkun[i].domKecamatanManual = user.domKecamatanManual;
+            dataAkun[i].domDesaManual = user.domDesaManual;
+            dataAkun[i].alamatDomisili = user.alamatDomisili;
+            
+            // Update alamat utama
+            dataAkun[i].alamat = user.alamat;
+            
+            // Update data rekening
+            dataAkun[i].namaBank = user.namaBank;
+            dataAkun[i].nomorRekening = user.nomorRekening;
+            dataAkun[i].pemilikRekening = user.pemilikRekening;
+            
+            // KTP tetap dipertahankan (tidak diubah di sini, karena diupload terpisah)
+            
+            akunDitemukan = true;
+            break;
+        }
+    }
+
+    if (!akunDitemukan) {
+        tampilkanToast('Akun tidak ditemukan di database!', 'error');
+        return;
+    }
+
+    // ===== 9. SIMPAN KE LOCALSTORAGE =====
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(dataAkun);
+
+    // Update nama user di navbar
+    document.getElementById('userNama').textContent = user.nama;
+
+    // ===== 10. TAMPILKAN NOTIFIKASI TERSIMPAN DI ATAS FORM =====
+    var notif = document.getElementById('notifikasiSimpanProfilUmum');
+    if (notif) {
+        notif.style.display = 'block';
+        notif.classList.add('notif-berkedip');
+        
+        setTimeout(function() {
+            notif.style.display = 'none';
+            notif.classList.remove('notif-berkedip');
+            // Render ulang halaman dengan data terbaru
+            // Panggil kembali renderProfilUmum dengan data user yang sudah diperbarui
+            var role = localStorage.getItem('2r_user_role');
+            var userTerbaru = JSON.parse(localStorage.getItem('2r_user'));
+            renderProfilUmum(userTerbaru, role);
+        }, 3000);
+    }
+
+    // ===== 11. TAMPILKAN TOAST NOTIFIKASI =====
+    tampilkanToast('Profil berhasil disimpan!', 'success');
+}
+
+/* ===== FUNGSI PENDUKUNG KTP ===== */
+
+// Preview KTP untuk profil umum
+function previewKTPUmum(file) {
+    if (!file) return;
+    var pembaca = new FileReader();
+    pembaca.onload = function(e) {
+        document.getElementById('ktpPreviewUmum').innerHTML = '<img src="' + e.target.result + '" class="preview-image">';
+        localStorage.setItem('2r_ktp_temp_umum', e.target.result);
+    };
+    pembaca.readAsDataURL(file);
+}
+
+// Simpan KTP untuk profil umum
+function simpanKTPUmum() {
+    var ktp = localStorage.getItem('2r_ktp_temp_umum');
+    if (!ktp) {
+        tampilkanToast('Upload KTP dulu!', 'warning');
+        return;
+    }
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var dataAkun = getDataAkun();
+    user.ktp = ktp;
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === user.id) {
+            dataAkun[i].ktp = ktp;
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(dataAkun);
+    localStorage.removeItem('2r_ktp_temp_umum');
+    tampilkanToast('KTP disimpan!', 'success');
+    // Render ulang profil
+    var role = localStorage.getItem('2r_user_role');
+    renderProfilUmum(user, role);
+}
+
+// Hapus KTP untuk profil umum
+function hapusKTPUmum() {
+    if (!confirm('Yakin ingin menghapus foto KTP?')) return;
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var dataAkun = getDataAkun();
+    user.ktp = '';
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === user.id) {
+            dataAkun[i].ktp = '';
+            break;
+        }
+    }
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(dataAkun);
+    tampilkanToast('KTP berhasil dihapus!', 'success');
+    var role = localStorage.getItem('2r_user_role');
+    renderProfilUmum(user, role);
+}
+/* ===== AKHIR BLOK 4.5.2 ===== */
     /* ===== BLOK 4.5.3 - PREVIEW KTP ===== */
     /*
         Fungsi ini menampilkan preview gambar KTP saat user memilih file.
