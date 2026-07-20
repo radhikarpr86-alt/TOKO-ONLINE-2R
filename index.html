@@ -1713,91 +1713,93 @@ function setupNavigasiSidebar() {
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
     /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
-    /*
-        Fungsi ini adalah pusat routing aplikasi.
-        Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
-        Jika halaman tidak dikenali, akan menampilkan placeholder.
-    */
-    function navigasiKeHalaman(namaHalaman) {
-        var areaKonten = document.getElementById('mainContent');
-        if (!areaKonten) {
-            return;
-        }
-
-        // ===== NAVIGASI UNTUK SEMUA ROLE =====
-        if (namaHalaman === 'dashboard') {
-            renderDashboard();
-        } else if (namaHalaman === 'profile') {
-            renderProfil();
-        } else if (namaHalaman === 'daftarAkun') {
-            renderDaftarAkun();
-        } else if (namaHalaman === 'persetujuan') {
-            renderPersetujuanAkun();
-        } else if (namaHalaman === 'kelolaAkun') {
-            renderKelolaAkun();
-        } else if (namaHalaman === 'settingRekening') {
-            renderSettingRekening();
-        } else if (namaHalaman === 'belanja') {
-            renderBelanja();
-        } else if (namaHalaman === 'pesananSaya') {
-            renderPesananSaya();
-        } else if (namaHalaman === 'kelolaIklan') {
-            renderMenuIklan();
-        } else if (namaHalaman === 'pengajuanHapus') {
-            renderPengajuanHapusAkun();
-        } else if (namaHalaman === 'uploadProdukPublik') {
-            renderUploadProdukPublik();
-        } else if (namaHalaman === 'manajemenStokGudang') {
-            renderManajemenStokGudang();
-        } else if (namaHalaman === 'kelolaProduk') {
-            renderKelolaProduk();
-        } else if (namaHalaman === 'helloFriends') {
-            renderHelloFriends();
-        } else if (namaHalaman === 'transferMenu') {
-            renderTransferMenu();
-        }
-
-        // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
-        else if (namaHalaman === 'dashboardCustomer') {
-            renderDashboardCustomer();
-        } else if (namaHalaman === 'profilCustomer') {
-            renderProfilCustomer();
-        } else if (namaHalaman === 'lihatTokoTerdekat') {
-            renderLihatTokoTerdekat();
-        } else if (namaHalaman === 'lihatOjekTerdekat') {
-            renderLihatOjekTerdekat();
-        } else if (namaHalaman === 'lihatProduk') {
-            renderLihatProduk();
-        } else if (namaHalaman === 'keranjang') {
-            renderKeranjang();
-        } else if (namaHalaman === 'chat') {
-            renderChat();
-        } else if (namaHalaman === 'papanInformasi') {
-            renderPapanInformasi();
-        } else if (namaHalaman === 'menuIklan') {
-            renderMenuIklan();
-        } else if (namaHalaman === 'daftarBelanja') {
-            renderDaftarBelanja();
-        } else if (namaHalaman === 'riwayatBelanja') {
-            renderRiwayatBelanja();
-        } else if (namaHalaman === 'pembayaran') {
-            renderPembayaran();
-        } else if (namaHalaman === 'ulasanRating') {
-            renderUlasanRating();
-        } else if (namaHalaman === 'bantuanFAQ') {
-            renderBantuanFAQ();
-        } else if (namaHalaman === 'notifikasi') {
-            renderNotifikasi();
-        } else if (namaHalaman === 'editAkun') {
-            renderEditAkun();
-        }
-
-        // ===== PLACEHOLDER (Halaman belum siap) =====
-        else {
-            renderPlaceholder(namaHalaman);
-        }
+/*
+    Fungsi ini adalah pusat routing aplikasi.
+    Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
+    Jika halaman tidak dikenali, akan menampilkan placeholder.
+*/
+function navigasiKeHalaman(namaHalaman) {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) {
+        return;
     }
-    /* ===== AKHIR BLOK 3.5.2 ===== */
+
+    // ===== NAVIGASI UNTUK SEMUA ROLE =====
+    if (namaHalaman === 'dashboard') {
+        renderDashboard();
+    } else if (namaHalaman === 'profile') {
+        renderProfil();
+    } else if (namaHalaman === 'daftarAkun') {
+        renderDaftarAkun();
+    } else if (namaHalaman === 'persetujuan') {
+        renderPersetujuanAkun();
+    } else if (namaHalaman === 'kelolaAkun') {
+        renderKelolaAkun();
+    } else if (namaHalaman === 'settingRekening') {
+        renderSettingRekening();
+    } else if (namaHalaman === 'belanja') {
+        renderBelanja();
+    } else if (namaHalaman === 'pesananSaya') {
+        renderPesananSaya();
+    } else if (namaHalaman === 'kelolaIklan') {
+        renderMenuIklan();
+    } else if (namaHalaman === 'pengajuanHapus') {
+        renderPengajuanHapusAkun();
+    } else if (namaHalaman === 'uploadProdukPublik') {
+        renderUploadProdukPublik();
+    } else if (namaHalaman === 'manajemenStokGudang') {
+        renderManajemenStokGudang();
+    } else if (namaHalaman === 'kelolaProduk') {
+        renderKelolaProduk();
+    } else if (namaHalaman === 'helloFriends') {
+        renderHelloFriends();
+    } else if (namaHalaman === 'transferMenu') {
+        renderTransferMenu();
+    } else if (namaHalaman === 'kelolaWilayah') {
+        renderKelolaWilayah();
+    }
+
+    // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
+    else if (namaHalaman === 'dashboardCustomer') {
+        renderDashboardCustomer();
+    } else if (namaHalaman === 'profilCustomer') {
+        renderProfilCustomer();
+    } else if (namaHalaman === 'lihatTokoTerdekat') {
+        renderLihatTokoTerdekat();
+    } else if (namaHalaman === 'lihatOjekTerdekat') {
+        renderLihatOjekTerdekat();
+    } else if (namaHalaman === 'lihatProduk') {
+        renderLihatProduk();
+    } else if (namaHalaman === 'keranjang') {
+        renderKeranjang();
+    } else if (namaHalaman === 'chat') {
+        renderChat();
+    } else if (namaHalaman === 'papanInformasi') {
+        renderPapanInformasi();
+    } else if (namaHalaman === 'menuIklan') {
+        renderMenuIklan();
+    } else if (namaHalaman === 'daftarBelanja') {
+        renderDaftarBelanja();
+    } else if (namaHalaman === 'riwayatBelanja') {
+        renderRiwayatBelanja();
+    } else if (namaHalaman === 'pembayaran') {
+        renderPembayaran();
+    } else if (namaHalaman === 'ulasanRating') {
+        renderUlasanRating();
+    } else if (namaHalaman === 'bantuanFAQ') {
+        renderBantuanFAQ();
+    } else if (namaHalaman === 'notifikasi') {
+        renderNotifikasi();
+    } else if (namaHalaman === 'editAkun') {
+        renderEditAkun();
+    }
+
+    // ===== PLACEHOLDER (Halaman belum siap) =====
+    else {
+        renderPlaceholder(namaHalaman);
+    }
+}
+/* ===== AKHIR BLOK 3.5.2 ===== */
 
     /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
     /*
