@@ -4503,16 +4503,9 @@ function simpanProfilCustomer() {
     /* ===== AKHIR BLOK 4.2.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.2 ===== -->
-<!-- ===== BLOK 4.3 - JS_RENDER_PROFIL_SUPERADMIN ===== -->
-<script>
-    /* ===== BLOK 4.3 - JS_RENDER_PROFIL_SUPERADMIN ===== */
+/* ===== BLOK 4.3 - JS_RENDER_PROFIL_SUPERADMIN ===== */
 <script>
     /* ===== BLOK 4.3.1 - RENDER PROFIL SUPERADMIN (LENGKAP) ===== */
-    /*
-        Fungsi ini menampilkan halaman profil lengkap untuk SuperAdmin.
-        Terdiri dari beberapa bagian: Data Aplikasi, Keamanan Akun,
-        Data Pribadi & Rekening, Dokumen Perusahaan, dan Keterangan.
-    */
     function renderProfilSuperAdmin(user) {
         var areaKonten = document.getElementById('mainContent');
         if (!areaKonten) {
@@ -4523,7 +4516,6 @@ function simpanProfilCustomer() {
             user = JSON.parse(localStorage.getItem('2r_user') || '{}');
         }
 
-        // Ambil data aplikasi yang tersimpan
         var dataAplikasi = JSON.parse(localStorage.getItem('2r_data_aplikasi') || '{}');
 
         var html = '';
@@ -4606,7 +4598,309 @@ function simpanProfilCustomer() {
 <!-- ===== AKHIR BLOK 4.3 ===== -->
 /* ===== BLOK 4.4 - JS_SUPERADMIN_PENDUKUNG ===== */
 <script>
-    // ... semua fungsi di atas ...
+    /* ===== BLOK 4.4.1 - SIMPAN DATA APLIKASI ===== */
+    function simpanDataAplikasi() {
+        var data = {
+            nama: document.getElementById('appNama').value.trim(),
+            penerbit: document.getElementById('appPenerbit').value.trim(),
+            pemilik: document.getElementById('appPemilik').value.trim(),
+            pengelola: document.getElementById('appPengelola').value.trim()
+        };
+        
+        if (!data.nama) {
+            tampilkanToast('Nama aplikasi wajib diisi!', 'warning');
+            return;
+        }
+        
+        localStorage.setItem('2r_data_aplikasi', JSON.stringify(data));
+        tampilkanToast('Data aplikasi disimpan!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.1 ===== */
+
+    /* ===== BLOK 4.4.2 - LOAD DATA APLIKASI ===== */
+    function loadDataAplikasi() {
+        var data = JSON.parse(localStorage.getItem('2r_data_aplikasi') || '{}');
+        if (document.getElementById('appNama')) {
+            document.getElementById('appNama').value = data.nama || 'Toko Online 2R';
+        }
+        if (document.getElementById('appPenerbit')) {
+            document.getElementById('appPenerbit').value = data.penerbit || '';
+        }
+        if (document.getElementById('appPemilik')) {
+            document.getElementById('appPemilik').value = data.pemilik || '';
+        }
+        if (document.getElementById('appPengelola')) {
+            document.getElementById('appPengelola').value = data.pengelola || '';
+        }
+    }
+    /* ===== AKHIR BLOK 4.4.2 ===== */
+
+    /* ===== BLOK 4.4.3 - UBAH PASSWORD SUPERADMIN ===== */
+    function ubahPasswordSA() {
+        var usernameBaru = document.getElementById('saUsername').value.trim();
+        var passwordBaru = document.getElementById('saPassword').value.trim();
+        var konfirmasiPassword = document.getElementById('saPasswordKonfirmasi').value.trim();
+        
+        if (!usernameBaru) {
+            tampilkanToast('Username tidak boleh kosong!', 'warning');
+            return;
+        }
+        if (passwordBaru && passwordBaru !== konfirmasiPassword) {
+            tampilkanToast('Password tidak cocok!', 'error');
+            return;
+        }
+        if (passwordBaru && passwordBaru.length < 6) {
+            tampilkanToast('Password minimal 6 karakter!', 'warning');
+            return;
+        }
+        
+        var user = JSON.parse(localStorage.getItem('2r_user'));
+        var dataAkun = getDataAkun();
+        
+        // Cek apakah username baru sudah digunakan oleh akun lain
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === usernameBaru && dataAkun[i].id !== user.id) {
+                tampilkanToast('Username sudah digunakan oleh akun lain!', 'error');
+                return;
+            }
+        }
+        
+        user.username = usernameBaru;
+        if (passwordBaru) {
+            user.password = encodePassword(passwordBaru);
+        }
+        
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                dataAkun[i].username = usernameBaru;
+                if (passwordBaru) {
+                    dataAkun[i].password = encodePassword(passwordBaru);
+                }
+                break;
+            }
+        }
+        
+        localStorage.setItem('2r_user', JSON.stringify(user));
+        simpanDataAkun(dataAkun);
+        document.getElementById('saPassword').value = '';
+        document.getElementById('saPasswordKonfirmasi').value = '';
+        tampilkanToast('Keamanan akun diperbarui!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.3 ===== */
+
+    /* ===== BLOK 4.4.4 - SIMPAN DATA PRIBADI & REKENING SUPERADMIN ===== */
+    function simpanDataPribadiSA() {
+        var user = JSON.parse(localStorage.getItem('2r_user'));
+        var dataAkun = getDataAkun();
+        
+        var nama = document.getElementById('saNama').value.trim();
+        var alamat = document.getElementById('saAlamat').value.trim();
+        var email = document.getElementById('saEmail').value.trim();
+        var nomorHp = document.getElementById('saHp').value.trim();
+        var namaBank = document.getElementById('saBank').value.trim();
+        var nomorRekening = document.getElementById('saRekening').value.trim();
+        var pemilikRekening = document.getElementById('saPemilikRek').value.trim();
+        
+        if (!nama) {
+            tampilkanToast('Nama lengkap wajib diisi!', 'warning');
+            return;
+        }
+        
+        user.nama = nama;
+        user.alamat = alamat;
+        user.email = email;
+        user.nomorHp = nomorHp;
+        user.namaBank = namaBank;
+        user.nomorRekening = nomorRekening;
+        user.pemilikRekening = pemilikRekening;
+        
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].id === user.id) {
+                dataAkun[i].nama = nama;
+                dataAkun[i].alamat = alamat;
+                dataAkun[i].email = email;
+                dataAkun[i].nomorHp = nomorHp;
+                dataAkun[i].namaBank = namaBank;
+                dataAkun[i].nomorRekening = nomorRekening;
+                dataAkun[i].pemilikRekening = pemilikRekening;
+                break;
+            }
+        }
+        
+        localStorage.setItem('2r_user', JSON.stringify(user));
+        simpanDataAkun(dataAkun);
+        document.getElementById('userNama').textContent = nama;
+        tampilkanToast('Data pribadi dan rekening disimpan!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.4 ===== */
+
+    /* ===== BLOK 4.4.5 - UPLOAD DOKUMEN PERUSAHAAN ===== */
+    function uploadDokumenSA(files) {
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        var totalFile = files.length;
+        var selesai = 0;
+        
+        if (totalFile === 0) {
+            tampilkanToast('Tidak ada file yang dipilih!', 'warning');
+            return;
+        }
+        
+        for (var i = 0; i < files.length; i++) {
+            (function(file) {
+                var pembaca = new FileReader();
+                pembaca.onload = function(e) {
+                    dataDokumen.push({
+                        id: Date.now(),
+                        nama: file.name,
+                        tipe: file.type,
+                        data: e.target.result,
+                        keterangan: '',
+                        tanggal: new Date().toLocaleDateString('id-ID')
+                    });
+                    selesai++;
+                    if (selesai === totalFile) {
+                        localStorage.setItem('2r_dokumen_sa', JSON.stringify(dataDokumen));
+                        loadDokumenSA();
+                        tampilkanToast(totalFile + ' dokumen berhasil diunggah!', 'success');
+                    }
+                };
+                pembaca.readAsDataURL(file);
+            })(files[i]);
+        }
+    }
+    /* ===== AKHIR BLOK 4.4.5 ===== */
+
+    /* ===== BLOK 4.4.6 - LOAD DOKUMEN PERUSAHAAN ===== */
+    function loadDokumenSA() {
+        var containerDokumen = document.getElementById('daftarDokumen');
+        if (!containerDokumen) {
+            return;
+        }
+        
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        if (dataDokumen.length === 0) {
+            containerDokumen.innerHTML = '<div class="empty-state"><i class="fas fa-cloud-upload-alt"></i><h3>Belum ada dokumen</h3></div>';
+            return;
+        }
+        
+        var html = '';
+        for (var i = 0; i < dataDokumen.length; i++) {
+            var d = dataDokumen[i];
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;">';
+            html += '<div style="display:flex;align-items:center;gap:15px;">';
+            if (d.tipe && d.tipe.startsWith('image/')) {
+                html += '<img src="' + d.data + '" style="width:50px;height:50px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewGambarSuperAdmin(\'' + d.data + '\',\'' + d.nama + '\')">';
+            } else {
+                html += '<div style="width:50px;height:50px;background:#fff0e5;color:#FF6B00;display:flex;align-items:center;justify-content:center;border-radius:6px;"><i class="fas fa-file-alt"></i></div>';
+            }
+            html += '<div><h4 style="font-size:14px;">' + d.nama + '</h4><p style="font-size:12px;color:#888;">' + (d.keterangan || 'Tidak ada keterangan') + ' | ' + d.tanggal + '</p></div></div>';
+            html += '<div style="display:flex;gap:6px;">';
+            html += '<button class="button button-success button-extra-small" onclick="downloadDokumenSA(' + i + ')"><i class="fas fa-download"></i></button>';
+            html += '<button class="button button-info button-extra-small" style="background:#17a2b8;color:white;" onclick="bagikanDokumenSA(' + i + ')"><i class="fas fa-share-alt"></i></button>';
+            html += '<button class="button button-primary button-extra-small" onclick="editDokumenSA(' + i + ')"><i class="fas fa-edit"></i></button>';
+            html += '<button class="button button-danger button-extra-small" onclick="hapusDokumenSA(' + i + ')"><i class="fas fa-trash"></i></button>';
+            html += '</div></div>';
+        }
+        containerDokumen.innerHTML = html;
+    }
+    /* ===== AKHIR BLOK 4.4.6 ===== */
+
+    /* ===== BLOK 4.4.7 - DOWNLOAD DOKUMEN ===== */
+    function downloadDokumenSA(index) {
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        var d = dataDokumen[index];
+        if (!d || !d.data) {
+            tampilkanToast('Dokumen tidak ditemukan!', 'error');
+            return;
+        }
+        var link = document.createElement('a');
+        link.href = d.data;
+        link.download = d.nama;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        tampilkanToast('Dokumen sedang didownload!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.7 ===== */
+
+    /* ===== BLOK 4.4.8 - BAGIKAN DOKUMEN (COPY LINK) ===== */
+    function bagikanDokumenSA(index) {
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        var d = dataDokumen[index];
+        if (!d || !d.data) {
+            tampilkanToast('Dokumen tidak ditemukan!', 'error');
+            return;
+        }
+        var link = d.data;
+        navigator.clipboard.writeText(link).then(function() {
+            tampilkanToast('Link dokumen disalin ke clipboard!', 'success');
+        }).catch(function() {
+            var textarea = document.createElement('textarea');
+            textarea.value = link;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            tampilkanToast('Link dokumen disalin!', 'success');
+        });
+    }
+    /* ===== AKHIR BLOK 4.4.8 ===== */
+
+    /* ===== BLOK 4.4.9 - EDIT DOKUMEN ===== */
+    function editDokumenSA(index) {
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        var namaBaru = prompt('Nama file:', dataDokumen[index].nama);
+        if (namaBaru !== null && namaBaru.trim() !== '') {
+            var keteranganBaru = prompt('Keterangan:', dataDokumen[index].keterangan || '');
+            if (keteranganBaru !== null) {
+                dataDokumen[index].nama = namaBaru.trim();
+                dataDokumen[index].keterangan = keteranganBaru.trim();
+                localStorage.setItem('2r_dokumen_sa', JSON.stringify(dataDokumen));
+                loadDokumenSA();
+                tampilkanToast('Dokumen diperbarui!', 'success');
+            }
+        }
+    }
+    /* ===== AKHIR BLOK 4.4.9 ===== */
+
+    /* ===== BLOK 4.4.10 - HAPUS DOKUMEN ===== */
+    function hapusDokumenSA(index) {
+        if (!confirm('Hapus dokumen ini?')) {
+            return;
+        }
+        var dataDokumen = JSON.parse(localStorage.getItem('2r_dokumen_sa') || '[]');
+        dataDokumen.splice(index, 1);
+        localStorage.setItem('2r_dokumen_sa', JSON.stringify(dataDokumen));
+        loadDokumenSA();
+        tampilkanToast('Dokumen dihapus!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.10 ===== */
+
+    /* ===== BLOK 4.4.11 - PREVIEW GAMBAR SUPERADMIN ===== */
+    function previewGambarSuperAdmin(src, title) {
+        document.getElementById('modalPreviewImage').src = src;
+        document.getElementById('modalPreviewTitle').textContent = title || 'Preview';
+        bukaModal('modalPreviewGambar');
+    }
+    /* ===== AKHIR BLOK 4.4.11 ===== */
+
+    /* ===== BLOK 4.4.12 - SIMPAN KETERANGAN ===== */
+    function simpanKeteranganSA() {
+        var keterangan = document.getElementById('textKeterangan').value.trim();
+        localStorage.setItem('2r_keterangan_sa', keterangan);
+        tampilkanToast('Keterangan disimpan!', 'success');
+    }
+    /* ===== AKHIR BLOK 4.4.12 ===== */
+
+    /* ===== BLOK 4.4.13 - LOAD KETERANGAN ===== */
+    function loadKeteranganSA() {
+        var k = localStorage.getItem('2r_keterangan_sa');
+        var el = document.getElementById('textKeterangan');
+        if (k && el) {
+            el.value = k;
+        }
+    }
+    /* ===== AKHIR BLOK 4.4.13 ===== */
 </script>
 /* ===== AKHIR BLOK 4.4 ===== */
 <!-- ===== BLOK 4.5 - JS_RENDER_PROFIL_UMUM ===== -->
