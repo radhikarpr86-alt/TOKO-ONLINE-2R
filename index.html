@@ -1863,7 +1863,7 @@ function setupNavigasiSidebar() {
     }
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
-            /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
+         /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN (RUBBER BAND FIX) ===== */
 /*
     Fungsi ini adalah pusat routing aplikasi.
     Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
@@ -1892,8 +1892,8 @@ function navigasiKeHalaman(namaHalaman) {
         renderBelanja();
     } else if (namaHalaman === 'pesananSaya') {
         renderPesananSaya();
-    } else if (namaHalaman === 'kelolaIklan') {
-        renderMenuIklan();
+    } else if (namaHalaman === 'kelolaIklan') { // <-- FIX: Sekarang memanggil fungsi SuperAdmin
+        renderKelolaIklan();
     } else if (namaHalaman === 'pengajuanHapus') {
         renderPengajuanHapusAkun();
     } else if (namaHalaman === 'uploadProdukPublik') {
@@ -1927,7 +1927,7 @@ function navigasiKeHalaman(namaHalaman) {
         renderChat();
     } else if (namaHalaman === 'papanInformasi') {
         renderPapanInformasi();
-    } else if (namaHalaman === 'menuIklan') {
+    } else if (namaHalaman === 'menuIklan') { // <-- FIX: Sekarang memanggil fungsi Customer
         renderMenuIklan();
     } else if (namaHalaman === 'daftarBelanja') {
         renderDaftarBelanja();
