@@ -1973,7 +1973,7 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.5.3 ===== */
-	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER DAN MENU IKLAN CUSTOMER ===== */
+	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER DAN MENU IKLAN ===== */
 function renderBelanja() {
     renderPlaceholder('Belanja');
 }
@@ -1982,7 +1982,6 @@ function renderPesananSaya() {
     renderPlaceholder('Pesanan Saya');
 }
 
-// ===== INI YANG DIGANTI =====
 function renderMenuIklan() {
     var areaKonten = document.getElementById('mainContent');
     var dataIklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
@@ -2003,8 +2002,8 @@ function renderMenuIklan() {
         for (var i = 0; i < dataIklan.length; i++) {
             var iklan = dataIklan[i];
             var gambarHtml = '';
-            if (iklan.gambar) {
-                gambarHtml = '<img src="' + iklan.gambar + '" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
+            if (iklan.gambar && iklan.gambar.length > 0) {
+                gambarHtml = '<img src="' + iklan.gambar[0] + '" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
             } else {
                 gambarHtml = '<i class="fas fa-ad" style="font-size:50px; margin-bottom:10px; display:block;"></i>';
             }
@@ -2013,6 +2012,9 @@ function renderMenuIklan() {
             html += gambarHtml;
             html += '<h4 style="font-size:16px;">' + iklan.judul + '</h4>';
             html += '<p style="font-size:14px; opacity:0.9;">' + iklan.deskripsi + '</p>';
+            if (iklan.gambar && iklan.gambar.length > 1) {
+                html += '<p style="font-size:12px; opacity:0.7;">+' + (iklan.gambar.length - 1) + ' gambar lainnya</p>';
+            }
             html += '</div>';
         }
         html += '</div></div>';
@@ -2020,7 +2022,6 @@ function renderMenuIklan() {
 
     areaKonten.innerHTML = html;
 }
-// ===== AKHIR PERUBAHAN =====
 
 function renderPengajuanHapusAkun() {
     renderPlaceholder('Pengajuan Hapus Akun');
@@ -6392,7 +6393,7 @@ function renderKelolaIklan() {
 
     html += '<div class="page-header">';
     html += '<h2>Kelola Iklan Sponsor</h2>';
-    html += '<p>Kelola iklan yang akan muncul di dashboard pengguna.</p>';
+    html += '<p>Kelola iklan yang akan muncul di dashboard pengguna. Anda dapat mengunggah beberapa gambar sekaligus.</p>';
     html += '</div>';
 
     // Form Tambah Iklan
@@ -6402,8 +6403,8 @@ function renderKelolaIklan() {
     html += '<div><label class="form-label">Judul Iklan</label><input type="text" id="iklanJudul" class="form-input" placeholder="Judul iklan"></div>';
     html += '<div><label class="form-label">Warna Latar (Hex)</label><input type="color" id="iklanWarna" class="form-input" value="#FF6B00" style="height:45px;"></div>';
     html += '<div><label class="form-label">Deskripsi</label><input type="text" id="iklanDeskripsi" class="form-input" placeholder="Deskripsi iklan"></div>';
-    html += '<div><label class="form-label">Upload Gambar</label>';
-    html += '<input type="file" id="iklanGambar" accept=".jpg,.jpeg,.png" style="display:none;">';
+    html += '<div><label class="form-label">Upload Gambar (Bisa lebih dari satu)</label>';
+    html += '<input type="file" id="iklanGambar" multiple accept=".jpg,.jpeg,.png" style="display:none;">';
     html += '<button class="button button-primary button-small" onclick="document.getElementById(\'iklanGambar\').click();">Pilih Gambar</button>';
     html += '<span id="iklanNamaGambar" style="font-size:12px; color:#888; margin-left:10px;">Belum ada gambar</span>';
     html += '</div>';
@@ -6417,15 +6418,16 @@ function renderKelolaIklan() {
     if (dataIklan.length === 0) {
         html += '<div class="empty-state"><i class="fas fa-ad"></i><h3>Belum ada iklan</h3><p>Silakan tambahkan iklan baru.</p></div>';
     } else {
-        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>Judul</th><th>Deskripsi</th><th>Warna</th><th>Gambar</th><th>Aksi</th></tr></thead><tbody>';
+        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>Judul</th><th>Deskripsi</th><th>Warna</th><th>Jumlah Gambar</th><th>Aksi</th></tr></thead><tbody>';
         for (var i = 0; i < dataIklan.length; i++) {
             var iklan = dataIklan[i];
+            var jumlahGambar = (iklan.gambar && Array.isArray(iklan.gambar)) ? iklan.gambar.length : 0;
             html += '<tr>';
             html += '<td>' + (i + 1) + '</td>';
             html += '<td>' + iklan.judul + '</td>';
             html += '<td>' + iklan.deskripsi + '</td>';
             html += '<td><div style="width:30px;height:30px;background:' + (iklan.warna || '#FF6B00') + ';border-radius:4px;"></div></td>';
-            html += '<td>' + (iklan.gambar ? '<i class="fas fa-image" style="color:#2196F3;"></i> Ada' : 'Tidak') + '</td>';
+            html += '<td>' + jumlahGambar + ' gambar</td>';
             html += '<td>';
             html += '<button class="button button-primary button-extra-small" onclick="editIklan(' + i + ')"><i class="fas fa-edit"></i> Edit</button> ';
             html += '<button class="button button-danger button-extra-small" onclick="hapusIklan(' + i + ')"><i class="fas fa-trash"></i> Hapus</button>';
@@ -6437,19 +6439,36 @@ function renderKelolaIklan() {
 
     areaKonten.innerHTML = html;
 
-    // Event listener upload gambar
+    // Event listener untuk upload gambar (multiple)
     setTimeout(function() {
         var inputGambar = document.getElementById('iklanGambar');
         if (inputGambar) {
             inputGambar.onchange = function(e) {
-                var file = e.target.files[0];
-                if (file) {
-                    document.getElementById('iklanNamaGambar').textContent = file.name;
-                    var pembaca = new FileReader();
-                    pembaca.onload = function(ev) {
-                        localStorage.setItem('2r_iklan_gambar_temp', ev.target.result);
-                    };
-                    pembaca.readAsDataURL(file);
+                var files = e.target.files;
+                if (files.length > 0) {
+                    var namaFile = '';
+                    for (var i = 0; i < files.length; i++) {
+                        namaFile += files[i].name + (i < files.length - 1 ? ', ' : '');
+                    }
+                    document.getElementById('iklanNamaGambar').textContent = files.length + ' file dipilih (' + namaFile + ')';
+                    
+                    // Simpan semua gambar sebagai array base64 sementara
+                    var selesai = 0;
+                    var totalFile = files.length;
+                    var gambarArray = [];
+                    for (var i = 0; i < files.length; i++) {
+                        (function(file) {
+                            var pembaca = new FileReader();
+                            pembaca.onload = function(ev) {
+                                gambarArray.push(ev.target.result);
+                                selesai++;
+                                if (selesai === totalFile) {
+                                    localStorage.setItem('2r_iklan_gambar_temp', JSON.stringify(gambarArray));
+                                }
+                            };
+                            pembaca.readAsDataURL(file);
+                        })(files[i]);
+                    }
                 }
             };
         }
@@ -6461,7 +6480,8 @@ function simpanIklan() {
     var judul = document.getElementById('iklanJudul').value.trim();
     var deskripsi = document.getElementById('iklanDeskripsi').value.trim();
     var warna = document.getElementById('iklanWarna').value;
-    var gambar = localStorage.getItem('2r_iklan_gambar_temp') || '';
+    var gambarTemp = localStorage.getItem('2r_iklan_gambar_temp');
+    var gambar = gambarTemp ? JSON.parse(gambarTemp) : [];
 
     if (!judul || !deskripsi) {
         tampilkanToast('Judul dan deskripsi wajib diisi!', 'warning');
@@ -6474,7 +6494,7 @@ function simpanIklan() {
         judul: judul,
         deskripsi: deskripsi,
         warna: warna,
-        gambar: gambar
+        gambar: gambar // array of base64
     });
 
     localStorage.setItem('2r_iklan', JSON.stringify(dataIklan));
@@ -6496,7 +6516,7 @@ function hapusIklan(index) {
     tampilkanToast('Iklan dihapus!', 'success');
 }
 
-// Edit Iklan (Sederhana: Memuat data ke form untuk diedit)
+// Edit Iklan (hanya mengubah judul, deskripsi, warna)
 function editIklan(index) {
     var dataIklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
     var iklan = dataIklan[index];
