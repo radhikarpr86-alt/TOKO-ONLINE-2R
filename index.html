@@ -5187,6 +5187,200 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     /* ===== AKHIR BLOK 4.11.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.11 ===== -->
+	/* ===== BLOK 4.12 - JS_RENDER_KELOLA_WILAYAH (SUPERADMIN) ===== */
+/*
+    Blok ini berisi fungsi untuk menampilkan halaman Kelola Wilayah 
+    serta fungsi CRUD (Tambah, Edit, Hapus) data wilayah.
+    Data wilayah disimpan di localStorage dengan kunci '2r_data_wilayah'.
+*/
+
+// ===== 4.12.1 - RENDER HALAMAN KELOLA WILAYAH =====
+/*
+    Fungsi ini menampilkan halaman Kelola Wilayah untuk SuperAdmin.
+    SuperAdmin dapat menambahkan, mengedit, atau menghapus data wilayah
+    (Provinsi, Kabupaten, Kecamatan, Kelurahan).
+    Data ini akan digunakan oleh semua akun saat mengisi alamat.
+*/
+function renderKelolaWilayah() {
+    // Ambil elemen konten utama
+    var areaKonten = document.getElementById('mainContent');
+    
+    // Ambil data wilayah dari localStorage
+    var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+    
+    // Variabel untuk menampung HTML
+    var html = '';
+
+    // ==========================================================
+    // HEADER HALAMAN
+    // ==========================================================
+    html += '<div class="page-header">';
+    html += '<h2>Kelola Wilayah Indonesia</h2>';
+    html += '<p>SuperAdmin dapat menambahkan, mengedit, atau menghapus data wilayah (Provinsi, Kabupaten, Kecamatan, Kelurahan). Data ini akan digunakan oleh semua akun saat mengisi alamat.</p>';
+    html += '</div>';
+
+    // ==========================================================
+    // FORM TAMBAH WILAYAH
+    // ==========================================================
+    html += '<div class="card">';
+    html += '<div class="card-header">Tambah Wilayah Baru</div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Provinsi</label><input type="text" id="wilProvinsi" class="form-input" placeholder="Contoh: DKI Jakarta"></div>';
+    html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="wilKabupaten" class="form-input" placeholder="Contoh: Jakarta Pusat"></div>';
+    html += '<div><label class="form-label">Kecamatan</label><input type="text" id="wilKecamatan" class="form-input" placeholder="Contoh: Gambir"></div>';
+    html += '<div><label class="form-label">Kelurahan / Desa</label><input type="text" id="wilDesa" class="form-input" placeholder="Contoh: Gambir"></div>';
+    html += '</div>';
+    html += '<button class="button button-primary margin-top-10" onclick="tambahWilayah()"><i class="fas fa-plus"></i> Tambah Wilayah</button>';
+    html += '</div>';
+
+    // ==========================================================
+    // DAFTAR WILAYAH YANG SUDAH ADA
+    // ==========================================================
+    html += '<div class="card">';
+    html += '<div class="card-header">Daftar Wilayah Tersimpan <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + dataWilayah.length + ' data)</span></div>';
+    
+    if (dataWilayah.length === 0) {
+        // Jika belum ada data
+        html += '<div class="empty-state"><i class="fas fa-map"></i><h3>Belum ada data wilayah</h3><p>Silakan tambahkan wilayah baru.</p></div>';
+    } else {
+        // Jika sudah ada data, tampilkan dalam tabel
+        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>Provinsi</th><th>Kabupaten</th><th>Kecamatan</th><th>Kelurahan</th><th>Aksi</th></tr></thead><tbody>';
+        for (var i = 0; i < dataWilayah.length; i++) {
+            var w = dataWilayah[i];
+            html += '<tr><td>' + (i+1) + '</td><td>' + w.provinsi + '</td><td>' + w.kabupaten + '</td><td>' + w.kecamatan + '</td><td>' + w.desa + '</td><td>';
+            html += '<button class="button button-primary button-extra-small" onclick="editWilayah(' + i + ')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="button button-danger button-extra-small" onclick="hapusWilayah(' + i + ')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    html += '</div>';
+
+    // ==========================================================
+    // TAMPILKAN KE AREA KONTEN
+    // ==========================================================
+    areaKonten.innerHTML = html;
+}
+/* ===== AKHIR BLOK 4.12.1 ===== */
+
+
+// ===== 4.12.2 - FUNGSI CRUD WILAYAH =====
+
+// ===== 4.12.2.1 - TAMBAH WILAYAH BARU =====
+/*
+    Fungsi ini menambahkan data wilayah baru ke localStorage.
+    Data yang diinput: Provinsi, Kabupaten, Kecamatan, Kelurahan.
+    Validasi:
+    - Semua field wajib diisi.
+    - Tidak boleh ada duplikasi data.
+*/
+function tambahWilayah() {
+    // Ambil nilai dari form input
+    var provinsi = document.getElementById('wilProvinsi').value.trim();
+    var kabupaten = document.getElementById('wilKabupaten').value.trim();
+    var kecamatan = document.getElementById('wilKecamatan').value.trim();
+    var desa = document.getElementById('wilDesa').value.trim();
+
+    // Validasi: semua field wajib diisi
+    if (!provinsi || !kabupaten || !kecamatan || !desa) {
+        tampilkanToast('Semua data wajib diisi!', 'warning');
+        return;
+    }
+
+    // Ambil data yang sudah ada
+    var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+    
+    // Cek duplikasi (case insensitive)
+    for (var i = 0; i < dataWilayah.length; i++) {
+        if (dataWilayah[i].provinsi.toLowerCase() === provinsi.toLowerCase() && 
+            dataWilayah[i].kabupaten.toLowerCase() === kabupaten.toLowerCase() && 
+            dataWilayah[i].kecamatan.toLowerCase() === kecamatan.toLowerCase() && 
+            dataWilayah[i].desa.toLowerCase() === desa.toLowerCase()) {
+            tampilkanToast('Data wilayah sudah ada!', 'warning');
+            return;
+        }
+    }
+
+    // Tambah data baru
+    dataWilayah.push({
+        id: Date.now(),
+        provinsi: provinsi,
+        kabupaten: kabupaten,
+        kecamatan: kecamatan,
+        desa: desa
+    });
+
+    // Simpan ke localStorage
+    localStorage.setItem('2r_data_wilayah', JSON.stringify(dataWilayah));
+    
+    // Reset form
+    document.getElementById('wilProvinsi').value = '';
+    document.getElementById('wilKabupaten').value = '';
+    document.getElementById('wilKecamatan').value = '';
+    document.getElementById('wilDesa').value = '';
+
+    // Refresh halaman
+    renderKelolaWilayah();
+    tampilkanToast('Wilayah berhasil ditambahkan!', 'success');
+}
+
+// ===== 4.12.2.2 - HAPUS WILAYAH =====
+/*
+    Fungsi ini menghapus data wilayah dari localStorage berdasarkan index.
+    User akan dimintai konfirmasi sebelum menghapus.
+*/
+function hapusWilayah(index) {
+    // Konfirmasi sebelum menghapus
+    if (!confirm('Yakin ingin menghapus data wilayah ini?')) return;
+    
+    // Ambil data, hapus sesuai index, lalu simpan kembali
+    var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+    dataWilayah.splice(index, 1);
+    localStorage.setItem('2r_data_wilayah', JSON.stringify(dataWilayah));
+    
+    // Refresh halaman
+    renderKelolaWilayah();
+    tampilkanToast('Wilayah dihapus!', 'success');
+}
+
+// ===== 4.12.2.3 - EDIT WILAYAH =====
+/*
+    Fungsi ini mengedit data wilayah yang sudah ada menggunakan prompt.
+    User dapat mengubah Provinsi, Kabupaten, Kecamatan, atau Kelurahan.
+*/
+function editWilayah(index) {
+    // Ambil data yang sudah ada
+    var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+    var w = dataWilayah[index];
+
+    // Minta input baru dari user melalui prompt
+    var provinsiBaru = prompt('Provinsi:', w.provinsi);
+    if (provinsiBaru === null) return; // Jika user klik Cancel
+    
+    var kabupatenBaru = prompt('Kabupaten/Kota:', w.kabupaten);
+    if (kabupatenBaru === null) return;
+    
+    var kecamatanBaru = prompt('Kecamatan:', w.kecamatan);
+    if (kecamatanBaru === null) return;
+    
+    var desaBaru = prompt('Kelurahan/Desa:', w.desa);
+    if (desaBaru === null) return;
+
+    // Update data
+    dataWilayah[index].provinsi = provinsiBaru.trim();
+    dataWilayah[index].kabupaten = kabupatenBaru.trim();
+    dataWilayah[index].kecamatan = kecamatanBaru.trim();
+    dataWilayah[index].desa = desaBaru.trim();
+
+    // Simpan kembali ke localStorage
+    localStorage.setItem('2r_data_wilayah', JSON.stringify(dataWilayah));
+    
+    // Refresh halaman
+    renderKelolaWilayah();
+    tampilkanToast('Wilayah diperbarui!', 'success');
+}
+/* ===== AKHIR BLOK 4.12.2 ===== */
+/* ===== AKHIR BLOK 4.12 ===== */
 <!-- ===== BLOK 5.1 - JS_EVENT_LOGOUT_MODAL ===== -->
 <script>
     /* ===== BLOK 5.1.1 - EVENT TOMBOL LOGOUT ===== */
