@@ -6075,85 +6075,90 @@ function simpanProfilCustomer() {
     /* ===== AKHIR BLOK 4.10.2 ===== */
 
         /* ===== BLOK 4.10.3 - EVENT REGISTER SUBMIT ===== */
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        var roleTerpilih = document.getElementById('registerRole').value;
-        var usernameBaru = document.getElementById('registerUsername').value.trim();
-        var passwordBaru = document.getElementById('registerPassword').value.trim();
-        var namaBaru = document.getElementById('registerNama').value.trim();
-        
-        if (!roleTerpilih || !usernameBaru || !passwordBaru || !namaBaru) {
-            tampilkanToast('Data belum lengkap!', 'warning');
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    var roleTerpilih = document.getElementById('registerRole').value;
+    var usernameBaru = document.getElementById('registerUsername').value.trim();
+    var passwordBaru = document.getElementById('registerPassword').value.trim();
+    var namaBaru = document.getElementById('registerNama').value.trim();
+    
+    if (!roleTerpilih || !usernameBaru || !passwordBaru || !namaBaru) {
+        tampilkanToast('Data belum lengkap!', 'warning');
+        return;
+    }
+    
+    var dataAkun = getDataAkun();
+    
+    // Cek apakah username sudah digunakan
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].username === usernameBaru) {
+            tampilkanToast('Username sudah digunakan!', 'error');
             return;
         }
-        
-        var dataAkun = getDataAkun();
-        
-        // Cek apakah username sudah digunakan
-        for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].username === usernameBaru) {
-                tampilkanToast('Username sudah digunakan!', 'error');
-                return;
-            }
-        }
-        
-        // Tentukan status akun awal
-        var statusAwal = '';
-        if (roleTerpilih === 'toko' || roleTerpilih === 'ojek') {
-            statusAwal = 'NONAKTIF (Menunggu Verifikasi)';
-        } else {
-            statusAwal = 'AKTIF';
-        }
+    }
+    
+    // Tentukan status akun awal
+    var statusAwal = '';
+    if (roleTerpilih === 'toko' || roleTerpilih === 'ojek') {
+        statusAwal = 'NONAKTIF (Menunggu Verifikasi)';
+    } else {
+        statusAwal = 'AKTIF';
+    }
 
-        // === TAMBAHKAN DATA DUMMY UNTUK AKUN BARU ===
-        var dummyDataRegistrasi = {
-            ktp: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-            ktpDusun: 'Dusun Baru',
-            ktpRT: '001',
-            ktpRW: '002',
-            ktpJalan: 'Jl. Baru No. 1',
-            ktpDesa: 'Desa Baru',
-            ktpKecamatan: 'Kecamatan Baru',
-            ktpKabupaten: 'Kabupaten Baru',
-            ktpProvinsi: 'Jawa Barat',
-            ktpKodepos: '12345',
-            domDusun: 'Dusun Domisili Baru',
-            domRT: '003',
-            domRW: '004',
-            domJalan: 'Jl. Domisili Baru No. 2',
-            domDesa: 'Desa Domisili Baru',
-            domKecamatan: 'Kecamatan Domisili Baru',
-            domKabupaten: 'Kabupaten Domisili Baru',
-            domProvinsi: 'DKI Jakarta',
-            domKodepos: '54321',
-            namaBank: 'BRI',
-            nomorRekening: '9876543210',
-            pemilikRekening: 'Pemilik Baru',
-            alamat: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
-            alamatKTP: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
-            alamatDomisili: 'Dusun Domisili Baru, RT 003 RW 004, Desa Domisili Baru, Kecamatan Domisili Baru, Kabupaten Domisili Baru, DKI Jakarta, 54321'
-        };
+    // DATA DUMMY UNTUK AKUN BARU
+    var dummyDataRegistrasi = {
+        ktp: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+        ktpDusun: 'Dusun Baru',
+        ktpRT: '001',
+        ktpRW: '002',
+        ktpJalan: 'Jl. Baru No. 1',
+        ktpDesa: 'Desa Baru',
+        ktpKecamatan: 'Kecamatan Baru',
+        ktpKabupaten: 'Kabupaten Baru',
+        ktpProvinsi: 'Jawa Barat',
+        ktpKodepos: '12345',
+        domDusun: 'Dusun Domisili Baru',
+        domRT: '003',
+        domRW: '004',
+        domJalan: 'Jl. Domisili Baru No. 2',
+        domDesa: 'Desa Domisili Baru',
+        domKecamatan: 'Kecamatan Domisili Baru',
+        domKabupaten: 'Kabupaten Domisili Baru',
+        domProvinsi: 'DKI Jakarta',
+        domKodepos: '54321',
+        namaBank: 'BRI',
+        nomorRekening: '9876543210',
+        pemilikRekening: 'Pemilik Baru',
+        alamat: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
+        alamatKTP: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
+        alamatDomisili: 'Dusun Domisili Baru, RT 003 RW 004, Desa Domisili Baru, Kecamatan Domisili Baru, Kabupaten Domisili Baru, DKI Jakarta, 54321'
+    };
 
-        // Buat objek akun baru (gabungkan dengan dummyDataRegistrasi)
-        var akunBaru = {
-            id: generateId(roleTerpilih),
-            role: roleTerpilih,
-            username: usernameBaru,
-            password: encodePassword(passwordBaru),
-            nama: namaBaru,
-            ...dummyDataRegistrasi, // <- DATA PROFIL OTOMATIS TERISI
-            status: statusAwal,
-            waktuRegistrasi: new Date().toISOString()
-        };
-        
-        dataAkun.push(akunBaru);
-        simpanDataAkun(dataAkun);
-        
-        tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + statusAwal, 'success');
-        toggleForm('login');
-    });
-    /* ===== AKHIR BLOK 4.10.3 ===== */
+    // Buat objek akun baru (HANYA SATU KALI)
+    var akunBaru = {
+        id: generateId(roleTerpilih),
+        role: roleTerpilih,
+        username: usernameBaru,
+        password: encodePassword(passwordBaru),
+        nama: namaBaru,
+        ...dummyDataRegistrasi, // Data profil otomatis terisi
+        status: statusAwal,
+        waktuRegistrasi: new Date().toISOString()
+    };
+    
+    dataAkun.push(akunBaru);
+    simpanDataAkun(dataAkun);
+    
+    // Reset form
+    document.getElementById('registerUsername').value = '';
+    document.getElementById('registerPassword').value = '';
+    document.getElementById('registerNama').value = '';
+    
+    tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + statusAwal, 'success');
+    toggleForm('login');
+});
+/* ===== AKHIR BLOK 4.10.3 ===== */
 
     /* ===== BLOK 4.10.4 - EVENT UPDATE ID OTOMATIS ===== */
     /*
