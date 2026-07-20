@@ -1407,6 +1407,42 @@
         }
     }
     /* ===== AKHIR BLOK 3.3.3 ===== */
+
+    /* ===== BLOK 3.3.4 - SIMPAN NOTIFIKASI ===== */
+    /*
+        Fungsi ini menyimpan notifikasi ke localStorage.
+        Notifikasi akan ditampilkan di menu Notifikasi user.
+        Parameter:
+        - userId: ID user yang menerima notifikasi (bisa 'ALL' untuk semua user)
+        - judul: Judul notifikasi
+        - pesan: Isi pesan notifikasi
+        - tipe: Tipe notifikasi (info, warning, success, error)
+    */
+    function simpanNotifikasi(userId, judul, pesan, tipe) {
+        // Ambil data notifikasi yang sudah ada
+        var dataNotifikasi = JSON.parse(localStorage.getItem('2r_notifikasi') || '[]');
+        
+        // Buat notifikasi baru
+        var notifikasiBaru = {
+            id: Date.now(),
+            userId: userId,
+            judul: judul,
+            pesan: pesan,
+            tipe: tipe || 'info',
+            sudahDibaca: false,
+            waktu: new Date().toISOString()
+        };
+        
+        // Tambahkan ke array
+        dataNotifikasi.push(notifikasiBaru);
+        
+        // Simpan ke localStorage
+        localStorage.setItem('2r_notifikasi', JSON.stringify(dataNotifikasi));
+        
+        // Tampilkan toast sebagai feedback (opsional)
+        tampilkanToast('Notifikasi baru: ' + judul, 'info');
+    }
+    /* ===== AKHIR BLOK 3.3.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.3 ===== -->
 <!-- ===== BLOK 3.4 - JS_SIDEBAR_BUILDER ===== -->
@@ -1712,7 +1748,7 @@ function setupNavigasiSidebar() {
     }
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
-    /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
+            /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
 /*
     Fungsi ini adalah pusat routing aplikasi.
     Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
@@ -1822,6 +1858,107 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.5.3 ===== */
+	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER UNTUK NAVIGASI ===== */
+    function renderBelanja() {
+        renderPlaceholder('Belanja');
+    }
+
+    function renderPesananSaya() {
+        renderPlaceholder('Pesanan Saya');
+    }
+
+    function renderMenuIklan() {
+        renderPlaceholder('Menu Iklan');
+    }
+
+    function renderPengajuanHapusAkun() {
+        renderPlaceholder('Pengajuan Hapus Akun');
+    }
+
+    function renderDaftarBelanja() {
+        renderPlaceholder('Daftar Belanja');
+    }
+
+    function renderRiwayatBelanja() {
+        renderPlaceholder('Riwayat Belanja');
+    }
+
+    function renderPembayaran() {
+        renderPlaceholder('Pembayaran');
+    }
+
+    function renderUlasanRating() {
+        renderPlaceholder('Ulasan & Rating');
+    }
+
+    function renderBantuanFAQ() {
+        renderPlaceholder('Bantuan & FAQ');
+    }
+
+    function renderNotifikasi() {
+        renderPlaceholder('Notifikasi');
+    }
+
+    function renderPenagihan() {
+        renderPlaceholder('Penagihan');
+    }
+
+    function renderKelolaUpgrade() {
+        renderPlaceholder('Kelola Upgrade');
+    }
+
+    function renderSettingTarifOjek() {
+        renderPlaceholder('Setting Tarif Ojek');
+    }
+
+    function renderTransaksiToko() {
+        renderPlaceholder('Transaksi Toko');
+    }
+
+    function renderPesananMasuk() {
+        renderPlaceholder('Pesanan Masuk');
+    }
+
+    function renderLaporanPenjualan() {
+        renderPlaceholder('Laporan Penjualan');
+    }
+
+    function renderSettingToko() {
+        renderPlaceholder('Setting Toko');
+    }
+
+    function renderOrderMasuk() {
+        renderPlaceholder('Order Masuk');
+    }
+
+    function renderRiwayatOrder() {
+        renderPlaceholder('Riwayat Order');
+    }
+
+    function renderLaporanOjek() {
+        renderPlaceholder('Laporan Ojek');
+    }
+
+    function renderSettingOjek() {
+        renderPlaceholder('Setting Ojek');
+    }
+
+    function renderTiketBantuan() {
+        renderPlaceholder('Tiket Bantuan');
+    }
+
+    function renderLiveChat() {
+        renderPlaceholder('Live Chat');
+    }
+
+    function renderIklanSaya() {
+        renderPlaceholder('Iklan Saya');
+    }
+
+    function renderStatistik() {
+        renderPlaceholder('Statistik');
+    }
+    /* ===== AKHIR BLOK 3.5.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.5 ===== -->
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
@@ -2788,6 +2925,202 @@ function navigasiKeHalaman(namaHalaman) {
     /* ===== AKHIR BLOK 3.8.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.8 ===== -->
+	<!-- ===== BLOK 3.8.5 - FUNGSI DATA WILAYAH UNTUK CUSTOMER ===== -->
+<script>
+    /* ===== BLOK 3.8.5.1 - GET PROVINSI LIST ===== */
+    /*
+        Fungsi ini mengambil daftar provinsi dari data wilayah yang tersimpan di localStorage.
+    */
+    function getProvinsiList() {
+        var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+        var provinsiList = [];
+        var provinsiSet = new Set();
+        
+        for (var i = 0; i < dataWilayah.length; i++) {
+            if (!provinsiSet.has(dataWilayah[i].provinsi)) {
+                provinsiSet.add(dataWilayah[i].provinsi);
+                provinsiList.push(dataWilayah[i].provinsi);
+            }
+        }
+        return provinsiList;
+    }
+
+    /* ===== BLOK 3.8.5.2 - GET KABUPATEN LIST ===== */
+    /*
+        Fungsi ini mengambil daftar kabupaten berdasarkan provinsi yang dipilih.
+    */
+    function getKabupatenList(provinsi) {
+        var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+        var kabupatenList = [];
+        var kabupatenSet = new Set();
+        
+        for (var i = 0; i < dataWilayah.length; i++) {
+            if (dataWilayah[i].provinsi === provinsi && !kabupatenSet.has(dataWilayah[i].kabupaten)) {
+                kabupatenSet.add(dataWilayah[i].kabupaten);
+                kabupatenList.push(dataWilayah[i].kabupaten);
+            }
+        }
+        return kabupatenList;
+    }
+
+    /* ===== BLOK 3.8.5.3 - GET KECAMATAN LIST ===== */
+    /*
+        Fungsi ini mengambil daftar kecamatan berdasarkan provinsi dan kabupaten yang dipilih.
+    */
+    function getKecamatanList(provinsi, kabupaten) {
+        var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+        var kecamatanList = [];
+        var kecamatanSet = new Set();
+        
+        for (var i = 0; i < dataWilayah.length; i++) {
+            if (dataWilayah[i].provinsi === provinsi && 
+                dataWilayah[i].kabupaten === kabupaten && 
+                !kecamatanSet.has(dataWilayah[i].kecamatan)) {
+                kecamatanSet.add(dataWilayah[i].kecamatan);
+                kecamatanList.push(dataWilayah[i].kecamatan);
+            }
+        }
+        return kecamatanList;
+    }
+
+    /* ===== BLOK 3.8.5.4 - GET DESA LIST ===== */
+    /*
+        Fungsi ini mengambil daftar desa berdasarkan provinsi, kabupaten, dan kecamatan yang dipilih.
+    */
+    function getDesaList(provinsi, kabupaten, kecamatan) {
+        var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+        var desaList = [];
+        var desaSet = new Set();
+        
+        for (var i = 0; i < dataWilayah.length; i++) {
+            if (dataWilayah[i].provinsi === provinsi && 
+                dataWilayah[i].kabupaten === kabupaten && 
+                dataWilayah[i].kecamatan === kecamatan && 
+                !desaSet.has(dataWilayah[i].desa)) {
+                desaSet.add(dataWilayah[i].desa);
+                desaList.push(dataWilayah[i].desa);
+            }
+        }
+        return desaList;
+    }
+
+    /* ===== BLOK 3.8.5.5 - ON CHANGE PROVINSI MANUAL ===== */
+    /*
+        Fungsi ini dipanggil saat user mengganti pilihan provinsi.
+        Akan mengisi dropdown kabupaten sesuai provinsi yang dipilih.
+    */
+    function onChangeProvinsiManual(prefix) {
+        var provinsi = document.getElementById(prefix + 'Provinsi').value;
+        var kabupatenDropdown = document.getElementById(prefix + 'Kabupaten');
+        var kecamatanDropdown = document.getElementById(prefix + 'Kecamatan');
+        var desaDropdown = document.getElementById(prefix + 'Desa');
+        
+        // Reset dropdown kabupaten, kecamatan, desa
+        kabupatenDropdown.innerHTML = '<option value="">-- Pilih Kabupaten --</option>';
+        kecamatanDropdown.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+        desaDropdown.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+        
+        if (provinsi) {
+            var kabupatenList = getKabupatenList(provinsi);
+            for (var i = 0; i < kabupatenList.length; i++) {
+                var option = document.createElement('option');
+                option.value = kabupatenList[i];
+                option.textContent = kabupatenList[i];
+                kabupatenDropdown.appendChild(option);
+            }
+        }
+    }
+
+    /* ===== BLOK 3.8.5.6 - ON CHANGE KABUPATEN MANUAL ===== */
+    /*
+        Fungsi ini dipanggil saat user mengganti pilihan kabupaten.
+        Akan mengisi dropdown kecamatan sesuai kabupaten yang dipilih.
+    */
+    function onChangeKabupatenManual(prefix) {
+        var provinsi = document.getElementById(prefix + 'Provinsi').value;
+        var kabupaten = document.getElementById(prefix + 'Kabupaten').value;
+        var kecamatanDropdown = document.getElementById(prefix + 'Kecamatan');
+        var desaDropdown = document.getElementById(prefix + 'Desa');
+        
+        // Reset dropdown kecamatan, desa
+        kecamatanDropdown.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+        desaDropdown.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+        
+        if (provinsi && kabupaten) {
+            var kecamatanList = getKecamatanList(provinsi, kabupaten);
+            for (var i = 0; i < kecamatanList.length; i++) {
+                var option = document.createElement('option');
+                option.value = kecamatanList[i];
+                option.textContent = kecamatanList[i];
+                kecamatanDropdown.appendChild(option);
+            }
+        }
+    }
+
+    /* ===== BLOK 3.8.5.7 - ON CHANGE KECAMATAN MANUAL ===== */
+    /*
+        Fungsi ini dipanggil saat user mengganti pilihan kecamatan.
+        Akan mengisi dropdown desa sesuai kecamatan yang dipilih.
+    */
+    function onChangeKecamatanManual(prefix) {
+        var provinsi = document.getElementById(prefix + 'Provinsi').value;
+        var kabupaten = document.getElementById(prefix + 'Kabupaten').value;
+        var kecamatan = document.getElementById(prefix + 'Kecamatan').value;
+        var desaDropdown = document.getElementById(prefix + 'Desa');
+        
+        // Reset dropdown desa
+        desaDropdown.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+        
+        if (provinsi && kabupaten && kecamatan) {
+            var desaList = getDesaList(provinsi, kabupaten, kecamatan);
+            for (var i = 0; i < desaList.length; i++) {
+                var option = document.createElement('option');
+                option.value = desaList[i];
+                option.textContent = desaList[i];
+                desaDropdown.appendChild(option);
+            }
+        }
+    }
+
+    /* ===== BLOK 3.8.5.8 - LOAD DATA WILAYAH TERSIMPAN ===== */
+    /*
+        Fungsi ini memuat data wilayah yang sudah tersimpan di profil customer
+        ke dalam dropdown setelah halaman dimuat.
+    */
+    function loadDataWilayahTersimpan(prefix, user) {
+        var provinsiDropdown = document.getElementById(prefix + 'Provinsi');
+        var kabupatenDropdown = document.getElementById(prefix + 'Kabupaten');
+        var kecamatanDropdown = document.getElementById(prefix + 'Kecamatan');
+        var desaDropdown = document.getElementById(prefix + 'Desa');
+        
+        var userKey = prefix === 'ktp' ? 'ktp' : 'dom';
+        
+        // Set provinsi jika ada
+        if (user[userKey + 'Provinsi'] && provinsiDropdown) {
+            provinsiDropdown.value = user[userKey + 'Provinsi'];
+            // Trigger change untuk memuat kabupaten
+            onChangeProvinsiManual(prefix);
+            
+            // Set kabupaten jika ada
+            if (user[userKey + 'Kabupaten'] && kabupatenDropdown) {
+                kabupatenDropdown.value = user[userKey + 'Kabupaten'];
+                onChangeKabupatenManual(prefix);
+                
+                // Set kecamatan jika ada
+                if (user[userKey + 'Kecamatan'] && kecamatanDropdown) {
+                    kecamatanDropdown.value = user[userKey + 'Kecamatan'];
+                    onChangeKecamatanManual(prefix);
+                    
+                    // Set desa jika ada
+                    if (user[userKey + 'Desa'] && desaDropdown) {
+                        desaDropdown.value = user[userKey + 'Desa'];
+                    }
+                }
+            }
+        }
+    }
+</script>
+<!-- ===== AKHIR BLOK 3.8.5 ===== -->
 <!-- ===== BLOK 3.9 - JS_RENDER_PROFIL_CUSTOMER ===== -->
 <script>
     /* ===== BLOK 3.9.1 - RENDER PROFIL CUSTOMER (DROPDOWN + MANUAL FALLBACK) ===== */
