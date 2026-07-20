@@ -3527,7 +3527,7 @@ function renderProfilCustomer() {
     1. Menampilkan notifikasi hijau di atas form dengan animasi berkedip.
     2. Menampilkan toast notification di pojok kanan atas.
     3. Mengupdate nama user di navbar.
-    4. TIDAK memanggil renderProfilCustomer() agar notifikasi tetap terlihat.
+    4. Setelah notifikasi hilang, merender ulang halaman dengan data terbaru.
 */
 function simpanProfilCustomer() {
     // Ambil data user yang sedang login dari localStorage
@@ -3688,6 +3688,7 @@ function simpanProfilCustomer() {
     // ===== 8. TAMPILKAN NOTIFIKASI TERSIMPAN DI ATAS FORM =====
     // Cari elemen notifikasi
     var notif = document.getElementById('notifikasiSimpanProfil');
+
     if (notif) {
         // Tampilkan notifikasi dengan efek blok penuh
         notif.style.display = 'block';
@@ -3698,17 +3699,16 @@ function simpanProfilCustomer() {
         setTimeout(function() {
             notif.style.display = 'none';
             notif.classList.remove('notif-berkedip');
+            
+            // ===== PERBAIKAN PENTING: REFRESH HALAMAN SETELAH NOTIFIKASI HILANG =====
+            // Panggil renderProfilCustomer() agar halaman menampilkan data terbaru
+            renderProfilCustomer();
         }, 3000);
     }
     
     // ===== 9. TAMPILKAN TOAST NOTIFIKASI =====
     // Tampilkan notifikasi toast di pojok kanan atas
     tampilkanToast('Profil berhasil disimpan!', 'success');
-    
-    // ===== 10. JANGAN PANGGIL renderProfilCustomer() DI SINI =====
-    // Baris berikut ini sudah dihapus agar halaman tidak reload/refresh
-    // dan notifikasi di atas form tetap terlihat.
-    // renderProfilCustomer();
 }
 /* ===== AKHIR BLOK 3.9.2 ===== */
     /* ===== BLOK 3.9.3 - SIMPAN REKENING CUSTOMER ===== */
