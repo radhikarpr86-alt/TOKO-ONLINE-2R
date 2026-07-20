@@ -1242,47 +1242,112 @@
 <!-- ===== AKHIR BLOK 3.1 ===== -->
 <!-- ===== BLOK 3.2 - JS_INIT_SUPERADMIN ===== -->
 <script>
-    /* ===== BLOK 3.2.1 - INISIALISASI SUPERADMIN PERTAMA KALI ===== */
-    /*
-        Fungsi ini mengecek apakah sudah ada akun dengan role 'superadmin'.
-        Jika belum ada, fungsi akan membuat akun SuperAdmin default:
-        - Username: admin
-        - Password: admin123
-        - ID: SA-001
-        Akun ini akan otomatis aktif dan tersimpan ke localStorage.
-    */
-    function inisialisasiSuperAdmin() {
-        var dataAkun = getDataAkun();
-        var sudahAdaSuperAdmin = false;
-        
-        for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].role === 'superadmin') {
-                sudahAdaSuperAdmin = true;
+    /* ===== BLOK 3.2.1 - INISIALISASI DATA AWAL (SEMUA ROLE) ===== */
+function inisialisasiDataAwal() {
+    var dataAkun = getDataAkun();
+    var daftarRole = ['customer', 'toko', 'ojek', 'pedagang', 'staf_admin', 'customer_service', 'staf_owner_toko', 'staf_owner_ojek', 'sponsor', 'codseller'];
+
+    // 1. Pastikan SuperAdmin selalu ada
+    var sudahAdaSuperAdmin = false;
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].role === 'superadmin') {
+            sudahAdaSuperAdmin = true;
+            break;
+        }
+    }
+    if (!sudahAdaSuperAdmin) {
+        var superAdminBaru = {
+            id: 'SA-001',
+            role: 'superadmin',
+            username: 'admin',
+            password: encodePassword('admin123'),
+            nama: 'SuperAdmin',
+            email: 'admin@2r.com',
+            nomorHp: '081234567890',
+            alamat: 'Kantor Pusat',
+            namaBank: '',
+            nomorRekening: '',
+            pemilikRekening: '',
+            status: 'AKTIF',
+            waktuRegistrasi: new Date().toISOString()
+        };
+        dataAkun.push(superAdminBaru);
+    }
+
+    // 2. Buat akun dummy untuk semua role (kecuali superadmin) jika belum ada
+    var dummyData = {
+        ktp: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+        ktpDusun: 'Dusun Contoh',
+        ktpRT: '001',
+        ktpRW: '002',
+        ktpJalan: 'Jl. Contoh No. 1',
+        ktpDesa: 'Desa Contoh',
+        ktpKecamatan: 'Kecamatan Contoh',
+        ktpKabupaten: 'Kabupaten Contoh',
+        ktpProvinsi: 'Jawa Barat',
+        ktpKodepos: '12345',
+        domDusun: 'Dusun Domisili',
+        domRT: '003',
+        domRW: '004',
+        domJalan: 'Jl. Domisili No. 2',
+        domDesa: 'Desa Domisili',
+        domKecamatan: 'Kecamatan Domisili',
+        domKabupaten: 'Kabupaten Domisili',
+        domProvinsi: 'DKI Jakarta',
+        domKodepos: '54321',
+        namaBank: 'BRI',
+        nomorRekening: '1234567890',
+        pemilikRekening: 'Pemilik Rekening',
+        alamat: 'Dusun Contoh, RT 001 RW 002, Desa Contoh, Kecamatan Contoh, Kabupaten Contoh, Jawa Barat, 12345',
+        alamatKTP: 'Dusun Contoh, RT 001 RW 002, Desa Contoh, Kecamatan Contoh, Kabupaten Contoh, Jawa Barat, 12345',
+        alamatDomisili: 'Dusun Domisili, RT 003 RW 004, Desa Domisili, Kecamatan Domisili, Kabupaten Domisili, DKI Jakarta, 54321',
+        status: 'AKTIF'
+    };
+
+    var suffix = 1;
+    for (var i = 0; i < daftarRole.length; i++) {
+        var role = daftarRole[i];
+        var sudahAda = false;
+        for (var j = 0; j < dataAkun.length; j++) {
+            if (dataAkun[j].role === role) {
+                sudahAda = true;
                 break;
             }
         }
         
-        if (!sudahAdaSuperAdmin) {
-            var superAdminBaru = {
-                id: 'SA-001',
-                role: 'superadmin',
-                username: 'admin',
-                password: encodePassword('admin123'),
-                nama: 'SuperAdmin',
-                email: 'admin@2r.com',
-                nomorHp: '081234567890',
-                alamat: 'Kantor Pusat',
-                namaBank: '',
-                nomorRekening: '',
-                pemilikRekening: '',
-                status: 'AKTIF',
+        if (!sudahAda) {
+            var prefixId = '';
+            var roleName = '';
+            if (role === 'customer') { prefixId = 'CUST'; roleName = 'Customer'; }
+            else if (role === 'toko') { prefixId = 'TOKO'; roleName = 'Toko'; }
+            else if (role === 'ojek') { prefixId = 'OJEK'; roleName = 'Ojek'; }
+            else if (role === 'pedagang') { prefixId = 'PEDAGANG'; roleName = 'Pedagang'; }
+            else if (role === 'codseller') { prefixId = 'COD'; roleName = 'COD Seller'; }
+            else if (role === 'staf_admin') { prefixId = 'STA'; roleName = 'Staf Admin'; }
+            else if (role === 'staf_owner_toko') { prefixId = 'SOT'; roleName = 'Staf Owner Toko'; }
+            else if (role === 'staf_owner_ojek') { prefixId = 'SOO'; roleName = 'Staf Owner Ojek'; }
+            else if (role === 'customer_service') { prefixId = 'CS'; roleName = 'Customer Service'; }
+            else if (role === 'sponsor') { prefixId = 'SPN'; roleName = 'Sponsor'; }
+
+            var akunBaru = {
+                id: prefixId + '-' + String(suffix).padStart(3, '0'),
+                role: role,
+                username: roleName.toLowerCase().replace(/\s/g, '') + suffix,
+                password: encodePassword('123456'),
+                nama: roleName + ' ' + suffix,
+                email: roleName.toLowerCase().replace(/\s/g, '') + suffix + '@2r.com',
+                nomorHp: '08123456789' + suffix,
+                ...dummyData,
                 waktuRegistrasi: new Date().toISOString()
             };
-            dataAkun.push(superAdminBaru);
-            simpanDataAkun(dataAkun);
+            dataAkun.push(akunBaru);
+            suffix++;
         }
     }
-    /* ===== AKHIR BLOK 3.2.1 ===== */
+
+    simpanDataAkun(dataAkun);
+}
+/* ===== AKHIR BLOK 3.2.1 ===== */
 
     /* ===== BLOK 3.2.2 - MENGHASILKAN ID AKUN OTOMATIS ===== */
     /*
@@ -6012,6 +6077,50 @@ function simpanProfilCustomer() {
         } else {
             statusAwal = 'AKTIF';
         }
+
+        // === TAMBAHKAN DATA DUMMY UNTUK AKUN BARU ===
+        var dummyDataRegistrasi = {
+            ktp: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+            ktpDusun: 'Dusun Baru',
+            ktpRT: '001',
+            ktpRW: '002',
+            ktpJalan: 'Jl. Baru No. 1',
+            ktpDesa: 'Desa Baru',
+            ktpKecamatan: 'Kecamatan Baru',
+            ktpKabupaten: 'Kabupaten Baru',
+            ktpProvinsi: 'Jawa Barat',
+            ktpKodepos: '12345',
+            domDusun: 'Dusun Domisili Baru',
+            domRT: '003',
+            domRW: '004',
+            domJalan: 'Jl. Domisili Baru No. 2',
+            domDesa: 'Desa Domisili Baru',
+            domKecamatan: 'Kecamatan Domisili Baru',
+            domKabupaten: 'Kabupaten Domisili Baru',
+            domProvinsi: 'DKI Jakarta',
+            domKodepos: '54321',
+            namaBank: 'BRI',
+            nomorRekening: '9876543210',
+            pemilikRekening: 'Pemilik Baru',
+            alamat: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
+            alamatKTP: 'Dusun Baru, RT 001 RW 002, Desa Baru, Kecamatan Baru, Kabupaten Baru, Jawa Barat, 12345',
+            alamatDomisili: 'Dusun Domisili Baru, RT 003 RW 004, Desa Domisili Baru, Kecamatan Domisili Baru, Kabupaten Domisili Baru, DKI Jakarta, 54321'
+        };
+
+        // Buat objek akun baru (gabungkan dengan dummyDataRegistrasi)
+        var akunBaru = {
+            id: generateId(roleTerpilih),
+            role: roleTerpilih,
+            username: usernameBaru,
+            password: encodePassword(passwordBaru),
+            nama: namaBaru,
+            ...dummyDataRegistrasi, // <- DATA PROFIL OTOMATIS TERISI
+            status: statusAwal,
+            waktuRegistrasi: new Date().toISOString()
+        };
+        
+        dataAkun.push(akunBaru);
+        simpanDataAkun(dataAkun);
         
         // Buat objek akun baru
         var akunBaru = {
@@ -6596,8 +6705,8 @@ function tampilkanDashboard(user) {
 /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
 document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. Pastikan SuperAdmin selalu ada
-    inisialisasiSuperAdmin();
+    // 1. Pastikan SuperAdmin & semua akun dummy selalu ada
+    inisialisasiDataAwal(); // <-- UBAH INI
 
     // 2. Cek apakah user sudah login
     var dataUser = localStorage.getItem('2r_user');
