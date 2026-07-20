@@ -1274,7 +1274,7 @@ function inisialisasiDataAwal() {
         dataAkun.push(superAdminBaru);
     }
 
-    // 2. Buat akun dummy untuk semua role (kecuali superadmin) jika belum ada
+    // 2. Data dummy untuk profil lengkap
     var dummyData = {
         ktp: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
         ktpDusun: 'Dusun Contoh',
@@ -1304,6 +1304,7 @@ function inisialisasiDataAwal() {
         status: 'AKTIF'
     };
 
+    // 3. Buat akun dummy untuk role yang belum ada
     var suffix = 1;
     for (var i = 0; i < daftarRole.length; i++) {
         var role = daftarRole[i];
@@ -1342,6 +1343,38 @@ function inisialisasiDataAwal() {
             };
             dataAkun.push(akunBaru);
             suffix++;
+        }
+    }
+
+    // 4. Isi data profil untuk akun yang sudah ada (kecuali SuperAdmin) jika field kosong
+    for (var i = 0; i < dataAkun.length; i++) {
+        var akun = dataAkun[i];
+        if (akun.role === 'superadmin') continue; // Lewati SuperAdmin
+
+        // Periksa dan isi field yang kosong dengan dummyData
+        var needUpdate = false;
+        for (var key in dummyData) {
+            if (!akun.hasOwnProperty(key) || akun[key] === '' || akun[key] === undefined || akun[key] === null) {
+                akun[key] = dummyData[key];
+                needUpdate = true;
+            }
+        }
+        // Pastikan alamat gabungan juga diisi jika kosong
+        if (!akun.alamat || akun.alamat === '') {
+            akun.alamat = dummyData.alamat;
+            needUpdate = true;
+        }
+        if (!akun.alamatKTP || akun.alamatKTP === '') {
+            akun.alamatKTP = dummyData.alamatKTP;
+            needUpdate = true;
+        }
+        if (!akun.alamatDomisili || akun.alamatDomisili === '') {
+            akun.alamatDomisili = dummyData.alamatDomisili;
+            needUpdate = true;
+        }
+        // Jika ada perubahan, update
+        if (needUpdate) {
+            dataAkun[i] = akun;
         }
     }
 
