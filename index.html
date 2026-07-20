@@ -6041,12 +6041,7 @@ function simpanProfilCustomer() {
     });
     /* ===== AKHIR BLOK 4.10.2 ===== */
 
-    /* ===== BLOK 4.10.3 - EVENT REGISTER SUBMIT ===== */
-    /*
-        Event listener saat tombol "Daftar" ditekan.
-        Melakukan validasi data, cek ketersediaan username,
-        lalu menyimpan akun baru ke localStorage.
-    */
+        /* ===== BLOK 4.10.3 - EVENT REGISTER SUBMIT ===== */
     document.getElementById('registerForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -6115,26 +6110,6 @@ function simpanProfilCustomer() {
             password: encodePassword(passwordBaru),
             nama: namaBaru,
             ...dummyDataRegistrasi, // <- DATA PROFIL OTOMATIS TERISI
-            status: statusAwal,
-            waktuRegistrasi: new Date().toISOString()
-        };
-        
-        dataAkun.push(akunBaru);
-        simpanDataAkun(dataAkun);
-        
-        // Buat objek akun baru
-        var akunBaru = {
-            id: generateId(roleTerpilih),
-            role: roleTerpilih,
-            username: usernameBaru,
-            password: encodePassword(passwordBaru),
-            nama: namaBaru,
-            email: '',
-            nomorHp: '',
-            alamat: '',
-            namaBank: '',
-            nomorRekening: '',
-            pemilikRekening: '',
             status: statusAwal,
             waktuRegistrasi: new Date().toISOString()
         };
