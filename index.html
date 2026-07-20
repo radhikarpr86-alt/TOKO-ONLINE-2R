@@ -3474,6 +3474,170 @@ function buatAlamatHTML(prefix, judul, user) {
     html += '<div style="margin-top:5px;"><input type="text" id="' + prefix + 'KecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user[prefix + 'KecamatanManual'] || '') + '"></div>';
     html += '</div>';
     
+    // KELURAHAN (Hanya struktur dropdown, dengan onchange untuk mengisi Kode Pos)
+    html += '<div><label class="form-label">Desa / Kelurahan</label>';
+    html += '<select id="' + prefix + 'Desa" class="form-input" onchange="onChangeDesaManual(\'' + prefix + '\')">';
+    html += '<option value="">-- Pilih Kelurahan --</option>';
+    html += '</select>';
+    html += '<div style="margin-top:5px;"><input type="text" id="' + prefix + 'DesaManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user[prefix + 'DesaManual'] || '') + '"></div>';
+    html += '</div>';
+    
+    // Kode Pos
+    html += '<div><label class="form-label">Kode Pos</label><input type="text" id="' + prefix + 'Kodepos" class="form-input" value="' + (user[prefix + 'Kodepos'] || '') + '" placeholder="Contoh: 10230"></div>';
+    
+    html += '</div></div>';
+    return html;
+}
+
+
+/* ===== FUNGSI HELPER: MENGISI DROPDOWN WILAYAH SETELAH HTML DIRENDER ===== */
+function isiDropdownWilayah(prefix) {
+    // Ambil elemen dropdown
+    var provinsiDropdown = document.getElementById(prefix + 'Provinsi');
+    var kabupatenDropdown = document.getElementById(prefix + 'Kabupaten');
+    var kecamatanDropdown = document.getElementById(prefix + 'Kecamatan');
+    var desaDropdown = document.getElementById(prefix + 'Desa');
+    var kodeposInput = document.getElementById(prefix + 'Kodepos');
+    
+    // Jika elemen tidak ditemukan, hentikan
+    if (!provinsiDropdown) return;
+    
+    // Ambil nilai yang sudah tersimpan dari atribut data-value (jika ada)
+    var provinsiTersimpan = provinsiDropdown.getAttribute('data-value') || '';
+    var kabupatenTersimpan = kabupatenDropdown.getAttribute('data-value') || '';
+    var kecamatanTersimpan = kecamatanDropdown.getAttribute('data-value') || '';
+    var desaTersimpan = desaDropdown.getAttribute('data-value') || '';
+    
+    // Jika tidak ada data-value, coba ambil dari user object (yang sudah disimpan di localStorage)
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var key = prefix === 'ktp' ? 'ktp' : 'dom';
+    if (!provinsiTersimpan && user[key + 'Provinsi']) {
+        provinsiTersimpan = user[key + 'Provinsi'];
+        kabupatenTersimpan = user[key + 'Kabupaten'] || '';
+        kecamatanTersimpan = user[key + 'Kecamatan'] || '';
+        desaTersimpan = user[key + 'Desa'] || '';
+    }
+    
+    // Isi Provinsi
+    var provinsiList = getProvinsiList();
+    provinsiDropdown.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+    for (var i = 0; i < provinsiList.length; i++) {
+        var selected = (provinsiTersimpan === provinsiList[i]) ? 'selected' : '';
+        provinsiDropdown.innerHTML += '<option value="' + provinsiList[i] + '" ' + selected + '>' + provinsiList[i] + '</option>';
+    }
+    
+    // Jika provinsi terpilih, isi kabupaten
+    if (provinsiTersimpan) {
+        var kabupatenList = getKabupatenList(provinsiTersimpan);
+        kabupatenDropdown.innerHTML = '<option value="">-- Pilih Kabupaten --</option>';
+        for (var i = 0; i < kabupatenList.length; i++) {
+            var selected = (kabupatenTersimpan === kabupatenList[i]) ? 'selected' : '';
+            kabupatenDropdown.innerHTML += '<option value="' + kabupatenList[i] + '" ' + selected + '>' + kabupatenList[i] + '</option>';
+        }
+        
+        // Jika kabupaten terpilih, isi kecamatan
+        if (kabupatenTersimpan) {
+            var kecamatanList = getKecamatanList(provinsiTersimpan, kabupatenTersimpan);
+            kecamatanDropdown.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+            for (var i = 0; i < kecamatanList.length; i++) {
+                var selected = (kecamatanTersimpan === kecamatanList[i]) ? 'selected' : '';
+                kecamatanDropdown.innerHTML += '<option value="' + kecamatanList[i] + '" ' + selected + '>' + kecamatanList[i] + '</option>';
+            }
+            
+            // Jika kecamatan terpilih, isi desa
+            if (kecamatanTersimpan) {
+                var desaList = getDesaList(provinsiTersimpan, kabupatenTersimpan, kecamatanTersimpan);
+                desaDropdown.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+                for (var i = 0; i < desaList.length; i++) {
+                    var selected = (desaTersimpan === desaList[i]) ? 'selected' : '';
+                    desaDropdown.innerHTML += '<option value="' + desaList[i] + '" ' + selected + '>' + desaList[i] + '</option>';
+                }
+                
+                // Jika desa terpilih, isi Kode Pos
+                if (desaTersimpan && kodeposInput) {
+                    var kodePos = getKodePos(provinsiTersimpan, kabupatenTersimpan, kecamatanTersimpan, desaTersimpan);
+                    if (kodePos) {
+                        kodeposInput.value = kodePos;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/* ===== FUNGSI HELPER: MENGAMBIL KODE POS DARI DATA WILAYAH ===== */
+function getKodePos(provinsi, kabupaten, kecamatan, desa) {
+    var dataWilayah = JSON.parse(localStorage.getItem('2r_data_wilayah') || '[]');
+    for (var i = 0; i < dataWilayah.length; i++) {
+        if (dataWilayah[i].provinsi === provinsi && 
+            dataWilayah[i].kabupaten === kabupaten && 
+            dataWilayah[i].kecamatan === kecamatan && 
+            dataWilayah[i].desa === desa) {
+            return dataWilayah[i].kodepos;
+        }
+    }
+    return '';
+}
+
+
+/* ===== FUNGSI HELPER: ON CHANGE DESA UNTUK MENGISI KODE POS ===== */
+function onChangeDesaManual(prefix) {
+    var provinsi = document.getElementById(prefix + 'Provinsi').value;
+    var kabupaten = document.getElementById(prefix + 'Kabupaten').value;
+    var kecamatan = document.getElementById(prefix + 'Kecamatan').value;
+    var desa = document.getElementById(prefix + 'Desa').value;
+    var kodeposInput = document.getElementById(prefix + 'Kodepos');
+    
+    if (provinsi && kabupaten && kecamatan && desa) {
+        var kodePos = getKodePos(provinsi, kabupaten, kecamatan, desa);
+        if (kodePos) {
+            kodeposInput.value = kodePos;
+        } else {
+            kodeposInput.value = '';
+        }
+    } else {
+        kodeposInput.value = '';
+    }
+}
+/* ===== AKHIR BLOK 3.9.1 ===== */
+/* ===== FUNGSI HELPER: MEMBUAT BAGIAN ALAMAT LENGKAP (HANYA STRUKTUR HTML) ===== */
+function buatAlamatHTML(prefix, judul, user) {
+    var html = '';
+    
+    html += '<div class="card"><div class="card-header">' + judul + ' <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+    html += '<div class="grid-2">';
+    
+    // Dusun, RT, RW, Jalan
+    html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="' + prefix + 'Dusun" class="form-input" value="' + (user[prefix + 'Dusun'] || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+    html += '<div><label class="form-label">RT</label><input type="text" id="' + prefix + 'RT" class="form-input" value="' + (user[prefix + 'RT'] || '') + '" placeholder="Contoh: 001"></div>';
+    html += '<div><label class="form-label">RW</label><input type="text" id="' + prefix + 'RW" class="form-input" value="' + (user[prefix + 'RW'] || '') + '" placeholder="Contoh: 002"></div>';
+    html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="' + prefix + 'Jalan" class="form-input" value="' + (user[prefix + 'Jalan'] || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+    
+    // PROVINSI (Hanya struktur dropdown, data akan diisi nanti)
+    html += '<div><label class="form-label">Provinsi</label>';
+    html += '<select id="' + prefix + 'Provinsi" class="form-input" onchange="onChangeProvinsiManual(\'' + prefix + '\')">';
+    html += '<option value="">-- Pilih Provinsi --</option>';
+    html += '</select>';
+    html += '<div style="margin-top:5px;"><input type="text" id="' + prefix + 'ProvinsiManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user[prefix + 'ProvinsiManual'] || '') + '"></div>';
+    html += '</div>';
+    
+    // KABUPATEN (Hanya struktur dropdown)
+    html += '<div><label class="form-label">Kabupaten / Kota</label>';
+    html += '<select id="' + prefix + 'Kabupaten" class="form-input" onchange="onChangeKabupatenManual(\'' + prefix + '\')">';
+    html += '<option value="">-- Pilih Kabupaten --</option>';
+    html += '</select>';
+    html += '<div style="margin-top:5px;"><input type="text" id="' + prefix + 'KabupatenManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user[prefix + 'KabupatenManual'] || '') + '"></div>';
+    html += '</div>';
+    
+    // KECAMATAN (Hanya struktur dropdown)
+    html += '<div><label class="form-label">Kecamatan</label>';
+    html += '<select id="' + prefix + 'Kecamatan" class="form-input" onchange="onChangeKecamatanManual(\'' + prefix + '\')">';
+    html += '<option value="">-- Pilih Kecamatan --</option>';
+    html += '</select>';
+    html += '<div style="margin-top:5px;"><input type="text" id="' + prefix + 'KecamatanManual" class="form-input" placeholder="Ketik manual jika tidak ada di dropdown" value="' + (user[prefix + 'KecamatanManual'] || '') + '"></div>';
+    html += '</div>';
+    
     // KELURAHAN (Hanya struktur dropdown)
     html += '<div><label class="form-label">Desa / Kelurahan</label>';
     html += '<select id="' + prefix + 'Desa" class="form-input">';
