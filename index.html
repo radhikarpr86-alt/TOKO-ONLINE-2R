@@ -1409,278 +1409,244 @@
     /* ===== AKHIR BLOK 3.3.3 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.3 ===== -->
-
+<!-- ===== BLOK 3.4 - JS_SIDEBAR_BUILDER ===== -->
 <script>
-/* ===== BLOK 3.4.1 - MEMBANGUN STRUKTUR MENU SIDEBAR ===== */
-/*
-    Fungsi ini menerima parameter 'role' (peran user yang sedang login),
-    lalu mengembalikan string HTML yang berisi daftar menu sidebar.
-    Setiap role memiliki menu yang berbeda-beda.
-*/
-function buatSidebarHTML(role) {
-    
-    // ===== DEFINISI MENU UNTUK SETIAP ROLE =====
-    var menuRole = {
+    /* ===== BLOK 3.4.1 - MEMBANGUN STRUKTUR MENU SIDEBAR ===== */
+    /*
+        Fungsi ini menerima parameter 'role' (peran user yang sedang login),
+        lalu mengembalikan string HTML yang berisi daftar menu sidebar.
+        Setiap role memiliki menu yang berbeda-beda.
+    */
+    function buatSidebarHTML(role) {
         
-        // ===== SUPERADMIN (Telah ditambahkan menu Kelola Wilayah) =====
-        'superadmin': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            },
-            {
-                judul: 'Menu Admin',
-                items: [
-                    { halaman: 'daftarAkun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
-                    { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                    { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Semua Akun' },
-                    { halaman: 'transferMenu', icon: 'fa-exchange-alt', label: 'Transfer Menu' },
-                    { halaman: 'penagihan', icon: 'fa-file-invoice-dollar', label: 'Penagihan' },
-                    { halaman: 'settingRekening', icon: 'fa-university', label: 'Setting Rekening' },
-                    { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
-                    { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
-                    { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' },
-                    { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' },
-                    { halaman: 'kelolaWilayah', icon: 'fa-map-marked-alt', label: 'Kelola Wilayah' }
-                ]
-            }
-        ],
-
-        // ===== CUSTOMER (16 MENU) =====
-        'customer': [
-            {
-                judul: 'Menu Belanja',
-                items: [
-                    { halaman: 'dashboardCustomer', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'profilCustomer', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'lihatTokoTerdekat', icon: 'fa-store', label: 'Lihat Toko Terdekat' },
-                    { halaman: 'lihatOjekTerdekat', icon: 'fa-motorcycle', label: 'Lihat Ojek Terdekat' },
-                    { halaman: 'lihatProduk', icon: 'fa-box', label: 'Lihat Produk' },
-                    { halaman: 'keranjang', icon: 'fa-shopping-cart', label: 'Keranjang' },
-                    { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
-                    { halaman: 'papanInformasi', icon: 'fa-bullhorn', label: 'Papan Informasi' },
-                    { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' }
-                ]
-            },
-            {
-                judul: 'Transaksi',
-                items: [
-                    { halaman: 'daftarBelanja', icon: 'fa-clipboard-list', label: 'Daftar Belanja' },
-                    { halaman: 'riwayatBelanja', icon: 'fa-history', label: 'Riwayat Belanja' },
-                    { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' },
-                    { halaman: 'ulasanRating', icon: 'fa-star', label: 'Ulasan & Rating' }
-                ]
-            },
-            {
-                judul: 'Lainnya',
-                items: [
-                    { halaman: 'bantuanFAQ', icon: 'fa-question-circle', label: 'Bantuan & FAQ' },
-                    { halaman: 'notifikasi', icon: 'fa-bell', label: 'Notifikasi' },
-                    { halaman: 'editAkun', icon: 'fa-user-edit', label: 'Edit / Hapus Akun' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== TOKO =====
-        'toko': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            },
-            {
-                judul: 'Menu Toko',
-                items: [
-                    { halaman: 'transaksi', icon: 'fa-cash-register', label: 'Transaksi' },
-                    { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                    { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
-                    { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
-                    { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
-                    { halaman: 'editAkun', icon: 'fa-user-edit', label: 'Edit / Hapus Akun' },
-                    { halaman: 'settingToko', icon: 'fa-store', label: 'Setting Toko' }
-                ]
-            }
-        ],
-
-        // ===== OJEK =====
-        'ojek': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            },
-            {
-                judul: 'Menu Ojek',
-                items: [
-                    { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' },
-                    { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
-                    { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
-                    { halaman: 'settingOjek', icon: 'fa-cog', label: 'Setting Ojek' }
-                ]
-            }
-        ],
-
-        // ===== PEDAGANG =====
-        'pedagang': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== STAF ADMIN =====
-        'staf_admin': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                    { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Akun' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== CUSTOMER SERVICE =====
-        'customer_service': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'tiketBantuan', icon: 'fa-ticket-alt', label: 'Tiket Bantuan' },
-                    { halaman: 'liveChat', icon: 'fa-comments', label: 'Live Chat' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== STAF OWNER TOKO =====
-        'staf_owner_toko': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
-                    { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
-                    { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
-                    { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
-                    { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== STAF OWNER OJEK =====
-        'staf_owner_ojek': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' },
-                    { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
-                    { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ],
-
-        // ===== SPONSOR =====
-        'sponsor': [
-            {
-                judul: 'Menu Utama',
-                items: [
-                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
-                    { halaman: 'iklanSaya', icon: 'fa-ad', label: 'Iklan Saya' },
-                    { halaman: 'statistik', icon: 'fa-chart-pie', label: 'Statistik' },
-                    { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' },
-                    { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
-                    { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
-                ]
-            }
-        ]
-    };
-
-    // Jika role tidak ditemukan, gunakan menu customer sebagai default
-    var daftarMenu = menuRole[role];
-    if (!daftarMenu) {
-        daftarMenu = menuRole['customer'];
-    }
-
-    // ===== BANGUN STRUKTUR HTML DARI MENU =====
-    var htmlSidebar = '';
-    for (var i = 0; i < daftarMenu.length; i++) {
-        var bagian = daftarMenu[i];
-        htmlSidebar += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
-        
-        for (var j = 0; j < bagian.items.length; j++) {
-            var item = bagian.items[j];
-            var classActive = '';
-            // Tandai menu 'dashboard' atau 'dashboardCustomer' sebagai aktif secara default
-            if (item.halaman === 'dashboard' || item.halaman === 'dashboardCustomer') {
-                classActive = ' active';
-            }
-            htmlSidebar += '<div class="sidebar-menu-item' + classActive + '" data-page="' + item.halaman + '">';
-            htmlSidebar += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
-        }
-    }
-    
-    return htmlSidebar;
-}
-/* ===== AKHIR BLOK 3.4.1 ===== */
-
-/* ===== BLOK 3.4.2 - SETUP NAVIGASI SIDEBAR ===== */
-/*
-    Fungsi ini memberikan event listener ke setiap item menu di sidebar.
-    Saat item diklik:
-    1. Menghapus class 'active' dari semua item.
-    2. Menambahkan class 'active' ke item yang diklik.
-    3. Memanggil navigasiKeHalaman() untuk menampilkan konten yang sesuai.
-*/
-function setupNavigasiSidebar() {
-    var semuaItemMenu = document.querySelectorAll('.sidebar-menu-item');
-    
-    semuaItemMenu.forEach(function(item) {
-        item.onclick = function() {
-            var namaHalaman = this.getAttribute('data-page');
-            if (!namaHalaman) return;
+        // ===== DEFINISI MENU UNTUK SETIAP ROLE =====
+        var menuRole = {
             
-            // Hapus active dari semua item
-            semuaItemMenu.forEach(function(m) {
-                m.classList.remove('active');
-            });
-            
-            // Tambahkan active ke item yang diklik
-            this.classList.add('active');
-            
-            // Panggil navigasi
-            navigasiKeHalaman(namaHalaman);
+            // ===== SUPERADMIN =====
+            'superadmin': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                },
+                {
+                    judul: 'Menu Admin',
+                    items: [
+                        { halaman: 'daftarAkun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
+                        { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
+                        { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Semua Akun' },
+                        { halaman: 'transferMenu', icon: 'fa-exchange-alt', label: 'Transfer Menu' },
+                        { halaman: 'penagihan', icon: 'fa-file-invoice-dollar', label: 'Penagihan' },
+                        { halaman: 'settingRekening', icon: 'fa-university', label: 'Setting Rekening' },
+                        { halaman: 'kelolaUpgrade', icon: 'fa-crown', label: 'Kelola Upgrade' },
+                        { halaman: 'settingTarifOjek', icon: 'fa-cogs', label: 'Setting Tarif Ojek' },
+                        { halaman: 'kelolaIklan', icon: 'fa-ad', label: 'Kelola Iklan' },
+                        { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' }
+                    ]
+                }
+            ],
+
+            // ===== CUSTOMER (16 MENU) =====
+            'customer': [
+                {
+                    judul: 'Menu Belanja',
+                    items: [
+                        { halaman: 'dashboardCustomer', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'profilCustomer', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'lihatTokoTerdekat', icon: 'fa-store', label: 'Lihat Toko Terdekat' },
+                        { halaman: 'lihatOjekTerdekat', icon: 'fa-motorcycle', label: 'Lihat Ojek Terdekat' },
+                        { halaman: 'lihatProduk', icon: 'fa-box', label: 'Lihat Produk' },
+                        { halaman: 'keranjang', icon: 'fa-shopping-cart', label: 'Keranjang' },
+                        { halaman: 'chat', icon: 'fa-comments', label: 'Chat' },
+                        { halaman: 'papanInformasi', icon: 'fa-bullhorn', label: 'Papan Informasi' },
+                        { halaman: 'menuIklan', icon: 'fa-ad', label: 'Menu Iklan' }
+                    ]
+                },
+                {
+                    judul: 'Transaksi',
+                    items: [
+                        { halaman: 'daftarBelanja', icon: 'fa-clipboard-list', label: 'Daftar Belanja' },
+                        { halaman: 'riwayatBelanja', icon: 'fa-history', label: 'Riwayat Belanja' },
+                        { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' },
+                        { halaman: 'ulasanRating', icon: 'fa-star', label: 'Ulasan & Rating' }
+                    ]
+                },
+                {
+                    judul: 'Lainnya',
+                    items: [
+                        { halaman: 'bantuanFAQ', icon: 'fa-question-circle', label: 'Bantuan & FAQ' },
+                        { halaman: 'notifikasi', icon: 'fa-bell', label: 'Notifikasi' },
+                        { halaman: 'editAkun', icon: 'fa-user-edit', label: 'Edit / Hapus Akun' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== TOKO =====
+            'toko': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                },
+                {
+                    judul: 'Menu Toko',
+                    items: [
+                        { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
+                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
+                        { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
+                        { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
+                        { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan Penjualan' },
+                        { halaman: 'settingToko', icon: 'fa-store', label: 'Setting Toko' }
+                    ]
+                }
+            ],
+
+            // ===== OJEK =====
+            'ojek': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                },
+                {
+                    judul: 'Menu Ojek',
+                    items: [
+                        { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' },
+                        { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
+                        { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
+                        { halaman: 'settingOjek', icon: 'fa-cog', label: 'Setting Ojek' }
+                    ]
+                }
+            ],
+
+            // ===== PEDAGANG =====
+            'pedagang': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== STAF ADMIN =====
+            'staf_admin': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
+                        { halaman: 'kelolaAkun', icon: 'fa-users-cog', label: 'Kelola Akun' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'pengajuanHapus', icon: 'fa-trash-alt', label: 'Pengajuan Hapus Akun' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== CUSTOMER SERVICE =====
+            'customer_service': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'tiketBantuan', icon: 'fa-ticket-alt', label: 'Tiket Bantuan' },
+                        { halaman: 'liveChat', icon: 'fa-comments', label: 'Live Chat' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== STAF OWNER TOKO =====
+            'staf_owner_toko': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'kelolaProduk', icon: 'fa-box', label: 'Kelola Produk' },
+                        { halaman: 'uploadProdukPublik', icon: 'fa-upload', label: 'Upload Produk Publik' },
+                        { halaman: 'manajemenStokGudang', icon: 'fa-warehouse', label: 'Manajemen Stok Gudang' },
+                        { halaman: 'pesananMasuk', icon: 'fa-shopping-cart', label: 'Pesanan Masuk' },
+                        { halaman: 'laporanPenjualan', icon: 'fa-chart-line', label: 'Laporan' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== STAF OWNER OJEK =====
+            'staf_owner_ojek': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'orderMasuk', icon: 'fa-motorcycle', label: 'Order Masuk' },
+                        { halaman: 'riwayatOrder', icon: 'fa-history', label: 'Riwayat Order' },
+                        { halaman: 'laporanOjek', icon: 'fa-chart-bar', label: 'Laporan' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ],
+
+            // ===== SPONSOR =====
+            'sponsor': [
+                {
+                    judul: 'Menu Utama',
+                    items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dasbor' },
+                        { halaman: 'iklanSaya', icon: 'fa-ad', label: 'Iklan Saya' },
+                        { halaman: 'statistik', icon: 'fa-chart-pie', label: 'Statistik' },
+                        { halaman: 'pembayaran', icon: 'fa-credit-card', label: 'Pembayaran' },
+                        { halaman: 'profile', icon: 'fa-user-circle', label: 'Profil' },
+                        { halaman: 'helloFriends', icon: 'fa-video', label: 'HelloFriends (Coming Soon)' }
+                    ]
+                }
+            ]
         };
-    });
-}
-/* ===== AKHIR BLOK 3.4.2 ===== */
-</script>
 
-<!-- ===== AKHIR BLOK 3.4 ===== -->	
+        // Jika role tidak ditemukan, gunakan menu customer sebagai default
+        var daftarMenu = menuRole[role];
+        if (!daftarMenu) {
+            daftarMenu = menuRole['customer'];
+        }
+
+        // ===== BANGUN STRUKTUR HTML DARI MENU =====
+        var htmlSidebar = '';
+        for (var i = 0; i < daftarMenu.length; i++) {
+            var bagian = daftarMenu[i];
+            htmlSidebar += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
+            
+            for (var j = 0; j < bagian.items.length; j++) {
+                var item = bagian.items[j];
+                var classActive = '';
+                // Tandai menu 'dashboard' atau 'dashboardCustomer' sebagai aktif secara default
+                if (item.halaman === 'dashboard' || item.halaman === 'dashboardCustomer') {
+                    classActive = ' active';
+                }
+                htmlSidebar += '<div class="sidebar-menu-item' + classActive + '" data-page="' + item.halaman + '">';
+                htmlSidebar += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
+            }
+        }
+        
+        return htmlSidebar;
+    }
+    /* ===== AKHIR BLOK 3.4.1 ===== */
+</script>
+<!-- ===== AKHIR BLOK 3.4 ===== -->
 <!-- ===== BLOK 3.5 - JS_SIDEBAR_NAVIGASI ===== -->
 <script>
     /* ===== BLOK 3.5.1 - SETUP NAVIGASI SIDEBAR ===== */
@@ -1715,118 +1681,113 @@ function setupNavigasiSidebar() {
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
     /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
-/*
-    Fungsi ini adalah pusat routing aplikasi.
-    Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
-    Jika halaman tidak dikenali, akan menampilkan placeholder.
-*/
-function navigasiKeHalaman(namaHalaman) {
-    var areaKonten = document.getElementById('mainContent');
-    if (!areaKonten) {
-        return;
-    }
+    /*
+        Fungsi ini adalah pusat routing aplikasi.
+        Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
+        Jika halaman tidak dikenali, akan menampilkan placeholder.
+    */
+    function navigasiKeHalaman(namaHalaman) {
+        var areaKonten = document.getElementById('mainContent');
+        if (!areaKonten) {
+            return;
+        }
 
-    // ===== NAVIGASI UNTUK SEMUA ROLE =====
-    if (namaHalaman === 'dashboard') {
-        renderDashboard();
-    } else if (namaHalaman === 'transaksi') {
-        renderTransaksi(); // Menu Transaksi untuk Toko
-    } else if (namaHalaman === 'profile') {
-        // ===== PERBAIKAN: CEK ROLE USER UNTUK MENENTUKAN RENDER PROFIL =====
-        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-        var role = user.role;
-        
-        if (role === 'superadmin') {
-            renderProfilSuperAdmin(user);
-        } else if (role === 'customer') {
+        // ===== NAVIGASI UNTUK SEMUA ROLE =====
+        if (namaHalaman === 'dashboard') {
+            renderDashboard();
+        } else if (namaHalaman === 'profile') {
+            renderProfil();
+        } else if (namaHalaman === 'daftarAkun') {
+            renderDaftarAkun();
+        } else if (namaHalaman === 'persetujuan') {
+            renderPersetujuanAkun();
+        } else if (namaHalaman === 'kelolaAkun') {
+            renderKelolaAkun();
+        } else if (namaHalaman === 'settingRekening') {
+            renderSettingRekening();
+        } else if (namaHalaman === 'belanja') {
+            renderBelanja();
+        } else if (namaHalaman === 'pesananSaya') {
+            renderPesananSaya();
+        } else if (namaHalaman === 'kelolaIklan') {
+            renderMenuIklan();
+        } else if (namaHalaman === 'pengajuanHapus') {
+            renderPengajuanHapusAkun();
+        } else if (namaHalaman === 'uploadProdukPublik') {
+            renderUploadProdukPublik();
+        } else if (namaHalaman === 'manajemenStokGudang') {
+            renderManajemenStokGudang();
+        } else if (namaHalaman === 'kelolaProduk') {
+            renderKelolaProduk();
+        } else if (namaHalaman === 'helloFriends') {
+            renderHelloFriends();
+        } else if (namaHalaman === 'transferMenu') {
+            renderTransferMenu();
+        }
+
+        // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
+        else if (namaHalaman === 'dashboardCustomer') {
+            renderDashboardCustomer();
+        } else if (namaHalaman === 'profilCustomer') {
             renderProfilCustomer();
-        } else {
-            renderProfilUmum(user, role);
-        }
-        // ===== AKHIR PERBAIKAN =====
-    } else if (namaHalaman === 'daftarAkun') {
-        renderDaftarAkun();
-    } else if (namaHalaman === 'persetujuan') {
-        renderPersetujuanAkun();
-    } else if (namaHalaman === 'kelolaAkun') {
-        renderKelolaAkun();
-    } else if (namaHalaman === 'settingRekening') {
-        renderSettingRekening();
-    } else if (namaHalaman === 'belanja') {
-        renderBelanja();
-    } else if (namaHalaman === 'pesananSaya') {
-        renderPesananSaya();
-    } else if (namaHalaman === 'kelolaIklan') {
-        renderMenuIklan();
-    } else if (namaHalaman === 'pengajuanHapus') {
-        renderPengajuanHapusAkun();
-    } else if (namaHalaman === 'uploadProdukPublik') {
-        renderUploadProdukPublik();
-    } else if (namaHalaman === 'manajemenStokGudang') {
-        renderManajemenStokGudang();
-    } else if (namaHalaman === 'kelolaProduk') {
-        renderKelolaProduk();
-    } else if (namaHalaman === 'helloFriends') {
-        renderHelloFriends();
-    } else if (namaHalaman === 'transferMenu') {
-        renderTransferMenu();
-    } else if (namaHalaman === 'editAkun') {
-        // ===== PERBAIKAN UNTUK EDIT AKUN TOKO & CUSTOMER =====
-        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-        if (user.role === 'customer') {
+        } else if (namaHalaman === 'lihatTokoTerdekat') {
+            renderLihatTokoTerdekat();
+        } else if (namaHalaman === 'lihatOjekTerdekat') {
+            renderLihatOjekTerdekat();
+        } else if (namaHalaman === 'lihatProduk') {
+            renderLihatProduk();
+        } else if (namaHalaman === 'keranjang') {
+            renderKeranjang();
+        } else if (namaHalaman === 'chat') {
+            renderChat();
+        } else if (namaHalaman === 'papanInformasi') {
+            renderPapanInformasi();
+        } else if (namaHalaman === 'menuIklan') {
+            renderMenuIklan();
+        } else if (namaHalaman === 'daftarBelanja') {
+            renderDaftarBelanja();
+        } else if (namaHalaman === 'riwayatBelanja') {
+            renderRiwayatBelanja();
+        } else if (namaHalaman === 'pembayaran') {
+            renderPembayaran();
+        } else if (namaHalaman === 'ulasanRating') {
+            renderUlasanRating();
+        } else if (namaHalaman === 'bantuanFAQ') {
+            renderBantuanFAQ();
+        } else if (namaHalaman === 'notifikasi') {
+            renderNotifikasi();
+        } else if (namaHalaman === 'editAkun') {
             renderEditAkun();
-        } else {
-            renderEditAkunToko();
         }
-        // ===== AKHIR PERBAIKAN =====
-    } 
-    // ===== TAMBAHKAN INI UNTUK KELOLA WILAYAH =====
-    else if (namaHalaman === 'kelolaWilayah') {
-        renderKelolaWilayah();
-    }
-    // ===== AKHIR TAMBAHAN =====
 
-    // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
-    else if (namaHalaman === 'dashboardCustomer') {
-        renderDashboardCustomer();
-    } else if (namaHalaman === 'profilCustomer') {
-        renderProfilCustomer();
-    } else if (namaHalaman === 'lihatTokoTerdekat') {
-        renderLihatTokoTerdekat();
-    } else if (namaHalaman === 'lihatOjekTerdekat') {
-        renderLihatOjekTerdekat();
-    } else if (namaHalaman === 'lihatProduk') {
-        renderLihatProduk();
-    } else if (namaHalaman === 'keranjang') {
-        renderKeranjang();
-    } else if (namaHalaman === 'chat') {
-        renderChat();
-    } else if (namaHalaman === 'papanInformasi') {
-        renderPapanInformasi();
-    } else if (namaHalaman === 'menuIklan') {
-        renderMenuIklan();
-    } else if (namaHalaman === 'daftarBelanja') {
-        renderDaftarBelanja();
-    } else if (namaHalaman === 'riwayatBelanja') {
-        renderRiwayatBelanja();
-    } else if (namaHalaman === 'pembayaran') {
-        renderPembayaran();
-    } else if (namaHalaman === 'ulasanRating') {
-        renderUlasanRating();
-    } else if (namaHalaman === 'bantuanFAQ') {
-        renderBantuanFAQ();
-    } else if (namaHalaman === 'notifikasi') {
-        renderNotifikasi();
-    } else if (namaHalaman === 'editAkun') {
-        renderEditAkun();
+        // ===== PLACEHOLDER (Halaman belum siap) =====
+        else {
+            renderPlaceholder(namaHalaman);
+        }
     }
+    /* ===== AKHIR BLOK 3.5.2 ===== */
 
-    // ===== PLACEHOLDER (Halaman belum siap) =====
-    else {
-        renderPlaceholder(namaHalaman);
+    /* ===== BLOK 3.5.3 - RENDER PLACEHOLDER ===== */
+    /*
+        Fungsi ini menampilkan halaman placeholder untuk fitur yang belum selesai.
+        Digunakan saat halaman yang dipilih belum memiliki fungsi render.
+    */
+    function renderPlaceholder(judulHalaman) {
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
+        html += '<div class="page-header">';
+        html += '<h2>' + judulHalaman + '</h2>';
+        html += '<p>Halaman ini sedang dalam pengembangan.</p>';
+        html += '</div>';
+        html += '<div class="card">';
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-tools" style="color:#FF9800;"></i>';
+        html += '<h3>Fitur Sedang Dikembangkan</h3>';
+        html += '</div>';
+        html += '</div>';
+        areaKonten.innerHTML = html;
     }
-}
-/* ===== AKHIR BLOK 3.5.2 ===== */
+    /* ===== AKHIR BLOK 3.5.3 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.5 ===== -->
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
@@ -2180,293 +2141,92 @@ function navigasiKeHalaman(namaHalaman) {
 <!-- ===== AKHIR BLOK 3.8 ===== -->
 <!-- ===== BLOK 3.9 - JS_RENDER_PROFIL_CUSTOMER ===== -->
 <script>
-    /* ===== BLOK 3.9.1 - RENDER PROFIL CUSTOMER (DENGAN DROPDOWN WILAYAH) ===== */
-/*
-    Fungsi ini menampilkan halaman profil untuk role Customer.
-    Menampilkan data registrasi, alamat KTP, alamat domisili, rekening, dan upload KTP.
-    Semua alamat menggunakan dropdown berjenjang (Provinsi → Kabupaten → Kecamatan → Kelurahan)
-    yang datanya diambil dari input SuperAdmin melalui menu Kelola Wilayah.
-*/
-function renderProfilCustomer() {
-    // Ambil data user yang sedang login dari localStorage
-    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-    
-    // Ambil elemen konten utama
-    var areaKonten = document.getElementById('mainContent');
-    
-    // Variabel untuk menampung HTML yang akan dirender
-    var html = '';
-    
-    // ==========================================================
-    // BAGIAN 1: HEADER HALAMAN
-    // ==========================================================
-    html += '<div class="page-header">';
-    html += '<h2>Profil Customer</h2>';
-    html += '<p>ID Akun: <strong>' + (user.id || '-') + '</strong></p>';
-    html += '</div>';
-    
-    // ==========================================================
-    // BAGIAN 2: DATA REGISTRASI
-    // ==========================================================
-    html += '<div class="card">';
-    html += '<div class="card-header">';
-    html += 'Data Registrasi ';
-    html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
-    html += '<i class="fas fa-save"></i> Simpan Profil';
-    html += '</button>';
-    html += '</div>';
-    html += '<div class="grid-2">';
-    html += '<div><label class="form-label">Nama Lengkap (Sesuai KTP)</label>';
-    html += '<input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
-    html += '<div><label class="form-label">Username</label>';
-    html += '<input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
-    html += '<div><label class="form-label">Email</label>';
-    html += '<input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
-    html += '<div><label class="form-label">Nomor HP</label>';
-    html += '<input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div>';
-    html += '</div>'; // End grid-2
-    html += '</div>'; // End card
-
-    // ==========================================================
-    // BAGIAN 3: ALAMAT SESUAI KTP (DROPDOWN BERJENJANG)
-    // ==========================================================
-    html += '<div class="card">';
-    html += '<div class="card-header">';
-    html += 'Alamat Sesuai KTP ';
-    html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
-    html += '<i class="fas fa-save"></i> Simpan';
-    html += '</button>';
-    html += '</div>';
-    html += '<div class="grid-2">';
-    
-    // Dusun, RT, RW, Jalan (input teks)
-    html += '<div><label class="form-label">Dusun / Dukuh</label>';
-    html += '<input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
-    html += '<div><label class="form-label">RT</label>';
-    html += '<input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
-    html += '<div><label class="form-label">RW</label>';
-    html += '<input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
-    html += '<div><label class="form-label">Jalan / Gang</label>';
-    html += '<input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
-    
-    // ===== DROPDOWN PROVINSI =====
-    html += '<div><label class="form-label">Provinsi</label>';
-    html += '<select id="ktpProvinsi" class="form-input" onchange="onChangeProvinsiManual(\'ktp\')">';
-    html += '<option value="">-- Pilih Provinsi --</option>';
-    var provinsiList = getProvinsiList();
-    for (var p = 0; p < provinsiList.length; p++) {
-        var selected = (user.ktpProvinsi === provinsiList[p]) ? 'selected' : '';
-        html += '<option value="' + provinsiList[p] + '" ' + selected + '>' + provinsiList[p] + '</option>';
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KABUPATEN/KOTA =====
-    html += '<div><label class="form-label">Kabupaten / Kota</label>';
-    html += '<select id="ktpKabupaten" class="form-input" onchange="onChangeKabupatenManual(\'ktp\')">';
-    html += '<option value="">-- Pilih Kabupaten --</option>';
-    if (user.ktpProvinsi) {
-        var kabupatenList = getKabupatenList(user.ktpProvinsi);
-        for (var k = 0; k < kabupatenList.length; k++) {
-            var selected = (user.ktpKabupaten === kabupatenList[k]) ? 'selected' : '';
-            html += '<option value="' + kabupatenList[k] + '" ' + selected + '>' + kabupatenList[k] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KECAMATAN =====
-    html += '<div><label class="form-label">Kecamatan</label>';
-    html += '<select id="ktpKecamatan" class="form-input" onchange="onChangeKecamatanManual(\'ktp\')">';
-    html += '<option value="">-- Pilih Kecamatan --</option>';
-    if (user.ktpProvinsi && user.ktpKabupaten) {
-        var kecamatanList = getKecamatanList(user.ktpProvinsi, user.ktpKabupaten);
-        for (var kc = 0; kc < kecamatanList.length; kc++) {
-            var selected = (user.ktpKecamatan === kecamatanList[kc]) ? 'selected' : '';
-            html += '<option value="' + kecamatanList[kc] + '" ' + selected + '>' + kecamatanList[kc] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KELURAHAN/DESA =====
-    html += '<div><label class="form-label">Desa / Kelurahan</label>';
-    html += '<select id="ktpDesa" class="form-input">';
-    html += '<option value="">-- Pilih Kelurahan --</option>';
-    if (user.ktpProvinsi && user.ktpKabupaten && user.ktpKecamatan) {
-        var desaList = getDesaList(user.ktpProvinsi, user.ktpKabupaten, user.ktpKecamatan);
-        for (var d = 0; d < desaList.length; d++) {
-            var selected = (user.ktpDesa === desaList[d]) ? 'selected' : '';
-            html += '<option value="' + desaList[d] + '" ' + selected + '>' + desaList[d] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // Kode Pos (input teks)
-    html += '<div><label class="form-label">Kode Pos</label>';
-    html += '<input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
-    html += '</div>'; // End grid-2
-    html += '</div>'; // End card
-
-    // ==========================================================
-    // BAGIAN 4: ALAMAT DOMISILI / SEKARANG (DROPDOWN BERJENJANG)
-    // ==========================================================
-    html += '<div class="card">';
-    html += '<div class="card-header">';
-    html += 'Alamat Domisili / Sekarang ';
-    html += '<button class="button button-primary button-small" onclick="simpanProfilCustomer()">';
-    html += '<i class="fas fa-save"></i> Simpan';
-    html += '</button>';
-    html += '</div>';
-    html += '<div class="grid-2">';
-
-    // Dusun, RT, RW, Jalan (input teks)
-    html += '<div><label class="form-label">Dusun / Dukuh</label>';
-    html += '<input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
-    html += '<div><label class="form-label">RT</label>';
-    html += '<input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
-    html += '<div><label class="form-label">RW</label>';
-    html += '<input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
-    html += '<div><label class="form-label">Jalan / Gang</label>';
-    html += '<input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
-
-    // ===== DROPDOWN PROVINSI DOMISILI =====
-    html += '<div><label class="form-label">Provinsi</label>';
-    html += '<select id="domProvinsi" class="form-input" onchange="onChangeProvinsiManual(\'dom\')">';
-    html += '<option value="">-- Pilih Provinsi --</option>';
-    var provinsiListDom = getProvinsiList();
-    for (var p = 0; p < provinsiListDom.length; p++) {
-        var selected = (user.domProvinsi === provinsiListDom[p]) ? 'selected' : '';
-        html += '<option value="' + provinsiListDom[p] + '" ' + selected + '>' + provinsiListDom[p] + '</option>';
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KABUPATEN DOMISILI =====
-    html += '<div><label class="form-label">Kabupaten / Kota</label>';
-    html += '<select id="domKabupaten" class="form-input" onchange="onChangeKabupatenManual(\'dom\')">';
-    html += '<option value="">-- Pilih Kabupaten --</option>';
-    if (user.domProvinsi) {
-        var kabupatenListDom = getKabupatenList(user.domProvinsi);
-        for (var k = 0; k < kabupatenListDom.length; k++) {
-            var selected = (user.domKabupaten === kabupatenListDom[k]) ? 'selected' : '';
-            html += '<option value="' + kabupatenListDom[k] + '" ' + selected + '>' + kabupatenListDom[k] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KECAMATAN DOMISILI =====
-    html += '<div><label class="form-label">Kecamatan</label>';
-    html += '<select id="domKecamatan" class="form-input" onchange="onChangeKecamatanManual(\'dom\')">';
-    html += '<option value="">-- Pilih Kecamatan --</option>';
-    if (user.domProvinsi && user.domKabupaten) {
-        var kecamatanListDom = getKecamatanList(user.domProvinsi, user.domKabupaten);
-        for (var kc = 0; kc < kecamatanListDom.length; kc++) {
-            var selected = (user.domKecamatan === kecamatanListDom[kc]) ? 'selected' : '';
-            html += '<option value="' + kecamatanListDom[kc] + '" ' + selected + '>' + kecamatanListDom[kc] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // ===== DROPDOWN KELURAHAN DOMISILI =====
-    html += '<div><label class="form-label">Desa / Kelurahan</label>';
-    html += '<select id="domDesa" class="form-input">';
-    html += '<option value="">-- Pilih Kelurahan --</option>';
-    if (user.domProvinsi && user.domKabupaten && user.domKecamatan) {
-        var desaListDom = getDesaList(user.domProvinsi, user.domKabupaten, user.domKecamatan);
-        for (var d = 0; d < desaListDom.length; d++) {
-            var selected = (user.domDesa === desaListDom[d]) ? 'selected' : '';
-            html += '<option value="' + desaListDom[d] + '" ' + selected + '>' + desaListDom[d] + '</option>';
-        }
-    }
-    html += '</select></div>';
-
-    // Kode Pos Domisili (input teks)
-    html += '<div><label class="form-label">Kode Pos</label>';
-    html += '<input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
-    html += '</div>'; // End grid-2
-    html += '</div>'; // End card
-
-    // ==========================================================
-    // BAGIAN 5: DATA REKENING
-    // ==========================================================
-    html += '<div class="card">';
-    html += '<div class="card-header">';
-    html += 'Data Rekening ';
-    html += '<button class="button button-primary button-small" onclick="simpanRekeningCustomer()">';
-    html += '<i class="fas fa-save"></i> Simpan Rekening';
-    html += '</button>';
-    html += '</div>';
-    html += '<div class="grid-2">';
-    html += '<div><label class="form-label">Nama Bank</label>';
-    html += '<input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '"></div>';
-    html += '<div><label class="form-label">Nomor Rekening</label>';
-    html += '<input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
-    html += '<div><label class="form-label">Nama Pemilik Rekening</label>';
-    html += '<input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '"></div>';
-    html += '</div>'; // End grid-2
-    html += '</div>'; // End card
-
-    // ==========================================================
-    // BAGIAN 6: DOKUMEN KTP (UPLOAD)
-    // ==========================================================
-    html += '<div class="card">';
-    html += '<div class="card-header">Dokumen KTP & Domisili</div>';
-    html += '<div class="upload-area" id="uploadKtpContainerCustomer">';
-    html += '<div id="ktpPreviewCustomer">';
-    if (user.ktp) {
-        html += '<img src="' + user.ktp + '" class="preview-image">';
-    } else {
-        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
-    }
-    html += '</div>'; // End ktpPreviewCustomer
-    html += '<input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none">';
-    html += '</div>'; // End upload-area
-    html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()">';
-    html += '<i class="fas fa-save"></i> Simpan KTP';
-    html += '</button>';
-    html += '</div>'; // End card
-
-    // ==========================================================
-    // BAGIAN 7: TAMPILKAN HTML KE AREA KONTEN
-    // ==========================================================
-    areaKonten.innerHTML = html;
-
-    // ==========================================================
-    // BAGIAN 8: PANGGIL FUNGSI LOAD DATA TERSIMPAN
-    // ==========================================================
+    /* ===== BLOK 3.9.1 - RENDER PROFIL CUSTOMER ===== */
     /*
-        Setelah HTML ditampilkan, panggil fungsi loadDataWilayahTersimpan
-        untuk mengisi dropdown dengan data yang sudah tersimpan di user.
-        Gunakan setTimeout agar elemen dropdown sudah benar-benar ada di DOM.
+        Fungsi ini menampilkan halaman profil untuk role Customer.
+        Menampilkan:
+        - Data registrasi (nama, username, email, nomor HP)
+        - Alamat sesuai KTP (Dusun, RT, RW, Jalan, Desa, Kecamatan, Kabupaten, Provinsi, Kode Pos)
+        - Alamat domisili (dengan format yang sama lengkap)
+        - Data rekening (Nama Bank, Nomor Rekening, Nama Pemilik)
+        - Area upload KTP
     */
-    setTimeout(function() {
-        // Load data alamat KTP yang tersimpan
-        loadDataWilayahTersimpan('ktp', user);
+    function renderProfilCustomer() {
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var areaKonten = document.getElementById('mainContent');
+        var html = '';
         
-        // Load data alamat Domisili yang tersimpan
-        loadDataWilayahTersimpan('dom', user);
-    }, 500); // Delay 500ms untuk memastikan dropdown sudah dirender
-
-    // ==========================================================
-    // BAGIAN 9: EVENT LISTENER UNTUK UPLOAD KTP
-    // ==========================================================
-    /*
-        Event listener ini memastikan bahwa ketika user mengklik area upload,
-        file input akan terbuka, dan ketika file dipilih, preview gambar akan muncul.
-    */
-    setTimeout(function() {
-        var containerKTP = document.getElementById('uploadKtpContainerCustomer');
-        var inputKTP = document.getElementById('inputKtpCustomer');
-        if (containerKTP && inputKTP) {
-            // Saat area upload diklik, buka file input
-            containerKTP.onclick = function() {
-                inputKTP.click();
-            };
-            // Saat file dipilih, tampilkan preview
-            inputKTP.onchange = function(e) {
-                previewKTPCustomer(e.target.files[0]);
-            };
+        html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
+        
+        // Data Registrasi
+        html += '<div class="card"><div class="card-header">Data Registrasi <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
+        html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
+        html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
+        html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
+        html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div></div></div>';
+        
+        // Alamat Sesuai KTP
+        html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+        html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
+        html += '<div><label class="form-label">RW</label><input type="text" id="ktpRW" class="form-input" value="' + (user.ktpRW || '') + '" placeholder="Contoh: 002"></div>';
+        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="ktpJalan" class="form-input" value="' + (user.ktpJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="ktpDesa" class="form-input" value="' + (user.ktpDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kecamatan</label><input type="text" id="ktpKecamatan" class="form-input" value="' + (user.ktpKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="ktpKabupaten" class="form-input" value="' + (user.ktpKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+        html += '<div><label class="form-label">Provinsi</label><input type="text" id="ktpProvinsi" class="form-input" value="' + (user.ktpProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+        html += '</div></div>';
+        
+        // Alamat Domisili
+        html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
+        html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
+        html += '<div><label class="form-label">RW</label><input type="text" id="domRW" class="form-input" value="' + (user.domRW || '') + '" placeholder="Contoh: 002"></div>';
+        html += '<div><label class="form-label">Jalan / Gang</label><input type="text" id="domJalan" class="form-input" value="' + (user.domJalan || '') + '" placeholder="Contoh: Jl. Merdeka No. 5"></div>';
+        html += '<div><label class="form-label">Desa / Kelurahan</label><input type="text" id="domDesa" class="form-input" value="' + (user.domDesa || '') + '" placeholder="Contoh: Kelurahan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kecamatan</label><input type="text" id="domKecamatan" class="form-input" value="' + (user.domKecamatan || '') + '" placeholder="Contoh: Kecamatan Tanah Abang"></div>';
+        html += '<div><label class="form-label">Kabupaten / Kota</label><input type="text" id="domKabupaten" class="form-input" value="' + (user.domKabupaten || '') + '" placeholder="Contoh: Kota Jakarta Pusat"></div>';
+        html += '<div><label class="form-label">Provinsi</label><input type="text" id="domProvinsi" class="form-input" value="' + (user.domProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
+        html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
+        html += '</div></div>';
+        
+        // Data Rekening
+        html += '<div class="card"><div class="card-header">Data Rekening <button class="button button-primary button-small" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
+        html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '"></div>';
+        html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
+        html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '"></div></div></div>';
+        
+        // Dokumen KTP
+        html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
+        html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
+        if (user.ktp) {
+            html += '<img src="' + user.ktp + '" class="preview-image">';
+        } else {
+            html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
         }
-    }, 300);
-}
-/* ===== AKHIR BLOK 3.9.1 ===== */
+        html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
+        html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+        
+        areaKonten.innerHTML = html;
+        
+        // Event listener untuk upload KTP
+        setTimeout(function() {
+            var containerKTP = document.getElementById('uploadKtpContainerCustomer');
+            var inputKTP = document.getElementById('inputKtpCustomer');
+            if (containerKTP && inputKTP) {
+                containerKTP.onclick = function() {
+                    inputKTP.click();
+                };
+                inputKTP.onchange = function(e) {
+                    previewKTPCustomer(e.target.files[0]);
+                };
+            }
+        }, 300);
+    }
+    /* ===== AKHIR BLOK 3.9.1 ===== */
 
     /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER ===== */
     /*
@@ -5304,124 +5064,6 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
     /* ===== AKHIR BLOK 4.11.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 4.11 ===== -->
-	/* ===== BLOK 4.13 - FUNGSI AMBIL DATA WILAYAH (UNTUK SEMUA AKUN) ===== */
-/*
-    Blok ini berisi kumpulan fungsi untuk mengambil data wilayah yang telah diinput oleh SuperAdmin 
-    melalui menu Kelola Wilayah. Data ini disimpan di localStorage dengan kunci '2r_data_wilayah'.
-    Fungsi-fungsi ini digunakan oleh semua akun (Customer, Toko, Ojek, dll) untuk mengisi dropdown 
-    provinsi, kabupaten, kecamatan, dan kelurahan pada halaman profil.
-*/
-
-// ===== 4.13.1 AMBIL DATA WILAYAH DARI LOCALSTORAGE =====
-function getDataWilayah() {
-    var dataWilayah = localStorage.getItem('2r_data_wilayah');
-    if (dataWilayah) {
-        return JSON.parse(dataWilayah);
-    } else {
-        return [];
-    }
-}
-
-// ===== 4.13.2 DAPATKAN DAFTAR PROVINSI UNIK =====
-function getProvinsiList() {
-    var data = getDataWilayah();
-    var provinsiSet = new Set();
-    for (var i = 0; i < data.length; i++) {
-        provinsiSet.add(data[i].provinsi);
-    }
-    return Array.from(provinsiSet).sort();
-}
-
-// ===== 4.13.3 DAPATKAN DAFTAR KABUPATEN BERDASARKAN PROVINSI =====
-function getKabupatenList(provinsi) {
-    var data = getDataWilayah();
-    var kabupatenSet = new Set();
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].provinsi === provinsi) {
-            kabupatenSet.add(data[i].kabupaten);
-        }
-    }
-    return Array.from(kabupatenSet).sort();
-}
-
-// ===== 4.13.4 DAPATKAN DAFTAR KECAMATAN BERDASARKAN PROVINSI DAN KABUPATEN =====
-function getKecamatanList(provinsi, kabupaten) {
-    var data = getDataWilayah();
-    var kecamatanSet = new Set();
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].provinsi === provinsi && data[i].kabupaten === kabupaten) {
-            kecamatanSet.add(data[i].kecamatan);
-        }
-    }
-    return Array.from(kecamatanSet).sort();
-}
-
-// ===== 4.13.5 DAPATKAN DAFTAR DESA BERDASARKAN PROVINSI, KABUPATEN, DAN KECAMATAN =====
-function getDesaList(provinsi, kabupaten, kecamatan) {
-    var data = getDataWilayah();
-    var desaSet = new Set();
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].provinsi === provinsi && data[i].kabupaten === kabupaten && data[i].kecamatan === kecamatan) {
-            desaSet.add(data[i].desa);
-        }
-    }
-    return Array.from(desaSet).sort();
-}
-
-// ===== 4.13.6 LOAD DATA WILAYAH TERSIMPAN (OTOMATIS MENGISI DROPDOWN) =====
-function loadDataWilayahTersimpan(prefix, user) {
-    if (!user) {
-        return;
-    }
-    if (user[prefix + 'Provinsi']) {
-        var provinsiSelect = document.getElementById(prefix + 'Provinsi');
-        if (provinsiSelect) {
-            for (var i = 0; i < provinsiSelect.options.length; i++) {
-                if (provinsiSelect.options[i].value === user[prefix + 'Provinsi']) {
-                    provinsiSelect.options[i].selected = true;
-                    break;
-                }
-            }
-            onChangeProvinsiManual(prefix);
-        }
-    }
-    if (user[prefix + 'Kabupaten']) {
-        var kabupatenSelect = document.getElementById(prefix + 'Kabupaten');
-        if (kabupatenSelect) {
-            for (var i = 0; i < kabupatenSelect.options.length; i++) {
-                if (kabupatenSelect.options[i].value === user[prefix + 'Kabupaten']) {
-                    kabupatenSelect.options[i].selected = true;
-                    break;
-                }
-            }
-            onChangeKabupatenManual(prefix);
-        }
-    }
-    if (user[prefix + 'Kecamatan']) {
-        var kecamatanSelect = document.getElementById(prefix + 'Kecamatan');
-        if (kecamatanSelect) {
-            for (var i = 0; i < kecamatanSelect.options.length; i++) {
-                if (kecamatanSelect.options[i].value === user[prefix + 'Kecamatan']) {
-                    kecamatanSelect.options[i].selected = true;
-                    break;
-                }
-            }
-            onChangeKecamatanManual(prefix);
-        }
-    }
-    if (user[prefix + 'Desa']) {
-        var desaSelect = document.getElementById(prefix + 'Desa');
-        if (desaSelect) {
-            for (var i = 0; i < desaSelect.options.length; i++) {
-                if (desaSelect.options[i].value === user[prefix + 'Desa']) {
-                    desaSelect.options[i].selected = true;
-                    break;
-                }
-            }
-        }
-    }
-}
-/* ===== AKHIR BLOK 4.13 ===== */
 <!-- ===== BLOK 5.1 - JS_EVENT_LOGOUT_MODAL ===== -->
 <script>
     /* ===== BLOK 5.1.1 - EVENT TOMBOL LOGOUT ===== */
@@ -5682,70 +5324,51 @@ function loadDataWilayahTersimpan(prefix, user) {
     }
 
     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
-/*
-    Event ini adalah titik awal aplikasi.
-    Saat halaman selesai dimuat oleh browser, maka:
-    1. Inisialisasi SuperAdmin (jika belum ada).
-    2. Perbaiki data produk lama agar kolom tanggal input dan penginput terisi.
-    3. Cek apakah user sudah login (ada data di localStorage).
-    4. Jika sudah login, tampilkan dashboard.
-    5. Jika belum, biarkan halaman login tetap tampil.
-*/
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // ===== 1. PASTIKAN SUPERADMIN SELALU ADA =====
-    // Jika belum ada akun SuperAdmin, buat akun default (admin/admin123)
-    inisialisasiSuperAdmin();
-
-    // ===== 2. PERBAIKAN DATA PRODUK LAMA =====
     /*
-        Fungsi ini memastikan produk lama yang tersimpan di localStorage
-        memiliki kolom 'tanggalInput' dan 'namaPenginput' agar kompatibel
-        dengan fitur Manajemen Stok Gudang.
+        Event ini adalah titik awal aplikasi.
+        Saat halaman selesai dimuat oleh browser, maka:
+        1. Inisialisasi SuperAdmin (jika belum ada).
+        2. Cek apakah user sudah login (ada data di localStorage).
+        3. Jika sudah login, tampilkan dashboard.
+        4. Jika belum, biarkan halaman login tetap tampil.
     */
-    function perbaikiDataProdukLama() {
-        // Ambil semua data produk gudang dari localStorage
-        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
-        var perluDiupdate = false;
+    document.addEventListener('DOMContentLoaded', function() {
         
-        // Loop melalui semua produk
-        for (var i = 0; i < semuaProdukGudang.length; i++) {
-            // Jika belum ada tanggal input, ambil dari tanggal masuk
-            if (!semuaProdukGudang[i].tanggalInput) {
-                semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
-                perluDiupdate = true;
-            }
-            // Jika belum ada penginput, isi dengan strip (-)
-            if (!semuaProdukGudang[i].namaPenginput) {
-                semuaProdukGudang[i].namaPenginput = '-';
-                perluDiupdate = true;
-            }
-        }
-        
-        // Jika ada perubahan, simpan kembali ke localStorage
-        if (perluDiupdate) {
-            localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
-        }
-    }
-    // Jalankan fungsi perbaikan data produk lama
-    perbaikiDataProdukLama();
+        // 1. Pastikan SuperAdmin selalu ada
+        inisialisasiSuperAdmin();
 
-    // ===== 3. CEK APAKAH USER SUDAH LOGIN =====
-    // Ambil data user dari localStorage
-    var dataUser = localStorage.getItem('2r_user');
-    
-    // Jika data user ada, berarti user sudah login
-    if (dataUser) {
-        // Parse data user dari string JSON menjadi objek
-        var user = JSON.parse(dataUser);
+        // ===== PERBAIKAN DATA PRODUK LAMA (AGAR KOLOM TANGGAL & PENGINPUT TERISI) =====
+        function perbaikiDataProdukLama() {
+            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+            var perluDiupdate = false;
+            for (var i = 0; i < semuaProdukGudang.length; i++) {
+                // Jika belum ada tanggal input, ambil dari tanggal masuk
+                if (!semuaProdukGudang[i].tanggalInput) {
+                    semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
+                    perluDiupdate = true;
+                }
+                // Jika belum ada penginput, isi dengan strip
+                if (!semuaProdukGudang[i].namaPenginput) {
+                    semuaProdukGudang[i].namaPenginput = '-';
+                    perluDiupdate = true;
+                }
+            }
+            if (perluDiupdate) {
+                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+            }
+        }
+        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
+        // ===== AKHIR PERBAIKAN =====
+
+        // 2. Cek apakah user sudah login
+        var dataUser = localStorage.getItem('2r_user');
+        if (dataUser) {
+            var user = JSON.parse(dataUser);
+            tampilkanDashboard(user);
+        }
         
-        // Tampilkan dashboard dengan data user tersebut
-        tampilkanDashboard(user);
-    }
-    // Jika tidak ada data user, biarkan halaman login tetap tampil
-    
-});
-/* ===== AKHIR BLOK 5.3.2 ===== */
+    });
+    /* ===== AKHIR BLOK 5.3.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 5.3 ===== -->
 
