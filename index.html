@@ -5675,72 +5675,159 @@ function simpanProfilCustomer() {
 <!-- ===== AKHIR BLOK 4.4 ===== -->
 <!-- ===== BLOK 4.5 - JS_RENDER_PROFIL_UMUM ===== -->
 <script>
-    /* ===== BLOK 4.5.1 - RENDER PROFIL UMUM ===== */
-    /*
-        Fungsi ini menampilkan halaman profil untuk role selain SuperAdmin dan Customer.
-        Digunakan untuk Toko, Ojek, Pedagang, Staf Admin, Customer Service, Sponsor.
-        Menampilkan data pribadi, rekening, dan upload KTP.
-    */
-    function renderProfilUmum(user, role) {
-        var areaKonten = document.getElementById('mainContent');
-        if (!areaKonten) {
-            return;
-        }
-
-        // Daftar nama role untuk ditampilkan di judul
-        var namaRole = {
-            customer: 'Customer',
-            toko: 'Toko',
-            ojek: 'Ojek',
-            pedagang: 'Pedagang Pasar',
-            staf_admin: 'Staf Admin',
-            customer_service: 'Customer Service',
-            staf_owner_toko: 'Staf Owner Toko',
-            staf_owner_ojek: 'Staf Owner Ojek',
-            sponsor: 'Sponsor'
-        };
-
-        var html = '';
-        html += '<div class="page-header"><h2>Profil ' + (namaRole[role] || role) + '</h2><p>Kelola data pribadi, rekening, dan dokumen KTP Anda.</p></div>';
-        
-        // Data Pribadi & Rekening
-        html += '<div class="card"><div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Data Pribadi & Rekening</span><button class="button button-primary button-small" onclick="simpanDataPribadiUmum()"><i class="fas fa-save"></i> Simpan</button></div>';
-        html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap</label><input type="text" id="profilNama" class="form-input" value="' + (user.nama || '') + '"></div>';
-        html += '<div><label class="form-label">Email</label><input type="email" id="profilEmail" class="form-input" value="' + (user.email || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="profilHp" class="form-input" value="' + (user.nomorHp || '') + '"></div>';
-        html += '<div><label class="form-label">Alamat</label><input type="text" id="profilAlamat" class="form-input" value="' + (user.alamat || '') + '"></div></div>';
-        html += '<div class="grid-2" style="margin-top:10px;"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBank" class="form-input" value="' + (user.namaBank || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekening" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
-        html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRek" class="form-input" value="' + (user.pemilikRekening || '') + '"></div></div></div>';
-        
-        // Dokumen KTP
-        html += '<div class="card"><div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Dokumen KTP</span></div>';
-        html += '<div class="upload-area" id="uploadKtpContainer"><div id="ktpPreview">';
-        if (user.ktp) {
-            html += '<img src="' + user.ktp + '" class="preview-image">';
-        } else {
-            html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
-        }
-        html += '</div><input type="file" id="inputKtp" accept=".jpg,.jpeg,.png" style="display:none"></div>';
-        html += '<button class="button button-primary margin-top-10" onclick="simpanKTP()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
-
-        areaKonten.innerHTML = html;
-
-        // Event listener untuk upload KTP
-        setTimeout(function() {
-            var containerKTP = document.getElementById('uploadKtpContainer');
-            var inputKTP = document.getElementById('inputKtp');
-            if (containerKTP && inputKTP) {
-                containerKTP.onclick = function() {
-                    inputKTP.click();
-                };
-                inputKTP.onchange = function(e) {
-                    previewKTP(e.target.files[0]);
-                };
-            }
-        }, 300);
+    /* ===== BLOK 4.5.1 - RENDER PROFIL UNTUK SEMUA ROLE NON-SUPERADMIN ===== */
+/*
+    Fungsi ini menampilkan halaman profil lengkap untuk role selain SuperAdmin dan Customer.
+    Terdiri dari ringkasan profil, data registrasi, alamat KTP, alamat domisili,
+    data rekening, dan upload KTP. Menggunakan template yang sama dengan Customer.
+*/
+function renderProfilUmum(user, role) {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) {
+        return;
     }
-    /* ===== AKHIR BLOK 4.5.1 ===== */
+
+    // Daftar nama role untuk ditampilkan di judul
+    var namaRole = {
+        toko: 'Toko',
+        ojek: 'Ojek',
+        pedagang: 'Pedagang Pasar',
+        staf_admin: 'Staf Admin',
+        customer_service: 'Customer Service',
+        staf_owner_toko: 'Staf Owner Toko',
+        staf_owner_ojek: 'Staf Owner Ojek',
+        sponsor: 'Sponsor',
+        codseller: 'COD Seller'
+    };
+
+    var html = '';
+
+    // ===== HEADER =====
+    html += '<div class="page-header">';
+    html += '<h2>Profil ' + (namaRole[role] || role) + '</h2>';
+    html += '<p>ID Akun: <strong>' + (user.id || '-') + '</strong> &nbsp;|&nbsp; Role: <strong>' + (user.role || '-') + '</strong></p>';
+    html += '</div>';
+
+    // ===== NOTIFIKASI TERSIMPAN (di atas form) =====
+    html += '<div id="notifikasiSimpanProfilUmum" style="display:none; background:#4CAF50; color:white; padding:12px 20px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:600; font-size:15px; animation: fadeInOut 1.5s ease-in-out;">';
+    html += '<i class="fas fa-check-circle"></i> Profil berhasil disimpan!';
+    html += '</div>';
+
+    // ===== RINGKASAN PROFIL =====
+    html += '<div class="card" style="background:#f8f9fa; border:2px solid #FF6B00;">';
+    html += '<div class="card-header" style="color:#FF6B00; font-weight:700;">';
+    html += '<span><i class="fas fa-user-circle"></i> Ringkasan Profil Anda</span>';
+    html += '<span style="font-weight:normal; font-size:13px; color:#888;">Terakhir diperbarui: ' + (user.waktuRegistrasi ? new Date(user.waktuRegistrasi).toLocaleDateString('id-ID') : '-') + '</span>';
+    html += '</div>';
+    html += '<div class="grid-2" style="margin-bottom:15px;">';
+    html += '<div><strong>Nama Lengkap:</strong><br><span style="font-size:16px;">' + (user.nama || '-') + '</span></div>';
+    html += '<div><strong>Username:</strong><br><span style="font-size:16px;">' + (user.username || '-') + '</span></div>';
+    html += '<div><strong>Email:</strong><br><span style="font-size:16px;">' + (user.email || '-') + '</span></div>';
+    html += '<div><strong>Nomor HP:</strong><br><span style="font-size:16px;">' + (user.nomorHp || '-') + '</span></div>';
+    html += '<div><strong>Role:</strong><br><span style="font-size:16px;">' + (user.role || '-') + '</span></div>';
+    html += '</div>';
+    html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
+    html += '<strong style="color:#FF6B00;">Alamat Sesuai KTP:</strong><br>';
+    html += '<span>' + (user.alamatKTP || 'Belum diisi') + '</span>';
+    if (user.ktpKodepos) {
+        html += '<br><span style="color:#888; font-size:13px;">Kode Pos: ' + user.ktpKodepos + '</span>';
+    }
+    html += '</div>';
+    html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
+    html += '<strong style="color:#FF6B00;">Alamat Domisili / Sekarang:</strong><br>';
+    html += '<span>' + (user.alamatDomisili || 'Belum diisi') + '</span>';
+    if (user.domKodepos) {
+        html += '<br><span style="color:#888; font-size:13px;">Kode Pos: ' + user.domKodepos + '</span>';
+    }
+    html += '</div>';
+    html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
+    html += '<strong style="color:#FF6B00;">Data Rekening:</strong><br>';
+    html += '<span>Bank: ' + (user.namaBank || '-') + ' | No. Rek: ' + (user.nomorRekening || '-') + ' | A/n: ' + (user.pemilikRekening || '-') + '</span>';
+    html += '</div>';
+    html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
+    html += '<strong style="color:#FF6B00;">Dokumen KTP:</strong><br>';
+    if (user.ktp) {
+        html += '<div style="display:flex; align-items:center; gap:15px;">';
+        html += '<img src="' + user.ktp + '" style="max-width:200px; max-height:150px; border-radius:8px; border:1px solid #ddd;">';
+        html += '<button class="button button-danger button-extra-small" onclick="hapusKTPUmum()"><i class="fas fa-trash"></i> Hapus KTP</button>';
+        html += '</div>';
+    } else {
+        html += '<span>Belum diupload</span>';
+    }
+    html += '</div>';
+    html += '</div>';
+    // ===== AKHIR RINGKASAN PROFIL =====
+
+    // ===== DATA REGISTRASI =====
+    html += '<div class="card"><div class="card-header">Data Registrasi <button class="button button-primary button-small" onclick="simpanProfilLengkap()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaProfilUmum" class="form-input" value="' + (user.nama || '') + '"></div>';
+    html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameProfilUmum" class="form-input" value="' + (user.username || '') + '" disabled></div>';
+    html += '<div><label class="form-label">Email</label><input type="email" id="editEmailProfilUmum" class="form-input" value="' + (user.email || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpProfilUmum" class="form-input" value="' + (user.nomorHp || '') + '"></div>';
+    html += '</div></div>';
+
+    // ===== ALAMAT SESUAI KTP =====
+    html += buatAlamatHTML('ktp', 'Alamat Sesuai KTP', user);
+
+    // ===== ALAMAT DOMISILI =====
+    html += buatAlamatHTML('dom', 'Alamat Domisili / Sekarang', user);
+
+    // ===== DATA REKENING =====
+    html += '<div class="card"><div class="card-header">Data Rekening <button class="button button-primary button-small" onclick="simpanProfilLengkap()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
+    html += '<div class="grid-2">';
+    html += '<div><label class="form-label">Nama Bank</label><input type="text" id="profilBankUmum" class="form-input" value="' + (user.namaBank || '') + '"></div>';
+    html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningUmum" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
+    html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekUmum" class="form-input" value="' + (user.pemilikRekening || '') + '"></div>';
+    html += '</div></div>';
+
+    // ===== DOKUMEN KTP =====
+    html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
+    html += '<div class="upload-area" id="uploadKtpContainerUmum"><div id="ktpPreviewUmum">';
+    if (user.ktp) {
+        html += '<img src="' + user.ktp + '" class="preview-image">';
+    } else {
+        html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
+    }
+    html += '</div><input type="file" id="inputKtpUmum" accept=".jpg,.jpeg,.png" style="display:none"></div>';
+    html += '<button class="button button-primary margin-top-10" onclick="simpanKTPUmum()"><i class="fas fa-save"></i> Simpan KTP</button>';
+    // Tombol hapus KTP jika sudah ada
+    if (user.ktp) {
+        html += '<button class="button button-danger margin-top-10" onclick="hapusKTPUmum()" style="margin-left:10px;"><i class="fas fa-trash"></i> Hapus KTP</button>';
+    }
+    html += '</div>';
+
+    // ===== TAMPILKAN KE AREA KONTEN =====
+    areaKonten.innerHTML = html;
+
+    // ===== PANGGIL LOAD DATA TERSIMPAN UNTUK DROPDOWN WILAYAH =====
+    setTimeout(function() {
+        // Fungsi-fungsi helper wilayah sudah ada di global scope
+        if (typeof loadDataWilayahTersimpan === 'function') {
+            loadDataWilayahTersimpan('ktp', user);
+            loadDataWilayahTersimpan('dom', user);
+        }
+        if (typeof isiDropdownWilayah === 'function') {
+            isiDropdownWilayah('ktp');
+            isiDropdownWilayah('dom');
+        }
+    }, 500);
+
+    // ===== EVENT LISTENER UPLOAD KTP =====
+    setTimeout(function() {
+        var containerKTP = document.getElementById('uploadKtpContainerUmum');
+        var inputKTP = document.getElementById('inputKtpUmum');
+        if (containerKTP && inputKTP) {
+            containerKTP.onclick = function() {
+                inputKTP.click();
+            };
+            inputKTP.onchange = function(e) {
+                previewKTPUmum(e.target.files[0]);
+            };
+        }
+    }, 300);
+}
+/* ===== AKHIR BLOK 4.5.1 ===== */
 
     /* ===== BLOK 4.5.2 - SIMPAN PROFIL LENGKAP UNTUK SEMUA ROLE NON-SUPERADMIN ===== */
 /*
