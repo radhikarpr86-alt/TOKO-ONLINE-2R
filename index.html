@@ -1715,91 +1715,118 @@ function setupNavigasiSidebar() {
     /* ===== AKHIR BLOK 3.5.1 ===== */
 
     /* ===== BLOK 3.5.2 - NAVIGASI KE HALAMAN ===== */
-    /*
-        Fungsi ini adalah pusat routing aplikasi.
-        Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
-        Jika halaman tidak dikenali, akan menampilkan placeholder.
-    */
-    function navigasiKeHalaman(namaHalaman) {
-        var areaKonten = document.getElementById('mainContent');
-        if (!areaKonten) {
-            return;
-        }
-
-        // ===== NAVIGASI UNTUK SEMUA ROLE =====
-        if (namaHalaman === 'dashboard') {
-            renderDashboard();
-        } else if (namaHalaman === 'profile') {
-            renderProfil();
-        } else if (namaHalaman === 'daftarAkun') {
-            renderDaftarAkun();
-        } else if (namaHalaman === 'persetujuan') {
-            renderPersetujuanAkun();
-        } else if (namaHalaman === 'kelolaAkun') {
-            renderKelolaAkun();
-        } else if (namaHalaman === 'settingRekening') {
-            renderSettingRekening();
-        } else if (namaHalaman === 'belanja') {
-            renderBelanja();
-        } else if (namaHalaman === 'pesananSaya') {
-            renderPesananSaya();
-        } else if (namaHalaman === 'kelolaIklan') {
-            renderMenuIklan();
-        } else if (namaHalaman === 'pengajuanHapus') {
-            renderPengajuanHapusAkun();
-        } else if (namaHalaman === 'uploadProdukPublik') {
-            renderUploadProdukPublik();
-        } else if (namaHalaman === 'manajemenStokGudang') {
-            renderManajemenStokGudang();
-        } else if (namaHalaman === 'kelolaProduk') {
-            renderKelolaProduk();
-        } else if (namaHalaman === 'helloFriends') {
-            renderHelloFriends();
-        } else if (namaHalaman === 'transferMenu') {
-            renderTransferMenu();
-        }
-
-        // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
-        else if (namaHalaman === 'dashboardCustomer') {
-            renderDashboardCustomer();
-        } else if (namaHalaman === 'profilCustomer') {
-            renderProfilCustomer();
-        } else if (namaHalaman === 'lihatTokoTerdekat') {
-            renderLihatTokoTerdekat();
-        } else if (namaHalaman === 'lihatOjekTerdekat') {
-            renderLihatOjekTerdekat();
-        } else if (namaHalaman === 'lihatProduk') {
-            renderLihatProduk();
-        } else if (namaHalaman === 'keranjang') {
-            renderKeranjang();
-        } else if (namaHalaman === 'chat') {
-            renderChat();
-        } else if (namaHalaman === 'papanInformasi') {
-            renderPapanInformasi();
-        } else if (namaHalaman === 'menuIklan') {
-            renderMenuIklan();
-        } else if (namaHalaman === 'daftarBelanja') {
-            renderDaftarBelanja();
-        } else if (namaHalaman === 'riwayatBelanja') {
-            renderRiwayatBelanja();
-        } else if (namaHalaman === 'pembayaran') {
-            renderPembayaran();
-        } else if (namaHalaman === 'ulasanRating') {
-            renderUlasanRating();
-        } else if (namaHalaman === 'bantuanFAQ') {
-            renderBantuanFAQ();
-        } else if (namaHalaman === 'notifikasi') {
-            renderNotifikasi();
-        } else if (namaHalaman === 'editAkun') {
-            renderEditAkun();
-        }
-
-        // ===== PLACEHOLDER (Halaman belum siap) =====
-        else {
-            renderPlaceholder(namaHalaman);
-        }
+/*
+    Fungsi ini adalah pusat routing aplikasi.
+    Menerima nama halaman, lalu memanggil fungsi render yang sesuai.
+    Jika halaman tidak dikenali, akan menampilkan placeholder.
+*/
+function navigasiKeHalaman(namaHalaman) {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) {
+        return;
     }
-    /* ===== AKHIR BLOK 3.5.2 ===== */	
+
+    // ===== NAVIGASI UNTUK SEMUA ROLE =====
+    if (namaHalaman === 'dashboard') {
+        renderDashboard();
+    } else if (namaHalaman === 'transaksi') {
+        renderTransaksi(); // Menu Transaksi untuk Toko
+    } else if (namaHalaman === 'profile') {
+        // ===== PERBAIKAN: CEK ROLE USER UNTUK MENENTUKAN RENDER PROFIL =====
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        var role = user.role;
+        
+        if (role === 'superadmin') {
+            renderProfilSuperAdmin(user);
+        } else if (role === 'customer') {
+            renderProfilCustomer();
+        } else {
+            renderProfilUmum(user, role);
+        }
+        // ===== AKHIR PERBAIKAN =====
+    } else if (namaHalaman === 'daftarAkun') {
+        renderDaftarAkun();
+    } else if (namaHalaman === 'persetujuan') {
+        renderPersetujuanAkun();
+    } else if (namaHalaman === 'kelolaAkun') {
+        renderKelolaAkun();
+    } else if (namaHalaman === 'settingRekening') {
+        renderSettingRekening();
+    } else if (namaHalaman === 'belanja') {
+        renderBelanja();
+    } else if (namaHalaman === 'pesananSaya') {
+        renderPesananSaya();
+    } else if (namaHalaman === 'kelolaIklan') {
+        renderMenuIklan();
+    } else if (namaHalaman === 'pengajuanHapus') {
+        renderPengajuanHapusAkun();
+    } else if (namaHalaman === 'uploadProdukPublik') {
+        renderUploadProdukPublik();
+    } else if (namaHalaman === 'manajemenStokGudang') {
+        renderManajemenStokGudang();
+    } else if (namaHalaman === 'kelolaProduk') {
+        renderKelolaProduk();
+    } else if (namaHalaman === 'helloFriends') {
+        renderHelloFriends();
+    } else if (namaHalaman === 'transferMenu') {
+        renderTransferMenu();
+    } else if (namaHalaman === 'editAkun') {
+        // ===== PERBAIKAN UNTUK EDIT AKUN TOKO & CUSTOMER =====
+        var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+        if (user.role === 'customer') {
+            renderEditAkun();
+        } else {
+            renderEditAkunToko();
+        }
+        // ===== AKHIR PERBAIKAN =====
+    } 
+    // ===== TAMBAHKAN INI UNTUK KELOLA WILAYAH =====
+    else if (namaHalaman === 'kelolaWilayah') {
+        renderKelolaWilayah();
+    }
+    // ===== AKHIR TAMBAHAN =====
+
+    // ===== NAVIGASI KHUSUS CUSTOMER (16 MENU) =====
+    else if (namaHalaman === 'dashboardCustomer') {
+        renderDashboardCustomer();
+    } else if (namaHalaman === 'profilCustomer') {
+        renderProfilCustomer();
+    } else if (namaHalaman === 'lihatTokoTerdekat') {
+        renderLihatTokoTerdekat();
+    } else if (namaHalaman === 'lihatOjekTerdekat') {
+        renderLihatOjekTerdekat();
+    } else if (namaHalaman === 'lihatProduk') {
+        renderLihatProduk();
+    } else if (namaHalaman === 'keranjang') {
+        renderKeranjang();
+    } else if (namaHalaman === 'chat') {
+        renderChat();
+    } else if (namaHalaman === 'papanInformasi') {
+        renderPapanInformasi();
+    } else if (namaHalaman === 'menuIklan') {
+        renderMenuIklan();
+    } else if (namaHalaman === 'daftarBelanja') {
+        renderDaftarBelanja();
+    } else if (namaHalaman === 'riwayatBelanja') {
+        renderRiwayatBelanja();
+    } else if (namaHalaman === 'pembayaran') {
+        renderPembayaran();
+    } else if (namaHalaman === 'ulasanRating') {
+        renderUlasanRating();
+    } else if (namaHalaman === 'bantuanFAQ') {
+        renderBantuanFAQ();
+    } else if (namaHalaman === 'notifikasi') {
+        renderNotifikasi();
+    } else if (namaHalaman === 'editAkun') {
+        renderEditAkun();
+    }
+
+    // ===== PLACEHOLDER (Halaman belum siap) =====
+    else {
+        renderPlaceholder(namaHalaman);
+    }
+}
+/* ===== AKHIR BLOK 3.5.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.5 ===== -->
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
@@ -5085,15 +5112,8 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 */
 
 // ===== 4.13.1 AMBIL DATA WILAYAH DARI LOCALSTORAGE =====
-/*
-    Fungsi ini mengambil seluruh data wilayah yang tersimpan di localStorage.
-    Jika data belum ada, fungsi akan mengembalikan array kosong [].
-*/
 function getDataWilayah() {
-    // Ambil data dari localStorage dengan kunci '2r_data_wilayah'
     var dataWilayah = localStorage.getItem('2r_data_wilayah');
-    
-    // Jika data ada, parse dari JSON ke array objek. Jika tidak ada, kembalikan array kosong.
     if (dataWilayah) {
         return JSON.parse(dataWilayah);
     } else {
@@ -5102,236 +5122,98 @@ function getDataWilayah() {
 }
 
 // ===== 4.13.2 DAPATKAN DAFTAR PROVINSI UNIK =====
-/*
-    Fungsi ini mengambil semua provinsi yang ada di data wilayah.
-    Data provinsi diambil dari seluruh record, lalu di-filter agar tidak ada duplikasi.
-    Hasilnya diurutkan secara alfabetis (A-Z).
-*/
 function getProvinsiList() {
-    // Ambil data wilayah
     var data = getDataWilayah();
-    
-    // Gunakan Set untuk menyimpan provinsi unik (menghilangkan duplikasi)
     var provinsiSet = new Set();
-    
-    // Loop melalui semua data wilayah
     for (var i = 0; i < data.length; i++) {
-        // Tambahkan provinsi ke dalam Set
         provinsiSet.add(data[i].provinsi);
     }
-    
-    // Konversi Set menjadi array, lalu urutkan secara alfabetis
-    var provinsiArray = Array.from(provinsiSet);
-    provinsiArray.sort();
-    
-    // Kembalikan array provinsi yang sudah diurutkan
-    return provinsiArray;
+    return Array.from(provinsiSet).sort();
 }
 
 // ===== 4.13.3 DAPATKAN DAFTAR KABUPATEN BERDASARKAN PROVINSI =====
-/*
-    Fungsi ini mengambil semua kabupaten/kota yang berada di dalam provinsi tertentu.
-    Parameter:
-    - provinsi: string nama provinsi yang dipilih (contoh: "DKI Jakarta")
-    Fungsi akan mengembalikan array kabupaten yang sudah diurutkan secara alfabetis.
-*/
 function getKabupatenList(provinsi) {
-    // Ambil data wilayah
     var data = getDataWilayah();
-    
-    // Gunakan Set untuk menyimpan kabupaten unik
     var kabupatenSet = new Set();
-    
-    // Loop melalui semua data wilayah
     for (var i = 0; i < data.length; i++) {
-        // Jika provinsi pada record ini sama dengan provinsi yang dicari
         if (data[i].provinsi === provinsi) {
-            // Tambahkan kabupaten ke dalam Set
             kabupatenSet.add(data[i].kabupaten);
         }
     }
-    
-    // Konversi Set menjadi array, lalu urutkan secara alfabetis
-    var kabupatenArray = Array.from(kabupatenSet);
-    kabupatenArray.sort();
-    
-    // Kembalikan array kabupaten yang sudah diurutkan
-    return kabupatenArray;
+    return Array.from(kabupatenSet).sort();
 }
 
 // ===== 4.13.4 DAPATKAN DAFTAR KECAMATAN BERDASARKAN PROVINSI DAN KABUPATEN =====
-/*
-    Fungsi ini mengambil semua kecamatan yang berada di dalam provinsi dan kabupaten tertentu.
-    Parameter:
-    - provinsi: string nama provinsi (contoh: "DKI Jakarta")
-    - kabupaten: string nama kabupaten/kota (contoh: "Jakarta Pusat")
-    Fungsi akan mengembalikan array kecamatan yang sudah diurutkan secara alfabetis.
-*/
 function getKecamatanList(provinsi, kabupaten) {
-    // Ambil data wilayah
     var data = getDataWilayah();
-    
-    // Gunakan Set untuk menyimpan kecamatan unik
     var kecamatanSet = new Set();
-    
-    // Loop melalui semua data wilayah
     for (var i = 0; i < data.length; i++) {
-        // Jika provinsi dan kabupaten pada record ini cocok dengan parameter
         if (data[i].provinsi === provinsi && data[i].kabupaten === kabupaten) {
-            // Tambahkan kecamatan ke dalam Set
             kecamatanSet.add(data[i].kecamatan);
         }
     }
-    
-    // Konversi Set menjadi array, lalu urutkan secara alfabetis
-    var kecamatanArray = Array.from(kecamatanSet);
-    kecamatanArray.sort();
-    
-    // Kembalikan array kecamatan yang sudah diurutkan
-    return kecamatanArray;
+    return Array.from(kecamatanSet).sort();
 }
 
 // ===== 4.13.5 DAPATKAN DAFTAR DESA BERDASARKAN PROVINSI, KABUPATEN, DAN KECAMATAN =====
-/*
-    Fungsi ini mengambil semua desa/kelurahan yang berada di dalam provinsi, kabupaten, dan kecamatan tertentu.
-    Parameter:
-    - provinsi: string nama provinsi (contoh: "DKI Jakarta")
-    - kabupaten: string nama kabupaten/kota (contoh: "Jakarta Pusat")
-    - kecamatan: string nama kecamatan (contoh: "Gambir")
-    Fungsi akan mengembalikan array desa/kelurahan yang sudah diurutkan secara alfabetis.
-*/
 function getDesaList(provinsi, kabupaten, kecamatan) {
-    // Ambil data wilayah
     var data = getDataWilayah();
-    
-    // Gunakan Set untuk menyimpan desa unik
     var desaSet = new Set();
-    
-    // Loop melalui semua data wilayah
     for (var i = 0; i < data.length; i++) {
-        // Jika provinsi, kabupaten, dan kecamatan pada record ini cocok dengan parameter
         if (data[i].provinsi === provinsi && data[i].kabupaten === kabupaten && data[i].kecamatan === kecamatan) {
-            // Tambahkan desa ke dalam Set
             desaSet.add(data[i].desa);
         }
     }
-    
-    // Konversi Set menjadi array, lalu urutkan secara alfabetis
-    var desaArray = Array.from(desaSet);
-    desaArray.sort();
-    
-    // Kembalikan array desa yang sudah diurutkan
-    return desaArray;
+    return Array.from(desaSet).sort();
 }
 
 // ===== 4.13.6 LOAD DATA WILAYAH TERSIMPAN (OTOMATIS MENGISI DROPDOWN) =====
-/*
-    Fungsi ini digunakan saat halaman profil Customer dirender.
-    Fungsinya adalah membaca data wilayah yang sudah tersimpan di dalam objek user,
-    lalu secara otomatis memilih option yang sesuai pada dropdown provinsi, kabupaten, kecamatan, dan desa.
-    Dengan demikian, user tidak perlu memilih ulang wilayah yang sudah disimpan sebelumnya.
-
-    Parameter:
-    - prefix: string yang menunjukkan jenis alamat, apakah 'ktp' atau 'dom'.
-              Contoh: jika prefix = 'ktp', maka fungsi akan mencari elemen dengan id 'ktpProvinsi', 'ktpKabupaten', dst.
-    - user: objek user yang sedang login, berisi data alamat yang sudah tersimpan.
-*/
 function loadDataWilayahTersimpan(prefix, user) {
-    // Jika objek user tidak ada, keluar dari fungsi
     if (!user) {
         return;
     }
-
-    // ===== BAGIAN 1: SET PROVINSI YANG TERSIMPAN =====
-    // Cek apakah user memiliki data provinsi yang tersimpan
     if (user[prefix + 'Provinsi']) {
-        // Ambil elemen dropdown provinsi berdasarkan prefix
         var provinsiSelect = document.getElementById(prefix + 'Provinsi');
-        
-        // Jika elemen dropdown provinsi ditemukan
         if (provinsiSelect) {
-            // Loop melalui semua option di dropdown provinsi
             for (var i = 0; i < provinsiSelect.options.length; i++) {
-                // Jika value option sama dengan provinsi yang tersimpan di user
                 if (provinsiSelect.options[i].value === user[prefix + 'Provinsi']) {
-                    // Set option tersebut menjadi selected (terpilih)
                     provinsiSelect.options[i].selected = true;
-                    // Hentikan loop karena sudah ditemukan
                     break;
                 }
             }
-            
-            // Panggil fungsi onChangeProvinsiManual untuk mengisi dropdown kabupaten
-            // Ini akan memicu pengisian kabupaten berdasarkan provinsi yang baru dipilih
             onChangeProvinsiManual(prefix);
         }
     }
-
-    // ===== BAGIAN 2: SET KABUPATEN YANG TERSIMPAN =====
-    // Cek apakah user memiliki data kabupaten yang tersimpan
     if (user[prefix + 'Kabupaten']) {
-        // Ambil elemen dropdown kabupaten berdasarkan prefix
         var kabupatenSelect = document.getElementById(prefix + 'Kabupaten');
-        
-        // Jika elemen dropdown kabupaten ditemukan
         if (kabupatenSelect) {
-            // Loop melalui semua option di dropdown kabupaten
             for (var i = 0; i < kabupatenSelect.options.length; i++) {
-                // Jika value option sama dengan kabupaten yang tersimpan di user
                 if (kabupatenSelect.options[i].value === user[prefix + 'Kabupaten']) {
-                    // Set option tersebut menjadi selected (terpilih)
                     kabupatenSelect.options[i].selected = true;
-                    // Hentikan loop karena sudah ditemukan
                     break;
                 }
             }
-            
-            // Panggil fungsi onChangeKabupatenManual untuk mengisi dropdown kecamatan
-            // Ini akan memicu pengisian kecamatan berdasarkan kabupaten yang baru dipilih
             onChangeKabupatenManual(prefix);
         }
     }
-
-    // ===== BAGIAN 3: SET KECAMATAN YANG TERSIMPAN =====
-    // Cek apakah user memiliki data kecamatan yang tersimpan
     if (user[prefix + 'Kecamatan']) {
-        // Ambil elemen dropdown kecamatan berdasarkan prefix
         var kecamatanSelect = document.getElementById(prefix + 'Kecamatan');
-        
-        // Jika elemen dropdown kecamatan ditemukan
         if (kecamatanSelect) {
-            // Loop melalui semua option di dropdown kecamatan
             for (var i = 0; i < kecamatanSelect.options.length; i++) {
-                // Jika value option sama dengan kecamatan yang tersimpan di user
                 if (kecamatanSelect.options[i].value === user[prefix + 'Kecamatan']) {
-                    // Set option tersebut menjadi selected (terpilih)
                     kecamatanSelect.options[i].selected = true;
-                    // Hentikan loop karena sudah ditemukan
                     break;
                 }
             }
-            
-            // Panggil fungsi onChangeKecamatanManual untuk mengisi dropdown desa
-            // Ini akan memicu pengisian desa berdasarkan kecamatan yang baru dipilih
             onChangeKecamatanManual(prefix);
         }
     }
-
-    // ===== BAGIAN 4: SET DESA/KELURAHAN YANG TERSIMPAN =====
-    // Cek apakah user memiliki data desa yang tersimpan
     if (user[prefix + 'Desa']) {
-        // Ambil elemen dropdown desa berdasarkan prefix
         var desaSelect = document.getElementById(prefix + 'Desa');
-        
-        // Jika elemen dropdown desa ditemukan
         if (desaSelect) {
-            // Loop melalui semua option di dropdown desa
             for (var i = 0; i < desaSelect.options.length; i++) {
-                // Jika value option sama dengan desa yang tersimpan di user
                 if (desaSelect.options[i].value === user[prefix + 'Desa']) {
-                    // Set option tersebut menjadi selected (terpilih)
                     desaSelect.options[i].selected = true;
-                    // Hentikan loop karena sudah ditemukan
                     break;
                 }
             }
