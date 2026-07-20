@@ -3006,7 +3006,7 @@ function renderProfilCustomer() {
     html += '<span style="font-weight:normal; font-size:13px; color:#888;">Terakhir diperbarui: ' + (user.waktuRegistrasi ? new Date(user.waktuRegistrasi).toLocaleDateString('id-ID') : '-') + '</span>';
     html += '</div>';
     
-    // Data Dasar (Termasuk Role)
+    // Data Dasar (Role dipastikan muncul)
     html += '<div class="grid-2" style="margin-bottom:15px;">';
     html += '<div><strong>Nama Lengkap:</strong><br><span style="font-size:16px;">' + (user.nama || '-') + '</span></div>';
     html += '<div><strong>Username:</strong><br><span style="font-size:16px;">' + (user.username || '-') + '</span></div>';
@@ -3015,7 +3015,7 @@ function renderProfilCustomer() {
     html += '<div><strong>Role:</strong><br><span style="font-size:16px;">' + (user.role || '-') + '</span></div>';
     html += '</div>';
     
-    // Alamat KTP (dengan Kode Pos)
+    // Alamat KTP (Kode Pos dipastikan muncul)
     html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
     html += '<strong style="color:#FF6B00;">Alamat Sesuai KTP:</strong><br>';
     html += '<span>' + (user.alamatKTP || 'Belum diisi') + '</span>';
@@ -3024,7 +3024,7 @@ function renderProfilCustomer() {
     }
     html += '</div>';
     
-    // Alamat Domisili (dengan Kode Pos)
+    // Alamat Domisili (Kode Pos dipastikan muncul)
     html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
     html += '<strong style="color:#FF6B00;">Alamat Domisili / Sekarang:</strong><br>';
     html += '<span>' + (user.alamatDomisili || 'Belum diisi') + '</span>';
@@ -3039,11 +3039,14 @@ function renderProfilCustomer() {
     html += '<span>Bank: ' + (user.namaBank || '-') + ' | No. Rek: ' + (user.nomorRekening || '-') + ' | A/n: ' + (user.pemilikRekening || '-') + '</span>';
     html += '</div>';
     
-    // Dokumen KTP
+    // Dokumen KTP (dengan tombol hapus)
     html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
     html += '<strong style="color:#FF6B00;">Dokumen KTP:</strong><br>';
     if (user.ktp) {
-        html += '<img src="' + user.ktp + '" style="max-width:200px; max-height:150px; border-radius:8px; margin-top:5px; border:1px solid #ddd;">';
+        html += '<div style="display:flex; align-items:center; gap:15px;">';
+        html += '<img src="' + user.ktp + '" style="max-width:200px; max-height:150px; border-radius:8px; border:1px solid #ddd;">';
+        html += '<button class="button button-danger button-extra-small" onclick="hapusKTPCustomer()"><i class="fas fa-trash"></i> Hapus KTP</button>';
+        html += '</div>';
     } else {
         html += '<span>Belum diupload</span>';
     }
@@ -3079,7 +3082,12 @@ function renderProfilCustomer() {
         html += '<i class="fas fa-cloud-upload-alt"></i><p>Klik untuk upload KTP</p>';
     }
     html += '</div><input type="file" id="inputKtpCustomer" accept=".jpg,.jpeg,.png" style="display:none"></div>';
-    html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button></div>';
+    html += '<button class="button button-primary margin-top-10" onclick="simpanKTPCustomer()"><i class="fas fa-save"></i> Simpan KTP</button>';
+    // Tombol hapus KTP di dalam form (jika sudah ada KTP)
+    if (user.ktp) {
+        html += '<button class="button button-danger margin-top-10" onclick="hapusKTPCustomer()" style="margin-left:10px;"><i class="fas fa-trash"></i> Hapus KTP</button>';
+    }
+    html += '</div>';
     
     areaKonten.innerHTML = html;
     
@@ -3261,6 +3269,29 @@ function onChangeDesaManual(prefix) {
     } else {
         kodeposInput.value = '';
     }
+}
+
+
+/* ===== FUNGSI HELPER: HAPUS KTP CUSTOMER ===== */
+function hapusKTPCustomer() {
+    if (!confirm('Yakin ingin menghapus foto KTP?')) return;
+    
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    var dataAkun = getDataAkun();
+    
+    // Hapus KTP dari data user
+    user.ktp = '';
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === user.id) {
+            dataAkun[i].ktp = '';
+            break;
+        }
+    }
+    
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(dataAkun);
+    tampilkanToast('KTP berhasil dihapus!', 'success');
+    renderProfilCustomer();
 }
 /* ===== AKHIR BLOK 3.9.1 ===== */
     /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER (DENGAN NILAI MANUAL) ===== */
