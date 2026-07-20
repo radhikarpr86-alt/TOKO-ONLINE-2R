@@ -2478,11 +2478,11 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
         
         // ===== PANGGIL LOAD DATA TERSIMPAN =====
-		setTimeout(function() {
-		loadDataWilayahTersimpan('ktp', user);
-		loadDataWilayahTersimpan('dom', user);
-		loadDataProfilCustomer(user);   // <-- TAMBAHKAN INI
-		}, 500);
+setTimeout(function() {
+    loadDataWilayahTersimpan('ktp', user);
+    loadDataWilayahTersimpan('dom', user);
+    loadDataProfilCustomer(user);   // <-- HARUS ADA
+}, 500);
         
         // ===== EVENT LISTENER UPLOAD KTP =====
         setTimeout(function() {
@@ -2793,6 +2793,8 @@ function loadDataProfilCustomer(user) {
     if (document.getElementById('profilPemilikRekCustomer')) {
         document.getElementById('profilPemilikRekCustomer').value = user.pemilikRekening || '';
     }
+
+    return true; // <-- TAMBAHKAN INI
 }
 /* ===== AKHIR BLOK 3.6.21 ===== */
 </script>
@@ -3376,7 +3378,7 @@ function simpanProfilCustomer() {
     user.email = document.getElementById('editEmailCustomer').value.trim();
     user.nomorHp = document.getElementById('editHpCustomer').value.trim();
     
-    // ===== 2. SIMPAN ALAMAT KTP (DARI DROPDOWN DAN MANUAL) =====
+    // ===== 2. SIMPAN ALAMAT KTP =====
     user.ktpDusun = document.getElementById('ktpDusun').value.trim();
     user.ktpRT = document.getElementById('ktpRT').value.trim();
     user.ktpRW = document.getElementById('ktpRW').value.trim();
@@ -3389,14 +3391,13 @@ function simpanProfilCustomer() {
     user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
     user.ktpKodepos = document.getElementById('ktpKodepos').value.trim();
     
-    // ===== TAMBAHAN: NILAI MANUAL =====
+    // Nilai manual
     user.ktpProvinsiManual = document.getElementById('ktpProvinsiManual').value.trim();
     user.ktpKabupatenManual = document.getElementById('ktpKabupatenManual').value.trim();
     user.ktpKecamatanManual = document.getElementById('ktpKecamatanManual').value.trim();
     user.ktpDesaManual = document.getElementById('ktpDesaManual').value.trim();
-    // ===== AKHIR TAMBAHAN =====
     
-    // Gabungkan alamat KTP menjadi satu string lengkap
+    // Gabungkan alamat KTP
     var gabungKTP = '';
     if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
     if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
@@ -3409,7 +3410,7 @@ function simpanProfilCustomer() {
     if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
     user.alamatKTP = gabungKTP;
     
-    // ===== 3. SIMPAN ALAMAT DOMISILI (DARI DROPDOWN DAN MANUAL) =====
+    // ===== 3. SIMPAN ALAMAT DOMISILI =====
     user.domDusun = document.getElementById('domDusun').value.trim();
     user.domRT = document.getElementById('domRT').value.trim();
     user.domRW = document.getElementById('domRW').value.trim();
@@ -3422,14 +3423,13 @@ function simpanProfilCustomer() {
     user.domProvinsi = document.getElementById('domProvinsi').value;
     user.domKodepos = document.getElementById('domKodepos').value.trim();
     
-    // ===== TAMBAHAN: NILAI MANUAL =====
+    // Nilai manual
     user.domProvinsiManual = document.getElementById('domProvinsiManual').value.trim();
     user.domKabupatenManual = document.getElementById('domKabupatenManual').value.trim();
     user.domKecamatanManual = document.getElementById('domKecamatanManual').value.trim();
     user.domDesaManual = document.getElementById('domDesaManual').value.trim();
-    // ===== AKHIR TAMBAHAN =====
     
-    // Gabungkan alamat domisili menjadi satu string lengkap
+    // Gabungkan alamat domisili
     var gabungDom = '';
     if (user.domDusun) gabungDom += user.domDusun + ', ';
     if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
@@ -3442,11 +3442,21 @@ function simpanProfilCustomer() {
     if (user.domKodepos) gabungDom += user.domKodepos;
     user.alamatDomisili = gabungDom;
     
-    // Untuk kompatibilitas dengan sistem lama (field alamat utama)
+    // Alamat utama
     user.alamat = user.alamatDomisili || user.alamatKTP;
     
-    // ===== 4. SIMPAN KE DATABASE AKUN =====
-    // Cari akun dengan ID yang sama, lalu update datanya
+    // ===== 4. SIMPAN DATA REKENING =====
+    user.namaBank = document.getElementById('profilBankCustomer').value.trim();
+    user.nomorRekening = document.getElementById('profilRekeningCustomer').value.trim();
+    user.pemilikRekening = document.getElementById('profilPemilikRekCustomer').value.trim();
+    
+    // ===== 5. VALIDASI DATA =====
+    if (!user.nama) {
+        tampilkanToast('Nama lengkap wajib diisi!', 'warning');
+        return;
+    }
+    
+    // ===== 6. SIMPAN KE DATABASE AKUN =====
     for (var i = 0; i < dataAkun.length; i++) {
         if (dataAkun[i].id === user.id) {
             // Update data registrasi
@@ -3454,7 +3464,7 @@ function simpanProfilCustomer() {
             dataAkun[i].email = user.email;
             dataAkun[i].nomorHp = user.nomorHp;
             
-            // Update alamat KTP (termasuk manual)
+            // Update alamat KTP
             dataAkun[i].ktpDusun = user.ktpDusun;
             dataAkun[i].ktpRT = user.ktpRT;
             dataAkun[i].ktpRW = user.ktpRW;
@@ -3470,7 +3480,7 @@ function simpanProfilCustomer() {
             dataAkun[i].ktpDesaManual = user.ktpDesaManual;
             dataAkun[i].alamatKTP = user.alamatKTP;
             
-            // Update alamat domisili (termasuk manual)
+            // Update alamat domisili
             dataAkun[i].domDusun = user.domDusun;
             dataAkun[i].domRT = user.domRT;
             dataAkun[i].domRW = user.domRW;
@@ -3489,12 +3499,16 @@ function simpanProfilCustomer() {
             // Update alamat utama
             dataAkun[i].alamat = user.alamat;
             
-            // Hentikan loop karena sudah ditemukan
+            // Update data rekening
+            dataAkun[i].namaBank = user.namaBank;
+            dataAkun[i].nomorRekening = user.nomorRekening;
+            dataAkun[i].pemilikRekening = user.pemilikRekening;
+            
             break;
         }
     }
     
-    // ===== 5. SIMPAN KE LOCALSTORAGE =====
+    // ===== 7. SIMPAN KE LOCALSTORAGE =====
     localStorage.setItem('2r_user', JSON.stringify(user));
     simpanDataAkun(dataAkun);
     
@@ -3504,7 +3518,7 @@ function simpanProfilCustomer() {
     // Tampilkan notifikasi sukses
     tampilkanToast('Profil berhasil disimpan!', 'success');
     
-    // ===== 6. REFRESH HALAMAN PROFIL =====
+    // ===== 8. REFRESH HALAMAN PROFIL =====
     renderProfilCustomer();
 }
 /* ===== AKHIR BLOK 3.9.2 ===== */
