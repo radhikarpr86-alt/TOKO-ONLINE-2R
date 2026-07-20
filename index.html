@@ -1647,6 +1647,36 @@ function buatSidebarHTML(role) {
     return htmlSidebar;
 }
 /* ===== AKHIR BLOK 3.4.1 ===== */
+	/* ===== BLOK 3.4.2 - SETUP NAVIGASI SIDEBAR ===== */
+/*
+    Fungsi ini memberikan event listener ke setiap item menu di sidebar.
+    Saat item diklik:
+    1. Menghapus class 'active' dari semua item.
+    2. Menambahkan class 'active' ke item yang diklik.
+    3. Memanggil navigasiKeHalaman() untuk menampilkan konten yang sesuai.
+*/
+function setupNavigasiSidebar() {
+    var semuaItemMenu = document.querySelectorAll('.sidebar-menu-item');
+    
+    semuaItemMenu.forEach(function(item) {
+        item.onclick = function() {
+            var namaHalaman = this.getAttribute('data-page');
+            if (!namaHalaman) return;
+            
+            // Hapus active dari semua item
+            semuaItemMenu.forEach(function(m) {
+                m.classList.remove('active');
+            });
+            
+            // Tambahkan active ke item yang diklik
+            this.classList.add('active');
+            
+            // Panggil navigasi
+            navigasiKeHalaman(namaHalaman);
+        };
+    });
+}
+/* ===== AKHIR BLOK 3.4.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.4 ===== -->
 <!-- ===== BLOK 3.5 - JS_SIDEBAR_NAVIGASI ===== -->
@@ -5369,52 +5399,62 @@ document.getElementById('tombolLupaPassword').addEventListener('click', function
 <!-- ===== BLOK 5.3 - JS_INIT_UTAMA ===== -->
 <script>
     /* ===== BLOK 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN ===== */
-    /*
-        Fungsi ini dipanggil setelah user berhasil login.
-        1. Menyembunyikan halaman Login/Register.
-        2. Menampilkan halaman Dashboard.
-        3. Mengisi nama user di navbar.
-        4. Membangun sidebar sesuai role user.
-        5. Menampilkan dashboard awal.
-    */
-    function tampilkanDashboard(user) {
-        // Validasi data user
-        if (!user || !user.nama) {
-            localStorage.removeItem('2r_user');
-            localStorage.removeItem('2r_user_role');
-            location.reload();
-            return;
-        }
-
-        // Sembunyikan halaman auth, tampilkan dashboard
-        document.getElementById('pageAuthentication').style.display = 'none';
-        document.getElementById('pageDashboard').style.display = 'block';
-        
-        // Tampilkan nama user di navbar
-        document.getElementById('userNama').textContent = user.nama;
-        
-        // Tampilkan role badge
-        var daftarRole = {
-            superadmin: 'SuperAdmin',
-            customer: 'Customer',
-            toko: 'Toko',
-            ojek: 'Ojek',
-            pedagang: 'Pedagang Pasar',
-            staf_admin: 'Staf Admin',
-            customer_service: 'Customer Service',
-            staf_owner_toko: 'Staf Owner Toko',
-            staf_owner_ojek: 'Staf Owner Ojek',
-            sponsor: 'Sponsor'
-        };
-        document.getElementById('roleBadge').textContent = daftarRole[user.role] || user.role;
-        
-        // Bangun sidebar
-        document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
-        setupNavigasiSidebar();
-        
-        // Tampilkan dashboard awal
-        renderDashboard();
+/*
+    Fungsi ini dipanggil setelah user berhasil login.
+    1. Menyembunyikan halaman Login/Register.
+    2. Menampilkan halaman Dashboard.
+    3. Mengisi nama user di navbar.
+    4. Membangun sidebar sesuai role user.
+    5. Memanggil setupNavigasiSidebar() agar sidebar bisa diklik.
+    6. Menampilkan dashboard awal.
+*/
+function tampilkanDashboard(user) {
+    // ===== 1. VALIDASI DATA USER =====
+    // Jika data user tidak valid, hapus session dan reload halaman
+    if (!user || !user.nama) {
+        localStorage.removeItem('2r_user');
+        localStorage.removeItem('2r_user_role');
+        location.reload();
+        return;
     }
+
+    // ===== 2. SEMBUNYIKAN HALAMAN AUTH, TAMPILKAN DASHBOARD =====
+    document.getElementById('pageAuthentication').style.display = 'none';
+    document.getElementById('pageDashboard').style.display = 'block';
+    
+    // ===== 3. TAMPILKAN NAMA USER DI NAVBAR =====
+    document.getElementById('userNama').textContent = user.nama;
+    
+    // ===== 4. TAMPILKAN ROLE BADGE =====
+    var daftarRole = {
+        superadmin: 'SuperAdmin',
+        customer: 'Customer',
+        toko: 'Toko',
+        ojek: 'Ojek',
+        pedagang: 'Pedagang Pasar',
+        staf_admin: 'Staf Admin',
+        customer_service: 'Customer Service',
+        staf_owner_toko: 'Staf Owner Toko',
+        staf_owner_ojek: 'Staf Owner Ojek',
+        sponsor: 'Sponsor'
+    };
+    document.getElementById('roleBadge').textContent = daftarRole[user.role] || user.role;
+    
+    // ===== 5. BANGUN SIDEBAR =====
+    // Sidebar akan diisi dengan menu yang sesuai dengan role user
+    document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
+    
+    // ===== 6. PANGGIL SETUP NAVIGASI SIDEBAR (PENTING!) =====
+    /*
+        Fungsi ini memberikan event listener ke setiap item menu di sidebar.
+        Tanpa ini, menu sidebar tidak bisa diklik.
+    */
+    setupNavigasiSidebar();
+    
+    // ===== 7. TAMPILKAN DASHBOARD AWAL =====
+    renderDashboard();
+}
+/* ===== AKHIR BLOK 5.3.1 ===== */
 
     /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
     /*
