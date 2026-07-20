@@ -2377,112 +2377,151 @@ function renderProfilCustomer() {
 }
 /* ===== AKHIR BLOK 3.9.1 ===== */
 
-    /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER ===== */
-    /*
-        Fungsi ini mengambil data dari form profil Customer,
-        lalu menyimpannya ke localStorage (baik di data user aktif maupun database akun).
-        Termasuk alamat KTP dan Domisili yang digabung menjadi string alamat lengkap.
-    */
-    function simpanProfilCustomer() {
-        var user = JSON.parse(localStorage.getItem('2r_user'));
-        var dataAkun = getDataAkun();
-        
-        // Data registrasi
-        user.nama = document.getElementById('editNamaCustomer').value;
-        user.email = document.getElementById('editEmailCustomer').value;
-        user.nomorHp = document.getElementById('editHpCustomer').value;
-        
-        // Alamat KTP
-        user.ktpDusun = document.getElementById('ktpDusun').value;
-        user.ktpRT = document.getElementById('ktpRT').value;
-        user.ktpRW = document.getElementById('ktpRW').value;
-        user.ktpJalan = document.getElementById('ktpJalan').value;
-        user.ktpDesa = document.getElementById('ktpDesa').value;
-        user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
-        user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
-        user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
-        user.ktpKodepos = document.getElementById('ktpKodepos').value;
-        
-        // Alamat Domisili
-        user.domDusun = document.getElementById('domDusun').value;
-        user.domRT = document.getElementById('domRT').value;
-        user.domRW = document.getElementById('domRW').value;
-        user.domJalan = document.getElementById('domJalan').value;
-        user.domDesa = document.getElementById('domDesa').value;
-        user.domKecamatan = document.getElementById('domKecamatan').value;
-        user.domKabupaten = document.getElementById('domKabupaten').value;
-        user.domProvinsi = document.getElementById('domProvinsi').value;
-        user.domKodepos = document.getElementById('domKodepos').value;
-        
-        // Gabungkan alamat KTP jadi satu string
-        var gabungKTP = '';
-        if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
-        if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
-        if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
-        if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
-        if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
-        if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
-        if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
-        if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
-        if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
-        user.alamatKTP = gabungKTP;
-        
-        // Gabungkan alamat domisili jadi satu string
-        var gabungDom = '';
-        if (user.domDusun) gabungDom += user.domDusun + ', ';
-        if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
-        if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
-        if (user.domJalan) gabungDom += user.domJalan + ', ';
-        if (user.domDesa) gabungDom += user.domDesa + ', ';
-        if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
-        if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
-        if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
-        if (user.domKodepos) gabungDom += user.domKodepos;
-        user.alamatDomisili = gabungDom;
-        
-        // Untuk kompatibilitas dengan sistem lama
-        user.alamat = user.alamatDomisili || user.alamatKTP;
-        
-        // Simpan ke database akun
-        for (var i = 0; i < dataAkun.length; i++) {
-            if (dataAkun[i].id === user.id) {
-                dataAkun[i].nama = user.nama;
-                dataAkun[i].email = user.email;
-                dataAkun[i].nomorHp = user.nomorHp;
-                
-                dataAkun[i].ktpDusun = user.ktpDusun;
-                dataAkun[i].ktpRT = user.ktpRT;
-                dataAkun[i].ktpRW = user.ktpRW;
-                dataAkun[i].ktpJalan = user.ktpJalan;
-                dataAkun[i].ktpDesa = user.ktpDesa;
-                dataAkun[i].ktpKecamatan = user.ktpKecamatan;
-                dataAkun[i].ktpKabupaten = user.ktpKabupaten;
-                dataAkun[i].ktpProvinsi = user.ktpProvinsi;
-                dataAkun[i].ktpKodepos = user.ktpKodepos;
-                dataAkun[i].alamatKTP = user.alamatKTP;
-                
-                dataAkun[i].domDusun = user.domDusun;
-                dataAkun[i].domRT = user.domRT;
-                dataAkun[i].domRW = user.domRW;
-                dataAkun[i].domJalan = user.domJalan;
-                dataAkun[i].domDesa = user.domDesa;
-                dataAkun[i].domKecamatan = user.domKecamatan;
-                dataAkun[i].domKabupaten = user.domKabupaten;
-                dataAkun[i].domProvinsi = user.domProvinsi;
-                dataAkun[i].domKodepos = user.domKodepos;
-                dataAkun[i].alamatDomisili = user.alamatDomisili;
-                
-                dataAkun[i].alamat = user.alamat;
-                break;
-            }
+    /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER (DENGAN NILAI MANUAL) ===== */
+function simpanProfilCustomer() {
+    // Ambil data user yang sedang login dari localStorage
+    var user = JSON.parse(localStorage.getItem('2r_user'));
+    
+    // Ambil seluruh data akun dari database
+    var dataAkun = getDataAkun();
+    
+    // ===== 1. SIMPAN DATA REGISTRASI =====
+    user.nama = document.getElementById('editNamaCustomer').value.trim();
+    user.email = document.getElementById('editEmailCustomer').value.trim();
+    user.nomorHp = document.getElementById('editHpCustomer').value.trim();
+    
+    // ===== 2. SIMPAN ALAMAT KTP (DARI DROPDOWN DAN MANUAL) =====
+    user.ktpDusun = document.getElementById('ktpDusun').value.trim();
+    user.ktpRT = document.getElementById('ktpRT').value.trim();
+    user.ktpRW = document.getElementById('ktpRW').value.trim();
+    user.ktpJalan = document.getElementById('ktpJalan').value.trim();
+    
+    // Nilai dari dropdown
+    user.ktpDesa = document.getElementById('ktpDesa').value;
+    user.ktpKecamatan = document.getElementById('ktpKecamatan').value;
+    user.ktpKabupaten = document.getElementById('ktpKabupaten').value;
+    user.ktpProvinsi = document.getElementById('ktpProvinsi').value;
+    user.ktpKodepos = document.getElementById('ktpKodepos').value.trim();
+    
+    // ===== TAMBAHAN: NILAI MANUAL =====
+    user.ktpProvinsiManual = document.getElementById('ktpProvinsiManual').value.trim();
+    user.ktpKabupatenManual = document.getElementById('ktpKabupatenManual').value.trim();
+    user.ktpKecamatanManual = document.getElementById('ktpKecamatanManual').value.trim();
+    user.ktpDesaManual = document.getElementById('ktpDesaManual').value.trim();
+    // ===== AKHIR TAMBAHAN =====
+    
+    // Gabungkan alamat KTP menjadi satu string lengkap
+    var gabungKTP = '';
+    if (user.ktpDusun) gabungKTP += user.ktpDusun + ', ';
+    if (user.ktpRT) gabungKTP += 'RT ' + user.ktpRT + ', ';
+    if (user.ktpRW) gabungKTP += 'RW ' + user.ktpRW + ', ';
+    if (user.ktpJalan) gabungKTP += user.ktpJalan + ', ';
+    if (user.ktpDesa) gabungKTP += user.ktpDesa + ', ';
+    if (user.ktpKecamatan) gabungKTP += user.ktpKecamatan + ', ';
+    if (user.ktpKabupaten) gabungKTP += user.ktpKabupaten + ', ';
+    if (user.ktpProvinsi) gabungKTP += user.ktpProvinsi + ', ';
+    if (user.ktpKodepos) gabungKTP += user.ktpKodepos;
+    user.alamatKTP = gabungKTP;
+    
+    // ===== 3. SIMPAN ALAMAT DOMISILI (DARI DROPDOWN DAN MANUAL) =====
+    user.domDusun = document.getElementById('domDusun').value.trim();
+    user.domRT = document.getElementById('domRT').value.trim();
+    user.domRW = document.getElementById('domRW').value.trim();
+    user.domJalan = document.getElementById('domJalan').value.trim();
+    
+    // Nilai dari dropdown
+    user.domDesa = document.getElementById('domDesa').value;
+    user.domKecamatan = document.getElementById('domKecamatan').value;
+    user.domKabupaten = document.getElementById('domKabupaten').value;
+    user.domProvinsi = document.getElementById('domProvinsi').value;
+    user.domKodepos = document.getElementById('domKodepos').value.trim();
+    
+    // ===== TAMBAHAN: NILAI MANUAL =====
+    user.domProvinsiManual = document.getElementById('domProvinsiManual').value.trim();
+    user.domKabupatenManual = document.getElementById('domKabupatenManual').value.trim();
+    user.domKecamatanManual = document.getElementById('domKecamatanManual').value.trim();
+    user.domDesaManual = document.getElementById('domDesaManual').value.trim();
+    // ===== AKHIR TAMBAHAN =====
+    
+    // Gabungkan alamat domisili menjadi satu string lengkap
+    var gabungDom = '';
+    if (user.domDusun) gabungDom += user.domDusun + ', ';
+    if (user.domRT) gabungDom += 'RT ' + user.domRT + ', ';
+    if (user.domRW) gabungDom += 'RW ' + user.domRW + ', ';
+    if (user.domJalan) gabungDom += user.domJalan + ', ';
+    if (user.domDesa) gabungDom += user.domDesa + ', ';
+    if (user.domKecamatan) gabungDom += user.domKecamatan + ', ';
+    if (user.domKabupaten) gabungDom += user.domKabupaten + ', ';
+    if (user.domProvinsi) gabungDom += user.domProvinsi + ', ';
+    if (user.domKodepos) gabungDom += user.domKodepos;
+    user.alamatDomisili = gabungDom;
+    
+    // Untuk kompatibilitas dengan sistem lama (field alamat utama)
+    user.alamat = user.alamatDomisili || user.alamatKTP;
+    
+    // ===== 4. SIMPAN KE DATABASE AKUN =====
+    // Cari akun dengan ID yang sama, lalu update datanya
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === user.id) {
+            // Update data registrasi
+            dataAkun[i].nama = user.nama;
+            dataAkun[i].email = user.email;
+            dataAkun[i].nomorHp = user.nomorHp;
+            
+            // Update alamat KTP (termasuk manual)
+            dataAkun[i].ktpDusun = user.ktpDusun;
+            dataAkun[i].ktpRT = user.ktpRT;
+            dataAkun[i].ktpRW = user.ktpRW;
+            dataAkun[i].ktpJalan = user.ktpJalan;
+            dataAkun[i].ktpDesa = user.ktpDesa;
+            dataAkun[i].ktpKecamatan = user.ktpKecamatan;
+            dataAkun[i].ktpKabupaten = user.ktpKabupaten;
+            dataAkun[i].ktpProvinsi = user.ktpProvinsi;
+            dataAkun[i].ktpKodepos = user.ktpKodepos;
+            dataAkun[i].ktpProvinsiManual = user.ktpProvinsiManual;
+            dataAkun[i].ktpKabupatenManual = user.ktpKabupatenManual;
+            dataAkun[i].ktpKecamatanManual = user.ktpKecamatanManual;
+            dataAkun[i].ktpDesaManual = user.ktpDesaManual;
+            dataAkun[i].alamatKTP = user.alamatKTP;
+            
+            // Update alamat domisili (termasuk manual)
+            dataAkun[i].domDusun = user.domDusun;
+            dataAkun[i].domRT = user.domRT;
+            dataAkun[i].domRW = user.domRW;
+            dataAkun[i].domJalan = user.domJalan;
+            dataAkun[i].domDesa = user.domDesa;
+            dataAkun[i].domKecamatan = user.domKecamatan;
+            dataAkun[i].domKabupaten = user.domKabupaten;
+            dataAkun[i].domProvinsi = user.domProvinsi;
+            dataAkun[i].domKodepos = user.domKodepos;
+            dataAkun[i].domProvinsiManual = user.domProvinsiManual;
+            dataAkun[i].domKabupatenManual = user.domKabupatenManual;
+            dataAkun[i].domKecamatanManual = user.domKecamatanManual;
+            dataAkun[i].domDesaManual = user.domDesaManual;
+            dataAkun[i].alamatDomisili = user.alamatDomisili;
+            
+            // Update alamat utama
+            dataAkun[i].alamat = user.alamat;
+            
+            // Hentikan loop karena sudah ditemukan
+            break;
         }
-        
-        localStorage.setItem('2r_user', JSON.stringify(user));
-        simpanDataAkun(dataAkun);
-        document.getElementById('userNama').textContent = user.nama;
-        tampilkanToast('Profil berhasil disimpan!', 'success');
     }
-    /* ===== AKHIR BLOK 3.9.2 ===== */
+    
+    // ===== 5. SIMPAN KE LOCALSTORAGE =====
+    localStorage.setItem('2r_user', JSON.stringify(user));
+    simpanDataAkun(dataAkun);
+    
+    // Update nama di navbar
+    document.getElementById('userNama').textContent = user.nama;
+    
+    // Tampilkan notifikasi sukses
+    tampilkanToast('Profil berhasil disimpan!', 'success');
+    
+    // ===== 6. REFRESH HALAMAN PROFIL =====
+    renderProfilCustomer();
+}
+/* ===== AKHIR BLOK 3.9.2 ===== */
 
     /* ===== BLOK 3.9.3 - SIMPAN REKENING CUSTOMER ===== */
     /*
