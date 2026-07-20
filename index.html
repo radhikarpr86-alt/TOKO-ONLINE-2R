@@ -1903,107 +1903,399 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.5.3 ===== */
-	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER UNTUK NAVIGASI ===== */
-    function renderBelanja() {
-        renderPlaceholder('Belanja');
+	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER DAN TRANSAKSI TOKO ===== */
+
+// ===== FUNGSI PLACEHOLDER (TIDAK DIUBAH) =====
+function renderBelanja() {
+    renderPlaceholder('Belanja');
+}
+
+function renderPesananSaya() {
+    renderPlaceholder('Pesanan Saya');
+}
+
+function renderPengajuanHapusAkun() {
+    renderPlaceholder('Pengajuan Hapus Akun');
+}
+
+function renderDaftarBelanja() {
+    renderPlaceholder('Daftar Belanja');
+}
+
+function renderRiwayatBelanja() {
+    renderPlaceholder('Riwayat Belanja');
+}
+
+function renderPembayaran() {
+    renderPlaceholder('Pembayaran');
+}
+
+function renderUlasanRating() {
+    renderPlaceholder('Ulasan & Rating');
+}
+
+function renderBantuanFAQ() {
+    renderPlaceholder('Bantuan & FAQ');
+}
+
+function renderNotifikasi() {
+    renderPlaceholder('Notifikasi');
+}
+
+function renderPenagihan() {
+    renderPlaceholder('Penagihan');
+}
+
+function renderKelolaUpgrade() {
+    renderPlaceholder('Kelola Upgrade');
+}
+
+function renderSettingTarifOjek() {
+    renderPlaceholder('Setting Tarif Ojek');
+}
+
+function renderPesananMasuk() {
+    renderPlaceholder('Pesanan Masuk');
+}
+
+function renderLaporanPenjualan() {
+    renderPlaceholder('Laporan Penjualan');
+}
+
+function renderSettingToko() {
+    renderPlaceholder('Setting Toko');
+}
+
+function renderOrderMasuk() {
+    renderPlaceholder('Order Masuk');
+}
+
+function renderRiwayatOrder() {
+    renderPlaceholder('Riwayat Order');
+}
+
+function renderLaporanOjek() {
+    renderPlaceholder('Laporan Ojek');
+}
+
+function renderSettingOjek() {
+    renderPlaceholder('Setting Ojek');
+}
+
+function renderTiketBantuan() {
+    renderPlaceholder('Tiket Bantuan');
+}
+
+function renderLiveChat() {
+    renderPlaceholder('Live Chat');
+}
+
+function renderIklanSaya() {
+    renderPlaceholder('Iklan Saya');
+}
+
+function renderStatistik() {
+    renderPlaceholder('Statistik');
+}
+
+// ===== FUNGSI RENDER MENU IKLAN (SUDAH DIPERBAIKI SEBELUMNYA) =====
+function renderMenuIklan() {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) {
+        return;
+    }
+    var dataIklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+    var html = '';
+    html += '<div class="page-header">';
+    html += '<h2>Menu Iklan</h2>';
+    html += '<p>Berikut adalah daftar iklan sponsor yang sedang aktif.</p>';
+    html += '</div>';
+    if (dataIklan.length === 0) {
+        html += '<div class="card">';
+        html += '<div class="empty-state">';
+        html += '<i class="fas fa-ad" style="color:#FF6B00;"></i>';
+        html += '<h3>Belum ada iklan</h3>';
+        html += '<p>Iklan sponsor akan muncul di sini.</p>';
+        html += '</div>';
+        html += '</div>';
+    } else {
+        html += '<div class="card">';
+        html += '<div class="card-header">Iklan Sponsor</div>';
+        html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">';
+        for (var i = 0; i < dataIklan.length; i++) {
+            var iklan = dataIklan[i];
+            var gambarHtml = '';
+            if (iklan.gambar) {
+                gambarHtml = '<img src="' + iklan.gambar + '" style="width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px;">';
+            } else {
+                gambarHtml = '<i class="fas fa-ad" style="font-size:40px; margin-bottom:10px; display:block;"></i>';
+            }
+            html += '<div style="background:' + (iklan.warna || '#FF6B00') + '; color:white; border-radius:10px; padding:20px; text-align:center;">';
+            html += gambarHtml;
+            html += '<h4 style="font-size:14px;">' + iklan.judul + '</h4>';
+            html += '<p style="font-size:12px; opacity:0.9;">' + iklan.deskripsi + '</p>';
+            html += '</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+    }
+    areaKonten.innerHTML = html;
+}
+
+// ===== FUNGSI RENDER TRANSAKSI TOKO (DIPERBAIKI) =====
+/*
+    Fungsi ini menampilkan halaman Transaksi Toko.
+    Terintegrasi dengan produk gudang (2r_produk_gudang).
+    Menampilkan widget ringkasan, form input transaksi, dan tabel riwayat transaksi.
+*/
+function renderTransaksiToko() {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) {
+        return;
     }
 
-    function renderPesananSaya() {
-        renderPlaceholder('Pesanan Saya');
+    // Ambil data user
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+
+    // Ambil data produk gudang milik toko
+    var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+    var produkToko = semuaProdukGudang.filter(function(p) {
+        return p.tokoId === user.id;
+    });
+
+    // Ambil data transaksi toko
+    var semuaTransaksi = JSON.parse(localStorage.getItem('2r_transaksi_toko') || '[]');
+    var transaksiToko = semuaTransaksi.filter(function(t) {
+        return t.tokoId === user.id;
+    });
+
+    // Hitung widget
+    var totalTransaksi = transaksiToko.length;
+    var totalPendapatan = 0;
+    var totalKeuntungan = 0;
+    var produkTerlaris = {};
+    for (var i = 0; i < transaksiToko.length; i++) {
+        var t = transaksiToko[i];
+        totalPendapatan += t.totalHargaJual;
+        totalKeuntungan += t.totalKeuntungan;
+        if (produkTerlaris[t.namaProduk]) {
+            produkTerlaris[t.namaProduk] += t.jumlahTerjual;
+        } else {
+            produkTerlaris[t.namaProduk] = t.jumlahTerjual;
+        }
+    }
+    // Cari produk dengan penjualan tertinggi
+    var namaProdukTerlaris = '';
+    var jumlahTerlaris = 0;
+    for (var nama in produkTerlaris) {
+        if (produkTerlaris[nama] > jumlahTerlaris) {
+            jumlahTerlaris = produkTerlaris[nama];
+            namaProdukTerlaris = nama;
+        }
     }
 
-    function renderMenuIklan() {
-        renderPlaceholder('Menu Iklan');
+    var html = '';
+
+    // ===== HEADER =====
+    html += '<div class="page-header">';
+    html += '<h2>Transaksi Toko</h2>';
+    html += '<p>Catat penjualan produk dari gudang Anda. Stok akan berkurang secara otomatis.</p>';
+    html += '</div>';
+
+    // ===== WIDGET RINGKASAN =====
+    html += '<div class="widget-grid">';
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#2196F3;"><i class="fas fa-shopping-cart"></i></div>';
+    html += '<div class="widget-number">' + totalTransaksi + '</div>';
+    html += '<div class="widget-label">Total Transaksi</div>';
+    html += '</div>';
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-money-bill-wave"></i></div>';
+    html += '<div class="widget-number">Rp ' + totalPendapatan.toLocaleString('id-ID') + '</div>';
+    html += '<div class="widget-label">Total Pendapatan</div>';
+    html += '</div>';
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#FF6B00;"><i class="fas fa-chart-line"></i></div>';
+    html += '<div class="widget-number">Rp ' + totalKeuntungan.toLocaleString('id-ID') + '</div>';
+    html += '<div class="widget-label">Total Keuntungan</div>';
+    html += '</div>';
+    html += '<div class="widget-card">';
+    html += '<div class="widget-icon" style="color:#F44336;"><i class="fas fa-trophy"></i></div>';
+    html += '<div class="widget-number">' + (namaProdukTerlaris || '-') + '</div>';
+    html += '<div class="widget-label">Produk Terlaris</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // ===== FORM INPUT TRANSAKSI =====
+    html += '<div class="card">';
+    html += '<div class="card-header">Tambah Transaksi Baru</div>';
+    html += '<div class="grid-2">';
+    // Dropdown produk
+    html += '<div><label class="form-label">Pilih Produk</label>';
+    html += '<select id="transaksiProduk" class="form-input" onchange="updateHargaJualTransaksi()">';
+    html += '<option value="">-- Pilih Produk --</option>';
+    for (var i = 0; i < produkToko.length; i++) {
+        var p = produkToko[i];
+        html += '<option value="' + p.id + '" data-harga="' + p.hargaJual + '" data-stok="' + p.jumlahStok + '">';
+        html += p.namaProduk + ' (Stok: ' + p.jumlahStok + ' ' + p.satuan + ')';
+        html += '</option>';
+    }
+    html += '</select></div>';
+    // Jumlah
+    html += '<div><label class="form-label">Jumlah Terjual</label>';
+    html += '<input type="number" id="transaksiJumlah" class="form-input" placeholder="Jumlah" min="1" onchange="validasiStokTransaksi()"></div>';
+    // Harga Jual (otomatis terisi)
+    html += '<div><label class="form-label">Harga Jual Satuan (Rp)</label>';
+    html += '<input type="number" id="transaksiHargaJual" class="form-input" placeholder="Harga jual"></div>';
+    // Metode Pembayaran
+    html += '<div><label class="form-label">Metode Pembayaran</label>';
+    html += '<select id="transaksiMetode" class="form-input">';
+    html += '<option value="Tunai">Tunai</option>';
+    html += '<option value="Transfer">Transfer</option>';
+    html += '<option value="COD">COD</option>';
+    html += '</select></div>';
+    html += '</div>';
+    // Keterangan
+    html += '<div class="form-group">';
+    html += '<label class="form-label">Keterangan (Opsional)</label>';
+    html += '<input type="text" id="transaksiKeterangan" class="form-input" placeholder="Catatan tambahan">';
+    html += '</div>';
+    html += '<button class="button button-primary margin-top-10" onclick="tambahTransaksiToko()"><i class="fas fa-plus"></i> Tambah Transaksi</button>';
+    html += '</div>';
+
+    // ===== TABEL RIWAYAT TRANSAKSI =====
+    html += '<div class="card">';
+    html += '<div class="card-header">Riwayat Transaksi <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + transaksiToko.length + ')</span></div>';
+    if (transaksiToko.length === 0) {
+        html += '<div class="empty-state"><i class="fas fa-receipt"></i><h3>Belum ada transaksi</h3></div>';
+    } else {
+        html += '<div class="table-container"><table class="table"><thead><tr><th>Tanggal</th><th>Produk</th><th>Jumlah</th><th>Harga Jual</th><th>Total</th><th>Keuntungan</th><th>Metode</th><th>Keterangan</th></tr></thead><tbody>';
+        // Urutkan dari yang terbaru
+        transaksiToko.sort(function(a, b) {
+            return new Date(b.tanggalTransaksi) - new Date(a.tanggalTransaksi);
+        });
+        for (var i = 0; i < transaksiToko.length; i++) {
+            var t = transaksiToko[i];
+            html += '<tr>';
+            html += '<td>' + new Date(t.tanggalTransaksi).toLocaleDateString('id-ID') + '</td>';
+            html += '<td>' + t.namaProduk + '</td>';
+            html += '<td>' + t.jumlahTerjual + '</td>';
+            html += '<td>Rp ' + t.hargaJualSatuan + '</td>';
+            html += '<td>Rp ' + t.totalHargaJual.toLocaleString('id-ID') + '</td>';
+            html += '<td style="color:#2e7d32;">Rp ' + t.totalKeuntungan.toLocaleString('id-ID') + '</td>';
+            html += '<td>' + t.metodePembayaran + '</td>';
+            html += '<td>' + (t.keterangan || '-') + '</td>';
+            html += '</tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    html += '</div>';
+
+    areaKonten.innerHTML = html;
+}
+
+/* ===== FUNGSI PENDUKUNG TRANSAKSI TOKO ===== */
+
+// Update harga jual otomatis saat produk dipilih
+function updateHargaJualTransaksi() {
+    var dropdown = document.getElementById('transaksiProduk');
+    var selected = dropdown.options[dropdown.selectedIndex];
+    if (selected && selected.dataset.harga) {
+        document.getElementById('transaksiHargaJual').value = selected.dataset.harga;
+    } else {
+        document.getElementById('transaksiHargaJual').value = '';
+    }
+}
+
+// Validasi stok saat jumlah diinput
+function validasiStokTransaksi() {
+    var dropdown = document.getElementById('transaksiProduk');
+    var selected = dropdown.options[dropdown.selectedIndex];
+    var stokTersedia = parseInt(selected.dataset.stok) || 0;
+    var jumlah = parseInt(document.getElementById('transaksiJumlah').value) || 0;
+    if (jumlah > stokTersedia) {
+        tampilkanToast('Stok tidak mencukupi! Tersedia: ' + stokTersedia, 'warning');
+        document.getElementById('transaksiJumlah').value = stokTersedia;
+    }
+}
+
+// Tambah transaksi baru
+function tambahTransaksiToko() {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    var produkId = document.getElementById('transaksiProduk').value;
+    var jumlah = parseInt(document.getElementById('transaksiJumlah').value) || 0;
+    var hargaJual = parseInt(document.getElementById('transaksiHargaJual').value) || 0;
+    var metode = document.getElementById('transaksiMetode').value;
+    var keterangan = document.getElementById('transaksiKeterangan').value.trim();
+
+    if (!produkId || jumlah <= 0 || hargaJual <= 0) {
+        tampilkanToast('Pilih produk, jumlah, dan harga jual dengan benar!', 'warning');
+        return;
     }
 
-    function renderPengajuanHapusAkun() {
-        renderPlaceholder('Pengajuan Hapus Akun');
+    // Ambil data produk dari gudang
+    var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+    var produkTarget = null;
+    for (var i = 0; i < semuaProdukGudang.length; i++) {
+        if (semuaProdukGudang[i].id === parseInt(produkId)) {
+            produkTarget = semuaProdukGudang[i];
+            break;
+        }
+    }
+    if (!produkTarget) {
+        tampilkanToast('Produk tidak ditemukan!', 'error');
+        return;
+    }
+    if (produkTarget.jumlahStok < jumlah) {
+        tampilkanToast('Stok tidak mencukupi! Tersedia: ' + produkTarget.jumlahStok, 'warning');
+        return;
     }
 
-    function renderDaftarBelanja() {
-        renderPlaceholder('Daftar Belanja');
-    }
+    // Hitung total dan keuntungan
+    var totalHargaJual = jumlah * hargaJual;
+    var totalKeuntungan = totalHargaJual - (jumlah * produkTarget.hargaBeli);
 
-    function renderRiwayatBelanja() {
-        renderPlaceholder('Riwayat Belanja');
-    }
+    // Simpan transaksi
+    var semuaTransaksi = JSON.parse(localStorage.getItem('2r_transaksi_toko') || '[]');
+    var transaksiBaru = {
+        id: Date.now(),
+        tokoId: user.id,
+        produkId: produkTarget.id,
+        namaProduk: produkTarget.namaProduk,
+        jumlahTerjual: jumlah,
+        hargaJualSatuan: hargaJual,
+        hargaBeliSatuan: produkTarget.hargaBeli,
+        totalHargaJual: totalHargaJual,
+        totalKeuntungan: totalKeuntungan,
+        metodePembayaran: metode,
+        keterangan: keterangan,
+        tanggalTransaksi: new Date().toISOString()
+    };
+    semuaTransaksi.push(transaksiBaru);
+    localStorage.setItem('2r_transaksi_toko', JSON.stringify(semuaTransaksi));
 
-    function renderPembayaran() {
-        renderPlaceholder('Pembayaran');
+    // Kurangi stok gudang
+    produkTarget.jumlahStok -= jumlah;
+    produkTarget.totalTerjual += jumlah;
+    for (var i = 0; i < semuaProdukGudang.length; i++) {
+        if (semuaProdukGudang[i].id === produkTarget.id) {
+            semuaProdukGudang[i] = produkTarget;
+            break;
+        }
     }
+    localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
 
-    function renderUlasanRating() {
-        renderPlaceholder('Ulasan & Rating');
-    }
+    // Reset form
+    document.getElementById('transaksiProduk').value = '';
+    document.getElementById('transaksiJumlah').value = '';
+    document.getElementById('transaksiHargaJual').value = '';
+    document.getElementById('transaksiKeterangan').value = '';
 
-    function renderBantuanFAQ() {
-        renderPlaceholder('Bantuan & FAQ');
-    }
-
-    function renderNotifikasi() {
-        renderPlaceholder('Notifikasi');
-    }
-
-    function renderPenagihan() {
-        renderPlaceholder('Penagihan');
-    }
-
-    function renderKelolaUpgrade() {
-        renderPlaceholder('Kelola Upgrade');
-    }
-
-    function renderSettingTarifOjek() {
-        renderPlaceholder('Setting Tarif Ojek');
-    }
-
-    function renderTransaksiToko() {
-        renderPlaceholder('Transaksi Toko');
-    }
-
-    function renderPesananMasuk() {
-        renderPlaceholder('Pesanan Masuk');
-    }
-
-    function renderLaporanPenjualan() {
-        renderPlaceholder('Laporan Penjualan');
-    }
-
-    function renderSettingToko() {
-        renderPlaceholder('Setting Toko');
-    }
-
-    function renderOrderMasuk() {
-        renderPlaceholder('Order Masuk');
-    }
-
-    function renderRiwayatOrder() {
-        renderPlaceholder('Riwayat Order');
-    }
-
-    function renderLaporanOjek() {
-        renderPlaceholder('Laporan Ojek');
-    }
-
-    function renderSettingOjek() {
-        renderPlaceholder('Setting Ojek');
-    }
-
-    function renderTiketBantuan() {
-        renderPlaceholder('Tiket Bantuan');
-    }
-
-    function renderLiveChat() {
-        renderPlaceholder('Live Chat');
-    }
-
-    function renderIklanSaya() {
-        renderPlaceholder('Iklan Saya');
-    }
-
-    function renderStatistik() {
-        renderPlaceholder('Statistik');
-    }
-    /* ===== AKHIR BLOK 3.5.4 ===== */
+    // Refresh halaman
+    renderTransaksiToko();
+    tampilkanToast('Transaksi berhasil ditambahkan!', 'success');
+}
+/* ===== AKHIR BLOK 3.5.4 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.5 ===== -->
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
