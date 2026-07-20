@@ -2478,11 +2478,11 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
         
         // ===== PANGGIL LOAD DATA TERSIMPAN =====
-setTimeout(function() {
-    loadDataWilayahTersimpan('ktp', user);
-    loadDataWilayahTersimpan('dom', user);
-    loadDataProfilCustomer(user);   // <-- TAMBAHKAN INI
-}, 500);
+		setTimeout(function() {
+		loadDataWilayahTersimpan('ktp', user);
+		loadDataWilayahTersimpan('dom', user);
+		loadDataProfilCustomer(user);   // <-- TAMBAHKAN INI
+		}, 500);
         
         // ===== EVENT LISTENER UPLOAD KTP =====
         setTimeout(function() {
@@ -2761,10 +2761,6 @@ setTimeout(function() {
     }
     /* ===== AKHIR BLOK 3.6.20 ===== */
 	/* ===== BLOK 3.6.21 - LOAD DATA PROFIL CUSTOMER SAAT RENDER ===== */
-/*
-    Fungsi ini memuat semua data profil customer yang sudah tersimpan
-    ke dalam input form saat halaman Profil dimuat.
-*/
 function loadDataProfilCustomer(user) {
     // Data Registrasi
     if (document.getElementById('editNamaCustomer')) {
