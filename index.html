@@ -3315,9 +3315,10 @@ function renderProfilCustomer() {
     var areaKonten = document.getElementById('mainContent');
     var html = '';
     
+    // ===== HEADER dengan Role =====
     html += '<div class="page-header">';
     html += '<h2>Profil Customer</h2>';
-    html += '<p>ID Akun: <strong>' + (user.id || '-') + '</strong> | Role: <strong>' + (user.role || '-') + '</strong></p>';
+    html += '<p>ID Akun: <strong>' + (user.id || '-') + '</strong> &nbsp;|&nbsp; Role: <strong>' + (user.role || '-') + '</strong></p>';
     html += '</div>';
     
     // ===== NOTIFIKASI TERSIMPAN DI ATAS FORM =====
@@ -3333,7 +3334,7 @@ function renderProfilCustomer() {
     html += '<span style="font-weight:normal; font-size:13px; color:#888;">Terakhir diperbarui: ' + (user.waktuRegistrasi ? new Date(user.waktuRegistrasi).toLocaleDateString('id-ID') : '-') + '</span>';
     html += '</div>';
     
-    // Data Dasar
+    // Data Dasar (Termasuk Role)
     html += '<div class="grid-2" style="margin-bottom:15px;">';
     html += '<div><strong>Nama Lengkap:</strong><br><span style="font-size:16px;">' + (user.nama || '-') + '</span></div>';
     html += '<div><strong>Username:</strong><br><span style="font-size:16px;">' + (user.username || '-') + '</span></div>';
@@ -3342,7 +3343,7 @@ function renderProfilCustomer() {
     html += '<div><strong>Role:</strong><br><span style="font-size:16px;">' + (user.role || '-') + '</span></div>';
     html += '</div>';
     
-    // Alamat KTP
+    // Alamat KTP (dengan Kode Pos)
     html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
     html += '<strong style="color:#FF6B00;">Alamat Sesuai KTP:</strong><br>';
     html += '<span>' + (user.alamatKTP || 'Belum diisi') + '</span>';
@@ -3351,7 +3352,7 @@ function renderProfilCustomer() {
     }
     html += '</div>';
     
-    // Alamat Domisili
+    // Alamat Domisili (dengan Kode Pos)
     html += '<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">';
     html += '<strong style="color:#FF6B00;">Alamat Domisili / Sekarang:</strong><br>';
     html += '<span>' + (user.alamatDomisili || 'Belum diisi') + '</span>';
@@ -3507,9 +3508,6 @@ function isiDropdownWilayah(prefix) {
     var desaTersimpan = desaDropdown.getAttribute('data-value') || '';
     
     // Jika tidak ada data-value, coba ambil dari user object (yang sudah disimpan di localStorage)
-    // Kita bisa akses user melalui closure atau parameter, tapi karena fungsi ini dipanggil di dalam renderProfilCustomer,
-    // kita bisa menggunakan variabel global atau melewatkan user sebagai parameter.
-    // Untuk amannya, kita ambil dari localStorage langsung.
     var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
     var key = prefix === 'ktp' ? 'ktp' : 'dom';
     if (!provinsiTersimpan && user[key + 'Provinsi']) {
