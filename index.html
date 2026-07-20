@@ -2759,6 +2759,45 @@ function navigasiKeHalaman(namaHalaman) {
         renderProfilCustomer();
     }
     /* ===== AKHIR BLOK 3.6.20 ===== */
+	/* ===== BLOK 3.6.21 - LOAD DATA PROFIL CUSTOMER SAAT RENDER ===== */
+/*
+    Fungsi ini memuat semua data profil customer yang sudah tersimpan
+    ke dalam input form saat halaman Profil dimuat.
+*/
+function loadDataProfilCustomer(user) {
+    // Data Registrasi
+    if (document.getElementById('editNamaCustomer')) {
+        document.getElementById('editNamaCustomer').value = user.nama || '';
+    }
+    if (document.getElementById('editEmailCustomer')) {
+        document.getElementById('editEmailCustomer').value = user.email || '';
+    }
+    if (document.getElementById('editHpCustomer')) {
+        document.getElementById('editHpCustomer').value = user.nomorHp || '';
+    }
+
+    // Kode Pos KTP
+    if (document.getElementById('ktpKodepos')) {
+        document.getElementById('ktpKodepos').value = user.ktpKodepos || '';
+    }
+
+    // Kode Pos Domisili
+    if (document.getElementById('domKodepos')) {
+        document.getElementById('domKodepos').value = user.domKodepos || '';
+    }
+
+    // Data Rekening
+    if (document.getElementById('profilBankCustomer')) {
+        document.getElementById('profilBankCustomer').value = user.namaBank || '';
+    }
+    if (document.getElementById('profilRekeningCustomer')) {
+        document.getElementById('profilRekeningCustomer').value = user.nomorRekening || '';
+    }
+    if (document.getElementById('profilPemilikRekCustomer')) {
+        document.getElementById('profilPemilikRekCustomer').value = user.pemilikRekening || '';
+    }
+}
+/* ===== AKHIR BLOK 3.6.21 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.6 ===== -->
 <!-- ===== BLOK 3.7 - JS_RENDER_DASHBOARD_LAIN ===== -->
