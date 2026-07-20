@@ -5590,9 +5590,9 @@ function editWilayah(index) {
     /* ===== AKHIR BLOK 5.3.2 ===== */
 </script>
 
-<!-- ===== BLOK 5.3 - JS_INIT_UTAMA ===== -->
-<script>
-    /* ===== BLOK 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN ===== */
+/* ===== BLOK 5.3 - JS_INIT_UTAMA ===== */
+
+// ===== 5.3.1 - TAMPILKAN DASHBOARD SETELAH LOGIN =====
 /*
     Fungsi ini dipanggil setelah user berhasil login.
     1. Menyembunyikan halaman Login/Register.
@@ -5650,54 +5650,74 @@ function tampilkanDashboard(user) {
 }
 /* ===== AKHIR BLOK 5.3.1 ===== */
 
-    /* ===== BLOK 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) ===== */
+
+// ===== 5.3.2 - INISIALISASI SAAT HALAMAN DIMUAT (DOMContentLoaded) =====
+/*
+    Event ini adalah titik awal aplikasi.
+    Saat halaman selesai dimuat oleh browser, maka:
+    1. Inisialisasi SuperAdmin (jika belum ada).
+    2. Perbaiki data produk lama agar kolom tanggal input dan penginput terisi.
+    3. Cek apakah user sudah login (ada data di localStorage).
+    4. Jika sudah login, tampilkan dashboard.
+    5. Jika belum, biarkan halaman login tetap tampil.
+*/
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== 1. PASTIKAN SUPERADMIN SELALU ADA =====
+    // Jika belum ada akun SuperAdmin, buat akun default (admin/admin123)
+    inisialisasiSuperAdmin();
+
+    // ===== 2. PERBAIKAN DATA PRODUK LAMA =====
     /*
-        Event ini adalah titik awal aplikasi.
-        Saat halaman selesai dimuat oleh browser, maka:
-        1. Inisialisasi SuperAdmin (jika belum ada).
-        2. Cek apakah user sudah login (ada data di localStorage).
-        3. Jika sudah login, tampilkan dashboard.
-        4. Jika belum, biarkan halaman login tetap tampil.
+        Fungsi ini memastikan produk lama yang tersimpan di localStorage
+        memiliki kolom 'tanggalInput' dan 'namaPenginput' agar kompatibel
+        dengan fitur Manajemen Stok Gudang.
     */
-    document.addEventListener('DOMContentLoaded', function() {
+    function perbaikiDataProdukLama() {
+        // Ambil semua data produk gudang dari localStorage
+        var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
+        var perluDiupdate = false;
         
-        // 1. Pastikan SuperAdmin selalu ada
-        inisialisasiSuperAdmin();
-
-        // ===== PERBAIKAN DATA PRODUK LAMA (AGAR KOLOM TANGGAL & PENGINPUT TERISI) =====
-        function perbaikiDataProdukLama() {
-            var semuaProdukGudang = JSON.parse(localStorage.getItem('2r_produk_gudang') || '[]');
-            var perluDiupdate = false;
-            for (var i = 0; i < semuaProdukGudang.length; i++) {
-                // Jika belum ada tanggal input, ambil dari tanggal masuk
-                if (!semuaProdukGudang[i].tanggalInput) {
-                    semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
-                    perluDiupdate = true;
-                }
-                // Jika belum ada penginput, isi dengan strip
-                if (!semuaProdukGudang[i].namaPenginput) {
-                    semuaProdukGudang[i].namaPenginput = '-';
-                    perluDiupdate = true;
-                }
+        // Loop melalui semua produk
+        for (var i = 0; i < semuaProdukGudang.length; i++) {
+            // Jika belum ada tanggal input, ambil dari tanggal masuk
+            if (!semuaProdukGudang[i].tanggalInput) {
+                semuaProdukGudang[i].tanggalInput = new Date(semuaProdukGudang[i].tanggalMasuk).toLocaleDateString('id-ID');
+                perluDiupdate = true;
             }
-            if (perluDiupdate) {
-                localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+            // Jika belum ada penginput, isi dengan strip (-)
+            if (!semuaProdukGudang[i].namaPenginput) {
+                semuaProdukGudang[i].namaPenginput = '-';
+                perluDiupdate = true;
             }
         }
-        perbaikiDataProdukLama(); // JALANKAN FUNGSI INI
-        // ===== AKHIR PERBAIKAN =====
-
-        // 2. Cek apakah user sudah login
-        var dataUser = localStorage.getItem('2r_user');
-        if (dataUser) {
-            var user = JSON.parse(dataUser);
-            tampilkanDashboard(user);
-        }
         
-    });
-    /* ===== AKHIR BLOK 5.3.2 ===== */
-</script>
-<!-- ===== AKHIR BLOK 5.3 ===== -->
+        // Jika ada perubahan, simpan kembali ke localStorage
+        if (perluDiupdate) {
+            localStorage.setItem('2r_produk_gudang', JSON.stringify(semuaProdukGudang));
+        }
+    }
+    // Jalankan fungsi perbaikan data produk lama
+    perbaikiDataProdukLama();
+
+    // ===== 3. CEK APAKAH USER SUDAH LOGIN =====
+    // Ambil data user dari localStorage
+    var dataUser = localStorage.getItem('2r_user');
+    
+    // Jika data user ada, berarti user sudah login
+    if (dataUser) {
+        // Parse data user dari string JSON menjadi objek
+        var user = JSON.parse(dataUser);
+        
+        // Tampilkan dashboard dengan data user tersebut
+        tampilkanDashboard(user);
+    }
+    // Jika tidak ada data user, biarkan halaman login tetap tampil
+    
+});
+/* ===== AKHIR BLOK 5.3.2 ===== */
+
+/* ===== AKHIR BLOK 5.3 ===== */
 
 <!-- ===== BLOK 5.5 - JS_EVENT_SCAN_BARCODE ===== -->
 <script>
