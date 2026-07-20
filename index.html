@@ -1973,144 +1973,167 @@ function navigasiKeHalaman(namaHalaman) {
         areaKonten.innerHTML = html;
     }
     /* ===== AKHIR BLOK 3.5.3 ===== */
-	    /* ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER DAN MENU IKLAN ===== */
-function renderBelanja() {
-    renderPlaceholder('Belanja');
-}
-
-function renderPesananSaya() {
-    renderPlaceholder('Pesanan Saya');
-}
-
-function renderMenuIklan() {
-    var areaKonten = document.getElementById('mainContent');
-    var dataIklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
-    var html = '';
-
-    html += '<div class="page-header">';
-    html += '<h2>Menu Iklan Sponsor</h2>';
-    html += '<p>Daftar iklan sponsor yang tersedia.</p>';
-    html += '</div>';
-
-    if (dataIklan.length === 0) {
-        html += '<div class="card">';
-        html += '<div class="empty-state"><i class="fas fa-ad" style="color:#ddd;"></i><h3>Belum ada iklan</h3><p>Belum ada iklan yang dipublikasikan.</p></div>';
-        html += '</div>';
-    } else {
-        html += '<div class="card">';
-        html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:20px;">';
-        for (var i = 0; i < dataIklan.length; i++) {
-            var iklan = dataIklan[i];
-            var gambarHtml = '';
-            if (iklan.gambar && iklan.gambar.length > 0) {
-                gambarHtml = '<img src="' + iklan.gambar[0] + '" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
-            } else {
-                gambarHtml = '<i class="fas fa-ad" style="font-size:50px; margin-bottom:10px; display:block;"></i>';
-            }
-            
-            html += '<div style="background:' + (iklan.warna || '#FF6B00') + '; color:white; border-radius:12px; padding:20px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">';
-            html += gambarHtml;
-            html += '<h4 style="font-size:16px;">' + iklan.judul + '</h4>';
-            html += '<p style="font-size:14px; opacity:0.9;">' + iklan.deskripsi + '</p>';
-            if (iklan.gambar && iklan.gambar.length > 1) {
-                html += '<p style="font-size:12px; opacity:0.7;">+' + (iklan.gambar.length - 1) + ' gambar lainnya</p>';
-            }
-            html += '</div>';
-        }
-        html += '</div></div>';
+	    <!-- ===== BLOK 3.5.4 - FUNGSI PLACEHOLDER DAN MENU IKLAN (LENGKAP) ===== -->
+<script>
+    function renderBelanja() {
+        renderPlaceholder('Belanja');
     }
 
-    areaKonten.innerHTML = html;
-}
+    function renderPesananSaya() {
+        renderPlaceholder('Pesanan Saya');
+    }
 
-function renderPengajuanHapusAkun() {
-    renderPlaceholder('Pengajuan Hapus Akun');
-}
+    function renderMenuIklan() {
+        var areaKonten = document.getElementById('mainContent');
+        var dataIklan = [];
+        
+        // Mencegah error jika data di localStorage rusak
+        try {
+            dataIklan = JSON.parse(localStorage.getItem('2r_iklan') || '[]');
+        } catch (error) {
+            console.error('Terjadi kesalahan saat memparsing data iklan:', error);
+            dataIklan = [];
+        }
+        
+        var htmlKonten = '';
 
-function renderDaftarBelanja() {
-    renderPlaceholder('Daftar Belanja');
-}
+        htmlKonten += '<div class="page-header">';
+        htmlKonten += '<h2>Menu Iklan Sponsor</h2>';
+        htmlKonten += '<p>Daftar iklan sponsor yang tersedia.</p>';
+        htmlKonten += '</div>';
 
-function renderRiwayatBelanja() {
-    renderPlaceholder('Riwayat Belanja');
-}
+        if (dataIklan.length === 0) {
+            htmlKonten += '<div class="card">';
+            htmlKonten += '<div class="empty-state"><i class="fas fa-ad" style="color:#ddd;"></i><h3>Belum ada iklan</h3><p>Belum ada iklan yang dipublikasikan.</p></div>';
+            htmlKonten += '</div>';
+        } else {
+            htmlKonten += '<div class="card">';
+            htmlKonten += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:20px;">';
+            
+            for (var indeks = 0; indeks < dataIklan.length; indeks++) {
+                var iklanSaatIni = dataIklan[indeks];
+                
+                // Validasi agar tidak error jika ada data iklan yang tidak valid
+                if (!iklanSaatIni || typeof iklanSaatIni !== 'object') {
+                    continue;
+                }
+                
+                var judulIklan = iklanSaatIni.judul || 'Iklan Tanpa Judul';
+                var deskripsiIklan = iklanSaatIni.deskripsi || '';
+                var warnaLatarIklan = iklanSaatIni.warna || '#FF6B00';
+                var daftarGambar = Array.isArray(iklanSaatIni.gambar) ? iklanSaatIni.gambar : [];
 
-function renderPembayaran() {
-    renderPlaceholder('Pembayaran');
-}
+                var gambarHtml = '';
+                if (daftarGambar.length > 0) {
+                    gambarHtml = '<img src="' + daftarGambar[0] + '" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;" alt="Gambar Iklan">';
+                } else {
+                    gambarHtml = '<i class="fas fa-ad" style="font-size:50px; margin-bottom:10px; display:block;"></i>';
+                }
 
-function renderUlasanRating() {
-    renderPlaceholder('Ulasan & Rating');
-}
+                htmlKonten += '<div style="background:' + warnaLatarIklan + '; color:white; border-radius:12px; padding:20px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">';
+                htmlKonten += gambarHtml;
+                htmlKonten += '<h4 style="font-size:16px;">' + judulIklan + '</h4>';
+                htmlKonten += '<p style="font-size:14px; opacity:0.9;">' + deskripsiIklan + '</p>';
+                if (daftarGambar.length > 1) {
+                    htmlKonten += '<p style="font-size:12px; opacity:0.7;">+' + (daftarGambar.length - 1) + ' gambar lainnya</p>';
+                }
+                htmlKonten += '</div>';
+            }
+            htmlKonten += '</div></div>';
+        }
 
-function renderBantuanFAQ() {
-    renderPlaceholder('Bantuan & FAQ');
-}
+        areaKonten.innerHTML = htmlKonten;
+    }
 
-function renderNotifikasi() {
-    renderPlaceholder('Notifikasi');
-}
+    function renderPengajuanHapusAkun() {
+        renderPlaceholder('Pengajuan Hapus Akun');
+    }
 
-function renderPenagihan() {
-    renderPlaceholder('Penagihan');
-}
+    function renderDaftarBelanja() {
+        renderPlaceholder('Daftar Belanja');
+    }
 
-function renderKelolaUpgrade() {
-    renderPlaceholder('Kelola Upgrade');
-}
+    function renderRiwayatBelanja() {
+        renderPlaceholder('Riwayat Belanja');
+    }
 
-function renderSettingTarifOjek() {
-    renderPlaceholder('Setting Tarif Ojek');
-}
+    function renderPembayaran() {
+        renderPlaceholder('Pembayaran');
+    }
 
-function renderTransaksiToko() {
-    renderPlaceholder('Transaksi Toko');
-}
+    function renderUlasanRating() {
+        renderPlaceholder('Ulasan & Rating');
+    }
 
-function renderPesananMasuk() {
-    renderPlaceholder('Pesanan Masuk');
-}
+    function renderBantuanFAQ() {
+        renderPlaceholder('Bantuan & FAQ');
+    }
 
-function renderLaporanPenjualan() {
-    renderPlaceholder('Laporan Penjualan');
-}
+    function renderNotifikasi() {
+        renderPlaceholder('Notifikasi');
+    }
 
-function renderSettingToko() {
-    renderPlaceholder('Setting Toko');
-}
+    function renderPenagihan() {
+        renderPlaceholder('Penagihan');
+    }
 
-function renderOrderMasuk() {
-    renderPlaceholder('Order Masuk');
-}
+    function renderKelolaUpgrade() {
+        renderPlaceholder('Kelola Upgrade');
+    }
 
-function renderRiwayatOrder() {
-    renderPlaceholder('Riwayat Order');
-}
+    function renderSettingTarifOjek() {
+        renderPlaceholder('Setting Tarif Ojek');
+    }
 
-function renderLaporanOjek() {
-    renderPlaceholder('Laporan Ojek');
-}
+    function renderTransaksiToko() {
+        renderPlaceholder('Transaksi Toko');
+    }
 
-function renderSettingOjek() {
-    renderPlaceholder('Setting Ojek');
-}
+    function renderPesananMasuk() {
+        renderPlaceholder('Pesanan Masuk');
+    }
 
-function renderTiketBantuan() {
-    renderPlaceholder('Tiket Bantuan');
-}
+    function renderLaporanPenjualan() {
+        renderPlaceholder('Laporan Penjualan');
+    }
 
-function renderLiveChat() {
-    renderPlaceholder('Live Chat');
-}
+    function renderSettingToko() {
+        renderPlaceholder('Setting Toko');
+    }
 
-function renderIklanSaya() {
-    renderPlaceholder('Iklan Saya');
-}
+    function renderOrderMasuk() {
+        renderPlaceholder('Order Masuk');
+    }
 
-function renderStatistik() {
-    renderPlaceholder('Statistik');
-}
-/* ===== AKHIR BLOK 3.5.4 ===== */
+    function renderRiwayatOrder() {
+        renderPlaceholder('Riwayat Order');
+    }
+
+    function renderLaporanOjek() {
+        renderPlaceholder('Laporan Ojek');
+    }
+
+    function renderSettingOjek() {
+        renderPlaceholder('Setting Ojek');
+    }
+
+    function renderTiketBantuan() {
+        renderPlaceholder('Tiket Bantuan');
+    }
+
+    function renderLiveChat() {
+        renderPlaceholder('Live Chat');
+    }
+
+    function renderIklanSaya() {
+        renderPlaceholder('Iklan Saya');
+    }
+
+    function renderStatistik() {
+        renderPlaceholder('Statistik');
+    }
+</script>
+<!-- ===== AKHIR BLOK 3.5.4 ===== -->
 </script>
 <!-- ===== AKHIR BLOK 3.5 ===== -->
 <!-- ===== BLOK 3.6 - JS_RENDER_DASHBOARD_CORE ===== -->
