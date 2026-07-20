@@ -2166,17 +2166,12 @@
     /* ===== AKHIR BLOK 3.8.2 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.8 ===== -->
-<!-- ===== BLOK 3.9 - JS_RENDER_PROFIL_CUSTOMER ===== -->
+<!-- ===== BLOK 3.9 - JS_RENDER_PROFIL_CUSTOMER (VERSI RAPI & PROFESIONAL) ===== -->
 <script>
     /* ===== BLOK 3.9.1 - RENDER PROFIL CUSTOMER ===== */
     /*
         Fungsi ini menampilkan halaman profil untuk role Customer.
-        Menampilkan:
-        - Data registrasi (nama, username, email, nomor HP)
-        - Alamat sesuai KTP (Dusun, RT, RW, Jalan, Desa, Kecamatan, Kabupaten, Provinsi, Kode Pos)
-        - Alamat domisili (dengan format yang sama lengkap)
-        - Data rekening (Nama Bank, Nomor Rekening, Nama Pemilik)
-        - Area upload KTP
+        Menampilkan data profil read-only, form edit data pribadi, alamat KTP, alamat domisili, dan upload KTP.
     */
     function renderProfilCustomer() {
         var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
@@ -2185,15 +2180,99 @@
         
         html += '<div class="page-header"><h2>Profil Customer</h2><p>ID Akun: <strong>' + (user.id || '-') + '</strong></p></div>';
         
-        // Data Registrasi
-        html += '<div class="card"><div class="card-header">Data Registrasi <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan Profil</button></div>';
-        html += '<div class="grid-2"><div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
+        // ==========================================================
+        // BAGIAN 1: TAMPILKAN DATA YANG SUDAH TERSIMPAN (READ-ONLY)
+        // ==========================================================
+        html += '<div class="card">';
+        html += '<div class="card-header" style="background:#f8f9fa; color:#333;"><i class="fas fa-info-circle" style="color:#FF6B00;"></i> Data Profil Saat Ini</div>';
+        html += '<div class="grid-2">';
+        html += '<div><span style="font-weight:600; color:#555;">Nama Lengkap:</span> <span>' + (user.nama || '-') + '</span></div>';
+        html += '<div><span style="font-weight:600; color:#555;">Username:</span> <span>' + (user.username || '-') + '</span></div>';
+        html += '<div><span style="font-weight:600; color:#555;">Email:</span> <span>' + (user.email || '-') + '</span></div>';
+        html += '<div><span style="font-weight:600; color:#555;">Nomor HP:</span> <span>' + (user.nomorHp || '-') + '</span></div>';
+        html += '<div><span style="font-weight:600; color:#555;">Bank:</span> <span>' + (user.namaBank || '-') + '</span></div>';
+        html += '<div><span style="font-weight:600; color:#555;">Nomor Rekening:</span> <span>' + (user.nomorRekening || '-') + '</span></div>';
+        html += '<div style="grid-column: span 2;"><span style="font-weight:600; color:#555;">Pemilik Rekening:</span> <span>' + (user.pemilikRekening || '-') + '</span></div>';
+        
+        // Tampilkan Alamat KTP jika ada
+        html += '<div style="grid-column: span 2; border-top:1px dashed #eee; padding-top:10px; margin-top:10px;">';
+        html += '<span style="font-weight:600; color:#555;">Alamat Sesuai KTP:</span><br>';
+        if (user.ktpDusun || user.ktpRT || user.ktpJalan || user.ktpDesa || user.ktpKabupaten || user.ktpProvinsi) {
+            html += '<span>' + (user.ktpDusun ? user.ktpDusun + ', ' : '') + 
+                    (user.ktpRT ? 'RT ' + user.ktpRT + ', ' : '') + 
+                    (user.ktpRW ? 'RW ' + user.ktpRW + ', ' : '') + 
+                    (user.ktpJalan ? user.ktpJalan + ', ' : '') + 
+                    (user.ktpDesa ? user.ktpDesa + ', ' : '') + 
+                    (user.ktpKecamatan ? user.ktpKecamatan + ', ' : '') + 
+                    (user.ktpKabupaten ? user.ktpKabupaten + ', ' : '') + 
+                    (user.ktpProvinsi ? user.ktpProvinsi + ', ' : '') + 
+                    (user.ktpKodepos ? user.ktpKodepos : '') + 
+                    '</span>';
+        } else {
+            html += '<span style="color:#999;">Belum diisi</span>';
+        }
+        html += '</div>';
+
+        // Tampilkan Alamat Domisili jika ada
+        html += '<div style="grid-column: span 2; border-top:1px dashed #eee; padding-top:10px; margin-top:10px;">';
+        html += '<span style="font-weight:600; color:#555;">Alamat Domisili / Sekarang:</span><br>';
+        if (user.domDusun || user.domRT || user.domJalan || user.domDesa || user.domKabupaten || user.domProvinsi) {
+            html += '<span>' + (user.domDusun ? user.domDusun + ', ' : '') + 
+                    (user.domRT ? 'RT ' + user.domRT + ', ' : '') + 
+                    (user.domRW ? 'RW ' + user.domRW + ', ' : '') + 
+                    (user.domJalan ? user.domJalan + ', ' : '') + 
+                    (user.domDesa ? user.domDesa + ', ' : '') + 
+                    (user.domKecamatan ? user.domKecamatan + ', ' : '') + 
+                    (user.domKabupaten ? user.domKabupaten + ', ' : '') + 
+                    (user.domProvinsi ? user.domProvinsi + ', ' : '') + 
+                    (user.domKodepos ? user.domKodepos : '') + 
+                    '</span>';
+        } else {
+            html += '<span style="color:#999;">Belum diisi</span>';
+        }
+        html += '</div>';
+
+        // Tampilkan KTP
+        html += '<div style="grid-column: span 2; border-top:1px dashed #eee; padding-top:10px; margin-top:10px;">';
+        html += '<span style="font-weight:600; color:#555;">Foto KTP:</span><br>';
+        if (user.ktp) {
+            html += '<img src="' + user.ktp + '" style="max-width:200px; max-height:150px; border-radius:6px; margin-top:5px; border:1px solid #ddd;">';
+        } else {
+            html += '<span style="color:#999;">Belum ada foto KTP</span>';
+        }
+        html += '</div>';
+
+        html += '</div>'; // End Grid
+        html += '</div>'; // End Card
+
+        // ==========================================================
+        // BAGIAN 2: FORM EDIT DATA PRIBADI & REKENING
+        // ==========================================================
+        html += '<div class="card" style="margin-top:20px;">';
+        html += '<div class="card-header"><span><i class="fas fa-user-circle" style="color:#FF6B00;"></i> Edit Data Pribadi & Rekening</span><button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        
+        // Data Pribadi
+        html += '<h4 style="font-size:14px; margin-bottom:10px; color:#666; border-bottom:1px solid #eee; padding-bottom:5px;">Data Pribadi</h4>';
+        html += '<div class="grid-2">';
+        html += '<div><label class="form-label">Nama Lengkap (Sesuai KTP)</label><input type="text" id="editNamaCustomer" class="form-input" value="' + (user.nama || '') + '"></div>';
         html += '<div><label class="form-label">Username</label><input type="text" id="editUsernameCustomer" class="form-input" value="' + (user.username || '') + '" disabled></div>';
         html += '<div><label class="form-label">Email</label><input type="email" id="editEmailCustomer" class="form-input" value="' + (user.email || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div></div></div>';
+        html += '<div><label class="form-label">Nomor HP</label><input type="tel" id="editHpCustomer" class="form-input" value="' + (user.nomorHp || '') + '"></div>';
+        html += '</div>';
+
+        // Data Rekening
+        html += '<h4 style="font-size:14px; margin-top:15px; margin-bottom:10px; color:#666; border-bottom:1px solid #eee; padding-bottom:5px;">Data Rekening</h4>';
+        html += '<div class="grid-2" style="margin-top:10px;">';
+        html += '<div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '"></div>';
+        html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
+        html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '"></div>';
+        html += '</div></div>';
         
-        // Alamat Sesuai KTP
-        html += '<div class="card"><div class="card-header">Alamat Sesuai KTP <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+        // ==========================================================
+        // BAGIAN 3: FORM ALAMAT KTP
+        // ==========================================================
+        html += '<div class="card" style="margin-top:20px;">';
+        html += '<div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Edit Alamat Sesuai KTP</span><button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
         html += '<div class="grid-2">';
         html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="ktpDusun" class="form-input" value="' + (user.ktpDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
         html += '<div><label class="form-label">RT</label><input type="text" id="ktpRT" class="form-input" value="' + (user.ktpRT || '') + '" placeholder="Contoh: 001"></div>';
@@ -2205,9 +2284,12 @@
         html += '<div><label class="form-label">Provinsi</label><input type="text" id="ktpProvinsi" class="form-input" value="' + (user.ktpProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
         html += '<div><label class="form-label">Kode Pos</label><input type="text" id="ktpKodepos" class="form-input" value="' + (user.ktpKodepos || '') + '" placeholder="Contoh: 10230"></div>';
         html += '</div></div>';
-        
-        // Alamat Domisili
-        html += '<div class="card"><div class="card-header">Alamat Domisili / Sekarang <button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
+
+        // ==========================================================
+        // BAGIAN 4: FORM ALAMAT DOMISILI
+        // ==========================================================
+        html += '<div class="card" style="margin-top:20px;">';
+        html += '<div class="card-header"><span><i class="fas fa-home" style="color:#FF6B00;"></i> Edit Alamat Domisili / Sekarang</span><button class="button button-primary button-small" onclick="simpanProfilCustomer()"><i class="fas fa-save"></i> Simpan</button></div>';
         html += '<div class="grid-2">';
         html += '<div><label class="form-label">Dusun / Dukuh</label><input type="text" id="domDusun" class="form-input" value="' + (user.domDusun || '') + '" placeholder="Contoh: Dusun Merdeka"></div>';
         html += '<div><label class="form-label">RT</label><input type="text" id="domRT" class="form-input" value="' + (user.domRT || '') + '" placeholder="Contoh: 001"></div>';
@@ -2219,15 +2301,12 @@
         html += '<div><label class="form-label">Provinsi</label><input type="text" id="domProvinsi" class="form-input" value="' + (user.domProvinsi || '') + '" placeholder="Contoh: DKI Jakarta"></div>';
         html += '<div><label class="form-label">Kode Pos</label><input type="text" id="domKodepos" class="form-input" value="' + (user.domKodepos || '') + '" placeholder="Contoh: 10230"></div>';
         html += '</div></div>';
-        
-        // Data Rekening
-        html += '<div class="card"><div class="card-header">Data Rekening <button class="button button-primary button-small" onclick="simpanRekeningCustomer()"><i class="fas fa-save"></i> Simpan Rekening</button></div>';
-        html += '<div class="grid-2"><div><label class="form-label">Nama Bank</label><input type="text" id="profilBankCustomer" class="form-input" value="' + (user.namaBank || '') + '"></div>';
-        html += '<div><label class="form-label">Nomor Rekening</label><input type="text" id="profilRekeningCustomer" class="form-input" value="' + (user.nomorRekening || '') + '"></div>';
-        html += '<div><label class="form-label">Nama Pemilik Rekening</label><input type="text" id="profilPemilikRekCustomer" class="form-input" value="' + (user.pemilikRekening || '') + '"></div></div></div>';
-        
-        // Dokumen KTP
-        html += '<div class="card"><div class="card-header">Dokumen KTP & Domisili</div>';
+
+        // ==========================================================
+        // BAGIAN 5: UPLOAD FOTO KTP
+        // ==========================================================
+        html += '<div class="card" style="margin-top:20px;">';
+        html += '<div class="card-header"><span><i class="fas fa-id-card" style="color:#FF6B00;"></i> Upload / Ganti Foto KTP</span></div>';
         html += '<div class="upload-area" id="uploadKtpContainerCustomer"><div id="ktpPreviewCustomer">';
         if (user.ktp) {
             html += '<img src="' + user.ktp + '" class="preview-image">';
@@ -2253,7 +2332,6 @@
             }
         }, 300);
     }
-    /* ===== AKHIR BLOK 3.9.1 ===== */
 
     /* ===== BLOK 3.9.2 - SIMPAN PROFIL CUSTOMER ===== */
     /*
@@ -2359,8 +2437,8 @@
         simpanDataAkun(dataAkun);
         document.getElementById('userNama').textContent = user.nama;
         tampilkanToast('Profil berhasil disimpan!', 'success');
+        renderProfilCustomer();
     }
-    /* ===== AKHIR BLOK 3.9.2 ===== */
 
     /* ===== BLOK 3.9.3 - SIMPAN REKENING CUSTOMER ===== */
     /*
@@ -2383,8 +2461,8 @@
         localStorage.setItem('2r_user', JSON.stringify(user));
         simpanDataAkun(dataAkun);
         tampilkanToast('Rekening disimpan!', 'success');
+        renderProfilCustomer();
     }
-    /* ===== AKHIR BLOK 3.9.3 ===== */
 
     /* ===== BLOK 3.9.4 - PREVIEW KTP CUSTOMER ===== */
     /*
@@ -2400,7 +2478,6 @@
         };
         pembaca.readAsDataURL(file);
     }
-    /* ===== AKHIR BLOK 3.9.4 ===== */
 
     /* ===== BLOK 3.9.5 - SIMPAN KTP CUSTOMER ===== */
     /*
@@ -2426,8 +2503,8 @@
         simpanDataAkun(dataAkun);
         localStorage.removeItem('2r_ktp_temp_customer');
         tampilkanToast('KTP disimpan!', 'success');
+        renderProfilCustomer();
     }
-    /* ===== AKHIR BLOK 3.9.5 ===== */
 </script>
 <!-- ===== AKHIR BLOK 3.9 ===== -->
 <!-- ===== BLOK 3.10 - JS_RENDER_FITUR_CUSTOMER ===== -->
