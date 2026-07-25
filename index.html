@@ -3118,25 +3118,42 @@ function renderTransferLainnya() {
 <!-- ===== AKHIR BLOK 8.1 ===== -->
 <!-- ===== BLOK 8.2 - JS_EVENT_AUTH, LOGOUT, SIDEBAR ===== -->
 <script>
-// ===== BLOK 8.2.1 - TOGGLE FORM (VERSI BENAR) =====
+// ===== BLOK 8.2.1 - TOGGLE FORM (VERSI LENGKAP - SUDAH DIPERBAIKI) =====
+/**
+ * Fungsi untuk menampilkan/menyembunyikan form Login, Register, atau Pengajuan Buka Akun.
+ * @param {string} tipe - Nilai yang diterima: 'login', 'register', 'pengajuan', atau 'pengajuanBukaAkun'.
+ */
 function toggleForm(tipe) {
+    // Sembunyikan pesan error jika ada
     var error = document.getElementById('authenticationError');
     if (error) error.style.display = 'none';
+
+    // Ambil elemen form
     var login = document.getElementById('loginForm');
     var register = document.getElementById('registerForm');
     var pengajuan = document.getElementById('pengajuanBukaAkunForm');
-    
+
+    // Pastikan elemen ada sebelum diakses
+    if (!login || !register || !pengajuan) {
+        console.error('Elemen form tidak ditemukan! Pastikan ID elemen sudah benar.');
+        return;
+    }
+
+    // Logika toggle
     if (tipe === 'register') {
+        // Tampilkan register, sembunyikan login dan pengajuan
         login.classList.add('hidden-form');
         register.classList.remove('hidden-form');
-        if (pengajuan) pengajuan.classList.add('hidden-form');
+        pengajuan.classList.add('hidden-form');
     } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
+        // Tampilkan pengajuan, sembunyikan login dan register
         login.classList.add('hidden-form');
         register.classList.add('hidden-form');
-        if (pengajuan) pengajuan.classList.remove('hidden-form');
-    } else { // login
+        pengajuan.classList.remove('hidden-form');
+    } else {
+        // Default: tampilkan login, sembunyikan register dan pengajuan
         register.classList.add('hidden-form');
-        if (pengajuan) pengajuan.classList.add('hidden-form');
+        pengajuan.classList.add('hidden-form');
         login.classList.remove('hidden-form');
     }
 }
