@@ -3116,7 +3116,7 @@ function renderTransferLainnya() {
 <!-- ===== AKHIR BLOK 8.1 ===== -->
 <!-- ===== BLOK 8.2 - JS_EVENT_AUTH, LOGOUT, SIDEBAR ===== -->
 <script>
-    // ===== BLOK 8.2.1 - TOGGLE FORM (VERSI LENGKAP) =====
+// ===== BLOK 8.2.1 - TOGGLE FORM (VERSI DIPERBAIKI) =====
 function toggleForm(tipe) {
     var error = document.getElementById('authenticationError');
     if (error) error.style.display = 'none';
@@ -3128,7 +3128,7 @@ function toggleForm(tipe) {
         login.classList.add('hidden-form');
         register.classList.remove('hidden-form');
         if (pengajuan) pengajuan.classList.add('hidden-form');
-    } else if (tipe === 'pengajuanBukaAkun') {
+    } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
         login.classList.add('hidden-form');
         register.classList.add('hidden-form');
         if (pengajuan) pengajuan.classList.remove('hidden-form');
