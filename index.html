@@ -599,25 +599,29 @@ body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh
 
 /* ===== BLOK 4.5 - CSS_RESPONSIVE_HP (LENGKAP) ===== */
 @media (max-width:767px) {
-    /* ... (kode navbar dan hamburger di atasnya tetap dipertahankan) ... */
-
-    /* --- GANTI BAGIAN INI DI BLOK 4.5 --- */
-    .authentication-wrapper {
-        padding: 10px;
-        align-items: flex-start; /* Agar tidak memaksa kotak ke tengah layar */
-        padding-top: 30px;       /* Jarak dari atas agar tidak tertutup navbar */
+    .navbar {
+        padding: 10px 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
     }
-    .authentication-box {
-        padding: 20px;
-        max-height: 70vh;        /* Di HP, batasi tinggi agar lebih pendek */
-        overflow-y: auto;        /* Scrollbar otomatis */
-        width: 100%;
-        margin-top: 10px;
+    .navbar-brand {
+        font-size: 16px;
+        gap: 8px;
     }
-    /* ------------------------------------- */
-
-    /* ... (kode grid, tabel, modal di bawahnya tetap dipertahankan) ... */
-}
+    .navbar-user .role-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+    .navbar-user span {
+        font-size: 13px;
+    }
+    .button-logout {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 
     /* --- TOMBOL HAMBURGER (GARIS TIGA) --- */
     #menuToggle {
@@ -12985,11 +12989,23 @@ document.addEventListener('DOMContentLoaded', function() {
     var overlay = document.getElementById('sidebarOverlay');
 
     if (!menuToggle || !sidebar || !overlay) {
-        console.warn('Elemen sidebar/overlay tidak ditemukan. Cek ID/class di HTML.');
+        console.warn('Elemen menu toggle tidak ditemukan!');
         return;
     }
 
-    // 1. Fungsi Buka/Tutup saat tombol hamburger diklik
+    // --- LANGKAH 1: HAPUS SEMUA LISTENER LAMA (SANGAT PENTING) ---
+    // Dengan metode cloneNode, tombol dan overlay akan "direset" dan bebas dari event ganda.
+    var newBtn = menuToggle.cloneNode(true);
+    menuToggle.parentNode.replaceChild(newBtn, menuToggle);
+    menuToggle = newBtn;
+
+    var newOverlay = overlay.cloneNode(true);
+    overlay.parentNode.replaceChild(newOverlay, overlay);
+    overlay = newOverlay;
+
+    // --- LANGKAH 2: PASANG LISTENER BARU (BUKA & TUTUP) ---
+    
+    // Event 1: Klik tombol hamburger
     menuToggle.addEventListener('click', function(e) {
         e.preventDefault();
         if (sidebar.classList.contains('open')) {
@@ -13001,13 +13017,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 2. Fungsi Menutup saat area gelap (overlay) diklik
+    // Event 2: Klik area gelap (overlay) untuk menutup
     overlay.addEventListener('click', function() {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
     });
 
-    // 3. (Opsional) Tutup sidebar jika ukuran layar berubah menjadi desktop (> 767px)
+    // Event 3: Jika layar diperbesar ke desktop (> 767px), tutup otomatis
     window.addEventListener('resize', function() {
         if (window.innerWidth > 767) {
             sidebar.classList.remove('open');
