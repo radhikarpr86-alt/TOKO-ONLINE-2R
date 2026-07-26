@@ -85,91 +85,74 @@
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
 <!-- ===== AKHIR BLOK 2.4 ===== -->
+<!-- ===== BLOK 2.5 - FORM REGISTER ===== -->
+<form class="authentication-form hidden-form" id="registerForm">
+    <div class="form-group">
+        <label>Pilih Role</label>
+        <div class="input-group">
+            <i class="fas fa-user-tag"></i>
+            <select id="registerRole">
+                <option value="customer">Customer</option>
+                <option value="toko">Toko</option>
+                <option value="ojek">Ojek</option>
+                <option value="pedagang">Pedagang Pasar</option>
+                <option value="codseller">COD Seller</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>ID Akun (Otomatis)</label>
+        <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="registerIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Username</label>
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="registerUsername" placeholder="Buat username" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="registerPassword" placeholder="Buat password" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Nama Lengkap</label>
+        <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="registerNama" placeholder="Nama lengkap Anda" required>
+        </div>
+    </div>
 
-<!-- ============================================================ -->
-<!-- BLOK 2.7 - FOOTER & NAVIGASI FORM (Lupa Password + Pindah Form) -->
-<!-- ============================================================ -->
-                    <div class="authentication-footer">
-                        <a onclick="lupaPassword()" style="cursor:pointer; color:#d32f2f; font-weight:600;">Lupa Password?</a>
-                        <br><br>
-                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
-                        <br>
-                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
-                    </div>
-                </form>
-<!-- ===== AKHIR BLOK 2.7 ===== -->
+    <!-- TAMBAHAN LOKASI -->
+    <div class="grid-2">
+        <div class="form-group">
+            <label>Alamat / Lokasi</label>
+            <div class="input-group">
+                <i class="fas fa-map-pin"></i>
+                <input type="text" id="registerLokasi" class="form-input" placeholder="Ketik atau klik Ambil Lokasi">
+            </div>
+        </div>
+        <div class="form-group" style="display:flex; align-items:flex-end;">
+            <button type="button" class="button-small" onclick="ambilLokasiRegister()">Ambil Lokasi Otomatis</button>
+        </div>
+    </div>
+    <input type="hidden" id="registerLat" value="">
+    <input type="hidden" id="registerLng" value="">
 
-<!-- ============================================================ -->
-<!-- BLOK 2.5 - FORM REGISTER                                      -->
-<!-- ============================================================ -->
-                <form class="authentication-form hidden-form" id="registerForm">
-                    <div class="form-group">
-                        <label>Pilih Role</label>
-                        <div class="input-group">
-                            <i class="fas fa-user-tag"></i>
-                            <select id="registerRole">
-                                <option value="customer">Customer</option>
-                                <option value="toko">Toko</option>
-                                <option value="ojek">Ojek</option>
-                                <option value="pedagang">Pedagang Pasar</option>
-                                <option value="codseller">COD Seller</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>ID Akun (Otomatis)</label>
-                        <div class="input-group">
-                            <i class="fas fa-id-card"></i>
-                            <input type="text" id="registerIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Username</label>
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="registerUsername" placeholder="Buat username" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="registerPassword" placeholder="Buat password" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <div class="input-group">
-                            <i class="fas fa-id-card"></i>
-                            <input type="text" id="registerNama" placeholder="Nama lengkap Anda" required>
-                        </div>
-                    </div>
-
-                    <!-- TAMBAHAN LOKASI -->
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Alamat / Lokasi</label>
-                            <div class="input-group">
-                                <i class="fas fa-map-pin"></i>
-                                <input type="text" id="registerLokasi" class="form-input" placeholder="Ketik atau klik Ambil Lokasi">
-                            </div>
-                        </div>
-                        <div class="form-group" style="display:flex; align-items:flex-end;">
-                            <button type="button" class="button-small" onclick="ambilLokasiRegister()">Ambil Lokasi Otomatis</button>
-                        </div>
-                    </div>
-                    <input type="hidden" id="registerLat" value="">
-                    <input type="hidden" id="registerLng" value="">
-
-                    <button type="submit" class="button-submit" id="btnDaftar" disabled>
-                        <i class="fas fa-user-plus"></i> Daftar
-                    </button>
-                    <div class="authentication-footer">
-                        Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
-                    </div>
-                </form>
+    <button type="submit" class="button-submit" id="btnDaftar" disabled>
+        <i class="fas fa-user-plus"></i> Daftar
+    </button>
+    <div class="authentication-footer">
+        Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
+    </div>
+</form>
 <!-- ===== AKHIR BLOK 2.5 ===== -->
-
 <!-- ============================================================ -->
 <!-- BLOK 2.6 - FORM PENGAJUAN BUKA AKUN                          -->
 <!-- ============================================================ -->
@@ -219,6 +202,18 @@
                     <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
                 </form>
 <!-- ===== AKHIR BLOK 2.6 ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.7 - FOOTER & NAVIGASI FORM (Lupa Password + Pindah Form) -->
+<!-- ============================================================ -->
+                    <div class="authentication-footer">
+                        <a onclick="lupaPassword()" style="cursor:pointer; color:#d32f2f; font-weight:600;">Lupa Password?</a>
+                        <br><br>
+                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
+                        <br>
+                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
+                    </div>
+                </form>
+<!-- ===== AKHIR BLOK 2.7 ===== -->
 
             </div>
         </div>
