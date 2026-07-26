@@ -173,7 +173,9 @@
     <input type="hidden" id="pengajuanLng" value="">
     <!-- ============================= -->
 
-    <button type="submit" class="button-submit" disabled><i class="fas fa-paper-plane"></i> Ajukan ke Admin</button>
+    <button type="submit" class="button-submit" disabled>
+    <i class="fas fa-paper-plane"></i> Ajukan ke Admin
+</button>
     <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
 </form>
 <!-- ===== AKHIR BLOK 2.1.5 ===== -->
@@ -12187,7 +12189,7 @@ function kirimKomentarStaf(id, index) {
 // ============================================================
 // AKHIR BLOK 8.55
 // ============================================================
-// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS =====
+// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS (DIPERBAIKI) =====
 
 // --- Untuk Register ---
 function ambilLokasiRegister() {
@@ -12202,23 +12204,26 @@ function ambilLokasiRegister() {
         document.getElementById('registerLat').value = lat;
         document.getElementById('registerLng').value = lng;
 
-        // Coba reverse geocoding ke alamat
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var alamat = data.display_name || 'Lokasi tidak diketahui';
-                document.getElementById('registerLokasi').value = alamat;
-                tampilkanToast('Lokasi berhasil diambil!', 'success');
-                // AKTIFKAN TOMBOL DAFTAR SETELAH LOKASI BERHASIL
-                var btnDaftar = document.querySelector('#registerForm .button-submit');
-                if (btnDaftar) btnDaftar.removeAttribute('disabled');
-            })
-            .catch(function() {
-                document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
-                tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
-                var btnDaftar = document.querySelector('#registerForm .button-submit');
-                if (btnDaftar) btnDaftar.removeAttribute('disabled');
-            });
+        // Tambahkan User-Agent agar tidak kena blokir 404
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
+            headers: { 'User-Agent': 'TokoOnline2R-App/1.0' }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            var alamat = data.display_name || 'Lokasi tidak diketahui';
+            document.getElementById('registerLokasi').value = alamat;
+            tampilkanToast('Lokasi berhasil diambil!', 'success');
+            // AKTIFKAN TOMBOL
+            var btnDaftar = document.querySelector('#registerForm .button-submit');
+            if (btnDaftar) btnDaftar.removeAttribute('disabled');
+        })
+        .catch(function() {
+            // Jika API gagal, tetap aktifkan tombol dengan koordinat saja
+            document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
+            tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
+            var btnDaftar = document.querySelector('#registerForm .button-submit');
+            if (btnDaftar) btnDaftar.removeAttribute('disabled');
+        });
     }, function(err) {
         tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
     });
@@ -12237,22 +12242,23 @@ function ambilLokasiPengajuan() {
         document.getElementById('pengajuanLat').value = lat;
         document.getElementById('pengajuanLng').value = lng;
 
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var alamat = data.display_name || 'Lokasi tidak diketahui';
-                document.getElementById('pengajuanLokasi').value = alamat;
-                tampilkanToast('Lokasi berhasil diambil!', 'success');
-                // AKTIFKAN TOMBOL AJUKAN SETELAH LOKASI BERHASIL
-                var btnAjukan = document.querySelector('#pengajuanBukaAkunForm .button-submit');
-                if (btnAjukan) btnAjukan.removeAttribute('disabled');
-            })
-            .catch(function() {
-                document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
-                tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
-                var btnAjukan = document.querySelector('#pengajuanBukaAkunForm .button-submit');
-                if (btnAjukan) btnAjukan.removeAttribute('disabled');
-            });
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
+            headers: { 'User-Agent': 'TokoOnline2R-App/1.0' }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            var alamat = data.display_name || 'Lokasi tidak diketahui';
+            document.getElementById('pengajuanLokasi').value = alamat;
+            tampilkanToast('Lokasi berhasil diambil!', 'success');
+            var btnAjukan = document.querySelector('#pengajuanBukaAkunForm .button-submit');
+            if (btnAjukan) btnAjukan.removeAttribute('disabled');
+        })
+        .catch(function() {
+            document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
+            tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
+            var btnAjukan = document.querySelector('#pengajuanBukaAkunForm .button-submit');
+            if (btnAjukan) btnAjukan.removeAttribute('disabled');
+        });
     }, function(err) {
         tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
     });
