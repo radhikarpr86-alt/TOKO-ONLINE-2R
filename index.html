@@ -12320,7 +12320,26 @@ function ambilLokasiPengajuan() {
     });
 }
 // ===== AKHIR BLOK 8.56 =====
-// ============================================================
+// ===== PASANG EVENT LISTENER UNTUK TOMBOL AMBIL LOKASI =====
+document.addEventListener('DOMContentLoaded', function() {
+    var btnReg = document.querySelector('#registerForm button[onclick*="ambilLokasiRegister"]');
+    if (btnReg) {
+        btnReg.removeAttribute('onclick');
+        btnReg.addEventListener('click', function(e) {
+            e.preventDefault();
+            ambilLokasiRegister();
+        });
+    }
+
+    var btnPeng = document.querySelector('#pengajuanBukaAkunForm button[onclick*="ambilLokasiPengajuan"]');
+    if (btnPeng) {
+        btnPeng.removeAttribute('onclick');
+        btnPeng.addEventListener('click', function(e) {
+            e.preventDefault();
+            ambilLokasiPengajuan();
+        });
+    }
+});
 // ============================================================
 // BLOK 8.57 - RENDER KATALOG PRODUK (LENGKAP DENGAN PENGATURAN)
 // ============================================================
