@@ -502,80 +502,80 @@
     .badge-secondary { background:#e9ecef; color:#555; }
     /* ===== AKHIR BLOK 6.3 ===== */
 
-        /* ===== BLOK 6.4 - RESPONSIVE HP (TOMBOL HAMBURGER & SIDEBAR MOBILE) ===== */
-    #menuToggle { 
-        display: none; 
-        background: none; 
-        border: none; 
-        font-size: 22px; 
-        cursor: pointer; 
-        color: var(--primary); 
-        padding: 0; 
-        margin-right: 10px; 
-        transition: transform 0.3s; 
-    }
-    #menuToggle:active { transform: scale(0.9); }
+     /* ===== BLOK 6.4 - RESPONSIVE HP (TOMBOL HAMBURGER & SIDEBAR MOBILE) ===== */
+#menuToggle { 
+    display: none; 
+    background: none; 
+    border: none; 
+    font-size: 22px; 
+    cursor: pointer; 
+    color: var(--primary); 
+    padding: 0; 
+    margin-right: 10px; 
+    transition: transform 0.3s; 
+}
+#menuToggle:active { transform: scale(0.9); }
 
-    .sidebar-overlay { 
-        display: none; 
+.sidebar-overlay { 
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 998; 
+    transition: opacity 0.3s; 
+}
+.sidebar-overlay.active { display: block; }
+
+@media (max-width: 767px) {
+    /* --- NAVBAR --- */
+    .navbar { padding: 10px 15px; }
+    .navbar-brand { font-size: 16px; gap: 8px; }
+    .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
+    .navbar-user span { font-size: 13px; }
+    .button-logout { padding: 6px 12px; font-size: 12px; }
+    
+    /* --- TOMBOL HAMBURGER --- */
+    #menuToggle { display: block !important; }
+
+    /* --- SIDEBAR & OVERLAY --- */
+    .sidebar { 
+        width: 80%; 
+        max-width: 300px; 
+        top: 64px; 
+        bottom: 0; 
+        z-index: 999; 
         position: fixed; 
-        inset: 0; 
-        background: rgba(0, 0, 0, 0.5); 
-        z-index: 998; 
-        transition: opacity 0.3s; 
+        left: -100%; 
+        transition: left 0.3s ease-in-out; 
     }
+    .sidebar.open { left: 0; }
+
     .sidebar-overlay.active { display: block; }
 
-    @media (max-width: 767px) {
-        /* --- NAVBAR --- */
-        .navbar { padding: 10px 15px; }
-        .navbar-brand { font-size: 16px; gap: 8px; }
-        .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
-        .navbar-user span { font-size: 13px; }
-        .button-logout { padding: 6px 12px; font-size: 12px; }
-        
-        /* --- TOMBOL HAMBURGER --- */
-        #menuToggle { display: block !important; }
-
-        /* --- SIDEBAR & OVERLAY --- */
-        .sidebar { 
-            width: 80%; 
-            max-width: 300px; /* Tidak terlalu lebar di HP */
-            top: 64px; 
-            bottom: 0; 
-            z-index: 999; 
-            position: fixed; 
-            left: -100%; 
-            transition: left 0.3s ease-in-out; 
-        }
-        .sidebar.open { left: 0; }
-
-        .sidebar-overlay.active { display: block; }
-
-        /* --- KONTEN UTAMA --- */
-        .content { 
-            margin-left: 0; 
-            padding: 15px; 
-            margin-top: 64px; 
-        }
-
-        /* --- GRID & TABEL --- */
-        .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-        .widget-card .widget-number { font-size: 22px; }
-        .grid-2 { grid-template-columns: 1fr; }
-        .table { font-size: 12px; }
-        .modal { width: 95%; padding: 15px; }
-
-        /* --- PERBAIKAN LOGIN DI HP (AGAR BISA DI-SCROLL) --- */
-        .authentication-wrapper { padding: 10px; }
-        .authentication-box { 
-            padding: 20px; 
-            max-height: 70vh;   /* Batasi tinggi di HP agar tidak keluar layar */
-            overflow-y: auto;   /* Tambahkan scrollbar di dalam kotak login */
-        }
-        /* --------------------------------------------- */
+    /* --- KONTEN UTAMA --- */
+    .content { 
+        margin-left: 0; 
+        padding: 15px; 
+        margin-top: 64px; 
     }
-    /* ===== AKHIR BLOK 6.4 ===== */
+
+    /* --- GRID & TABEL --- */
+    .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .widget-card .widget-number { font-size: 22px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .table { font-size: 12px; }
+    .modal { width: 95%; padding: 15px; }
+
+    /* --- PERBAIKAN LOGIN DI HP (AGAR BISA DI-SCROLL) --- */
+    .authentication-wrapper { padding: 10px; }
+    .authentication-box { 
+        padding: 20px; 
+        max-height: 70vh;   /* Batasi tinggi di HP agar tidak keluar layar */
+        overflow-y: auto;   /* Tambahkan scrollbar di dalam kotak login */
+    }
+    /* --------------------------------------------- */
+}
+/* ===== AKHIR BLOK 6.4 ===== */
 <!-- ===== BLOK 7 - JAVASCRIPT UTILITY DASAR ===== -->
 <script>
     // ===== BLOK 7.1 - DATA & HASH =====
