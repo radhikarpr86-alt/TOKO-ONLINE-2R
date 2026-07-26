@@ -3450,6 +3450,27 @@ if (lupaBtn) {
         }
     });
     // ===== AKHIR BLOK 8.2.5 =====
+// ===== BLOK 8.2.6 - EVENT TOGGLE SIDEBAR (HAMBURGER MENU) =====
+document.addEventListener('DOMContentLoaded', function() {
+    var menuToggle = document.getElementById('menuToggle');
+    var sidebar = document.querySelector('.sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+
+    if (menuToggle && sidebar && overlay) {
+        // Saat tombol hamburger diklik
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        });
+
+        // Saat area gelap di luar sidebar diklik (untuk menutup)
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+    }
+});
+// ===== AKHIR BLOK 8.2.6 =====
 // ===== BLOK 8.26.1 - PERBAIKAN TOGGLE FORM =====
 function toggleForm(tipe) {
     var login = document.getElementById('loginForm');
