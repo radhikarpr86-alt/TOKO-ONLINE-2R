@@ -3406,34 +3406,26 @@ if (lupaBtn) {
     // ===== AKHIR BLOK 8.2.5 =====
 // ===== BLOK 8.26.1 - PERBAIKAN TOGGLE FORM =====
 function toggleForm(tipe) {
-    // Sembunyikan pesan error jika ada
-    var error = document.getElementById('authenticationError');
-    if (error) error.style.display = 'none';
-
-    // Ambil elemen form
     var login = document.getElementById('loginForm');
     var register = document.getElementById('registerForm');
     var pengajuan = document.getElementById('pengajuanBukaAkunForm');
 
-    // Jika elemen tidak ditemukan, hentikan (mencegah error)
-    if (!login || !register || !pengajuan) {
-        console.error('Salah satu form (login/register/pengajuan) tidak ditemukan!');
-        return;
-    }
+    // Hilangkan error jika ada
+    var error = document.getElementById('authenticationError');
+    if (error) error.style.display = 'none';
 
-    // Logika menampilkan/menyembunyikan form
+    // Sembunyikan SEMUA form dulu
+    if (login) login.classList.add('hidden-form');
+    if (register) register.classList.add('hidden-form');
+    if (pengajuan) pengajuan.classList.add('hidden-form');
+
+    // Tampilkan form yang diminta
     if (tipe === 'register') {
-        login.classList.add('hidden-form');
-        register.classList.remove('hidden-form');
-        pengajuan.classList.add('hidden-form');
+        if (register) register.classList.remove('hidden-form');
     } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
-        login.classList.add('hidden-form');
-        register.classList.add('hidden-form');
-        pengajuan.classList.remove('hidden-form');
-    } else { // default: login
-        register.classList.add('hidden-form');
-        pengajuan.classList.add('hidden-form');
-        login.classList.remove('hidden-form');
+        if (pengajuan) pengajuan.classList.remove('hidden-form');
+    } else {
+        if (login) login.classList.remove('hidden-form');
     }
 }
 // ===== AKHIR BLOK 8.26.1 =====
