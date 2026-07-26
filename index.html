@@ -57,6 +57,46 @@
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
     .button-small { padding:6px 14px; font-size:12px; width:100%; border:none; border-radius:var(--radius); background:var(--primary); color:white; cursor:pointer; }
     /* ===== AKHIR BLOK 4.1 ===== */
+        /* ===== BLOK 4.1.3 – TOAST NOTIFICATION (POSISI TENGAH ATAS) ===== */
+    #toastContainer { 
+        position: fixed; 
+        top: 20px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 99999; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 10px; 
+        max-width: 90%; 
+        width: auto; 
+        align-items: center; 
+    }
+    .toast { 
+        padding: 14px 20px; 
+        border-radius: var(--radius); 
+        color: white; 
+        font-size: 14px; 
+        font-weight: 500; 
+        box-shadow: var(--shadow); 
+        animation: slideInDown 0.4s ease; 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        backdrop-filter: blur(4px); 
+        width: 100%;
+        min-width: 300px;
+        justify-content: center; 
+    }
+    .toast.success { background:#4CAF50; }
+    .toast.error { background:#F44336; }
+    .toast.warning { background:#FF9800; }
+    .toast.info { background:#2196F3; }
+    
+    @keyframes slideInDown { 
+        from { transform: translateY(-100px); opacity: 0; } 
+        to { transform: translateY(0); opacity: 1; } 
+    }
+    /* ===== AKHIR BLOK 4.1.3 ===== */
 
     /* ===== BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX) ===== */
     .authentication-wrapper {
