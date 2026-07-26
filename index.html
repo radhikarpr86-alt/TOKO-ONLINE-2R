@@ -201,5 +201,35 @@
     <a href="javascript:void(0)" onclick="toggleForm('pengajuan')" style="cursor:pointer;">Ajukan buka akun</a>
 </div>
 <!-- ===== AKHIR BLOK 2.7 ===== -->
+<!-- ===== BLOK 3.1 - NAVBAR UTAMA (JAM & PROFIL) ===== -->
+<div id="pageDashboard" class="page-dashboard">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <button id="menuToggle"><i class="fas fa-bars"></i></button>
+            <i class="fas fa-store-alt"></i> Toko Online 2R
+        </div>
+        <div class="navbar-user">
+            <!-- Jam & Tanggal -->
+            <div class="navbar-time" style="display:flex; flex-direction:column; align-items:flex-end; margin-right:15px; font-size:12px; color:#555;">
+                <span id="displayJam" style="font-weight:600; font-size:14px;">00:00:00</span>
+                <span id="displayTanggal" style="font-size:11px;">Senin, 01 Januari 2026</span>
+            </div>
+
+            <!-- Avatar Foto Profil -->
+            <img id="userAvatar" src="" style="display:none; width:32px; height:32px; border-radius:50%; object-fit:cover; margin-right:8px; vertical-align:middle; border:2px solid var(--primary);">
+            <span id="userAvatarPlaceholder" style="display:inline-block; width:32px; height:32px; border-radius:50%; background:#eee; text-align:center; line-height:32px; color:#aaa; margin-right:8px; vertical-align:middle;">
+                <i class="fas fa-user"></i>
+            </span>
+
+            <span class="role-badge" id="roleBadge">Role</span>
+            <span id="userNama" style="font-weight:600;">User</span>
+            <button class="button-logout" id="buttonLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+        </div>
+    </nav>
+<!-- ===== AKHIR BLOK 3.1 ===== -->
+<!-- ===== BLOK 3.2 - SIDEBAR CONTAINER & OVERLAY ===== -->
+<aside class="sidebar" id="sidebarContainer"></aside>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<!-- ===== AKHIR BLOK 3.2 ===== -->
 </body>
 </html>
