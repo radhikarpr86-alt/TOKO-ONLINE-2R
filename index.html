@@ -3293,11 +3293,45 @@ if (lupaBtn) {
         }
     });
     // ===== AKHIR BLOK 8.2.5 =====
+// ===== BLOK 8.26.1 - PERBAIKAN TOGGLE FORM =====
+function toggleForm(tipe) {
+    // Sembunyikan pesan error jika ada
+    var error = document.getElementById('authenticationError');
+    if (error) error.style.display = 'none';
 
-    // ============================================================
-// ===== BLOK 8.26.2 - SIMPAN PENGAJUAN DARI USER (VERSI AMAN) =====
-(function() {
+    // Ambil elemen form
+    var login = document.getElementById('loginForm');
+    var register = document.getElementById('registerForm');
+    var pengajuan = document.getElementById('pengajuanBukaAkunForm');
+
+    // Jika elemen tidak ditemukan, hentikan (mencegah error)
+    if (!login || !register || !pengajuan) {
+        console.error('Salah satu form (login/register/pengajuan) tidak ditemukan!');
+        return;
+    }
+
+    // Logika menampilkan/menyembunyikan form
+    if (tipe === 'register') {
+        login.classList.add('hidden-form');
+        register.classList.remove('hidden-form');
+        pengajuan.classList.add('hidden-form');
+    } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
+        login.classList.add('hidden-form');
+        register.classList.add('hidden-form');
+        pengajuan.classList.remove('hidden-form');
+    } else { // default: login
+        register.classList.add('hidden-form');
+        pengajuan.classList.add('hidden-form');
+        login.classList.remove('hidden-form');
+    }
+}
+// ===== AKHIR BLOK 8.26.1 =====
+
+// ===== BLOK 8.26.2 - EVENT LISTENER UNTUK FORM PENGAJUAN (DIPASANG SAAT DOM SIAP) =====
+document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('pengajuanBukaAkunForm');
+    
+    // Jika form tidak ditemukan, beri tahu di console
     if (!form) {
         console.error('Elemen dengan id "pengajuanBukaAkunForm" tidak ditemukan!');
         return;
@@ -3305,22 +3339,23 @@ if (lupaBtn) {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('Form pengajuan disubmit'); // Untuk debugging
-
+        
+        // Ambil nilai dari input
         var nama = document.getElementById('pengajuanNama').value.trim();
         var kontak = document.getElementById('pengajuanKontak').value.trim();
         var role = document.getElementById('pengajuanRole').value;
         var alasan = document.getElementById('pengajuanAlasan').value.trim();
-
         var lat = document.getElementById('pengajuanLat').value.trim();
         var lng = document.getElementById('pengajuanLng').value.trim();
         var alamat = document.getElementById('pengajuanLokasi').value.trim();
 
+        // Validasi data wajib
         if (!nama || !kontak || !role || !alasan) {
             tampilkanToast('Semua data wajib diisi!', 'warning');
             return;
         }
 
+        // Simpan ke localStorage
         var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
         dataPengajuan.push({
             id: 'PB-' + Date.now(),
@@ -3335,12 +3370,21 @@ if (lupaBtn) {
             waktu: new Date().toISOString()
         });
         localStorage.setItem('2r_pengajuan_buka_akun', JSON.stringify(dataPengajuan));
-        tampilkanToast('Pengajuan Anda telah dikirim ke Admin!', 'success');
+
+        // Kosongkan form setelah berhasil
+        document.getElementById('pengajuanNama').value = '';
+        document.getElementById('pengajuanKontak').value = '';
+        document.getElementById('pengajuanAlasan').value = '';
+        document.getElementById('pengajuanLokasi').value = '';
+        document.getElementById('pengajuanLat').value = '';
+        document.getElementById('pengajuanLng').value = '';
+
+        // Notifikasi dan kembali ke halaman login
+        tampilkanToast('Pengajuan Anda telah dikirim ke Staf Admin!', 'success');
         toggleForm('login');
     });
-})();
+});
 // ===== AKHIR BLOK 8.26.2 =====
-
 // ===== BLOK 8.26.3 - RENDER HALAMAN PENGAJUAN (UNTUK ADMIN) =====
 function renderPengajuanBukaAkun() {
     var role = localStorage.getItem('2r_user_role');
