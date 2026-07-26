@@ -603,7 +603,7 @@
 <!-- ===== AKHIR BLOK 4, 5, 6 (CSS LENGKAP) ===== -->
 
 <!-- ============================================================ -->
-<!-- BLOK 7 & 8 - JAVASCRIPT PERBAIKAN (TIDAK ERROR NULL)        -->
+<!-- BLOK 7 & 8 - JAVASCRIPT FINAL (TIDAK ERROR NULL)             -->
 <!-- ============================================================ -->
 <script>
     // ===== BLOK 7.1 - DATA & HASH =====
@@ -790,7 +790,7 @@
     // ===== AKHIR BLOK 8.2.4 =====
 
     // ============================================================
-    // ===== EVENT LISTENER (DIBUNGKUS DOMContentLoaded) =====
+    // EVENT LISTENER (DENGAN PENGECEKAN NULL)
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
         // --- REGISTER FORM LISTENER ---
@@ -854,7 +854,7 @@
                 toggleForm('login');
             });
         } else {
-            console.warn('Elemen #registerForm tidak ditemukan!');
+            console.warn('⚠️ Elemen #registerForm tidak ditemukan. Pastikan ID tidak duplikat.');
         }
 
         // --- PENGAJUAN FORM LISTENER ---
@@ -901,12 +901,11 @@
                 toggleForm('login');
             });
         } else {
-            console.warn('Elemen #pengajuanBukaAkunForm tidak ditemukan!');
+            console.warn('⚠️ Elemen #pengajuanBukaAkunForm tidak ditemukan. Pastikan ID tidak duplikat.');
         }
     });
 </script>
 <!-- ===== AKHIR BLOK 7 & 8 ===== -->
-
 <!-- ============================================================ -->
 <!-- PENUTUP HTML                                                 -->
 <!-- ============================================================ -->
