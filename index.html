@@ -26,134 +26,6 @@
     <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 1.5 ===== -->
 
-<!-- ===== BLOK 4 - CSS GLOBAL & UTILITY (TIDAK ADA ERROR JS) ===== -->
-<style>
-    /* -------- VARIABEL WARNA -------- */
-    :root {
-        --primary: #FF6B00;
-        --primary-dark: #e65c00;
-        --primary-light: #fff5f0;
-        --bg: #f8f9fa;
-        --text: #333333;
-        --text-muted: #888888;
-        --border: #e9ecef;
-        --shadow: 0 4px 20px rgba(0,0,0,0.08);
-        --radius: 12px;
-    }
-
-    /* ===== BLOK 4.1 - RESET DASAR ===== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family:'Poppins', sans-serif;
-        background:var(--bg);
-        min-height:100vh;
-        color:var(--text);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background:linear-gradient(135deg, var(--primary-light), #ffe0cc);
-    }
-    .hidden-form { display:none !important; }
-    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
-    .button-small { padding:6px 14px; font-size:12px; width:100%; border:none; border-radius:var(--radius); background:var(--primary); color:white; cursor:pointer; }
-    /* ===== AKHIR BLOK 4.1 ===== */
-        /* ===== BLOK 4.1.3 – TOAST NOTIFICATION (POSISI TENGAH ATAS) ===== */
-    #toastContainer { 
-        position: fixed; 
-        top: 20px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        z-index: 99999; 
-        display: flex; 
-        flex-direction: column; 
-        gap: 10px; 
-        max-width: 90%; 
-        width: auto; 
-        align-items: center; 
-    }
-    .toast { 
-        padding: 14px 20px; 
-        border-radius: var(--radius); 
-        color: white; 
-        font-size: 14px; 
-        font-weight: 500; 
-        box-shadow: var(--shadow); 
-        animation: slideInDown 0.4s ease; 
-        display: flex; 
-        align-items: center; 
-        gap: 12px; 
-        backdrop-filter: blur(4px); 
-        width: 100%;
-        min-width: 300px;
-        justify-content: center; 
-    }
-    .toast.success { background:#4CAF50; }
-    .toast.error { background:#F44336; }
-    .toast.warning { background:#FF9800; }
-    .toast.info { background:#2196F3; }
-    
-    @keyframes slideInDown { 
-        from { transform: translateY(-100px); opacity: 0; } 
-        to { transform: translateY(0); opacity: 1; } 
-    }
-    /* ===== AKHIR BLOK 4.1.3 ===== */
-    /* ===== BLOK 4.1.5 – HALAMAN LOGIN/REGISTER ===== */
-    #pageAuthentication { 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        min-height: 100vh; 
-        /* --- PERBAIKAN BACKGROUND ORANGE TUA --- */
-        background: linear-gradient(135deg, #C05000 0%, #E67E22 100%);
-        /* -------------------------------------- */
-    }
-    /* ===== AKHIR BLOK 4.1.5 ===== */
-
-    /* ===== BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX) ===== */
-    .authentication-wrapper {
-        width: 100%;
-        max-width: 450px;
-        padding: 20px;
-    }
-    .authentication-box {
-        background: white;
-        border-radius: var(--radius);
-        padding: 35px;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        width: 100%;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-    /* ===== AKHIR BLOK 5.1 ===== */
-
-    /* ===== BLOK 5.2 - CSS LOGO & PESAN ERROR ===== */
-    .authentication-logo { text-align:center; margin-bottom:25px; }
-    .authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
-    .authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
-    .authentication-logo p { color:var(--text-muted); font-size:14px; }
-    .authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
-    /* ===== AKHIR BLOK 5.2 ===== */
-
-    /* ===== BLOK 5.3 - CSS INPUT, GROUP & TOMBOL ===== */
-    .form-group { margin-bottom:15px; }
-    .form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
-    .input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:0.3s; }
-    .input-group:focus-within { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(255,107,0,0.1); }
-    .input-group i { color:#aaa; font-size:16px; width:30px; text-align:center; }
-    .input-group input, .input-group select { border:none; background:transparent; padding:13px 0; font-size:14px; width:100%; outline:none; font-family:'Poppins', sans-serif; }
-    .button-submit { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; transition:0.3s; }
-    .button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
-    /* ===== AKHIR BLOK 5.3 ===== */
-
-    /* ===== BLOK 5.4 - CSS FOOTER NAVIGASI ===== */
-    .authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
-    .authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; }
-    .authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
-    /* ===== AKHIR BLOK 5.4 ===== */
-</style>
-<!-- ===== AKHIR BLOK 4 & 5 (CSS LENGKAP) ===== -->
-
 <!-- ===== BLOK 2.1 - WRAPPER & KOTAK LOGIN ===== -->
     <div id="pageAuthentication">
         <div class="authentication-wrapper">
@@ -195,15 +67,6 @@
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
 <!-- ===== AKHIR BLOK 2.4 ===== -->
-
-<!-- ===== BLOK 2.7 - FOOTER & NAVIGASI FORM ===== -->
-                    <div class="authentication-footer">
-                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
-                        <br>
-                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
-                    </div>
-                </form>
-<!-- ===== AKHIR BLOK 2.7 ===== -->
 
 <!-- ===== BLOK 2.5 - FORM REGISTER (REVISI) ===== -->
                 <form class="authentication-form hidden-form" id="registerForm">
@@ -318,7 +181,7 @@
                     <button type="submit" class="button-submit"><i class="fas fa-paper-plane"></i> Ajukan ke Admin</button>
                     <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
                 </form>
-<!-- ===== AKHIR BLOK 2.6 ===== -->
+<!-- ===== AKHIR BLOK 2.6 ===== -->              
 <!-- ===== BLOK 2.7 - FOOTER & NAVIGASI FORM ===== -->
                     <div class="authentication-footer">
                         <!-- Tautan Lupa Password -->
@@ -337,6 +200,138 @@
         </div>
     </div>
 <!-- ===== AKHIR BLOK 2.1 (PENUTUP WRAPPER LOGIN) ===== -->
+<!-- ===== BLOK 4 - CSS GLOBAL & UTILITY (TIDAK ADA ERROR JS) ===== -->
+<style>
+    /* -------- VARIABEL WARNA -------- */
+    :root {
+        --primary: #FF6B00;
+        --primary-dark: #e65c00;
+        --primary-light: #fff5f0;
+        --bg: #f8f9fa;
+        --text: #333333;
+        --text-muted: #888888;
+        --border: #e9ecef;
+        --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        --radius: 12px;
+    }
+
+    /* ===== BLOK 4.1 - RESET DASAR ===== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family:'Poppins', sans-serif;
+        background:var(--bg);
+        min-height:100vh;
+        color:var(--text);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(135deg, var(--primary-light), #ffe0cc);
+    }
+    .hidden-form { display:none !important; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .button-small { padding:6px 14px; font-size:12px; width:100%; border:none; border-radius:var(--radius); background:var(--primary); color:white; cursor:pointer; }
+    /* ===== AKHIR BLOK 4.1 ===== */
+        /* ===== BLOK 4.1.3 – TOAST NOTIFICATION (POSISI TENGAH ATAS) ===== */
+    #toastContainer { 
+        position: fixed; 
+        top: 20px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 99999; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 10px; 
+        max-width: 90%; 
+        width: auto; 
+        align-items: center; 
+    }
+    .toast { 
+        padding: 14px 20px; 
+        border-radius: var(--radius); 
+        color: white; 
+        font-size: 14px; 
+        font-weight: 500; 
+        box-shadow: var(--shadow); 
+        animation: slideInDown 0.4s ease; 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        backdrop-filter: blur(4px); 
+        width: 100%;
+        min-width: 300px;
+        justify-content: center; 
+    }
+    .toast.success { background:#4CAF50; }
+    .toast.error { background:#F44336; }
+    .toast.warning { background:#FF9800; }
+    .toast.info { background:#2196F3; }
+    
+    @keyframes slideInDown { 
+        from { transform: translateY(-100px); opacity: 0; } 
+        to { transform: translateY(0); opacity: 1; } 
+    }
+    /* ===== AKHIR BLOK 4.1.3 ===== */
+        /* ===== BLOK 4.1.5 – HALAMAN LOGIN/REGISTER ===== */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #pageAuthentication { 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        width: 100%;
+        min-height: 100vh; /* Memastikan background memenuhi tinggi layar */
+        background: linear-gradient(135deg, #C05000 0%, #E67E22 100%);
+    }
+    /* ===== AKHIR BLOK 4.1.5 ===== */
+
+       /* ===== BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX) ===== */
+    .authentication-wrapper {
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+    }
+    .authentication-box {
+        background: white;
+        border-radius: var(--radius);
+        padding: 35px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        width: 100%;
+        /* --- DIHAPUS UNTUK PC: max-height & overflow-y --- */
+        /* max-height: 80vh; overflow-y: auto;  */
+        /* Agar di PC cukup memanjang tanpa scrollbar kotak */
+    }
+    /* ===== AKHIR BLOK 5.1 ===== */
+
+    /* ===== BLOK 5.2 - CSS LOGO & PESAN ERROR ===== */
+    .authentication-logo { text-align:center; margin-bottom:25px; }
+    .authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
+    .authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
+    .authentication-logo p { color:var(--text-muted); font-size:14px; }
+    .authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
+    /* ===== AKHIR BLOK 5.2 ===== */
+
+    /* ===== BLOK 5.3 - CSS INPUT, GROUP & TOMBOL ===== */
+    .form-group { margin-bottom:15px; }
+    .form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
+    .input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:0.3s; }
+    .input-group:focus-within { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(255,107,0,0.1); }
+    .input-group i { color:#aaa; font-size:16px; width:30px; text-align:center; }
+    .input-group input, .input-group select { border:none; background:transparent; padding:13px 0; font-size:14px; width:100%; outline:none; font-family:'Poppins', sans-serif; }
+    .button-submit { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; transition:0.3s; }
+    .button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
+    /* ===== AKHIR BLOK 5.3 ===== */
+
+    /* ===== BLOK 5.4 - CSS FOOTER NAVIGASI ===== */
+    .authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
+    .authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; }
+    .authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
+    /* ===== AKHIR BLOK 5.4 ===== */
+</style>
+<!-- ===== AKHIR BLOK 4 & 5 (CSS LENGKAP) ===== -->
     /* ====================================================== */
     /* BLOK 6 – CSS DASHBOARD & RESPONSIVE HP                 */
     /* ====================================================== */
@@ -542,6 +537,12 @@
         .table { font-size:12px; }
         .modal { width:95%; padding:15px; }
     }
+        /* --- TAMBAHAN DI BLOK 6.4 UNTUK HP --- */
+        .authentication-box {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        /* ------------------------------------- */
     /* ===== AKHIR BLOK 6.4 ===== */
 <!-- ===== BLOK 7 - JAVASCRIPT UTILITY DASAR ===== -->
 <script>
