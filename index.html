@@ -65,7 +65,7 @@
 </form>
 <!-- ===== AKHIR BLOK 2.1.3 ===== -->
 
-            <!-- ===== BLOK 2.1.4 - FORM REGISTER ===== -->
+<!-- ===== BLOK 2.1.4 - FORM REGISTER ===== -->
 <form class="authentication-form hidden-form" id="registerForm">
     <div class="form-group">
         <label>Pilih Role</label>
@@ -120,17 +120,18 @@
         </div>
         <div class="form-group" style="display:flex; align-items:flex-end;">
             <button type="button" class="button button-primary button-small" onclick="ambilLokasiRegister()" style="width:100%;">
-    <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
-</button>
+                <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
+            </button>
         </div>
     </div>
     <input type="hidden" id="registerLat" value="">
     <input type="hidden" id="registerLng" value="">
     <!-- ============================= -->
 
-    <button type="submit" class="button-submit" disabled>
-    <i class="fas fa-user-plus"></i> Daftar
-</button>
+    <!-- PERBAIKAN: tambahkan id="btnDaftar" pada tombol submit -->
+    <button type="submit" class="button-submit" id="btnDaftar" disabled>
+        <i class="fas fa-user-plus"></i> Daftar
+    </button>
     <div class="authentication-footer">
         Sudah punya akun? 
         <a onclick="toggleForm('login')">Login di sini</a>
@@ -169,16 +170,18 @@
         </div>
         <div class="form-group" style="display:flex; align-items:flex-end;">
             <button type="button" class="button button-primary button-small" onclick="ambilLokasiPengajuan()" style="width:100%;">
-    <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
-</button>
+                <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
+            </button>
+        </div>
     </div>
     <input type="hidden" id="pengajuanLat" value="">
     <input type="hidden" id="pengajuanLng" value="">
     <!-- ============================= -->
 
-    <button type="submit" class="button-submit" disabled>
-    <i class="fas fa-paper-plane"></i> Ajukan ke Admin
-</button>
+    <!-- PERBAIKAN: tambahkan id="btnAjukan" pada tombol submit -->
+    <button type="submit" class="button-submit" id="btnAjukan" disabled>
+        <i class="fas fa-paper-plane"></i> Ajukan ke Admin
+    </button>
     <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
 </form>
 <!-- ===== AKHIR BLOK 2.1.5 ===== -->
@@ -12206,7 +12209,7 @@ function kirimKomentarStaf(id, index) {
 // ============================================================
 // AKHIR BLOK 8.55
 // ============================================================
-// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS (VERSI DEBUG) =====
+// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS (VERSI DENGAN ID TOMBOL) =====
 
 // --- Untuk Register ---
 function ambilLokasiRegister() {
@@ -12223,14 +12226,9 @@ function ambilLokasiRegister() {
         document.getElementById('registerLat').value = lat;
         document.getElementById('registerLng').value = lng;
 
-        // Cari tombol submit
-        var form = document.getElementById('registerForm');
-        var btn = form ? form.querySelector('button[type="submit"]') : null;
-        if (!btn) {
-            console.warn('Selector button[type="submit"] gagal, coba class .button-submit');
-            btn = document.querySelector('#registerForm .button-submit');
-        }
-        console.log('Tombol register ditemukan:', btn);
+        // Cari tombol submit dengan ID
+        var btnDaftar = document.getElementById('btnDaftar');
+        console.log('Tombol btnDaftar ditemukan:', btnDaftar);
 
         // Coba reverse geocoding
         fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
@@ -12241,22 +12239,22 @@ function ambilLokasiRegister() {
             var alamat = data.display_name || 'Lokasi tidak diketahui';
             document.getElementById('registerLokasi').value = alamat;
             tampilkanToast('Lokasi berhasil diambil!', 'success');
-            if (btn) {
-                btn.removeAttribute('disabled');
-                console.log('Tombol register DIaktifkan (removeAttribute)');
+            if (btnDaftar) {
+                btnDaftar.removeAttribute('disabled');
+                console.log('Tombol Daftar DIaktifkan (removeAttribute)');
             } else {
-                console.error('Tombol register TIDAK ditemukan, aktivasi gagal!');
+                console.error('Tombol Daftar TIDAK ditemukan, aktivasi gagal!');
             }
         })
         .catch(function(err) {
             console.error('Error reverse geocoding register:', err);
             document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
             tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
-            if (btn) {
-                btn.removeAttribute('disabled');
-                console.log('Tombol register DIaktifkan (catch)');
+            if (btnDaftar) {
+                btnDaftar.removeAttribute('disabled');
+                console.log('Tombol Daftar DIaktifkan (catch)');
             } else {
-                console.error('Tombol register TIDAK ditemukan, aktivasi gagal!');
+                console.error('Tombol Daftar TIDAK ditemukan, aktivasi gagal!');
             }
         });
     }, function(err) {
@@ -12280,13 +12278,9 @@ function ambilLokasiPengajuan() {
         document.getElementById('pengajuanLat').value = lat;
         document.getElementById('pengajuanLng').value = lng;
 
-        var form = document.getElementById('pengajuanBukaAkunForm');
-        var btn = form ? form.querySelector('button[type="submit"]') : null;
-        if (!btn) {
-            console.warn('Selector button[type="submit"] gagal, coba class .button-submit');
-            btn = document.querySelector('#pengajuanBukaAkunForm .button-submit');
-        }
-        console.log('Tombol pengajuan ditemukan:', btn);
+        // Cari tombol submit dengan ID
+        var btnAjukan = document.getElementById('btnAjukan');
+        console.log('Tombol btnAjukan ditemukan:', btnAjukan);
 
         fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
             headers: { 'User-Agent': 'TokoOnline2R-App/1.0' }
@@ -12296,22 +12290,22 @@ function ambilLokasiPengajuan() {
             var alamat = data.display_name || 'Lokasi tidak diketahui';
             document.getElementById('pengajuanLokasi').value = alamat;
             tampilkanToast('Lokasi berhasil diambil!', 'success');
-            if (btn) {
-                btn.removeAttribute('disabled');
-                console.log('Tombol pengajuan DIaktifkan (removeAttribute)');
+            if (btnAjukan) {
+                btnAjukan.removeAttribute('disabled');
+                console.log('Tombol Ajukan DIaktifkan (removeAttribute)');
             } else {
-                console.error('Tombol pengajuan TIDAK ditemukan, aktivasi gagal!');
+                console.error('Tombol Ajukan TIDAK ditemukan, aktivasi gagal!');
             }
         })
         .catch(function(err) {
             console.error('Error reverse geocoding pengajuan:', err);
             document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
             tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
-            if (btn) {
-                btn.removeAttribute('disabled');
-                console.log('Tombol pengajuan DIaktifkan (catch)');
+            if (btnAjukan) {
+                btnAjukan.removeAttribute('disabled');
+                console.log('Tombol Ajukan DIaktifkan (catch)');
             } else {
-                console.error('Tombol pengajuan TIDAK ditemukan, aktivasi gagal!');
+                console.error('Tombol Ajukan TIDAK ditemukan, aktivasi gagal!');
             }
         });
     }, function(err) {
@@ -12320,26 +12314,6 @@ function ambilLokasiPengajuan() {
     });
 }
 // ===== AKHIR BLOK 8.56 =====
-// ===== PASANG EVENT LISTENER UNTUK TOMBOL AMBIL LOKASI =====
-document.addEventListener('DOMContentLoaded', function() {
-    var btnReg = document.querySelector('#registerForm button[onclick*="ambilLokasiRegister"]');
-    if (btnReg) {
-        btnReg.removeAttribute('onclick');
-        btnReg.addEventListener('click', function(e) {
-            e.preventDefault();
-            ambilLokasiRegister();
-        });
-    }
-
-    var btnPeng = document.querySelector('#pengajuanBukaAkunForm button[onclick*="ambilLokasiPengajuan"]');
-    if (btnPeng) {
-        btnPeng.removeAttribute('onclick');
-        btnPeng.addEventListener('click', function(e) {
-            e.preventDefault();
-            ambilLokasiPengajuan();
-        });
-    }
-});
 // ============================================================
 // BLOK 8.57 - RENDER KATALOG PRODUK (LENGKAP DENGAN PENGATURAN)
 // ============================================================
