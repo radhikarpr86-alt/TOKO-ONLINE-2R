@@ -12206,18 +12206,75 @@ function kirimKomentarStaf(id, index) {
 // ============================================================
 // AKHIR BLOK 8.55
 // ============================================================
-// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS (VERSI ROBUST) =====
+// ===== BLOK 8.56 - AMBIL LOKASI OTOMATIS (VERSI DEBUG) =====
 
 // --- Untuk Register ---
-function ambilLokasiPengajuan() {
-    console.log('Fungsi ambilLokasiPengajuan dipanggil');
+function ambilLokasiRegister() {
+    console.log('ambilLokasiRegister dipanggil');
     if (!navigator.geolocation) {
         tampilkanToast('Browser Anda tidak mendukung geolokasi.', 'error');
         return;
     }
     tampilkanToast('Sedang mengambil lokasi...', 'info');
     navigator.geolocation.getCurrentPosition(function(pos) {
-        console.log('Lokasi berhasil didapat:', pos.coords);
+        console.log('Lokasi register berhasil:', pos.coords);
+        var lat = pos.coords.latitude;
+        var lng = pos.coords.longitude;
+        document.getElementById('registerLat').value = lat;
+        document.getElementById('registerLng').value = lng;
+
+        // Cari tombol submit
+        var form = document.getElementById('registerForm');
+        var btn = form ? form.querySelector('button[type="submit"]') : null;
+        if (!btn) {
+            console.warn('Selector button[type="submit"] gagal, coba class .button-submit');
+            btn = document.querySelector('#registerForm .button-submit');
+        }
+        console.log('Tombol register ditemukan:', btn);
+
+        // Coba reverse geocoding
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
+            headers: { 'User-Agent': 'TokoOnline2R-App/1.0' }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            var alamat = data.display_name || 'Lokasi tidak diketahui';
+            document.getElementById('registerLokasi').value = alamat;
+            tampilkanToast('Lokasi berhasil diambil!', 'success');
+            if (btn) {
+                btn.removeAttribute('disabled');
+                console.log('Tombol register DIaktifkan (removeAttribute)');
+            } else {
+                console.error('Tombol register TIDAK ditemukan, aktivasi gagal!');
+            }
+        })
+        .catch(function(err) {
+            console.error('Error reverse geocoding register:', err);
+            document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
+            tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
+            if (btn) {
+                btn.removeAttribute('disabled');
+                console.log('Tombol register DIaktifkan (catch)');
+            } else {
+                console.error('Tombol register TIDAK ditemukan, aktivasi gagal!');
+            }
+        });
+    }, function(err) {
+        console.error('Geolocation error register:', err);
+        tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
+    });
+}
+
+// --- Untuk Pengajuan ---
+function ambilLokasiPengajuan() {
+    console.log('ambilLokasiPengajuan dipanggil');
+    if (!navigator.geolocation) {
+        tampilkanToast('Browser Anda tidak mendukung geolokasi.', 'error');
+        return;
+    }
+    tampilkanToast('Sedang mengambil lokasi...', 'info');
+    navigator.geolocation.getCurrentPosition(function(pos) {
+        console.log('Lokasi pengajuan berhasil:', pos.coords);
         var lat = pos.coords.latitude;
         var lng = pos.coords.longitude;
         document.getElementById('pengajuanLat').value = lat;
@@ -12226,39 +12283,39 @@ function ambilLokasiPengajuan() {
         var form = document.getElementById('pengajuanBukaAkunForm');
         var btn = form ? form.querySelector('button[type="submit"]') : null;
         if (!btn) {
-            console.warn('Tombol submit pengajuan tidak ditemukan!');
+            console.warn('Selector button[type="submit"] gagal, coba class .button-submit');
             btn = document.querySelector('#pengajuanBukaAkunForm .button-submit');
         }
-        console.log('Tombol ditemukan:', btn);
+        console.log('Tombol pengajuan ditemukan:', btn);
 
         fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
             headers: { 'User-Agent': 'TokoOnline2R-App/1.0' }
         })
-        .then(function(response) { 
-            console.log('Response Nominatim:', response);
-            return response.json(); 
-        })
+        .then(function(response) { return response.json(); })
         .then(function(data) {
-            console.log('Data alamat:', data);
             var alamat = data.display_name || 'Lokasi tidak diketahui';
             document.getElementById('pengajuanLokasi').value = alamat;
             tampilkanToast('Lokasi berhasil diambil!', 'success');
             if (btn) {
                 btn.removeAttribute('disabled');
-                console.log('Tombol diaktifkan');
+                console.log('Tombol pengajuan DIaktifkan (removeAttribute)');
+            } else {
+                console.error('Tombol pengajuan TIDAK ditemukan, aktivasi gagal!');
             }
         })
         .catch(function(err) {
-            console.error('Error pada fetch:', err);
+            console.error('Error reverse geocoding pengajuan:', err);
             document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
             tampilkanToast('Lokasi berhasil (tanpa alamat detail).', 'info');
             if (btn) {
                 btn.removeAttribute('disabled');
-                console.log('Tombol diaktifkan (catch)');
+                console.log('Tombol pengajuan DIaktifkan (catch)');
+            } else {
+                console.error('Tombol pengajuan TIDAK ditemukan, aktivasi gagal!');
             }
         });
     }, function(err) {
-        console.error('Geolocation error:', err);
+        console.error('Geolocation error pengajuan:', err);
         tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
     });
 }
