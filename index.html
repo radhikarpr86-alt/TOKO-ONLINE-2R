@@ -13008,6 +13008,7 @@ function renderPenataanProduk() {
 
     var pengaturan = JSON.parse(localStorage.getItem('2r_pengaturan_katalog') || '{"urutan":[],"ukuran":"sedang","fitur":[]}');
 
+    // --- HATI-HATI: PASTIKAN BACKTICK INI SEIMBANG ---
     var html = `
     <div class="page-header">
         <h2><i class="fas fa-cogs" style="color:#FF6B00;"></i> Penataan Produk (Katalog)</h2>
@@ -13107,13 +13108,12 @@ function renderPenataanProduk() {
             <button class="button button-danger" onclick="resetUrutanProduk()"><i class="fas fa-undo"></i> Reset ke Default</button>
         </div>
     </div>
-    `;
+    `; // <--- PERHATIKAN: BACKTICK PENUTUP INI SANGAT PENTING
 
     areaKonten.innerHTML = html;
 }
 
 // ---------- FUNGSI BANTUAN ----------
-
 function simpanPengaturanKatalog() {
     var ukuran = document.getElementById('ukuranGambar').value;
     var pengaturan = JSON.parse(localStorage.getItem('2r_pengaturan_katalog') || '{"urutan":[],"ukuran":"sedang","fitur":[]}');
