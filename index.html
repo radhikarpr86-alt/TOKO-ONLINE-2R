@@ -12993,7 +12993,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <!-- ===== AKHIR BLOK 8.61 ===== -->
 // ============================================================
-// BLOK 8.63 - PENATAAN PRODUK (SuperAdmin)
+// BLOK 8.63 - PENATAAN PRODUK (SuperAdmin) - VERSI AMAN
 // ============================================================
 
 function renderPenataanProduk() {
@@ -13005,10 +13005,9 @@ function renderPenataanProduk() {
     var areaKonten = document.getElementById('mainContent');
     var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
     var dataAkun = getDataAkun();
-
     var pengaturan = JSON.parse(localStorage.getItem('2r_pengaturan_katalog') || '{"urutan":[],"ukuran":"sedang","fitur":[]}');
 
-    // --- HATI-HATI: PASTIKAN BACKTICK INI SEIMBANG ---
+    // --- BAGIAN HTML MENGGUNAKAN BACKTICK YANG SUDAH PASTI SEIMBANG ---
     var html = `
     <div class="page-header">
         <h2><i class="fas fa-cogs" style="color:#FF6B00;"></i> Penataan Produk (Katalog)</h2>
@@ -13047,7 +13046,7 @@ function renderPenataanProduk() {
                 <tbody>
     `;
 
-    var daftarUrut = pengaturan.urutan && pengaturan.urutan.length > 0 ? pengaturan.urutan : semuaProduk.map(function(p) { return p.id; });
+    var daftarUrut = pengaturan.urutan && pengaturan.urutan.length > 0 ? pengaturan.urutan : semuaProduk.map(p => p.id);
     var produkTersedia = [];
     for (var i = 0; i < daftarUrut.length; i++) {
         var id = daftarUrut[i];
@@ -13063,9 +13062,7 @@ function renderPenataanProduk() {
         for (var j = 0; j < daftarUrut.length; j++) {
             if (daftarUrut[j] === p.id) { sudahAda = true; break; }
         }
-        if (!sudahAda) {
-            produkTersedia.push(p);
-        }
+        if (!sudahAda) produkTersedia.push(p);
     }
 
     if (produkTersedia.length === 0) {
@@ -13108,7 +13105,7 @@ function renderPenataanProduk() {
             <button class="button button-danger" onclick="resetUrutanProduk()"><i class="fas fa-undo"></i> Reset ke Default</button>
         </div>
     </div>
-    `; // <--- PERHATIKAN: BACKTICK PENUTUP INI SANGAT PENTING
+    `; // <--- PASTIKAN BACKTICK INI ADA (INI MENUTUP `var html =`)
 
     areaKonten.innerHTML = html;
 }
