@@ -3342,6 +3342,7 @@ if (loginForm) {
 // ===== BLOK 8.2.3 - REGISTER SUBMIT =====
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+    
     var role = document.getElementById('registerRole').value;
     var username = document.getElementById('registerUsername').value.trim();
     var password = document.getElementById('registerPassword').value.trim();
@@ -3349,16 +3350,26 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     var lat = document.getElementById('registerLat').value.trim();
     var lng = document.getElementById('registerLng').value.trim();
 
-    // Validasi wajib lokasi
-    if (!lat || !lng) {
-        tampilkanToast('Anda wajib mengambil lokasi otomatis terlebih dahulu!', 'warning');
+    // --- VALIDASI WAJIB LOKASI ---
+    if (lat === '' || lng === '' || lat === null || lng === null) {
+        tampilkanToast('Anda WAJIB mengambil lokasi otomatis terlebih dahulu!', 'error');
         return;
     }
 
+    // --- VALIDASI DATA LAINNYA ---
     if (!role || !username || !password || !nama) {
         tampilkanToast('Data belum lengkap!', 'warning');
         return;
     }
+    if (username.length < 4) {
+        tampilkanToast('Username minimal 4 karakter!', 'warning');
+        return;
+    }
+    if (password.length < 6) {
+        tampilkanToast('Password minimal 6 karakter!', 'warning');
+        return;
+    }
+
     var dataAkun = getDataAkun();
     for (var i = 0; i < dataAkun.length; i++) {
         if (dataAkun[i].username === username) {
@@ -3366,6 +3377,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             return;
         }
     }
+
     var status = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
     var hash = await hashPassword(password);
     var akunBaru = {
@@ -3385,6 +3397,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     };
     dataAkun.push(akunBaru);
     simpanDataAkun(dataAkun);
+    
     tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + status, 'success');
     toggleForm('login');
 });
@@ -9115,7 +9128,7 @@ function toggleForm(tipe) {
 }
 // ===== AKHIR BLOK 8.26.1 =====
 
-// ===== BLOK 8.26.2 - EVENT LISTENER UNTUK FORM PENGAJUAN (DIPASANG SAAT DOM SIAP) =====
+// ===== BLOK 8.26.2 - EVENT LISTENER UNTUK FORM PENGAJUAN (VALIDASI LOKASI) =====
 document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('pengajuanBukaAkunForm');
     
@@ -9134,14 +9147,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var alasan = document.getElementById('pengajuanAlasan').value.trim();
         var lat = document.getElementById('pengajuanLat').value.trim();
         var lng = document.getElementById('pengajuanLng').value.trim();
-        var alamat = document.getElementById('pengajuanLokasi').value.trim();
 
-        // Validasi wajib lokasi
-        if (!lat || !lng) {
-            tampilkanToast('Anda wajib mengambil lokasi otomatis terlebih dahulu!', 'warning');
+        // --- VALIDASI WAJIB LOKASI ---
+        if (lat === '' || lng === '' || lat === null || lng === null) {
+            tampilkanToast('Anda WAJIB mengambil lokasi otomatis terlebih dahulu!', 'error');
             return;
         }
 
+        // --- VALIDASI DATA LAINNYA ---
         if (!nama || !kontak || !role || !alasan) {
             tampilkanToast('Semua data wajib diisi!', 'warning');
             return;
@@ -9157,12 +9170,13 @@ document.addEventListener('DOMContentLoaded', function() {
             alasan: alasan,
             latitude: lat || '',
             longitude: lng || '',
-            alamatLokasi: alamat || '',
+            alamatLokasi: document.getElementById('pengajuanLokasi').value.trim() || '',
             status: 'MENUNGGU',
             waktu: new Date().toISOString()
         });
         localStorage.setItem('2r_pengajuan_buka_akun', JSON.stringify(dataPengajuan));
 
+        // Kosongkan form setelah berhasil
         document.getElementById('pengajuanNama').value = '';
         document.getElementById('pengajuanKontak').value = '';
         document.getElementById('pengajuanAlasan').value = '';
