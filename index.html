@@ -1,4 +1,6 @@
-<!-- ===== BLOK 1.1 - TAG HTML & META ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 1.1 - TAG HTML & META                                     -->
+<!-- ============================================================ -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,32 +9,44 @@
     <title>Aplikasi Multi Role - Toko Online 2R</title>
 <!-- ===== AKHIR BLOK 1.1 ===== -->
 
-<!-- ===== BLOK 1.2 - LINK FONTAWESOME & GOOGLE FONTS ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 1.2 - LINK FONTAWESOME & GOOGLE FONTS                   -->
+<!-- ============================================================ -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- ===== AKHIR BLOK 1.2 ===== -->
 
-<!-- ===== BLOK 1.3 - FAVICON ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 1.3 - FAVICON                                            -->
+<!-- ============================================================ -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
     <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
 <!-- ===== AKHIR BLOK 1.3 ===== -->
 
-<!-- ===== BLOK 1.4 - PENUTUP HEAD & PEMBUKA BODY ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 1.4 - PENUTUP HEAD & PEMBUKA BODY                       -->
+<!-- ============================================================ -->
 </head>
 <body>
 <!-- ===== AKHIR BLOK 1.4 ===== -->
 
-<!-- ===== BLOK 1.5 - WADAH NOTIFIKASI TOAST ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 1.5 - WADAH NOTIFIKASI TOAST                             -->
+<!-- ============================================================ -->
     <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 1.5 ===== -->
 
-<!-- ===== BLOK 2.1 - WRAPPER & KOTAK LOGIN ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.1 - WRAPPER & KOTAK LOGIN                              -->
+<!-- ============================================================ -->
     <div id="pageAuthentication">
         <div class="authentication-wrapper">
             <div class="authentication-box">
 <!-- ===== AKHIR BLOK 2.1 ===== -->
 
-<!-- ===== BLOK 2.2 - LOGO & JUDUL APLIKASI ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.2 - LOGO & JUDUL APLIKASI                              -->
+<!-- ============================================================ -->
                 <div class="authentication-logo">
                     <i class="fas fa-store-alt"></i>
                     <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
@@ -40,14 +54,18 @@
                 </div>
 <!-- ===== AKHIR BLOK 2.2 ===== -->
 
-<!-- ===== BLOK 2.3 - AREA PESAN ERROR ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.3 - AREA PESAN ERROR                                   -->
+<!-- ============================================================ -->
                 <div class="authentication-error" id="authenticationError">
                     <i class="fas fa-exclamation-circle"></i> 
                     <span id="authenticationErrorText"></span>
                 </div>
 <!-- ===== AKHIR BLOK 2.3 ===== -->
 
-<!-- ===== BLOK 2.4 - FORM LOGIN ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.4 - FORM LOGIN                                         -->
+<!-- ============================================================ -->
                 <form class="authentication-form" id="loginForm">
                     <div class="form-group">
                         <label>Username</label>
@@ -68,7 +86,22 @@
                     </button>
 <!-- ===== AKHIR BLOK 2.4 ===== -->
 
-<!-- ===== BLOK 2.5 - FORM REGISTER (REVISI) ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.7 - FOOTER & NAVIGASI FORM (Lupa Password + Pindah Form) -->
+<!-- ============================================================ -->
+                    <div class="authentication-footer">
+                        <a onclick="lupaPassword()" style="cursor:pointer; color:#d32f2f; font-weight:600;">Lupa Password?</a>
+                        <br><br>
+                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
+                        <br>
+                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
+                    </div>
+                </form>
+<!-- ===== AKHIR BLOK 2.7 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 2.5 - FORM REGISTER                                      -->
+<!-- ============================================================ -->
                 <form class="authentication-form hidden-form" id="registerForm">
                     <div class="form-group">
                         <label>Pilih Role</label>
@@ -122,13 +155,13 @@
                             </div>
                         </div>
                         <div class="form-group" style="display:flex; align-items:flex-end;">
-                            <button type="button" class="button-small">Ambil Lokasi Otomatis</button>
+                            <button type="button" class="button-small" onclick="ambilLokasiRegister()">Ambil Lokasi Otomatis</button>
                         </div>
                     </div>
                     <input type="hidden" id="registerLat" value="">
                     <input type="hidden" id="registerLng" value="">
 
-                    <button type="submit" class="button-submit">
+                    <button type="submit" class="button-submit" id="btnDaftar" disabled>
                         <i class="fas fa-user-plus"></i> Daftar
                     </button>
                     <div class="authentication-footer">
@@ -137,7 +170,9 @@
                 </form>
 <!-- ===== AKHIR BLOK 2.5 ===== -->
 
-<!-- ===== BLOK 2.6 - FORM PENGAJUAN BUKA AKUN (REVISI) ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 2.6 - FORM PENGAJUAN BUKA AKUN                          -->
+<!-- ============================================================ -->
                 <form class="authentication-form hidden-form" id="pengajuanBukaAkunForm">
                     <div class="form-group">
                         <label>Nama Lengkap</label>
@@ -172,35 +207,167 @@
                             </div>
                         </div>
                         <div class="form-group" style="display:flex; align-items:flex-end;">
-                            <button type="button" class="button-small">Ambil Lokasi Otomatis</button>
+                            <button type="button" class="button-small" onclick="ambilLokasiPengajuan()">Ambil Lokasi Otomatis</button>
                         </div>
                     </div>
                     <input type="hidden" id="pengajuanLat" value="">
                     <input type="hidden" id="pengajuanLng" value="">
 
-                    <button type="submit" class="button-submit"><i class="fas fa-paper-plane"></i> Ajukan ke Admin</button>
+                    <button type="submit" class="button-submit" id="btnAjukan" disabled>
+                        <i class="fas fa-paper-plane"></i> Ajukan ke Admin
+                    </button>
                     <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
                 </form>
-<!-- ===== AKHIR BLOK 2.6 ===== -->              
-<!-- ===== BLOK 2.7 - FOOTER & NAVIGASI FORM ===== -->
-                    <div class="authentication-footer">
-                        <!-- Tautan Lupa Password -->
-                        <a onclick="lupaPassword()" style="cursor:pointer; color:#d32f2f; font-weight:600;">Lupa Password?</a>
-                        <br><br>
-                        
-                        <!-- Navigasi ke Form Lain -->
-                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
-                        <br>
-                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
-                    </div>
-                </form>
-<!-- ===== AKHIR BLOK 2.7 ===== -->
+<!-- ===== AKHIR BLOK 2.6 ===== -->
 
             </div>
         </div>
     </div>
 <!-- ===== AKHIR BLOK 2.1 (PENUTUP WRAPPER LOGIN) ===== -->
-<!-- ===== BLOK 4 - CSS GLOBAL & UTILITY (TIDAK ADA ERROR JS) ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.1 - NAVBAR UTAMA (DASHBOARD)                          -->
+<!-- ============================================================ -->
+<div id="pageDashboard" class="page-dashboard">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <button id="menuToggle"><i class="fas fa-bars"></i></button>
+            <i class="fas fa-store-alt"></i> Toko Online 2R
+        </div>
+        <div class="navbar-user">
+            <!-- Jam & Tanggal -->
+            <div class="navbar-time" style="display:flex; flex-direction:column; align-items:flex-end; margin-right:15px; font-size:12px; color:#555;">
+                <span id="displayJam" style="font-weight:600; font-size:14px;">00:00:00</span>
+                <span id="displayTanggal" style="font-size:11px;">Senin, 01 Januari 2026</span>
+            </div>
+
+            <!-- Avatar Foto Profil -->
+            <img id="userAvatar" src="" style="display:none; width:32px; height:32px; border-radius:50%; object-fit:cover; margin-right:8px; vertical-align:middle; border:2px solid var(--primary);">
+            <span id="userAvatarPlaceholder" style="display:inline-block; width:32px; height:32px; border-radius:50%; background:#eee; text-align:center; line-height:32px; color:#aaa; margin-right:8px; vertical-align:middle;">
+                <i class="fas fa-user"></i>
+            </span>
+
+            <span class="role-badge" id="roleBadge">Role</span>
+            <span id="userNama" style="font-weight:600;">User</span>
+            <button class="button-logout" id="buttonLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+        </div>
+    </nav>
+<!-- ===== AKHIR BLOK 3.1 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.2 - SIDEBAR CONTAINER & OVERLAY                       -->
+<!-- ============================================================ -->
+    <aside class="sidebar" id="sidebarContainer"></aside>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+<!-- ===== AKHIR BLOK 3.2 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.3 - AREA KONTEN UTAMA (MAIN CONTENT)                  -->
+<!-- ============================================================ -->
+    <main class="content" id="mainContent"></main>
+<!-- ===== AKHIR BLOK 3.3 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.4 - MODAL KONFIRMASI TOLAK AKUN                       -->
+<!-- ============================================================ -->
+    <div class="modal-overlay" id="modalTolakAkun">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Konfirmasi Penolakan</h3>
+                <button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Yakin ingin menolak akun ini?</p>
+                <input type="hidden" id="tolakIdAkun">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-extra-small" style="background:#eeeeee;" onclick="tutupModal('modalTolakAkun')">Batal</button>
+                <button class="btn btn-danger btn-extra-small" onclick="eksekusiTolakAkun()">Ya, Tolak</button>
+            </div>
+        </div>
+    </div>
+<!-- ===== AKHIR BLOK 3.4 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.5 - MODAL PREVIEW GAMBAR                              -->
+<!-- ============================================================ -->
+    <div class="modal-overlay" id="modalPreviewGambar">
+        <div class="modal" style="background:transparent; box-shadow:none; max-width:800px;">
+            <div class="modal-header" style="background:white; border-radius:12px 12px 0 0;">
+                <h3 id="modalPreviewTitle">Preview</h3>
+                <button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button>
+            </div>
+            <img id="modalPreviewImage" src="" style="width:100%; max-height:70vh; object-fit:contain; border-radius:0 0 12px 12px; background:#f0f0f0;">
+        </div>
+    </div>
+<!-- ===== AKHIR BLOK 3.5 ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 3.6 - MODAL FORM TAGIHAN (SUPERADMIN)                   -->
+<!-- ============================================================ -->
+    <div class="modal-overlay" id="modalFormTagihan">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <h3 id="modalTagihanTitle">Tambah Tagihan</h3>
+                <button class="modal-close" onclick="tutupModalTagihan()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Akun</label>
+                    <select id="tagihanAkunId" class="form-input">
+                        <option value="">-- Pilih Akun --</option>
+                    </select>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Bulan</label>
+                        <select id="tagihanBulan" class="form-input">
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tahun</label>
+                        <input type="number" id="tagihanTahun" class="form-input" value="2026" min="2020" max="2030">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Tagihan (Rp)</label>
+                    <input type="number" id="tagihanJumlah" class="form-input" placeholder="50000">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="tagihanStatus" class="form-input">
+                        <option value="BELUM_BAYAR">BELUM_BAYAR</option>
+                        <option value="LUNAS">LUNAS</option>
+                    </select>
+                </div>
+                <input type="hidden" id="tagihanEditId" value="">
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="tutupModalTagihan()">Batal</button>
+                <button class="button button-primary" onclick="simpanTagihanManual()">Simpan</button>
+            </div>
+        </div>
+    </div>
+<!-- ===== AKHIR BLOK 3.6 ===== -->
+
+</div>
+<!-- ===== AKHIR BLOK 3.1 (PENUTUP DASHBOARD) ===== -->
+
+<!-- ============================================================ -->
+<!-- BLOK 4 - CSS GLOBAL & UTILITY (SEMUA CSS DISATUKAN DI SINI)  -->
+<!-- ============================================================ -->
 <style>
     /* -------- VARIABEL WARNA -------- */
     :root {
@@ -215,7 +382,9 @@
         --radius: 12px;
     }
 
-    /* ===== BLOK 4.1 - RESET DASAR ===== */
+    /* ============================================================ */
+    /* BLOK 4.1 - CSS RESET DASAR                                   */
+    /* ============================================================ */
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
         font-family:'Poppins', sans-serif;
@@ -225,13 +394,16 @@
         display:flex;
         justify-content:center;
         align-items:center;
-        background:linear-gradient(135deg, var(--primary-light), #ffe0cc);
+        background:linear-gradient(135deg, #C05000 0%, #E67E22 100%);
     }
     .hidden-form { display:none !important; }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
     .button-small { padding:6px 14px; font-size:12px; width:100%; border:none; border-radius:var(--radius); background:var(--primary); color:white; cursor:pointer; }
     /* ===== AKHIR BLOK 4.1 ===== */
-        /* ===== BLOK 4.1.3 – TOAST NOTIFICATION (POSISI TENGAH ATAS) ===== */
+
+    /* ============================================================ */
+    /* BLOK 4.1.3 – TOAST NOTIFICATION                              */
+    /* ============================================================ */
     #toastContainer { 
         position: fixed; 
         top: 20px; 
@@ -271,42 +443,38 @@
         to { transform: translateY(0); opacity: 1; } 
     }
     /* ===== AKHIR BLOK 4.1.3 ===== */
-        /* ===== BLOK 4.1.5 – HALAMAN LOGIN/REGISTER ===== */
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
+
+    /* ============================================================ */
+    /* BLOK 4.1.5 – HALAMAN LOGIN/REGISTER                          */
+    /* ============================================================ */
+    html, body { height:100%; margin:0; padding:0; }
     #pageAuthentication { 
         display: flex; 
         justify-content: center; 
         align-items: center; 
         width: 100%;
-        min-height: 100vh; /* Memastikan background memenuhi tinggi layar */
+        min-height: 100vh; 
         background: linear-gradient(135deg, #C05000 0%, #E67E22 100%);
     }
     /* ===== AKHIR BLOK 4.1.5 ===== */
 
-       /* ===== BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX) ===== */
-    .authentication-wrapper {
-        width: 100%;
-        max-width: 450px;
-        padding: 20px;
-    }
+    /* ============================================================ */
+    /* BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX)              */
+    /* ============================================================ */
+    .authentication-wrapper { width:100%; max-width:450px; padding:20px; }
     .authentication-box {
-        background: white;
-        border-radius: var(--radius);
-        padding: 35px;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        width: 100%;
-        /* --- DIHAPUS UNTUK PC: max-height & overflow-y --- */
-        /* max-height: 80vh; overflow-y: auto;  */
-        /* Agar di PC cukup memanjang tanpa scrollbar kotak */
+        background:white;
+        border-radius:var(--radius);
+        padding:35px;
+        box-shadow:var(--shadow);
+        border:1px solid var(--border);
+        width:100%;
     }
     /* ===== AKHIR BLOK 5.1 ===== */
 
-    /* ===== BLOK 5.2 - CSS LOGO & PESAN ERROR ===== */
+    /* ============================================================ */
+    /* BLOK 5.2 - CSS LOGO & PESAN ERROR                            */
+    /* ============================================================ */
     .authentication-logo { text-align:center; margin-bottom:25px; }
     .authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
     .authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
@@ -314,7 +482,9 @@
     .authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
     /* ===== AKHIR BLOK 5.2 ===== */
 
-    /* ===== BLOK 5.3 - CSS INPUT, GROUP & TOMBOL ===== */
+    /* ============================================================ */
+    /* BLOK 5.3 - CSS INPUT, GROUP & TOMBOL                         */
+    /* ============================================================ */
     .form-group { margin-bottom:15px; }
     .form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
     .input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:0.3s; }
@@ -325,18 +495,17 @@
     .button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
     /* ===== AKHIR BLOK 5.3 ===== */
 
-    /* ===== BLOK 5.4 - CSS FOOTER NAVIGASI ===== */
+    /* ============================================================ */
+    /* BLOK 5.4 - CSS FOOTER NAVIGASI                               */
+    /* ============================================================ */
     .authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
     .authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; }
     .authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
     /* ===== AKHIR BLOK 5.4 ===== */
-</style>
-<!-- ===== AKHIR BLOK 4 & 5 (CSS LENGKAP) ===== -->
-    /* ====================================================== */
-    /* BLOK 6 – CSS DASHBOARD & RESPONSIVE HP                 */
-    /* ====================================================== */
 
-    /* ===== BLOK 6.1 - NAVBAR & SIDEBAR (DESKTOP) ===== */
+    /* ============================================================ */
+    /* BLOK 6 – CSS DASHBOARD & RESPONSIVE HP                       */
+    /* ============================================================ */
     .page-dashboard { display:none; }
     
     .navbar { 
@@ -354,38 +523,10 @@
         height:64px; 
         box-shadow:0 2px 10px rgba(0,0,0,0.05); 
     }
-    .navbar-brand { 
-        font-size:20px; 
-        font-weight:700; 
-        color:var(--primary); 
-        display:flex; 
-        align-items:center; 
-        gap:10px; 
-    }
-    .navbar-user { 
-        display:flex; 
-        align-items:center; 
-        gap:15px; 
-    }
-    .navbar-user .role-badge { 
-        background:var(--primary-light); 
-        color:var(--primary); 
-        padding:4px 12px; 
-        border-radius:var(--radius); 
-        font-size:12px; 
-        font-weight:600; 
-    }
-    .button-logout { 
-        background:#f44336; 
-        color:white; 
-        border:none; 
-        padding:8px 16px; 
-        border-radius:var(--radius); 
-        cursor:pointer; 
-        font-weight:600; 
-        font-size:13px; 
-        transition:background 0.3s; 
-    }
+    .navbar-brand { font-size:20px; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:10px; }
+    .navbar-user { display:flex; align-items:center; gap:15px; }
+    .navbar-user .role-badge { background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:var(--radius); font-size:12px; font-weight:600; }
+    .button-logout { background:#f44336; color:white; border:none; padding:8px 16px; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:13px; transition:background 0.3s; }
     .button-logout:hover { background:#d32f2f; }
 
     .sidebar { 
@@ -400,96 +541,29 @@
         overflow-y:auto; 
         z-index:999; 
         box-shadow:2px 0 10px rgba(0,0,0,0.03); 
-        transition:left 0.3s ease-in-out; /* Animasi halus */
+        transition:left 0.3s ease-in-out; 
     }
-    .sidebar-menu-title { 
-        font-size:11px; 
-        text-transform:uppercase; 
-        color:#aaa; 
-        padding:15px 25px 8px; 
-        font-weight:700; 
-        letter-spacing:1.5px; 
-    }
-    .sidebar-menu-item { 
-        padding:12px 25px; 
-        cursor:pointer; 
-        color:#555; 
-        font-weight:500; 
-        display:flex; 
-        align-items:center; 
-        gap:14px; 
-        font-size:14px; 
-        border-left:4px solid transparent; 
-        transition:all 0.2s; 
-    }
-    .sidebar-menu-item:hover { 
-        background:#fafafa; 
-        color:var(--primary); 
-        transform:translateX(4px); 
-    }
-    .sidebar-menu-item.active { 
-        background:var(--primary-light); 
-        color:var(--primary); 
-        border-left-color:var(--primary); 
-        font-weight:600; 
-    }
+    .sidebar-menu-title { font-size:11px; text-transform:uppercase; color:#aaa; padding:15px 25px 8px; font-weight:700; letter-spacing:1.5px; }
+    .sidebar-menu-item { padding:12px 25px; cursor:pointer; color:#555; font-weight:500; display:flex; align-items:center; gap:14px; font-size:14px; border-left:4px solid transparent; transition:all 0.2s; }
+    .sidebar-menu-item:hover { background:#fafafa; color:var(--primary); transform:translateX(4px); }
+    .sidebar-menu-item.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
 
-    .content { 
-        margin-left:250px; 
-        margin-top:64px; 
-        padding:25px; 
-        min-height:calc(100vh - 64px); 
-        background:var(--bg); 
-        transition:margin-left 0.3s ease-in-out;
-    }
-    /* ===== AKHIR BLOK 6.1 ===== */
+    .content { margin-left:250px; margin-top:64px; padding:25px; min-height:calc(100vh - 64px); background:var(--bg); transition:margin-left 0.3s ease-in-out; }
 
-    /* ===== BLOK 6.2 - WIDGET, CARD & GRID ===== */
     .page-header { margin-bottom:20px; }
     .page-header h2 { font-size:22px; color:var(--text); font-weight:700; }
     .page-header p { color:var(--text-muted); font-size:14px; }
 
-    .card { 
-        background:white; 
-        border-radius:var(--radius); 
-        box-shadow:var(--shadow); 
-        margin-bottom:20px; 
-        padding:20px; 
-        border:1px solid var(--border); 
-    }
-    .card-header { 
-        font-weight:600; 
-        font-size:15px; 
-        border-bottom:1px solid var(--border); 
-        padding-bottom:12px; 
-        margin-bottom:15px; 
-        display:flex; 
-        justify-content:space-between; 
-        align-items:center; 
-    }
-    .widget-grid { 
-        display:grid; 
-        grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); 
-        gap:15px; 
-        margin-bottom:25px; 
-    }
-    .widget-card { 
-        background:white; 
-        border-radius:var(--radius); 
-        padding:20px; 
-        box-shadow:var(--shadow); 
-        border:1px solid var(--border); 
-        text-align:center; 
-        transition:transform 0.2s; 
-    }
+    .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:20px; padding:20px; border:1px solid var(--border); }
+    .card-header { font-weight:600; font-size:15px; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; }
+    .widget-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px; }
+    .widget-card { background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; transition:transform 0.2s; }
     .widget-card:hover { transform:translateY(-4px); }
     .widget-card .widget-icon { font-size:35px; margin-bottom:10px; }
     .widget-card .widget-number { font-size:28px; font-weight:700; color:#333; }
     .widget-card .widget-label { font-size:13px; color:#888; margin-top:5px; }
     .grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; }
-    /* ===== AKHIR BLOK 6.2 ===== */
 
-    /* ===== BLOK 6.3 - TABEL & BADGE ===== */
     .table-container { overflow-x:auto; }
     .table { width:100%; border-collapse:collapse; font-size:13px; }
     .table thead { background:#f8f9fa; }
@@ -500,83 +574,37 @@
     .badge-warning { background:#fff3e0; color:#e65100; }
     .badge-danger { background:#ffebee; color:#c62828; }
     .badge-secondary { background:#e9ecef; color:#555; }
-    /* ===== AKHIR BLOK 6.3 ===== */
 
-     /* ===== BLOK 6.4 - RESPONSIVE HP (TOMBOL HAMBURGER & SIDEBAR MOBILE) ===== */
-#menuToggle { 
-    display: none; 
-    background: none; 
-    border: none; 
-    font-size: 22px; 
-    cursor: pointer; 
-    color: var(--primary); 
-    padding: 0; 
-    margin-right: 10px; 
-    transition: transform 0.3s; 
-}
-#menuToggle:active { transform: scale(0.9); }
+    #menuToggle { display:none; background:none; border:none; font-size:22px; cursor:pointer; color:var(--primary); padding:0; margin-right:10px; transition:transform 0.3s; }
+    #menuToggle:active { transform:scale(0.9); }
+    .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:998; transition:opacity 0.3s; }
+    .sidebar-overlay.active { display:block; }
 
-.sidebar-overlay { 
-    display: none; 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0, 0, 0, 0.5); 
-    z-index: 998; 
-    transition: opacity 0.3s; 
-}
-.sidebar-overlay.active { display: block; }
-
-@media (max-width: 767px) {
-    /* --- NAVBAR --- */
-    .navbar { padding: 10px 15px; }
-    .navbar-brand { font-size: 16px; gap: 8px; }
-    .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
-    .navbar-user span { font-size: 13px; }
-    .button-logout { padding: 6px 12px; font-size: 12px; }
-    
-    /* --- TOMBOL HAMBURGER --- */
-    #menuToggle { display: block !important; }
-
-    /* --- SIDEBAR & OVERLAY --- */
-    .sidebar { 
-        width: 80%; 
-        max-width: 300px; 
-        top: 64px; 
-        bottom: 0; 
-        z-index: 999; 
-        position: fixed; 
-        left: -100%; 
-        transition: left 0.3s ease-in-out; 
+    @media (max-width:767px) {
+        .navbar { padding:10px 15px; }
+        .navbar-brand { font-size:16px; gap:8px; }
+        .navbar-user .role-badge { font-size:10px; padding:2px 8px; }
+        .navbar-user span { font-size:13px; }
+        .button-logout { padding:6px 12px; font-size:12px; }
+        #menuToggle { display:block !important; }
+        .sidebar { width:80%; max-width:300px; top:64px; bottom:0; z-index:999; position:fixed; left:-100%; transition:left 0.3s ease-in-out; }
+        .sidebar.open { left:0; }
+        .content { margin-left:0; padding:15px; margin-top:64px; }
+        .widget-grid { grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; }
+        .widget-card .widget-number { font-size:22px; }
+        .grid-2 { grid-template-columns:1fr; }
+        .table { font-size:12px; }
+        .modal { width:95%; padding:15px; }
+        .authentication-wrapper { padding:10px; }
+        .authentication-box { padding:20px; max-height:70vh; overflow-y:auto; }
     }
-    .sidebar.open { left: 0; }
+    /* ===== AKHIR BLOK 6 ===== */
+</style>
+<!-- ===== AKHIR BLOK 4, 5, 6 (CSS LENGKAP) ===== -->
 
-    .sidebar-overlay.active { display: block; }
-
-    /* --- KONTEN UTAMA --- */
-    .content { 
-        margin-left: 0; 
-        padding: 15px; 
-        margin-top: 64px; 
-    }
-
-    /* --- GRID & TABEL --- */
-    .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-    .widget-card .widget-number { font-size: 22px; }
-    .grid-2 { grid-template-columns: 1fr; }
-    .table { font-size: 12px; }
-    .modal { width: 95%; padding: 15px; }
-
-    /* --- PERBAIKAN LOGIN DI HP (AGAR BISA DI-SCROLL) --- */
-    .authentication-wrapper { padding: 10px; }
-    .authentication-box { 
-        padding: 20px; 
-        max-height: 70vh;   /* Batasi tinggi di HP agar tidak keluar layar */
-        overflow-y: auto;   /* Tambahkan scrollbar di dalam kotak login */
-    }
-    /* --------------------------------------------- */
-}
-/* ===== AKHIR BLOK 6.4 ===== */
-<!-- ===== BLOK 7 - JAVASCRIPT UTILITY DASAR ===== -->
+<!-- ============================================================ -->
+<!-- BLOK 7 - JAVASCRIPT UTILITY DASAR                            -->
+<!-- ============================================================ -->
 <script>
     // ===== BLOK 7.1 - DATA & HASH =====
     function getDataAkun() {
@@ -735,7 +763,6 @@
         var lat = document.getElementById('registerLat').value.trim();
         var lng = document.getElementById('registerLng').value.trim();
 
-        // Validasi Lokasi
         if (lat === '' || lng === '') {
             tampilkanToast('Anda WAJIB mengambil lokasi otomatis terlebih dahulu!', 'error');
             return;
@@ -784,16 +811,14 @@
         toggleForm('login');
     });
     // ===== AKHIR BLOK 8.2.3 =====
-        // ===== BLOK 8.2.4 - LUPA PASSWORD =====
-    // Fungsi ini dipanggil saat user mengklik "Lupa Password?"
+
+    // ===== BLOK 8.2.4 - LUPA PASSWORD =====
     async function lupaPassword() {
         var username = document.getElementById('loginUsername').value.trim();
         if (!username) {
             tampilkanToast('Masukkan username Anda terlebih dahulu!', 'warning');
             return;
         }
-
-        // 🔒 Pencegahan khusus: SuperAdmin tidak bisa di-reset passwordnya lewat sini
         if (username === 'admin') {
             tampilkanToast('Akun SuperAdmin tidak dapat di-reset melalui form ini!', 'error');
             return;
@@ -815,11 +840,8 @@
             return;
         }
 
-        // Generate password baru (8 karakter acak)
         var newPassword = Math.random().toString(36).slice(-8);
         var hash = await hashPassword(newPassword);
-        
-        // Update password di database
         dataAkun[indexUser].password = hash;
         simpanDataAkun(dataAkun);
 
@@ -838,7 +860,6 @@
         var lat = document.getElementById('pengajuanLat').value.trim();
         var lng = document.getElementById('pengajuanLng').value.trim();
 
-        // Validasi Lokasi
         if (lat === '' || lng === '') {
             tampilkanToast('Anda WAJIB mengambil lokasi otomatis terlebih dahulu!', 'error');
             return;
@@ -873,7 +894,9 @@
 </script>
 <!-- ===== AKHIR BLOK 7 & 8 ===== -->
 
-<!-- ===== PENUTUP HTML ===== -->
+<!-- ============================================================ -->
+<!-- PENUTUP HTML                                                 -->
+<!-- ============================================================ -->
 </body>
 </html>
 <!-- ===== AKHIR PENUTUP HTML ===== -->
