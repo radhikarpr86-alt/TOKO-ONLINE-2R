@@ -12977,78 +12977,46 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================================
 // AKHIR BLOK 8.60
 // ============================================================
-    // ============================================================
-// BLOK 8.61 - DETEKSI ALAMAT OTOMATIS & UPDATE LOKASI
-// ============================================================
+<!-- ===== BLOK 8.61 - MENU TOGGLE SIDEBAR (BUKA & TUTUP) ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var menuToggle = document.getElementById('menuToggle');
+    var sidebar = document.querySelector('.sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
 
-function deteksiDanSimpanLokasi(userId, callback) {
-    if (!navigator.geolocation) {
-        if (callback) callback('Browser tidak mendukung geolokasi.');
+    if (!menuToggle || !sidebar || !overlay) {
+        console.warn('Elemen sidebar/overlay tidak ditemukan. Cek ID/class di HTML.');
         return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-        function(pos) {
-            var lat = pos.coords.latitude;
-            var lng = pos.coords.longitude;
-
-            // Coba reverse geocoding ke alamat
-            fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-                .then(function(response) { return response.json(); })
-                .then(function(data) {
-                    var alamat = data.display_name || 'Lokasi tidak diketahui';
-
-                    // Simpan ke data akun
-                    var dataAkun = getDataAkun();
-                    for (var i = 0; i < dataAkun.length; i++) {
-                        if (dataAkun[i].id === userId) {
-                            dataAkun[i].latitude = lat;
-                            dataAkun[i].longitude = lng;
-                            dataAkun[i].alamatLokasi = alamat;
-                            dataAkun[i].lastUpdateLokasi = new Date().toISOString();
-                            break;
-                        }
-                    }
-                    simpanDataAkun(dataAkun);
-
-                    // Jika user yang sedang login, update juga di session
-                    var userLogin = JSON.parse(localStorage.getItem('2r_user') || '{}');
-                    if (userLogin.id === userId) {
-                        userLogin.latitude = lat;
-                        userLogin.longitude = lng;
-                        userLogin.alamatLokasi = alamat;
-                        localStorage.setItem('2r_user', JSON.stringify(userLogin));
-                    }
-
-                    tampilkanToast('Lokasi terbaru Anda telah diperbarui!', 'success');
-                    if (callback) callback(null, { lat: lat, lng: lng, alamat: alamat });
-                })
-                .catch(function() {
-                    // Jika reverse geocoding gagal, tetap simpan koordinat
-                    var dataAkun = getDataAkun();
-                    for (var i = 0; i < dataAkun.length; i++) {
-                        if (dataAkun[i].id === userId) {
-                            dataAkun[i].latitude = lat;
-                            dataAkun[i].longitude = lng;
-                            dataAkun[i].alamatLokasi = 'Lat: ' + lat + ', Lng: ' + lng;
-                            dataAkun[i].lastUpdateLokasi = new Date().toISOString();
-                            break;
-                        }
-                    }
-                    simpanDataAkun(dataAkun);
-                    tampilkanToast('Lokasi diperbarui (tanpa alamat).', 'info');
-                    if (callback) callback(null, { lat: lat, lng: lng, alamat: null });
-                });
-        },
-        function(err) {
-            tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
-            if (callback) callback('Gagal: ' + err.message);
+    // 1. Fungsi Buka/Tutup saat tombol hamburger diklik
+    menuToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
         }
-    );
-}
-// ============================================================
-// AKHIR BLOK 8.61
-// ============================================================
+    });
+
+    // 2. Fungsi Menutup saat area gelap (overlay) diklik
+    overlay.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+
+    // 3. (Opsional) Tutup sidebar jika ukuran layar berubah menjadi desktop (> 767px)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 767) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    });
+});
+</script>
+<!-- ===== AKHIR BLOK 8.61 ===== -->
 // ============================================================
 // BLOK 8.63 - PENATAAN PRODUK (SuperAdmin)
 // ============================================================
