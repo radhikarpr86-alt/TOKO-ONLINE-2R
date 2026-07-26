@@ -6,331 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Multi Role - Toko Online 2R</title>
 <!-- ===== AKHIR BLOK 1.1 ===== -->
+
 <!-- ===== BLOK 1.2 - LINK FONTAWESOME & GOOGLE FONTS ===== -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- ===== AKHIR BLOK 1.2 ===== -->
-<!-- ===== BLOK 1.3 - FAVICON (IKON TAB BROWSER) ===== -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
-<link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+
+<!-- ===== BLOK 1.3 - FAVICON ===== -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
 <!-- ===== AKHIR BLOK 1.3 ===== -->
+
 <!-- ===== BLOK 1.4 - PENUTUP HEAD & PEMBUKA BODY ===== -->
 </head>
 <body>
 <!-- ===== AKHIR BLOK 1.4 ===== -->
 
 <!-- ===== BLOK 1.5 - WADAH NOTIFIKASI TOAST ===== -->
-<div id="toastContainer"></div>
+    <div id="toastContainer"></div>
 <!-- ===== AKHIR BLOK 1.5 ===== -->
-<!-- ===== BLOK 2.1 - WRAPPER & KOTAK LOGIN ===== -->
-<div id="pageAuthentication">
-    <div class="authentication-wrapper">
-        <div class="authentication-box">
-            
-            <!-- KONTEN AKAN DIISI DI BLOK 2.2 - 2.7 -->
-            
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 2.1 ===== -->
-<!-- ===== BLOK 2.2 - LOGO & JUDUL APLIKASI ===== -->
-<div class="authentication-logo">
-    <i class="fas fa-store-alt"></i>
-    <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
-    <p>Platform Belanja & Layanan Serba Ada</p>
-</div>
-<!-- ===== AKHIR BLOK 2.2 ===== -->
-<!-- ===== BLOK 2.3 - AREA PESAN ERROR ===== -->
-<div class="authentication-error" id="authenticationError">
-    <i class="fas fa-exclamation-circle"></i> 
-    <span id="authenticationErrorText"></span>
-</div>
-<!-- ===== AKHIR BLOK 2.3 ===== -->
-<!-- ===== BLOK 2.4 - FORM LOGIN ===== -->
-<form class="authentication-form" id="loginForm" autocomplete="off">
-    <div class="form-group">
-        <label>Username</label>
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
-        </div>
-    </div>
-    <button type="submit" class="button-submit">
-        <i class="fas fa-sign-in-alt"></i> Login
-    </button>
-</form>
-<!-- ===== AKHIR BLOK 2.4 ===== -->
-<!-- ===== BLOK 2.5 - FORM REGISTER (REVISI) ===== -->
-<form class="authentication-form hidden-form" id="registerForm">
-    <div class="form-group">
-        <label>Pilih Role</label>
-        <div class="input-group">
-            <i class="fas fa-user-tag"></i>
-            <select id="registerRole">
-                <option value="customer">Customer</option>
-                <option value="toko">Toko</option>
-                <option value="ojek">Ojek</option>
-                <option value="pedagang">Pedagang Pasar</option>
-                <option value="codseller">COD Seller</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label>ID Akun (Otomatis)</label>
-        <div class="input-group">
-            <i class="fas fa-id-card"></i>
-            <input type="text" id="registerIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background-color:#f0f0f0; color:#666666;">
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Username</label>
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="registerUsername" placeholder="Buat username" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="registerPassword" placeholder="Buat password" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Nama Lengkap</label>
-        <div class="input-group">
-            <i class="fas fa-id-card"></i>
-            <input type="text" id="registerNama" placeholder="Nama lengkap Anda" required>
-        </div>
-    </div>
 
-    <!-- ===== TAMBAHAN LOKASI ===== -->
-    <div class="grid-2">
-        <div class="form-group">
-            <label>Alamat / Lokasi</label>
-            <div class="input-group">
-                <i class="fas fa-map-pin"></i>
-                <input type="text" id="registerLokasi" class="form-input" placeholder="Ketik alamat atau klik tombol Ambil Lokasi">
-            </div>
-        </div>
-        <div class="form-group" style="display:flex; align-items:flex-end;">
-            <button type="button" class="button button-primary button-small" onclick="ambilLokasiRegister()" style="width:100%;">
-                <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
-            </button>
-        </div>
-    </div>
-    <input type="hidden" id="registerLat" value="">
-    <input type="hidden" id="registerLng" value="">
-    <!-- ============================= -->
-
-    <!-- TOMBOL DAFTAR DENGAN ID DAN DISABLED -->
-    <button type="submit" class="button-submit" id="btnDaftar" disabled>
-        <i class="fas fa-user-plus"></i> Daftar
-    </button>
-    <div class="authentication-footer">
-        Sudah punya akun? 
-        <a onclick="toggleForm('login')">Login di sini</a>
-    </div>
-</form>
-<!-- ===== AKHIR BLOK 2.5 ===== -->
-<!-- ===== BLOK 2.6 - FORM PENGAJUAN BUKA AKUN (REVISI) ===== -->
-<form class="authentication-form hidden-form" id="pengajuanBukaAkunForm">
-    <div class="form-group">
-        <label>Nama Lengkap</label>
-        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="pengajuanNama" placeholder="Nama lengkap" required></div>
-    </div>
-    <div class="form-group">
-        <label>Email / Nomor HP</label>
-        <div class="input-group"><i class="fas fa-envelope"></i><input type="text" id="pengajuanKontak" placeholder="Email atau HP" required></div>
-    </div>
-    <div class="form-group">
-        <label>Role yang Diinginkan</label>
-        <div class="input-group"><i class="fas fa-user-tag"></i>
-            <select id="pengajuanRole">
-                <option value="toko">Toko</option>
-                <option value="pedagang">Pedagang Pasar</option>
-                <option value="codseller">COD Seller</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Alasan Pembuatan Akun</label>
-        <div class="input-group"><i class="fas fa-comment"></i><input type="text" id="pengajuanAlasan" placeholder="Misal: Ingin berjualan online" required></div>
-    </div>
-
-    <!-- ===== TAMBAHAN LOKASI ===== -->
-    <div class="grid-2">
-        <div class="form-group">
-            <label>Alamat / Lokasi</label>
-            <div class="input-group">
-                <i class="fas fa-map-pin"></i>
-                <input type="text" id="pengajuanLokasi" class="form-input" placeholder="Ketik alamat">
-            </div>
-        </div>
-        <div class="form-group" style="display:flex; align-items:flex-end;">
-            <button type="button" class="button button-primary button-small" onclick="ambilLokasiPengajuan()" style="width:100%;">
-                <i class="fas fa-location-dot"></i> Ambil Lokasi Otomatis
-            </button>
-        </div>
-    </div>
-    <input type="hidden" id="pengajuanLat" value="">
-    <input type="hidden" id="pengajuanLng" value="">
-    <!-- ============================= -->
-
-    <!-- TOMBOL AJUKAN DENGAN ID DAN DISABLED -->
-    <button type="submit" class="button-submit" id="btnAjukan" disabled>
-        <i class="fas fa-paper-plane"></i> Ajukan ke Admin
-    </button>
-    <div class="authentication-footer">
-        Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
-    </div>
-</form>
-<!-- ===== AKHIR BLOK 2.6 ===== -->
-<!-- ===== BLOK 2.7 - FOOTER & NAVIGASI FORM ===== -->
-<div class="authentication-footer">
-    Belum punya akun? 
-    <a href="javascript:void(0)" onclick="toggleForm('register')" style="cursor:pointer;">Daftar di sini</a>
-    <br>
-    <a href="javascript:void(0)" onclick="toggleForm('pengajuan')" style="cursor:pointer;">Ajukan buka akun</a>
-</div>
-<!-- ===== AKHIR BLOK 2.7 ===== -->
-<!-- ===== BLOK 3.1 - NAVBAR UTAMA (JAM & PROFIL) ===== -->
-<div id="pageDashboard" class="page-dashboard">
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <button id="menuToggle"><i class="fas fa-bars"></i></button>
-            <i class="fas fa-store-alt"></i> Toko Online 2R
-        </div>
-        <div class="navbar-user">
-            <!-- Jam & Tanggal -->
-            <div class="navbar-time" style="display:flex; flex-direction:column; align-items:flex-end; margin-right:15px; font-size:12px; color:#555;">
-                <span id="displayJam" style="font-weight:600; font-size:14px;">00:00:00</span>
-                <span id="displayTanggal" style="font-size:11px;">Senin, 01 Januari 2026</span>
-            </div>
-
-            <!-- Avatar Foto Profil -->
-            <img id="userAvatar" src="" style="display:none; width:32px; height:32px; border-radius:50%; object-fit:cover; margin-right:8px; vertical-align:middle; border:2px solid var(--primary);">
-            <span id="userAvatarPlaceholder" style="display:inline-block; width:32px; height:32px; border-radius:50%; background:#eee; text-align:center; line-height:32px; color:#aaa; margin-right:8px; vertical-align:middle;">
-                <i class="fas fa-user"></i>
-            </span>
-
-            <span class="role-badge" id="roleBadge">Role</span>
-            <span id="userNama" style="font-weight:600;">User</span>
-            <button class="button-logout" id="buttonLogout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-        </div>
-    </nav>
-<!-- ===== AKHIR BLOK 3.1 ===== -->
-<!-- ===== BLOK 3.2 - SIDEBAR CONTAINER & OVERLAY ===== -->
-<aside class="sidebar" id="sidebarContainer"></aside>
-<div id="sidebarOverlay" class="sidebar-overlay"></div>
-<!-- ===== AKHIR BLOK 3.2 ===== -->
-<!-- ===== BLOK 3.3 - AREA KONTEN UTAMA (MAIN CONTENT) ===== -->
-<main class="content" id="mainContent"></main>
-<!-- ===== AKHIR BLOK 3.3 ===== -->
-<!-- ===== BLOK 3.4 - MODAL KONFIRMASI TOLAK AKUN ===== -->
-<div class="modal-overlay" id="modalTolakAkun">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>Konfirmasi Penolakan</h3>
-            <button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p>Yakin ingin menolak akun ini?</p>
-            <input type="hidden" id="tolakIdAkun">
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-extra-small" style="background:#eeeeee;" onclick="tutupModal('modalTolakAkun')">Batal</button>
-            <button class="btn btn-danger btn-extra-small" onclick="eksekusiTolakAkun()">Ya, Tolak</button>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 3.4 ===== -->
-<!-- ===== BLOK 3.5 - MODAL PREVIEW GAMBAR ===== -->
-<div class="modal-overlay" id="modalPreviewGambar">
-    <!-- Mengatur gaya khusus agar background transparan saat preview gambar -->
-    <div class="modal" style="background:transparent; box-shadow:none; max-width:800px;">
-        <!-- Header berwarna putih agar tombol close terlihat -->
-        <div class="modal-header" style="background:white; border-radius:12px 12px 0 0;">
-            <h3 id="modalPreviewTitle">Preview</h3>
-            <button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button>
-        </div>
-        <!-- Tempat gambar akan ditampilkan oleh JavaScript -->
-        <img id="modalPreviewImage" src="" style="width:100%; max-height:70vh; object-fit:contain; border-radius:0 0 12px 12px; background:#f0f0f0;">
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 3.5 ===== -->
-<!-- ===== BLOK 3.6 - MODAL FORM TAGIHAN (SUPERADMIN) ===== -->
-<div class="modal-overlay" id="modalFormTagihan">
-    <div class="modal" style="max-width:500px;">
-        <div class="modal-header">
-            <h3 id="modalTagihanTitle">Tambah Tagihan</h3>
-            <button class="modal-close" onclick="tutupModalTagihan()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label>Akun</label>
-                <select id="tagihanAkunId" class="form-input">
-                    <option value="">-- Pilih Akun --</option>
-                </select>
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Bulan</label>
-                    <select id="tagihanBulan" class="form-input">
-                        <option value="1">Januari</option>
-                        <option value="2">Februari</option>
-                        <option value="3">Maret</option>
-                        <option value="4">April</option>
-                        <option value="5">Mei</option>
-                        <option value="6">Juni</option>
-                        <option value="7">Juli</option>
-                        <option value="8">Agustus</option>
-                        <option value="9">September</option>
-                        <option value="10">Oktober</option>
-                        <option value="11">November</option>
-                        <option value="12">Desember</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tahun</label>
-                    <input type="number" id="tagihanTahun" class="form-input" value="2026" min="2020" max="2030">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Jumlah Tagihan (Rp)</label>
-                <input type="number" id="tagihanJumlah" class="form-input" placeholder="50000">
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select id="tagihanStatus" class="form-input">
-                    <option value="BELUM_BAYAR">BELUM_BAYAR</option>
-                    <option value="LUNAS">LUNAS</option>
-                </select>
-            </div>
-            <input type="hidden" id="tagihanEditId" value="">
-        </div>
-        <div class="modal-footer">
-            <button class="button button-secondary" onclick="tutupModalTagihan()">Batal</button>
-            <button class="button button-primary" onclick="simpanTagihanManual()">Simpan</button>
-        </div>
-    </div>
-</div>
-<!-- ===== AKHIR BLOK 3.6 ===== -->
-
-<!-- ===== BLOK 4 - CSS GLOBAL & UTILITY ===== -->
+<!-- ===== BLOK 4 - CSS GLOBAL & UTILITY (TIDAK ADA ERROR JS) ===== -->
 <style>
-    /* ====================================================== */
-    /* BLOK 4.1 – CSS RESET GLOBAL                            */
-    /* ====================================================== */
-
-    /* -------- VARIABEL WARNA & UKURAN -------- */
+    /* -------- VARIABEL WARNA -------- */
     :root {
         --primary: #FF6B00;
         --primary-dark: #e65c00;
@@ -343,220 +41,240 @@
         --radius: 12px;
     }
 
-    /* ===== BLOK 4.1.1 – RESET DASAR ===== */
+    /* ===== BLOK 4.1 - RESET DASAR ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { 
-        font-family:'Poppins', sans-serif; 
-        background:var(--bg); 
-        min-height:100vh; 
-        color:var(--text); 
-        line-height:1.6; 
+    body {
+        font-family:'Poppins', sans-serif;
+        background:var(--bg);
+        min-height:100vh;
+        color:var(--text);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(135deg, var(--primary-light), #ffe0cc);
     }
-
-    /* ===== BLOK 4.1.2 – KELAS TAMPILAN HALAMAN ===== */
-    .page-dashboard { display:none; }
-    .page-content { display:none; }
-    .page-content.active { display:block; }
-    .hidden { display:none !important; }
     .hidden-form { display:none !important; }
-    .margin-top-10 { margin-top:10px; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .button-small { padding:6px 14px; font-size:12px; width:100%; border:none; border-radius:var(--radius); background:var(--primary); color:white; cursor:pointer; }
+    /* ===== AKHIR BLOK 4.1 ===== */
 
-    /* ===== BLOK 4.1.3 – TOAST NOTIFICATION ===== */
-    #toastContainer { 
-        position:fixed; 
-        top:20px; 
-        right:20px; 
-        z-index:99999; 
-        display:flex; 
-        flex-direction:column; 
-        gap:10px; 
-        max-width:400px; 
-        width:90%; 
+    /* ===== BLOK 5.1 - CSS LOGIN & REGISTER (WRAPPER & BOX) ===== */
+    .authentication-wrapper {
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
     }
-    .toast { 
-        padding:14px 20px; 
-        border-radius:var(--radius); 
-        color:white; 
-        font-size:14px; 
-        font-weight:500; 
-        box-shadow:var(--shadow); 
-        animation:slideInRight 0.4s ease; 
-        display:flex; 
-        align-items:center; 
-        gap:12px; 
-        backdrop-filter:blur(4px); 
+    .authentication-box {
+        background: white;
+        border-radius: var(--radius);
+        padding: 35px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
     }
-    .toast.success { background:#4CAF50; }
-    .toast.error { background:#F44336; }
-    .toast.warning { background:#FF9800; }
-    .toast.info { background:#2196F3; }
-    @keyframes slideInRight { 
-        from { transform:translateX(100%); opacity:0; } 
-        to { transform:translateX(0); opacity:1; } 
-    }
+    /* ===== AKHIR BLOK 5.1 ===== */
 
-    /* ===== BLOK 4.1.4 – EMPTY STATE ===== */
-    .empty-state { 
-        text-align:center; 
-        padding:40px 20px; 
-        color:var(--text-muted); 
-        background:white; 
-        border-radius:var(--radius); 
-        box-shadow:var(--shadow); 
-        border:1px solid var(--border); 
-    }
-    .empty-state i { font-size:48px; color:#ddd; display:block; margin-bottom:12px; }
-    .empty-state h3 { font-size:18px; font-weight:600; margin:10px 0 5px; }
+    /* ===== BLOK 5.2 - CSS LOGO & PESAN ERROR ===== */
+    .authentication-logo { text-align:center; margin-bottom:25px; }
+    .authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
+    .authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
+    .authentication-logo p { color:var(--text-muted); font-size:14px; }
+    .authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
+    /* ===== AKHIR BLOK 5.2 ===== */
 
-    /* ===== BLOK 4.1.5 – HALAMAN LOGIN/REGISTER ===== */
-    #pageAuthentication { 
-        display:flex; 
-        justify-content:center; 
-        align-items:center; 
-        min-height:100vh; 
-        background:linear-gradient(135deg, var(--primary-light), #ffe0cc); 
-    }
+    /* ===== BLOK 5.3 - CSS INPUT, GROUP & TOMBOL ===== */
+    .form-group { margin-bottom:15px; }
+    .form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
+    .input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:0.3s; }
+    .input-group:focus-within { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(255,107,0,0.1); }
+    .input-group i { color:#aaa; font-size:16px; width:30px; text-align:center; }
+    .input-group input, .input-group select { border:none; background:transparent; padding:13px 0; font-size:14px; width:100%; outline:none; font-family:'Poppins', sans-serif; }
+    .button-submit { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; transition:0.3s; }
+    .button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
+    /* ===== AKHIR BLOK 5.3 ===== */
 
-    /* ===== BLOK 4.1.6 – ANIMASI NOTIFIKASI ===== */
-    @keyframes fadeInOut { 
-        0% { opacity:0; transform:translateY(-20px); } 
-        20% { opacity:1; transform:translateY(0); } 
-        80% { opacity:1; transform:translateY(0); } 
-        100% { opacity:0; transform:translateY(-20px); } 
-    }
+    /* ===== BLOK 5.4 - CSS FOOTER NAVIGASI ===== */
+    .authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
+    .authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; }
+    .authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
+    /* ===== AKHIR BLOK 5.4 ===== */
 </style>
-<!-- ===== AKHIR BLOK 4 ===== -->
-    /* ====================================================== */
-    /* BLOK 5 – CSS LOGIN & REGISTER                          */
-    /* ====================================================== */
+<!-- ===== AKHIR BLOK 4 & 5 (CSS LENGKAP) ===== -->
 
-    .authentication-wrapper { 
-        width: 100%; 
-        max-width: 450px; 
-        padding: 20px; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        min-height: 100vh; /* Membuat kotak berada tepat di tengah layar */
-        margin: 0 auto; 
-    }
+<!-- ===== BLOK 2.1 - WRAPPER & KOTAK LOGIN ===== -->
+    <div id="pageAuthentication">
+        <div class="authentication-wrapper">
+            <div class="authentication-box">
+<!-- ===== AKHIR BLOK 2.1 ===== -->
 
-    .authentication-box { 
-        background: white; 
-        border-radius: var(--radius); 
-        padding: 35px; 
-        box-shadow: var(--shadow); 
-        border: 1px solid var(--border); 
-        transition: transform 0.3s; 
-        width: 100%; 
-        max-height: 80vh;      /* Revisi: Agar form panjang bisa di-scroll */
-        overflow-y: auto;      /* Revisi: Scroll otomatis */
-    }
+<!-- ===== BLOK 2.2 - LOGO & JUDUL APLIKASI ===== -->
+                <div class="authentication-logo">
+                    <i class="fas fa-store-alt"></i>
+                    <h1>Toko Online <span style="color:#FF6B00;">2R</span></h1>
+                    <p>Platform Belanja & Layanan Serba Ada</p>
+                </div>
+<!-- ===== AKHIR BLOK 2.2 ===== -->
 
-    .authentication-logo { 
-        text-align: center; 
-        margin-bottom: 25px; 
-    }
-    .authentication-logo i { 
-        font-size: 45px; 
-        color: var(--primary); 
-        margin-bottom: 10px; 
-    }
-    .authentication-logo h1 { 
-        font-size: 26px; 
-        color: var(--text); 
-        font-weight: 700; 
-    }
-    .authentication-logo p { 
-        color: var(--text-muted); 
-        font-size: 14px; 
-    }
+<!-- ===== BLOK 2.3 - AREA PESAN ERROR ===== -->
+                <div class="authentication-error" id="authenticationError">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    <span id="authenticationErrorText"></span>
+                </div>
+<!-- ===== AKHIR BLOK 2.3 ===== -->
 
-    .authentication-error { 
-        display: none; 
-        background: #ffebee; 
-        color: #d32f2f; 
-        padding: 12px 16px; 
-        border-radius: var(--radius); 
-        margin-bottom: 15px; 
-        font-size: 14px; 
-        border-left: 4px solid #d32f2f; 
-    }
+<!-- ===== BLOK 2.4 - FORM LOGIN ===== -->
+                <form class="authentication-form" id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="button-submit">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+<!-- ===== AKHIR BLOK 2.4 ===== -->
 
-    .form-group { 
-        margin-bottom: 15px; 
-    }
-    .form-group label { 
-        display: block; 
-        font-weight: 600; 
-        font-size: 13px; 
-        color: #555; 
-        margin-bottom: 5px; 
-    }
+<!-- ===== BLOK 2.7 - FOOTER & NAVIGASI FORM ===== -->
+                    <div class="authentication-footer">
+                        Belum punya akun? <a onclick="toggleForm('register')">Daftar di sini</a>
+                        <br>
+                        <a onclick="toggleForm('pengajuan')">Ajukan buka akun</a>
+                    </div>
+                </form>
+<!-- ===== AKHIR BLOK 2.7 ===== -->
 
-    .input-group { 
-        display: flex; 
-        align-items: center; 
-        background: #f8f9fa; 
-        border-radius: var(--radius); 
-        padding: 0 14px; 
-        border: 2px solid transparent; 
-        transition: border-color 0.3s, background 0.3s; 
-    }
-    .input-group:focus-within { 
-        border-color: var(--primary); 
-        background: white; 
-        box-shadow: 0 0 0 4px rgba(255,107,0,0.1); 
-    }
-    .input-group i { 
-        color: #aaa; 
-        font-size: 16px; 
-        width: 30px; 
-        text-align: center; 
-    }
-    .input-group input, .input-group select { 
-        border: none; 
-        background: transparent; 
-        padding: 13px 0; 
-        font-size: 14px; 
-        width: 100%; 
-        outline: none; 
-        font-family: 'Poppins', sans-serif; 
-    }
+<!-- ===== BLOK 2.5 - FORM REGISTER (REVISI) ===== -->
+                <form class="authentication-form hidden-form" id="registerForm">
+                    <div class="form-group">
+                        <label>Pilih Role</label>
+                        <div class="input-group">
+                            <i class="fas fa-user-tag"></i>
+                            <select id="registerRole">
+                                <option value="customer">Customer</option>
+                                <option value="toko">Toko</option>
+                                <option value="ojek">Ojek</option>
+                                <option value="pedagang">Pedagang Pasar</option>
+                                <option value="codseller">COD Seller</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>ID Akun (Otomatis)</label>
+                        <div class="input-group">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="registerIdPreview" class="form-input" value="Akan dibuat otomatis" disabled style="background:#f0f0f0; color:#666;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="registerUsername" placeholder="Buat username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="registerPassword" placeholder="Buat password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <div class="input-group">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="registerNama" placeholder="Nama lengkap Anda" required>
+                        </div>
+                    </div>
 
-    .button-submit { 
-        width: 100%; 
-        padding: 14px; 
-        background: var(--primary); 
-        color: white; 
-        border: none; 
-        border-radius: var(--radius); 
-        font-size: 16px; 
-        font-weight: 700; 
-        cursor: pointer; 
-        transition: background 0.3s, transform 0.2s; 
-    }
-    .button-submit:hover { 
-        background: var(--primary-dark); 
-        transform: scale(1.02); 
-    }
+                    <!-- TAMBAHAN LOKASI -->
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Alamat / Lokasi</label>
+                            <div class="input-group">
+                                <i class="fas fa-map-pin"></i>
+                                <input type="text" id="registerLokasi" class="form-input" placeholder="Ketik atau klik Ambil Lokasi">
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:flex-end;">
+                            <button type="button" class="button-small">Ambil Lokasi Otomatis</button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="registerLat" value="">
+                    <input type="hidden" id="registerLng" value="">
 
-    .authentication-footer { 
-        text-align: center; 
-        margin-top: 18px; 
-        font-size: 14px; 
-        color: var(--text-muted); 
-    }
-    .authentication-footer a { 
-        color: var(--primary); 
-        cursor: pointer; 
-        font-weight: 600; 
-        text-decoration: none; 
-        transition: color 0.3s; 
-    }
-    .authentication-footer a:hover { 
-        text-decoration: underline; 
-        color: var(--primary-dark); 
-    }
+                    <button type="submit" class="button-submit">
+                        <i class="fas fa-user-plus"></i> Daftar
+                    </button>
+                    <div class="authentication-footer">
+                        Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a>
+                    </div>
+                </form>
+<!-- ===== AKHIR BLOK 2.5 ===== -->
+
+<!-- ===== BLOK 2.6 - FORM PENGAJUAN BUKA AKUN (REVISI) ===== -->
+                <form class="authentication-form hidden-form" id="pengajuanBukaAkunForm">
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="pengajuanNama" placeholder="Nama lengkap" required></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / Nomor HP</label>
+                        <div class="input-group"><i class="fas fa-envelope"></i><input type="text" id="pengajuanKontak" placeholder="Email atau HP" required></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Role yang Diinginkan</label>
+                        <div class="input-group"><i class="fas fa-user-tag"></i>
+                            <select id="pengajuanRole">
+                                <option value="toko">Toko</option>
+                                <option value="pedagang">Pedagang Pasar</option>
+                                <option value="codseller">COD Seller</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Alasan Pembuatan Akun</label>
+                        <div class="input-group"><i class="fas fa-comment"></i><input type="text" id="pengajuanAlasan" placeholder="Misal: Ingin berjualan online" required></div>
+                    </div>
+
+                    <!-- TAMBAHAN LOKASI -->
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Alamat / Lokasi</label>
+                            <div class="input-group">
+                                <i class="fas fa-map-pin"></i>
+                                <input type="text" id="pengajuanLokasi" class="form-input" placeholder="Ketik alamat">
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:flex-end;">
+                            <button type="button" class="button-small">Ambil Lokasi Otomatis</button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="pengajuanLat" value="">
+                    <input type="hidden" id="pengajuanLng" value="">
+
+                    <button type="submit" class="button-submit"><i class="fas fa-paper-plane"></i> Ajukan ke Admin</button>
+                    <div class="authentication-footer">Sudah punya akun? <a onclick="toggleForm('login')">Login di sini</a></div>
+                </form>
+<!-- ===== AKHIR BLOK 2.6 ===== -->
+
+            </div>
+        </div>
+    </div>
+<!-- ===== AKHIR BLOK 2.1 (PENUTUP WRAPPER LOGIN) ===== -->
+
+<!-- ===== PENUTUP HTML ===== -->
 </body>
 </html>
+<!-- ===== AKHIR PENUTUP HTML ===== -->
