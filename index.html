@@ -13006,7 +13006,6 @@ function renderPenataanProduk() {
     var semuaProduk = JSON.parse(localStorage.getItem('2r_produk_publik') || '[]');
     var dataAkun = getDataAkun();
 
-    // Ambil preferensi tata letak yang tersimpan (urutan, ukuran, fitur)
     var pengaturan = JSON.parse(localStorage.getItem('2r_pengaturan_katalog') || '{"urutan":[],"ukuran":"sedang","fitur":[]}');
 
     var html = `
@@ -13047,9 +13046,7 @@ function renderPenataanProduk() {
                 <tbody>
     `;
 
-    // Buat daftar produk dengan urutan yang tersimpan (jika ada)
-    var daftarUrut = pengaturan.urutan && pengaturan.urutan.length > 0 ? pengaturan.urutan : semuaProduk.map(p => p.id);
-    // Filter produk yang masih ada
+    var daftarUrut = pengaturan.urutan && pengaturan.urutan.length > 0 ? pengaturan.urutan : semuaProduk.map(function(p) { return p.id; });
     var produkTersedia = [];
     for (var i = 0; i < daftarUrut.length; i++) {
         var id = daftarUrut[i];
@@ -13059,10 +13056,13 @@ function renderPenataanProduk() {
         }
         if (produk) produkTersedia.push(produk);
     }
-    // Tambahkan produk yang belum ada di urutan
     for (var i = 0; i < semuaProduk.length; i++) {
         var p = semuaProduk[i];
-        if (!daftarUrut.includes(p.id)) {
+        var sudahAda = false;
+        for (var j = 0; j < daftarUrut.length; j++) {
+            if (daftarUrut[j] === p.id) { sudahAda = true; break; }
+        }
+        if (!sudahAda) {
             produkTersedia.push(p);
         }
     }
@@ -13083,7 +13083,7 @@ function renderPenataanProduk() {
 
             html += `
             <tr>
-                <td>${i+1}</td>
+                <td>${i + 1}</td>
                 <td><strong>${escapeHtml(p.judul)}</strong></td>
                 <td>${escapeHtml(namaPenjual)}</td>
                 <td style="text-align:center;">
