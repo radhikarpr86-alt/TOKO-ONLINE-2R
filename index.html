@@ -596,7 +596,6 @@ body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh
     .widget-grid { grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); }
     .grid-2 { grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); }
 }
-
 /* ===== BLOK 4.5 - CSS_RESPONSIVE_HP (LENGKAP) ===== */
 @media (max-width:767px) {
     .navbar {
@@ -607,23 +606,11 @@ body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh
         right: 0;
         z-index: 1001;
     }
-    .navbar-brand {
-        font-size: 16px;
-        gap: 8px;
-    }
-    .navbar-user .role-badge {
-        font-size: 10px;
-        padding: 2px 8px;
-    }
-    .navbar-user span {
-        font-size: 13px;
-    }
-    .button-logout {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
+    .navbar-brand { font-size: 16px; gap: 8px; }
+    .navbar-user .role-badge { font-size: 10px; padding: 2px 8px; }
+    .navbar-user span { font-size: 13px; }
+    .button-logout { padding: 6px 12px; font-size: 12px; }
 
-    /* --- TOMBOL HAMBURGER (GARIS TIGA) --- */
     #menuToggle {
         display: block !important;
         cursor: pointer;
@@ -635,21 +622,18 @@ body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh
         margin-right: 10px;
     }
 
-    /* --- SIDEBAR ANIMASI MASUK/KELUAR --- */
     .sidebar {
         width: 80%;
+        max-width: 300px; /* AGAR TIDAK TERLALU LEBAR */
         top: 64px;
         bottom: 0;
         z-index: 999;
         position: fixed;
-        left: -100%; /* Sembunyikan di luar layar kiri */
+        left: -100%;
         transition: left 0.3s ease-in-out;
     }
-    .sidebar.open {
-        left: 0; /* Muncul saat di-klik */
-    }
+    .sidebar.open { left: 0; }
 
-    /* --- OVERLAY (LATAR BELAKANG GELAP) --- */
     .sidebar-overlay {
         display: none;
         position: fixed;
@@ -657,41 +641,21 @@ body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh
         background: rgba(0, 0, 0, 0.5);
         z-index: 998;
     }
-    .sidebar-overlay.active {
-        display: block;
-    }
+    .sidebar-overlay.active { display: block; }
 
-    /* --- KONTEN UTAMA --- */
     .content {
         margin-left: 0;
         padding: 15px;
         margin-top: 64px;
     }
 
-    /* --- GRID & TABEL HP --- */
-    .widget-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 10px;
-    }
-    .widget-card .widget-number {
-        font-size: 22px;
-    }
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
-    .table {
-        font-size: 12px;
-    }
-    .modal {
-        width: 95%;
-        padding: 15px;
-    }
-    .authentication-wrapper {
-        padding: 10px;
-    }
-    .authentication-box {
-        padding: 20px;
-    }
+    .widget-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .widget-card .widget-number { font-size: 22px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .table { font-size: 12px; }
+    .modal { width: 95%; padding: 15px; }
+    .authentication-wrapper { padding: 10px; }
+    .authentication-box { padding: 20px; }
 }
 /* ===== AKHIR BLOK 4.5 ===== */
 /* ===== BLOK 4.6 - CSS_HAMBURGER_OVERLAY ===== */
@@ -12993,8 +12957,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // --- LANGKAH 1: HAPUS SEMUA LISTENER LAMA (SANGAT PENTING) ---
-    // Dengan metode cloneNode, tombol dan overlay akan "direset" dan bebas dari event ganda.
+    // --- RESET LISTENER LAMA ---
     var newBtn = menuToggle.cloneNode(true);
     menuToggle.parentNode.replaceChild(newBtn, menuToggle);
     menuToggle = newBtn;
@@ -13003,9 +12966,7 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.parentNode.replaceChild(newOverlay, overlay);
     overlay = newOverlay;
 
-    // --- LANGKAH 2: PASANG LISTENER BARU (BUKA & TUTUP) ---
-    
-    // Event 1: Klik tombol hamburger
+    // --- PASANG LISTENER BARU ---
     menuToggle.addEventListener('click', function(e) {
         e.preventDefault();
         if (sidebar.classList.contains('open')) {
@@ -13017,13 +12978,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event 2: Klik area gelap (overlay) untuk menutup
     overlay.addEventListener('click', function() {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
     });
 
-    // Event 3: Jika layar diperbesar ke desktop (> 767px), tutup otomatis
     window.addEventListener('resize', function() {
         if (window.innerWidth > 767) {
             sidebar.classList.remove('open');
