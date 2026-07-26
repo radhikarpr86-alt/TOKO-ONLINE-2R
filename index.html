@@ -234,6 +234,25 @@
 <!-- ===== BLOK 3.3 - AREA KONTEN UTAMA (MAIN CONTENT) ===== -->
 <main class="content" id="mainContent"></main>
 <!-- ===== AKHIR BLOK 3.3 ===== -->
+<!-- ===== BLOK 3.4 - MODAL KONFIRMASI TOLAK AKUN ===== -->
+<div class="modal-overlay" id="modalTolakAkun">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Konfirmasi Penolakan</h3>
+            <button class="modal-close" onclick="tutupModal('modalTolakAkun')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Yakin ingin menolak akun ini?</p>
+            <input type="hidden" id="tolakIdAkun">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-extra-small" style="background:#eeeeee;" onclick="tutupModal('modalTolakAkun')">Batal</button>
+            <button class="btn btn-danger btn-extra-small" onclick="eksekusiTolakAkun()">Ya, Tolak</button>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 3.4 ===== -->
+
 
 <!-- ===== BLOK 4 - CSS GLOBAL & UTILITY ===== -->
 <style>
