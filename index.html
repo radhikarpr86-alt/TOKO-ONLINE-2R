@@ -252,7 +252,77 @@
     </div>
 </div>
 <!-- ===== AKHIR BLOK 3.4 ===== -->
-
+<!-- ===== BLOK 3.5 - MODAL PREVIEW GAMBAR ===== -->
+<div class="modal-overlay" id="modalPreviewGambar">
+    <!-- Mengatur gaya khusus agar background transparan saat preview gambar -->
+    <div class="modal" style="background:transparent; box-shadow:none; max-width:800px;">
+        <!-- Header berwarna putih agar tombol close terlihat -->
+        <div class="modal-header" style="background:white; border-radius:12px 12px 0 0;">
+            <h3 id="modalPreviewTitle">Preview</h3>
+            <button class="modal-close" onclick="tutupModal('modalPreviewGambar')">&times;</button>
+        </div>
+        <!-- Tempat gambar akan ditampilkan oleh JavaScript -->
+        <img id="modalPreviewImage" src="" style="width:100%; max-height:70vh; object-fit:contain; border-radius:0 0 12px 12px; background:#f0f0f0;">
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 3.5 ===== -->
+<!-- ===== BLOK 3.6 - MODAL FORM TAGIHAN (SUPERADMIN) ===== -->
+<div class="modal-overlay" id="modalFormTagihan">
+    <div class="modal" style="max-width:500px;">
+        <div class="modal-header">
+            <h3 id="modalTagihanTitle">Tambah Tagihan</h3>
+            <button class="modal-close" onclick="tutupModalTagihan()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Akun</label>
+                <select id="tagihanAkunId" class="form-input">
+                    <option value="">-- Pilih Akun --</option>
+                </select>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Bulan</label>
+                    <select id="tagihanBulan" class="form-input">
+                        <option value="1">Januari</option>
+                        <option value="2">Februari</option>
+                        <option value="3">Maret</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Juni</option>
+                        <option value="7">Juli</option>
+                        <option value="8">Agustus</option>
+                        <option value="9">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tahun</label>
+                    <input type="number" id="tagihanTahun" class="form-input" value="2026" min="2020" max="2030">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Jumlah Tagihan (Rp)</label>
+                <input type="number" id="tagihanJumlah" class="form-input" placeholder="50000">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="tagihanStatus" class="form-input">
+                    <option value="BELUM_BAYAR">BELUM_BAYAR</option>
+                    <option value="LUNAS">LUNAS</option>
+                </select>
+            </div>
+            <input type="hidden" id="tagihanEditId" value="">
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="tutupModalTagihan()">Batal</button>
+            <button class="button button-primary" onclick="simpanTagihanManual()">Simpan</button>
+        </div>
+    </div>
+</div>
+<!-- ===== AKHIR BLOK 3.6 ===== -->
 
 <!-- ===== BLOK 4 - CSS GLOBAL & UTILITY ===== -->
 <style>
