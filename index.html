@@ -3116,49 +3116,188 @@ function renderTransferLainnya() {
     // ===== AKHIR BLOK 8.1.4 =====
 </script>
 <!-- ===== AKHIR BLOK 8.1 ===== -->
-<!-- ============================================================ -->
-<!-- BLOK 8.26 - JS_PENGAJUAN_BUKA_AKUN (VERSI FINAL DIPERBAIKI) -->
-<!-- ============================================================ -->
-
+<!-- ===== BLOK 8.2 - JS_EVENT_AUTH, LOGOUT, SIDEBAR ===== -->
 <script>
-// ===== BLOK 8.26.1 - PERBAIKAN TOGGLE FORM (LEBIH STABIL) =====
+// ===== BLOK 8.2.1 - TOGGLE FORM (VERSI LENGKAP - SUDAH DIPERBAIKI) =====
+/**
+ * Fungsi untuk menampilkan/menyembunyikan form Login, Register, atau Pengajuan Buka Akun.
+ * @param {string} tipe - Nilai yang diterima: 'login', 'register', 'pengajuan', atau 'pengajuanBukaAkun'.
+ */
 function toggleForm(tipe) {
-    // Sembunyikan error jika ada
+    // Sembunyikan pesan error jika ada
     var error = document.getElementById('authenticationError');
     if (error) error.style.display = 'none';
 
-    // Ambil elemen form (pastikan ID benar)
+    // Ambil elemen form
     var login = document.getElementById('loginForm');
     var register = document.getElementById('registerForm');
     var pengajuan = document.getElementById('pengajuanBukaAkunForm');
 
-    // Jika salah satu form tidak ditemukan, hentikan (mencegah error)
+    // Pastikan elemen ada sebelum diakses
     if (!login || !register || !pengajuan) {
-        console.error('Salah satu form (login/register/pengajuan) tidak ditemukan!');
+        console.error('Elemen form tidak ditemukan! Pastikan ID elemen sudah benar.');
         return;
     }
 
     // Logika toggle
     if (tipe === 'register') {
+        // Tampilkan register, sembunyikan login dan pengajuan
         login.classList.add('hidden-form');
         register.classList.remove('hidden-form');
         pengajuan.classList.add('hidden-form');
     } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
+        // Tampilkan pengajuan, sembunyikan login dan register
         login.classList.add('hidden-form');
         register.classList.add('hidden-form');
         pengajuan.classList.remove('hidden-form');
-    } else { // default: login
+    } else {
+        // Default: tampilkan login, sembunyikan register dan pengajuan
         register.classList.add('hidden-form');
         pengajuan.classList.add('hidden-form');
         login.classList.remove('hidden-form');
     }
 }
+// ===== AKHIR BLOK 8.2.1 =====
+// ===== BLOK 8.2.2 - LOGIN SUBMIT (GABUNGAN USER + KASIR) =====
+var loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var username = document.getElementById('loginUsername').value.trim();
+        var password = document.getElementById('loginPassword').value.trim();
+        var errorBox = document.getElementById('authenticationError');
+        var errorText = document.getElementById('authenticationErrorText');
+        
+        if (errorBox) errorBox.style.display = 'none';
 
-// ===== BLOK 8.26.2 - EVENT LISTENER UNTUK FORM PENGAJUAN (AMAN & PASTI BERJALAN) =====
-document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. Coba login sebagai user biasa ---
+        var dataAkun = getDataAkun();
+        var user = null;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === username) { user = dataAkun[i]; break; }
+        }
+        if (user) {
+            await migrasiPasswordJikaPerlu(username, password);
+            dataAkun = getDataAkun();
+            for (var i = 0; i < dataAkun.length; i++) {
+                if (dataAkun[i].username === username) { user = dataAkun[i]; break; }
+            }
+            var cocok = await verifikasiPassword(password, user.password);
+            if (cocok) {
+                if (user.status !== 'AKTIF' && user.role !== 'superadmin') {
+                    if (errorBox) {
+                        errorBox.style.display = 'block';
+                        errorText.textContent = 'Akun belum aktif. Menunggu verifikasi admin.';
+                    }
+                    return;
+                }
+                localStorage.setItem('2r_user', JSON.stringify(user));
+                localStorage.setItem('2r_user_role', user.role);
+                tampilkanDashboard(user);
+                return;
+            }
+        }
+
+        // --- 2. Coba login sebagai kasir ---
+        var kasir = await validasiLoginKasir(username, password);
+        if (kasir) {
+            if (kasir.status === 'Aktif') {
+                localStorage.setItem('2r_mode_kasir', JSON.stringify(kasir));
+                localStorage.setItem('2r_user_original_role', 'toko');
+                localStorage.setItem('2r_user_role', 'kasir');
+                tampilkanToast('Login sebagai kasir berhasil!', 'success');
+                tampilkanDashboardKasir(kasir);
+                return;
+            } else {
+                if (errorBox) {
+                    errorBox.style.display = 'block';
+                    errorText.textContent = 'Kasir tidak aktif!';
+                }
+                return;
+            }
+        }
+
+        // --- 3. Jika semua gagal ---
+        if (errorBox) {
+            errorBox.style.display = 'block';
+            errorText.textContent = 'Username atau password salah!';
+        }
+    });
+}
+// ===== AKHIR BLOK 8.2.2 =====
+
+    // ===== BLOK 8.2.3 - REGISTER SUBMIT =====
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var role = document.getElementById('registerRole').value;
+        var username = document.getElementById('registerUsername').value.trim();
+        var password = document.getElementById('registerPassword').value.trim();
+        var nama = document.getElementById('registerNama').value.trim();
+        if (!role || !username || !password || !nama) { tampilkanToast('Data belum lengkap!', 'warning'); return; }
+        var dataAkun = getDataAkun();
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === username) { tampilkanToast('Username sudah digunakan!', 'error'); return; }
+        }
+        var status = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
+        var hash = await hashPassword(password);
+        var akunBaru = {
+            id: generateId(role), role: role, username: username, password: hash, nama: nama,
+            email: '', nomorHp: '', alamat: '', namaBank: '', nomorRekening: '', pemilikRekening: '',
+            status: status, waktuRegistrasi: new Date().toISOString()
+        };
+        dataAkun.push(akunBaru);
+        simpanDataAkun(dataAkun);
+        tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + '\nStatus: ' + status, 'success');
+        toggleForm('login');
+    });
+    // ===== AKHIR BLOK 8.2.3 =====
+
+   // ===== BLOK 8.2.4 - LUPA PASSWORD (DENGAN PENGECUALIAN SUPERADMIN) =====
+var lupaBtn = document.getElementById('tombolLupaPassword');
+if (lupaBtn) {
+    lupaBtn.addEventListener('click', async function() {
+        var username = document.getElementById('loginUsername').value.trim();
+        if (!username) { tampilkanToast('Masukkan username terlebih dahulu!', 'warning'); return; }
+        
+        // 🔒 Cegah reset password untuk SuperAdmin
+        if (username === 'admin') {
+            tampilkanToast('SuperAdmin tidak dapat mereset password melalui form ini. Hubungi pengelola sistem.', 'error');
+            return;
+        }
+
+        var dataAkun = getDataAkun();
+        var user = null;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === username) { user = dataAkun[i]; break; }
+        }
+        if (!user) { tampilkanToast('Username tidak ditemukan!', 'error'); return; }
+        
+        var newPassword = Math.random().toString(36).slice(-8);
+        var hash = await hashPassword(newPassword);
+        user.password = hash;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === username) { dataAkun[i].password = hash; break; }
+        }
+        simpanDataAkun(dataAkun);
+        tampilkanToast('Password Anda telah direset. Password baru: ' + newPassword, 'success');
+    });
+}
+// ===== AKHIR BLOK 8.2.4 =====
+
+    // ===== BLOK 8.2.5 - LOGOUT =====
+    document.getElementById('buttonLogout').addEventListener('click', function() {
+        if (confirm('Keluar dari aplikasi?')) {
+            localStorage.removeItem('2r_user');
+            localStorage.removeItem('2r_user_role');
+            location.reload();
+        }
+    });
+    // ===== AKHIR BLOK 8.2.5 =====
+
+    // ============================================================
+// ===== BLOK 8.26.2 - SIMPAN PENGAJUAN DARI USER (VERSI AMAN) =====
+(function() {
     var form = document.getElementById('pengajuanBukaAkunForm');
-    
-    // Jika form tidak ditemukan, beri tahu di console
     if (!form) {
         console.error('Elemen dengan id "pengajuanBukaAkunForm" tidak ditemukan!');
         return;
@@ -3166,23 +3305,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // Ambil nilai input
+        console.log('Form pengajuan disubmit'); // Untuk debugging
+
         var nama = document.getElementById('pengajuanNama').value.trim();
         var kontak = document.getElementById('pengajuanKontak').value.trim();
         var role = document.getElementById('pengajuanRole').value;
         var alasan = document.getElementById('pengajuanAlasan').value.trim();
+
         var lat = document.getElementById('pengajuanLat').value.trim();
         var lng = document.getElementById('pengajuanLng').value.trim();
         var alamat = document.getElementById('pengajuanLokasi').value.trim();
 
-        // Validasi data wajib
         if (!nama || !kontak || !role || !alasan) {
             tampilkanToast('Semua data wajib diisi!', 'warning');
             return;
         }
 
-        // Simpan ke localStorage
         var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
         dataPengajuan.push({
             id: 'PB-' + Date.now(),
@@ -3197,54 +3335,364 @@ document.addEventListener('DOMContentLoaded', function() {
             waktu: new Date().toISOString()
         });
         localStorage.setItem('2r_pengajuan_buka_akun', JSON.stringify(dataPengajuan));
-
-        // Kosongkan form setelah berhasil
-        document.getElementById('pengajuanNama').value = '';
-        document.getElementById('pengajuanKontak').value = '';
-        document.getElementById('pengajuanAlasan').value = '';
-        document.getElementById('pengajuanLokasi').value = '';
-        document.getElementById('pengajuanLat').value = '';
-        document.getElementById('pengajuanLng').value = '';
-
-        // Notifikasi dan kembali ke halaman login
-        tampilkanToast('Pengajuan Anda telah dikirim ke Staf Admin!', 'success');
+        tampilkanToast('Pengajuan Anda telah dikirim ke Admin!', 'success');
         toggleForm('login');
     });
-});
+})();
+// ===== AKHIR BLOK 8.26.2 =====
 
-// ===== BLOK 8.56 - FUNGSI AMBIL LOKASI (TIDAK BERUBAH, TETAPI DIPASTIKAN ADA) =====
-function ambilLokasiPengajuan() {
-    if (!navigator.geolocation) {
-        tampilkanToast('Browser Anda tidak mendukung geolokasi.', 'error');
+// ===== BLOK 8.26.3 - RENDER HALAMAN PENGAJUAN (UNTUK ADMIN) =====
+function renderPengajuanBukaAkun() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Anda tidak memiliki akses!', 'error');
         return;
     }
-    tampilkanToast('Sedang mengambil lokasi...', 'info');
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        var lat = pos.coords.latitude;
-        var lng = pos.coords.longitude;
-        document.getElementById('pengajuanLat').value = lat;
-        document.getElementById('pengajuanLng').value = lng;
-        
-        // Reverse geocoding untuk mendapatkan alamat
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var alamat = data.display_name || 'Lokasi tidak diketahui';
-                document.getElementById('pengajuanLokasi').value = alamat;
-                tampilkanToast('Lokasi berhasil diambil!', 'success');
-            })
-            .catch(function() {
-                document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
-                tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
-            });
-    }, function(err) {
-        tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
-    });
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) return;
+
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var filterStatus = window._filterPengajuanStatus || 'MENUNGGU';
+
+    // Filter
+    var filtered = dataPengajuan;
+    if (filterStatus !== 'SEMUA') {
+        filtered = dataPengajuan.filter(function(p) { return p.status === filterStatus; });
+    }
+
+    // Pencarian
+    var search = document.getElementById('searchPengajuan') ? document.getElementById('searchPengajuan').value.toLowerCase().trim() : '';
+    if (search) {
+        filtered = filtered.filter(function(p) {
+            return (p.nama || '').toLowerCase().includes(search) ||
+                   (p.kontak || '').toLowerCase().includes(search) ||
+                   (p.role || '').toLowerCase().includes(search);
+        });
+    }
+
+    // Urutkan terbaru
+    filtered.sort(function(a,b) { return new Date(b.waktu) - new Date(a.waktu); });
+
+    var html = '<div class="page-header"><h2>Pengajuan Buka Akun</h2><p>Daftar calon user yang ingin dibuatkan akun.</p></div>';
+
+    // Filter & Pencarian UI
+    html += `
+    <div class="card" style="margin-bottom:15px;">
+        <div class="grid-2" style="gap:10px;">
+            <div>
+                <label style="font-size:12px; font-weight:600;">Filter Status:</label>
+                <select id="filterStatusPengajuan" class="form-input" style="width:100%;" onchange="window._filterPengajuanStatus=this.value; renderPengajuanBukaAkun();">
+                    <option value="MENUNGGU" ${filterStatus === 'MENUNGGU' ? 'selected' : ''}>Menunggu</option>
+                    <option value="DISETUJUI" ${filterStatus === 'DISETUJUI' ? 'selected' : ''}>Disetujui</option>
+                    <option value="DITOLAK" ${filterStatus === 'DITOLAK' ? 'selected' : ''}>Ditolak</option>
+                    <option value="SEMUA" ${filterStatus === 'SEMUA' ? 'selected' : ''}>Semua</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-size:12px; font-weight:600;">Cari Nama / Kontak / Role:</label>
+                <input type="text" id="searchPengajuan" class="form-input" placeholder="Ketik kata kunci..." oninput="renderPengajuanBukaAkun();" value="${search}">
+            </div>
+        </div>
+        <div style="margin-top:5px; font-size:13px; color:#888;">Total: <strong>${filtered.length}</strong> pengajuan</div>
+    </div>
+    `;
+
+    if (filtered.length === 0) {
+        html += '<div class="card"><div class="empty-state"><i class="fas fa-inbox"></i><h3>Tidak ada pengajuan dengan status ini</h3></div></div>';
+    } else {
+        html += '<div class="card"><div class="table-container"><table class="table"><thead><tr><th>No</th><th>Nama</th><th>Kontak</th><th>Role</th><th>Alasan</th><th>Status</th><th>Waktu</th><th>Aksi</th></tr></thead><tbody>';
+        for (var i = 0; i < filtered.length; i++) {
+            var p = filtered[i];
+            var badge = p.status === 'DISETUJUI' ? 'badge-success' : (p.status === 'DITOLAK' ? 'badge-danger' : 'badge-warning');
+            var waktu = new Date(p.waktu).toLocaleDateString('id-ID');
+            var aksi = '';
+            if (p.status === 'MENUNGGU') {
+                aksi = `
+                    <button class="button button-success button-extra-small" onclick="bukaModalSetujuiPengajuan('${p.id}')"><i class="fas fa-check"></i> Setujui</button>
+                    <button class="button button-danger button-extra-small" onclick="bukaModalTolakPengajuan('${p.id}')"><i class="fas fa-times"></i> Tolak</button>
+                `;
+            } else {
+                aksi = '<span style="color:#888;">Selesai</span>';
+            }
+            html += `<tr>
+                <td>${i+1}</td>
+                <td><strong>${escapeHtml(p.nama)}</strong></td>
+                <td>${escapeHtml(p.kontak)}</td>
+                <td>${p.role}</td>
+                <td>${escapeHtml(p.alasan.substring(0,30))}${p.alasan.length > 30 ? '...' : ''}</td>
+                <td><span class="badge ${badge}">${p.status}</span></td>
+                <td>${waktu}</td>
+                <td>
+                    <button class="button button-primary button-extra-small" onclick="bukaDetailPengajuan('${p.id}')"><i class="fas fa-eye"></i> Detail</button>
+                    ${aksi}
+                </td>
+            </tr>`;
+        }
+        html += '</tbody></table></div></div>';
+    }
+
+    areaKonten.innerHTML = html;
 }
-</script>
-<!-- ============================================================ -->
-<!-- AKHIR BLOK 8.26 DAN 8.56 (DIPERBAIKI) -->
-<!-- ============================================================ -->
+// ===== AKHIR BLOK 8.26.3 =====
+
+// ===== BLOK 8.26.4 - DETAIL PENGAJUAN (MODAL) =====
+function bukaDetailPengajuan(idPengajuan) {
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var pengajuan = null;
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].id === idPengajuan) {
+            pengajuan = dataPengajuan[i];
+            break;
+        }
+    }
+    if (!pengajuan) { tampilkanToast('Pengajuan tidak ditemukan!', 'error'); return; }
+
+    var alamatTampil = pengajuan.alamatLokasi || (pengajuan.latitude && pengajuan.longitude ? pengajuan.latitude + ', ' + pengajuan.longitude : '-');
+    var html = `
+    <div class="modal-overlay" id="modalDetailPengajuan" style="display:flex; z-index:99999;">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header">
+                <h3>Detail Pengajuan</h3>
+                <button class="modal-close" onclick="tutupModalDetailPengajuan()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div><strong>Nama:</strong> ${escapeHtml(pengajuan.nama)}</div>
+                    <div><strong>Kontak:</strong> ${escapeHtml(pengajuan.kontak)}</div>
+                    <div><strong>Role:</strong> ${pengajuan.role}</div>
+                    <div><strong>Status:</strong> <span class="badge ${pengajuan.status === 'DISETUJUI' ? 'badge-success' : pengajuan.status === 'DITOLAK' ? 'badge-danger' : 'badge-warning'}">${pengajuan.status}</span></div>
+                    <div style="grid-column:1/-1;"><strong>Alasan:</strong><br>${escapeHtml(pengajuan.alasan)}</div>
+                    <div style="grid-column:1/-1;"><strong>Alamat Lokasi:</strong><br>${escapeHtml(alamatTampil)}</div>
+                    ${pengajuan.alasanPenolakan ? `<div style="grid-column:1/-1;"><strong>Alasan Penolakan:</strong><br>${escapeHtml(pengajuan.alasanPenolakan)}</div>` : ''}
+                    ${pengajuan.generatedUsername ? `<div><strong>Username:</strong> ${pengajuan.generatedUsername}</div><div><strong>Password:</strong> ${pengajuan.generatedPassword}</div>` : ''}
+                    <div><strong>Waktu Pengajuan:</strong> ${new Date(pengajuan.waktu).toLocaleString('id-ID')}</div>
+                    ${pengajuan.diprosesOleh ? `<div><strong>Diproses Oleh:</strong> ${pengajuan.diprosesOleh}</div>` : ''}
+                    ${pengajuan.waktuDiproses ? `<div><strong>Waktu Diproses:</strong> ${new Date(pengajuan.waktuDiproses).toLocaleString('id-ID')}</div>` : ''}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="tutupModalDetailPengajuan()">Tutup</button>
+            </div>
+        </div>
+    </div>
+    `;
+    var body = document.body;
+    var container = document.createElement('div');
+    container.innerHTML = html;
+    body.appendChild(container);
+}
+
+function tutupModalDetailPengajuan() {
+    var modal = document.getElementById('modalDetailPengajuan');
+    if (modal) modal.remove();
+}
+// ===== AKHIR BLOK 8.26.4 =====
+
+// ===== BLOK 8.26.5 - SETUJUI PENGAJUAN (DENGAN KONFIRMASI & EDIT USERNAME) =====
+function bukaModalSetujuiPengajuan(idPengajuan) {
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var pengajuan = null;
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].id === idPengajuan) {
+            pengajuan = dataPengajuan[i];
+            break;
+        }
+    }
+    if (!pengajuan) { tampilkanToast('Pengajuan tidak ditemukan!', 'error'); return; }
+
+    // Generate username sementara
+    var usernameDasar = pengajuan.nama.toLowerCase().replace(/\s/g, '');
+    var username = usernameDasar;
+    var dataAkun = getDataAkun();
+    var nomorUrut = 1;
+    while (true) {
+        var sudahAda = false;
+        for (var i = 0; i < dataAkun.length; i++) {
+            if (dataAkun[i].username === username) { sudahAda = true; break; }
+        }
+        if (!sudahAda) break;
+        username = usernameDasar + nomorUrut;
+        nomorUrut++;
+    }
+    var password = '123456';
+
+    var html = `
+    <div class="modal-overlay" id="modalSetujuiPengajuan" style="display:flex; z-index:99999;">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <h3>Konfirmasi Persetujuan</h3>
+                <button class="modal-close" onclick="tutupModalSetujuiPengajuan()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Anda akan menyetujui pengajuan <strong>${escapeHtml(pengajuan.nama)}</strong> sebagai <strong>${pengajuan.role}</strong>.</p>
+                <p>Akun akan dibuat dengan data berikut. Anda dapat mengedit username jika diperlukan.</p>
+                <div class="grid-2" style="margin-top:10px;">
+                    <div><label class="form-label">Username</label><input type="text" id="konfirmasiUsername" class="form-input" value="${username}"></div>
+                    <div><label class="form-label">Password</label><input type="text" id="konfirmasiPassword" class="form-input" value="${password}" readonly style="background:#f0f0f0;"></div>
+                </div>
+                <p style="font-size:12px; color:#888; margin-top:5px;">* Password dapat diubah nanti oleh user.</p>
+                <input type="hidden" id="konfirmasiPengajuanId" value="${idPengajuan}">
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="tutupModalSetujuiPengajuan()">Batal</button>
+                <button class="button button-success" onclick="eksekusiSetujuiPengajuan()"><i class="fas fa-check"></i> Ya, Buat Akun</button>
+            </div>
+        </div>
+    </div>
+    `;
+    var body = document.body;
+    var container = document.createElement('div');
+    container.innerHTML = html;
+    body.appendChild(container);
+}
+
+function tutupModalSetujuiPengajuan() {
+    var modal = document.getElementById('modalSetujuiPengajuan');
+    if (modal) modal.remove();
+}
+
+async function eksekusiSetujuiPengajuan() {
+    var idPengajuan = document.getElementById('konfirmasiPengajuanId').value;
+    var usernameBaru = document.getElementById('konfirmasiUsername').value.trim();
+    var passwordBaru = document.getElementById('konfirmasiPassword').value.trim();
+
+    if (!usernameBaru) {
+        tampilkanToast('Username wajib diisi!', 'warning');
+        return;
+    }
+
+    // Cek username sudah ada?
+    var dataAkun = getDataAkun();
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].username === usernameBaru) {
+            tampilkanToast('Username sudah digunakan!', 'error');
+            return;
+        }
+    }
+
+    // Ambil data pengajuan
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var index = -1;
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].id === idPengajuan) {
+            index = i;
+            break;
+        }
+    }
+    if (index === -1) { tampilkanToast('Pengajuan tidak ditemukan!', 'error'); return; }
+    var p = dataPengajuan[index];
+
+    // Hash password
+    var passwordHash = await hashPassword(passwordBaru);
+
+    // Buat akun
+    var akunBaru = {
+        id: generateId(p.role),
+        role: p.role,
+        username: usernameBaru,
+        password: passwordHash,
+        nama: p.nama,
+        email: p.kontak,
+        nomorHp: p.kontak,
+        fitur: { paketTransaksi: ['paket1'] },
+        latitude: p.latitude || '',
+        longitude: p.longitude || '',
+        alamatLokasi: p.alamatLokasi || '',
+        status: 'NONAKTIF (Menunggu Verifikasi)',
+        waktuRegistrasi: new Date().toISOString()
+    };
+    dataAkun.push(akunBaru);
+    simpanDataAkun(dataAkun);
+
+    // Update status pengajuan
+    var userAdmin = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    dataPengajuan[index].status = 'DISETUJUI';
+    dataPengajuan[index].diprosesOleh = userAdmin.id;
+    dataPengajuan[index].waktuDiproses = new Date().toISOString();
+    dataPengajuan[index].generatedUsername = usernameBaru;
+    dataPengajuan[index].generatedPassword = passwordBaru;
+    localStorage.setItem('2r_pengajuan_buka_akun', JSON.stringify(dataPengajuan));
+
+    tutupModalSetujuiPengajuan();
+    tampilkanToast('Akun berhasil dibuat! Username: ' + usernameBaru + ', Password: ' + passwordBaru + '. Sampaikan ke calon user.', 'success');
+    renderPengajuanBukaAkun();
+}
+// ===== AKHIR BLOK 8.26.5 =====
+
+// ===== BLOK 8.26.6 - TOLAK PENGAJUAN (DENGAN ALASAN WAJIB) =====
+function bukaModalTolakPengajuan(idPengajuan) {
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var pengajuan = null;
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].id === idPengajuan) {
+            pengajuan = dataPengajuan[i];
+            break;
+        }
+    }
+    if (!pengajuan) { tampilkanToast('Pengajuan tidak ditemukan!', 'error'); return; }
+
+    var html = `
+    <div class="modal-overlay" id="modalTolakPengajuan" style="display:flex; z-index:99999;">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <h3>Alasan Penolakan</h3>
+                <button class="modal-close" onclick="tutupModalTolakPengajuan()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Anda akan menolak pengajuan dari <strong>${escapeHtml(pengajuan.nama)}</strong>.</p>
+                <div class="form-group">
+                    <label>Tulis alasan penolakan (wajib):</label>
+                    <textarea id="alasanTolakInput" class="form-input" rows="3" placeholder="Misal: Data tidak lengkap, dll."></textarea>
+                </div>
+                <input type="hidden" id="tolakPengajuanId" value="${idPengajuan}">
+            </div>
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="tutupModalTolakPengajuan()">Batal</button>
+                <button class="button button-danger" onclick="eksekusiTolakPengajuan()"><i class="fas fa-times"></i> Ya, Tolak</button>
+            </div>
+        </div>
+    </div>
+    `;
+    var body = document.body;
+    var container = document.createElement('div');
+    container.innerHTML = html;
+    body.appendChild(container);
+}
+
+function tutupModalTolakPengajuan() {
+    var modal = document.getElementById('modalTolakPengajuan');
+    if (modal) modal.remove();
+}
+
+function eksekusiTolakPengajuan() {
+    var idPengajuan = document.getElementById('tolakPengajuanId').value;
+    var alasan = document.getElementById('alasanTolakInput').value.trim();
+    if (!alasan) {
+        tampilkanToast('Alasan penolakan wajib diisi!', 'warning');
+        return;
+    }
+
+    var dataPengajuan = JSON.parse(localStorage.getItem('2r_pengajuan_buka_akun') || '[]');
+    var userAdmin = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    for (var i = 0; i < dataPengajuan.length; i++) {
+        if (dataPengajuan[i].id === idPengajuan) {
+            dataPengajuan[i].status = 'DITOLAK';
+            dataPengajuan[i].alasanPenolakan = alasan;
+            dataPengajuan[i].diprosesOleh = userAdmin.id;
+            dataPengajuan[i].waktuDiproses = new Date().toISOString();
+            break;
+        }
+    }
+    localStorage.setItem('2r_pengajuan_buka_akun', JSON.stringify(dataPengajuan));
+    tutupModalTolakPengajuan();
+    tampilkanToast('Pengajuan ditolak. Alasan telah disimpan.', 'success');
+    renderPengajuanBukaAkun();
+}
+// ===== AKHIR BLOK 8.26.6 =====
+
+// ============================================================
+// AKHIR BLOK 8.26
+// ============================================================
 </script>
 <!-- ===== AKHIR BLOK 8.2 ===== -->
 
