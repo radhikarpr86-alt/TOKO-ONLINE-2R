@@ -822,11 +822,9 @@
 
 <script>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
-<!--- ===== BLOK 9.2 JavaScript Core: Variabel Global, Navigasi, Toggle Password, Waktu, Login SuperAdmin ===== --->
+<!--- ===== BLOK 9.2 REVISI FINAL - JavaScript Core, Login SuperAdmin, Masuk Dasbor ===== --->
 // ============================================
 // DATA SUPERADMIN (Tertanam)
-// Username: AppTokoOnLine2R
-// Password: MyHand0286
 // ============================================
 const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 const SUPERADMIN_PASSWORD = 'MyHand0286';
@@ -838,7 +836,7 @@ let userAktif = null;
 let kontenAsliDasbor = null;
 
 // ============================================
-// SIMPAN KONTEN ASLI DASBOR SAAT HALAMAN DIMUAT
+// SIMPAN KONTEN ASLI DASBOR
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
     const kontenDasbor = document.getElementById('kontenDasbor');
@@ -853,30 +851,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 function tampilkanHalaman(halaman) {
     const semuaHalaman = document.querySelectorAll('.page-section');
-    semuaHalaman.forEach(function(hal) {
-        hal.classList.remove('active');
-    });
+    for (let i = 0; i < semuaHalaman.length; i++) {
+        semuaHalaman[i].classList.remove('active');
+    }
     
     let targetId = '';
-    if (halaman === 'dasbor') {
-        targetId = 'halamanDasbor';
-    } else if (halaman === 'login') {
-        targetId = 'halamanLogin';
-    } else if (halaman === 'daftar') {
-        targetId = 'halamanDaftar';
-    } else if (halaman === 'lupaPassword') {
-        targetId = 'halamanLupaPassword';
-    } else if (halaman === 'logout') {
-        targetId = 'halamanLogout';
-    } else if (halaman === '404') {
-        targetId = 'halaman404';
-    } else if (halaman === '403') {
-        targetId = 'halaman403';
-    } else if (halaman === 'maintenance') {
-        targetId = 'halamanMaintenance';
-    } else {
-        targetId = 'halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1);
-    }
+    if (halaman === 'dasbor') targetId = 'halamanDasbor';
+    else if (halaman === 'login') targetId = 'halamanLogin';
+    else if (halaman === 'daftar') targetId = 'halamanDaftar';
+    else if (halaman === 'lupaPassword') targetId = 'halamanLupaPassword';
+    else if (halaman === 'buatAkun') targetId = 'halamanDaftarAkunBaru';
+    else targetId = 'halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1);
     
     const target = document.getElementById(targetId);
     if (target) {
@@ -937,6 +922,22 @@ function togglePasswordBaru() {
     }
 }
 
+function togglePasswordBuat() {
+    const passwordInput = document.getElementById('passwordBuat');
+    const icon = document.getElementById('iconTogglePasswordBuat');
+    if (passwordInput && icon) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+}
+
 // ============================================
 // UPDATE WAKTU REAL-TIME WIB
 // ============================================
@@ -974,7 +975,7 @@ function prosesLogin(event) {
     const notifikasi = document.getElementById('notifikasiLogin');
     
     if (!usernameInput || !passwordInput) {
-        alert('Form login tidak ditemukan');
+        alert('Form login tidak ditemukan! Refresh halaman.');
         return false;
     }
     
@@ -988,7 +989,7 @@ function prosesLogin(event) {
         return false;
     }
     
-    // Hanya cek SuperAdmin
+    // Cek SuperAdmin - PERBANDINGAN LANGSUNG
     if (username === 'AppTokoOnLine2R' && password === 'MyHand0286') {
         userAktif = {
             nama: 'SuperAdmin',
@@ -996,10 +997,33 @@ function prosesLogin(event) {
             kodeRole: 'SA',
             idUser: 'ID_TK2R_SA-0001'
         };
-        notifikasi.className = 'alert alert-success';
-        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login SuperAdmin berhasil! Mengalihkan ke Dasbor...';
-        notifikasi.classList.remove('d-none');
-        setTimeout(function() { masukDasbor(); }, 800);
+        
+        // Reset konten dasbor ke asli
+        const kontenDasbor = document.getElementById('kontenDasbor');
+        if (kontenDasbor && kontenAsliDasbor) {
+            kontenDasbor.innerHTML = kontenAsliDasbor;
+        }
+        
+        // Update info user
+        document.getElementById('namaUserDisplay').textContent = 'SuperAdmin';
+        document.getElementById('roleUserDisplay').textContent = 'Role: SuperAdmin';
+        document.getElementById('offcanvasNamaUser').textContent = 'SuperAdmin';
+        document.getElementById('offcanvasRoleUser').textContent = 'SuperAdmin';
+        
+        // Load menu
+        loadMenuNavigasi('SA');
+        
+        // Reset form login
+        usernameInput.value = '';
+        passwordInput.value = '';
+        notifikasi.classList.add('d-none');
+        
+        // Tampilkan dasbor
+        tampilkanHalaman('dasbor');
+        
+        // Update waktu
+        updateWaktu();
+        
         return false;
     }
     
@@ -1011,66 +1035,21 @@ function prosesLogin(event) {
 }
 
 // ============================================
-// MASUK KE DASBOR (REVISI FINAL - PASTIKAN KONTEN MUNCUL)
-// ============================================
-function masukDasbor() {
-    // Reset konten dasbor ke asli
-    const kontenDasbor = document.getElementById('kontenDasbor');
-    if (kontenDasbor && kontenAsliDasbor) {
-        kontenDasbor.innerHTML = kontenAsliDasbor;
-    }
-    
-    // Update info user di navbar
-    const namaDisplay = document.getElementById('namaUserDisplay');
-    const roleDisplay = document.getElementById('roleUserDisplay');
-    const offcanvasNama = document.getElementById('offcanvasNamaUser');
-    const offcanvasRole = document.getElementById('offcanvasRoleUser');
-    
-    if (namaDisplay) namaDisplay.textContent = userAktif.nama;
-    if (roleDisplay) roleDisplay.textContent = 'Role: ' + userAktif.role;
-    if (offcanvasNama) offcanvasNama.textContent = userAktif.nama;
-    if (offcanvasRole) offcanvasRole.textContent = userAktif.role;
-    
-    // Load menu SuperAdmin
-    loadMenuNavigasi('SA');
-    
-    // Tampilkan halaman dasbor
-    tampilkanHalaman('dasbor');
-    
-    // Reset form login
-    const usernameInput = document.getElementById('usernameLogin');
-    const passwordInput = document.getElementById('passwordLogin');
-    if (usernameInput) usernameInput.value = '';
-    if (passwordInput) passwordInput.value = '';
-    const notifikasiLogin = document.getElementById('notifikasiLogin');
-    if (notifikasiLogin) notifikasiLogin.classList.add('d-none');
-    
-    // Update waktu
-    updateWaktu();
-}
-
-// ============================================
 // PROSES LOGOUT
 // ============================================
 function prosesLogout() {
-    // Tutup offcanvas
     const offcanvasEl = document.getElementById('offcanvasMenu');
     if (offcanvasEl) {
         const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
         if (offcanvas) offcanvas.hide();
     }
     
-    // Reset data
     userAktif = null;
-    
-    // Kembali ke login
     tampilkanHalaman('login');
-    const usernameInput = document.getElementById('usernameLogin');
-    const passwordInput = document.getElementById('passwordLogin');
-    if (usernameInput) usernameInput.value = '';
-    if (passwordInput) passwordInput.value = '';
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
 }
-<!--- ===== AKHIR BLOK 9.2 ===== --->
+<!--- ===== AKHIR BLOK 9.2 REVISI FINAL ===== --->
 <!--- ===== BLOK 9.3 JavaScript Konfigurasi Menu SuperAdmin (35 Menu) ===== --->
 // ============================================
 // KONFIGURASI MENU SUPERADMIN
