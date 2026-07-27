@@ -621,11 +621,17 @@
                 if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
                 return;
             }
+
+            // PERBAIKAN DI SINI: Hapus baris yang menimpa hash dengan string kosong
+            // Migrasi password jika masih plain (tapi jangan menimpa dengan string kosong)
             if (user.password.length < 64) {
                 var hash = await hashPassword(user.password);
-                user.password = hash;
-                simpanDataAkun(dataAkun);
+                if (hash && hash.length === 64) {
+                    user.password = hash;
+                    simpanDataAkun(dataAkun);
+                }
             }
+
             var cocok = await verifikasiPassword(password, user.password);
             if (!cocok) {
                 if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
