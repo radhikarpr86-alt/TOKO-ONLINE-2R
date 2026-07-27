@@ -17,76 +17,29 @@
 
 <!--- ===== BLOK 1.2 Custom CSS & Global Style ===== --->
     <style>
-        /* Global Background Orange */
         body {
             background-color: #FF8C00;
             background-image: linear-gradient(135deg, #FF8C00 0%, #FF6B00 50%, #FF5500 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        /* Card Styling */
         .card {
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
-        
         .card-header {
             border-radius: 15px 15px 0 0 !important;
         }
-        
-        /* Button Styling */
-        .btn-success {
-            background-color: #FF8C00;
-            border-color: #FF8C00;
-        }
-        .btn-success:hover {
-            background-color: #FF6B00;
-            border-color: #FF6B00;
-        }
-        .btn-outline-success {
-            color: #FF8C00;
-            border-color: #FF8C00;
-        }
-        .btn-outline-success:hover {
-            background-color: #FF8C00;
-            border-color: #FF8C00;
-            color: white;
-        }
-        
-        /* Navbar Orange */
-        .navbar-orange {
-            background-color: #FF6B00 !important;
-        }
-        
-        /* Text Colors */
-        .text-success {
-            color: #FF8C00 !important;
-        }
-        .text-orange {
-            color: #FF8C00 !important;
-        }
-        
-        /* Badge */
-        .bg-success {
-            background-color: #FF8C00 !important;
-        }
-        
-        /* Page Section */
         .page-section {
             display: none;
         }
         .page-section.active {
             display: block;
         }
-        
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #FF6B00 0%, #FF5500 100%);
+        .navbar-orange {
+            background-color: #FF6B00 !important;
         }
-        
-        /* Hover Card */
         .hover-card {
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
@@ -95,13 +48,6 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(255, 107, 0, 0.3);
         }
-        
-        /* Input Group */
-        .input-group-text.bg-success {
-            background-color: #FF8C00 !important;
-        }
-        
-        /* Menu Item */
         .menu-item {
             cursor: pointer;
             transition: background 0.2s;
@@ -109,58 +55,6 @@
         .menu-item:hover {
             background: rgba(255, 140, 0, 0.1) !important;
         }
-        
-        /* Link */
-        a {
-            color: #FF8C00;
-        }
-        a:hover {
-            color: #FF6B00;
-        }
-        
-        /* Alert */
-        .alert-success {
-            background-color: #FFF3E0;
-            border-color: #FF8C00;
-            color: #FF6B00;
-        }
-        
-        /* Badge */
-        .badge.bg-success {
-            background-color: #FF8C00 !important;
-        }
-        
-        /* Button Warning */
-        .btn-warning {
-            background-color: #FFB347;
-            border-color: #FFB347;
-            color: #333;
-        }
-        .btn-warning:hover {
-            background-color: #FFA500;
-            border-color: #FFA500;
-            color: #333;
-        }
-        
-        /* Text Warning */
-        .text-warning {
-            color: #FF8C00 !important;
-        }
-        
-        /* Spinner */
-        .spinner-border.text-success {
-            color: #FF8C00 !important;
-        }
-        
-        /* List Group Item */
-        .list-group-item.bg-dark {
-            background-color: #1a1a1a !important;
-        }
-        .list-group-item.bg-dark:hover {
-            background-color: #2a2a2a !important;
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding-left: 15px;
@@ -171,10 +65,11 @@
 <!--- ===== AKHIR BLOK 1.2 ===== --->
 </head>
 <body>
+
 <!--- ===== BLOK 2 Halaman Login Multi-Login (Halaman Utama) ===== --->
 <div id="halamanLogin" class="page-section active">
 
-<!--- ===== BLOK 2.1 Header Login ===== --->
+<!--- ===== BLOK 2.1 Container Login ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5 col-lg-4">
@@ -257,6 +152,7 @@
 
 </div>
 <!--- ===== AKHIR BLOK 2 Halaman Login Multi-Login ===== --->
+
 <!--- ===== BLOK 3 Halaman Pendaftaran ===== --->
 <div id="halamanDaftar" class="page-section">
 
@@ -430,6 +326,7 @@
 
 </div>
 <!--- ===== AKHIR BLOK 3 Halaman Pendaftaran ===== --->
+
 <!--- ===== BLOK 4 Halaman Lupa Password ===== --->
 <div id="halamanLupaPassword" class="page-section">
 
@@ -461,7 +358,6 @@
                     
                     <div id="notifikasiLupaPassword" class="alert d-none" role="alert"></div>
                     
-                    <!-- Tahap 1: Input Username/Email -->
                     <div id="tahapSatuLupaPassword">
                         <form onsubmit="return prosesLupaPassword(event)">
                             <div class="mb-3">
@@ -484,11 +380,9 @@
                         </form>
                     </div>
                     
-                    <!-- Tahap 2: Input Password Baru -->
                     <div id="tahapDuaLupaPassword" class="d-none">
                         <form onsubmit="return prosesResetPassword(event)">
                             <input type="hidden" id="tokenReset" name="token" value="">
-                            
                             <div class="mb-3">
                                 <label for="passwordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password Baru
@@ -504,7 +398,6 @@
                                 </div>
                                 <small class="text-muted">Minimal 6 karakter</small>
                             </div>
-                            
                             <div class="mb-3">
                                 <label for="konfirmasiPasswordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password Baru
@@ -516,7 +409,6 @@
                                     <input type="password" id="konfirmasiPasswordBaru" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password baru" minlength="6" required>
                                 </div>
                             </div>
-                            
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-save me-2"></i>Simpan Password Baru
@@ -547,28 +439,24 @@
 
 </div>
 <!--- ===== AKHIR BLOK 4 Halaman Lupa Password ===== --->
+
 <!--- ===== BLOK 5 Halaman Dasbor Default Setelah Login ===== --->
 <div id="halamanDasbor" class="page-section">
 
 <!--- ===== BLOK 5.1 Navigasi Atas Dasbor ===== --->
 <nav class="navbar navbar-expand-lg navbar-orange sticky-top">
     <div class="container">
-        <!-- Tombol Hamburger -->
         <button class="btn text-white me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
             <i class="fas fa-bars fa-lg"></i>
         </button>
-        
         <a class="navbar-brand fw-bold text-white" href="#">
             <i class="fas fa-store-alt me-2"></i>Toko Online 2R
         </a>
-        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDasbor">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
         <div class="collapse navbar-collapse" id="navbarDasbor">
             <ul class="navbar-nav ms-auto align-items-center">
-                <!-- User Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle fa-lg me-1"></i>
@@ -577,11 +465,9 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><span class="dropdown-item-text fw-bold" id="roleUserDisplay">Role: -</span></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="tampilkanHalaman('login')"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </li>
-                
-                <!-- Notifikasi -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-bell fa-lg"></i>
@@ -621,7 +507,6 @@
 <!--- ===== BLOK 5.3 Konten Utama Dasbor ===== --->
 <main class="container-fluid px-4 py-4" id="kontenDasbor">
     
-    <!-- Baris Waktu & Tanggal -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #FF6B00 0%, #FF5500 100%);">
@@ -645,7 +530,6 @@
         </div>
     </div>
     
-    <!-- Tombol Aksi Utama -->
     <div class="row mb-4 g-3">
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
@@ -659,7 +543,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
                 <div class="card-body text-center py-4">
@@ -672,7 +555,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
                 <div class="card-body text-center py-4">
@@ -687,7 +569,6 @@
         </div>
     </div>
     
-    <!-- Statistik -->
     <div class="row mb-4 g-3">
         <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm bg-light">
@@ -727,7 +608,6 @@
         </div>
     </div>
     
-    <!-- Toko Terdekat & Produk -->
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm">
@@ -741,7 +621,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom fw-bold">
@@ -762,7 +641,6 @@
         </div>
     </div>
     
-    <!-- Ojek Online -->
     <div class="row mt-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
@@ -783,18 +661,15 @@
 
 </div>
 <!--- ===== AKHIR BLOK 5 Halaman Dasbor Default ===== --->
+
 <!--- ===== BLOK 6 Halaman Logout ===== --->
 <div id="halamanLogout" class="page-section">
 
-<!--- ===== BLOK 6.1 Container Logout ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            
             <div class="card shadow-lg border-0 text-center">
                 <div class="card-body p-5">
-                    
-                    <!-- Loading -->
                     <div id="logoutLoading">
                         <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -802,8 +677,6 @@
                         <h4 class="fw-bold mb-2" style="color: #FF8C00;">Sedang Logout...</h4>
                         <p class="text-muted">Anda akan dialihkan ke halaman login</p>
                     </div>
-                    
-                    <!-- Sukses -->
                     <div id="logoutSukses" class="d-none">
                         <i class="fas fa-check-circle fa-5x mb-3" style="color: #FF8C00;"></i>
                         <h4 class="fw-bold mb-2" style="color: #FF8C00;">Logout Berhasil!</h4>
@@ -814,59 +687,38 @@
                             </button>
                         </div>
                     </div>
-                    
-                    <!-- Gagal -->
-                    <div id="logoutGagal" class="d-none">
-                        <i class="fas fa-exclamation-triangle fa-5x mb-3" style="color: #FF6B00;"></i>
-                        <h4 class="fw-bold mb-2" style="color: #FF6B00;">Gagal Logout</h4>
-                        <p class="text-muted">Terjadi kesalahan saat logout</p>
-                        <div class="mt-3">
-                            <button class="btn btn-lg text-white fw-bold" style="background-color: #FF6B00;" onclick="tampilkanHalaman('dasbor')">
-                                <i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor
-                            </button>
-                        </div>
-                    </div>
-                    
                 </div>
             </div>
-            
             <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
-            
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 6.1 ===== --->
 
 </div>
 <!--- ===== AKHIR BLOK 6 Halaman Logout ===== --->
+
 <!--- ===== BLOK 7 Halaman 404 Not Found ===== --->
 <div id="halaman404" class="page-section">
 
-<!--- ===== BLOK 7.1 Container 404 ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
-            
             <div class="mb-4">
                 <i class="fas fa-map-signs fa-6x text-white mb-3"></i>
                 <h1 class="display-1 fw-bold text-white">404</h1>
             </div>
-            
             <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
-                    
                     <h3 class="fw-bold text-dark mb-3">
                         <i class="fas fa-exclamation-circle me-2" style="color: #FF8C00;"></i>
                         Halaman Tidak Ditemukan
                     </h3>
-                    
                     <p class="text-muted mb-4">
                         Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.
                         Silakan periksa kembali URL atau kembali ke halaman utama.
                     </p>
-                    
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
                         <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-home me-2"></i>Ke Beranda
@@ -874,110 +726,79 @@
                         <button class="btn btn-lg text-white fw-bold" style="background-color: #FF6B00;" onclick="tampilkanHalaman('dasbor')">
                             <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
                         </button>
-                        <button class="btn btn-outline-secondary btn-lg" onclick="history.back()">
-                            <i class="fas fa-arrow-left me-2"></i>Kembali
-                        </button>
                     </div>
-                    
                 </div>
             </div>
-            
-            <div class="mt-4 text-white small">
-                <p>Butuh bantuan? <a href="#" class="text-white fw-bold">Hubungi Customer Service</a></p>
-            </div>
-            
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 7.1 ===== --->
 
 </div>
 <!--- ===== AKHIR BLOK 7 Halaman 404 Not Found ===== --->
+
 <!--- ===== BLOK 8 Halaman 403 Forbidden ===== --->
 <div id="halaman403" class="page-section">
 
-<!--- ===== BLOK 8.1 Container 403 ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
-            
             <div class="mb-4">
                 <i class="fas fa-lock fa-6x text-white mb-3"></i>
                 <h1 class="display-1 fw-bold text-white">403</h1>
             </div>
-            
             <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
-                    
                     <h3 class="fw-bold text-dark mb-3">
                         <i class="fas fa-ban text-danger me-2"></i>
                         Akses Ditolak
                     </h3>
-                    
                     <p class="text-muted mb-4">
                         Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.
-                        Silakan hubungi Administrator jika Anda merasa ini adalah kesalahan.
                     </p>
-                    
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
                         <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('dasbor')">
                             <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
                         </button>
-                        <button class="btn btn-outline-secondary btn-lg" onclick="tampilkanHalaman('logout')">
+                        <button class="btn btn-outline-secondary btn-lg" onclick="prosesLogout()">
                             <i class="fas fa-sign-out-alt me-2"></i>Logout
                         </button>
                     </div>
-                    
                 </div>
             </div>
-            
-            <div class="mt-4 text-white small">
-                <p>Butuh bantuan? <a href="#" class="text-white fw-bold">Hubungi Administrator</a></p>
-            </div>
-            
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 8.1 ===== --->
 
 </div>
 <!--- ===== AKHIR BLOK 8 Halaman 403 Forbidden ===== --->
+
 <!--- ===== BLOK 9 Halaman Maintenance ===== --->
 <div id="halamanMaintenance" class="page-section">
 
-<!--- ===== BLOK 9.1 Container Maintenance ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
-            
             <div class="mb-4">
                 <i class="fas fa-tools fa-6x text-white mb-3"></i>
                 <h1 class="display-4 fw-bold text-white">Maintenance</h1>
             </div>
-            
             <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
-                    
                     <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    
                     <h3 class="fw-bold text-dark mb-3">
                         <i class="fas fa-cog fa-spin me-2" style="color: #FF8C00;"></i>
                         Sedang Dalam Perbaikan
                     </h3>
-                    
                     <p class="text-muted mb-4">
                         Maaf, sistem sedang dalam masa pemeliharaan.
-                        Kami sedang melakukan peningkatan untuk memberikan layanan yang lebih baik.
                         Silakan coba beberapa saat lagi.
                     </p>
-                    
                     <div class="alert text-dark" style="background-color: #FFF3E0; border-color: #FF8C00;">
                         <i class="fas fa-info-circle me-2" style="color: #FF8C00;"></i>
                         Estimasi selesai: 30 menit
                     </div>
-                    
                     <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
                         <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="location.reload()">
                             <i class="fas fa-redo me-2"></i>Coba Lagi
@@ -986,939 +807,18 @@
                             <i class="fas fa-home me-2"></i>Ke Beranda
                         </button>
                     </div>
-                    
                 </div>
             </div>
-            
-            <div class="mt-4 text-white small">
-                <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
-            </div>
-            
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 9.1 ===== --->
 
 </div>
 <!--- ===== AKHIR BLOK 9 Halaman Maintenance ===== --->
-<!--- ===== BLOK 10 Placeholder Menu SuperAdmin (35 Menu) ===== --->
-<!--- ===== BLOK 10.1 Dasbor SuperAdmin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor SuperAdmin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-crown fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Dasbor SuperAdmin</h3>
-            <p class="lead text-muted">Ringkasan semua aktivitas platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.1 ===== --->
 
-<!--- ===== BLOK 10.2 Profil SuperAdmin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil SuperAdmin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Profil SuperAdmin</h3>
-            <p class="lead text-muted">Pengaturan profil administrator utama</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.2 ===== --->
+<!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!--- ===== BLOK 10.3 Penagihan Otomatis ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-robot me-2"></i>Penagihan Otomatis</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-robot fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Penagihan Otomatis</h3>
-            <p class="lead text-muted">Sistem penagihan otomatis ke semua seller</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.3 ===== --->
-
-<!--- ===== BLOK 10.4 Riwayat Penagihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Riwayat Penagihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-history fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Riwayat Penagihan</h3>
-            <p class="lead text-muted">Catatan semua penagihan yang pernah dilakukan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.4 ===== --->
-
-<!--- ===== BLOK 10.5 Laporan Keuangan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Laporan Keuangan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Laporan Keuangan</h3>
-            <p class="lead text-muted">Laporan pemasukan, pengeluaran, dan profit platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.5 ===== --->
-
-<!--- ===== BLOK 10.6 Setting Harga Aplikasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Setting Harga Aplikasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tags fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Setting Harga Aplikasi</h3>
-            <p class="lead text-muted">Pengaturan fee platform, komisi, dan biaya layanan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.6 ===== --->
-
-<!--- ===== BLOK 10.7 Data Penagihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-database me-2"></i>Data Penagihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-database fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Data Penagihan</h3>
-            <p class="lead text-muted">Semua data tagihan dari seluruh pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.7 ===== --->
-
-<!--- ===== BLOK 10.8 Semua Transaksi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Semua Transaksi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-exchange-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Semua Transaksi</h3>
-            <p class="lead text-muted">Daftar seluruh transaksi di platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.8 ===== --->
-
-<!--- ===== BLOK 10.9 Semua Order ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Semua Order</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-shopping-cart fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Semua Order</h3>
-            <p class="lead text-muted">Daftar seluruh order dari semua pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.9 ===== --->
-
-<!--- ===== BLOK 10.10 Verifikasi Dokumen ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-check-double me-2"></i>Verifikasi Dokumen</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-check-double fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Verifikasi Dokumen</h3>
-            <p class="lead text-muted">Verifikasi KTP, dokumen usaha, dan kendaraan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.10 ===== --->
-
-<!--- ===== BLOK 10.11 Manajemen Owner ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Manajemen Owner</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-tie fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Manajemen Owner</h3>
-            <p class="lead text-muted">Kelola Staf Owner Toko dan Staf Owner Ojek</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.11 ===== --->
-
-<!--- ===== BLOK 10.12 Daftar Akun Baru ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Daftar Akun Baru</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-plus fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Daftar Akun Baru</h3>
-            <p class="lead text-muted">Lihat semua pendaftaran akun baru yang masuk</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.12 ===== --->
-
-<!--- ===== BLOK 10.13 Persetujuan Akun ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-check fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Persetujuan Akun</h3>
-            <p class="lead text-muted">Setujui atau tolak pengajuan akun baru</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.13 ===== --->
-
-<!--- ===== BLOK 10.14 Kelola Akun Aktif ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Kelola Akun Aktif</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-users-cog fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Kelola Akun Aktif</h3>
-            <p class="lead text-muted">Blokir, hapus, atau edit akun yang sudah aktif</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.14 ===== --->
-
-<!--- ===== BLOK 10.15 Pengajuan Buka Akun ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-folder-open me-2"></i>Pengajuan Buka Akun</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-folder-open fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pengajuan Buka Akun</h3>
-            <p class="lead text-muted">Pengajuan pembukaan akun dari Staf Owner</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.15 ===== --->
-
-<!--- ===== BLOK 10.16 Pengajuan Upload Produk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Pengajuan Upload Produk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-upload fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pengajuan Upload Produk</h3>
-            <p class="lead text-muted">Setujui pengajuan slot upload produk seller</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.16 ===== --->
-
-<!--- ===== BLOK 10.17 Setting Rekening Master ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-university me-2"></i>Setting Rekening Master</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-university fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Setting Rekening Master</h3>
-            <p class="lead text-muted">Atur rekening bank utama untuk pembayaran</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.17 ===== --->
-
-<!--- ===== BLOK 10.18 Menu Iklan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-ad me-2"></i>Menu Iklan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-ad fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Menu Iklan</h3>
-            <p class="lead text-muted">Kelola iklan yang tampil di platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.18 ===== --->
-
-<!--- ===== BLOK 10.19 Papan Informasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Papan Informasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-bullhorn fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Papan Informasi</h3>
-            <p class="lead text-muted">Pengumuman dan informasi untuk seluruh pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.19 ===== --->
-
-<!--- ===== BLOK 10.20 Notifikasi Broadcast ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notifikasi Broadcast</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-bell fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Notifikasi Broadcast</h3>
-            <p class="lead text-muted">Kirim notifikasi massal ke pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.20 ===== --->
-
-<!--- ===== BLOK 10.21 Katalog Produk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-th-list me-2"></i>Katalog Produk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-th-list fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Katalog Produk</h3>
-            <p class="lead text-muted">Lihat semua produk dari seluruh seller</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.21 ===== --->
-
-<!--- ===== BLOK 10.22 Manajemen Katalog ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-folder me-2"></i>Manajemen Katalog</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-folder fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Manajemen Katalog</h3>
-            <p class="lead text-muted">Atur kategori, susunan, dan tampilan katalog</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.22 ===== --->
-
-<!--- ===== BLOK 10.23 Penataan Produk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-sort me-2"></i>Penataan Produk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-sort fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Penataan Produk</h3>
-            <p class="lead text-muted">Atur urutan dan prioritas tampilan produk</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.23 ===== --->
-
-<!--- ===== BLOK 10.24 Kelola Wilayah ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-map-marked-alt me-2"></i>Kelola Wilayah</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-map-marked-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Kelola Wilayah</h3>
-            <p class="lead text-muted">Atur wilayah operasional toko dan ojek</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.24 ===== --->
-
-<!--- ===== BLOK 10.25 Backup & Restore ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-cloud-upload-alt me-2"></i>Backup & Restore</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-cloud-upload-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Backup & Restore</h3>
-            <p class="lead text-muted">Backup database dan restore sistem</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.25 ===== --->
-
-<!--- ===== BLOK 10.26 Reset & Pembersihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-broom me-2"></i>Reset & Pembersihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-broom fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Reset & Pembersihan</h3>
-            <p class="lead text-muted">Bersihkan cache, log, dan data sementara</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.26 ===== --->
-
-<!--- ===== BLOK 10.27 Notepad+ ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-sticky-note me-2"></i>Notepad+</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-sticky-note fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Notepad+</h3>
-            <p class="lead text-muted">Catatan internal SuperAdmin</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.27 ===== --->
-<!--- ===== BLOK 10.28 Keamanan Sistem ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Keamanan Sistem</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-shield-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Keamanan Sistem</h3>
-            <p class="lead text-muted">Pengaturan keamanan, firewall, dan enkripsi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.28 ===== --->
-
-<!--- ===== BLOK 10.29 Histori Aktivitas ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Histori Aktivitas</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-history fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Histori Aktivitas</h3>
-            <p class="lead text-muted">Catatan semua aktivitas di sistem</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-<!--- ===== BLOK 17 Placeholder Menu Toko (16 Menu) ===== --->
-<!--- ===== BLOK 17.1 Dasbor Toko ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Toko</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-store fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Dasbor Toko</h3>
-            <p class="lead text-muted">Ringkasan penjualan, order, dan performa toko</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.1 ===== --->
-
-<!--- ===== BLOK 17.2 Profil Toko ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Toko</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Profil Toko</h3>
-            <p class="lead text-muted">Pengaturan profil toko dan data usaha</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.2 ===== --->
-
-<!--- ===== BLOK 17.3 Daftar Produk Saya ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Daftar Produk Saya</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-list fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Daftar Produk Saya</h3>
-            <p class="lead text-muted">Lihat semua produk yang sudah diupload</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.3 ===== --->
-
-<!--- ===== BLOK 17.4 Tambah Produk Baru ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Tambah Produk Baru</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-plus-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Tambah Produk Baru</h3>
-            <p class="lead text-muted">Upload produk baru ke katalog toko</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.4 ===== --->
-
-<!--- ===== BLOK 17.5 Kategori Produk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Kategori Produk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tags fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Kategori Produk</h3>
-            <p class="lead text-muted">Atur kategori untuk produk toko</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.5 ===== --->
-
-<!--- ===== BLOK 17.6 Pengajuan Upload Slot ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Pengajuan Upload Slot</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-upload fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pengajuan Upload Slot</h3>
-            <p class="lead text-muted">Ajukan slot tambahan untuk upload produk</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.6 ===== --->
-
-<!--- ===== BLOK 17.7 Riwayat Pengajuan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Riwayat Pengajuan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-history fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Riwayat Pengajuan</h3>
-            <p class="lead text-muted">Lihat status pengajuan yang pernah diajukan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.7 ===== --->
-
-<!--- ===== BLOK 17.8 Semua Order ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Semua Order</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-shopping-cart fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Semua Order</h3>
-            <p class="lead text-muted">Daftar semua pesanan dari pembeli</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.8 ===== --->
-
-<!--- ===== BLOK 17.9 Proses Order ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Proses Order</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tasks fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Proses Order</h3>
-            <p class="lead text-muted">Proses pesanan masuk dan update status</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.9 ===== --->
-
-<!--- ===== BLOK 17.10 Manajemen Ongkir ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-truck me-2"></i>Manajemen Ongkir</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-truck fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Manajemen Ongkir</h3>
-            <p class="lead text-muted">Atur biaya pengiriman per wilayah</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.10 ===== --->
-
-<!--- ===== BLOK 17.11 Transaksi Penjualan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-money-bill me-2"></i>Transaksi Penjualan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-money-bill fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Transaksi Penjualan</h3>
-            <p class="lead text-muted">Catatan semua transaksi penjualan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.11 ===== --->
-
-<!--- ===== BLOK 17.12 Tagihan Fee & Pembayaran ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Tagihan Fee & Pembayaran</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Tagihan Fee & Pembayaran</h3>
-            <p class="lead text-muted">Lihat dan bayar tagihan fee platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.12 ===== --->
-
-<!--- ===== BLOK 17.13 Histori Pembayaran Fee ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Histori Pembayaran Fee</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-history fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Histori Pembayaran Fee</h3>
-            <p class="lead text-muted">Riwayat pembayaran fee platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.13 ===== --->
-
-<!--- ===== BLOK 17.14 Verifikasi Dokumen ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verifikasi Dokumen</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Verifikasi Dokumen</h3>
-            <p class="lead text-muted">Upload dan verifikasi dokumen toko</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.14 ===== --->
-
-<!--- ===== BLOK 17.15 Pusat Bantuan / Chat CS ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-headset me-2"></i>Pusat Bantuan / Chat CS</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-headset fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pusat Bantuan / Chat CS</h3>
-            <p class="lead text-muted">Hubungi customer service untuk bantuan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.15 ===== --->
-
-<!--- ===== BLOK 17.16 Kotak Masuk Notifikasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-inbox me-2"></i>Kotak Masuk Notifikasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-inbox fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Kotak Masuk Notifikasi</h3>
-            <p class="lead text-muted">Pesan dan pemberitahuan untuk toko</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 17.16 ===== --->
-<!--- ===== AKHIR BLOK 17 Placeholder Menu Toko ===== --->
-
-
-<!--- ===== BLOK 18 Placeholder Menu Pedagang Makanan (18 Menu) ===== --->
-<!--- ===== BLOK 18.1 Dasbor Pedagang Makanan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Pedagang Makanan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-utensils fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Dasbor Pedagang Makanan</h3>
-            <p class="lead text-muted">Ringkasan penjualan makanan dan performa usaha</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.1 ===== --->
-
-<!--- ===== BLOK 18.2 Profil Pedagang Makanan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Pedagang Makanan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Profil Pedagang Makanan</h3>
-            <p class="lead text-muted">Pengaturan profil usaha dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.2 ===== --->
-
-<!--- ===== BLOK 18.3 Daftar Jualan Saya ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Daftar Jualan Saya</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-list fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Daftar Jualan Saya</h3>
-            <p class="lead text-muted">Lihat semua menu makanan yang dijual</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.3 ===== --->
-
-<!--- ===== BLOK 18.4 Tambah Jualan Baru ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Tambah Jualan Baru</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-plus-circle fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Tambah Jualan Baru</h3>
-            <p class="lead text-muted">Tambah menu makanan baru ke katalog</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.4 ===== --->
-
-<!--- ===== BLOK 18.5 Manajemen Stok & Bahan Baku ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-boxes me-2"></i>Manajemen Stok & Bahan Baku</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-boxes fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Manajemen Stok & Bahan Baku</h3>
-            <p class="lead text-muted">Kelola stok bahan baku dan inventory</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.5 ===== --->
-
-<!--- ===== BLOK 18.6 Manajemen Kategori Pasar ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Manajemen Kategori Pasar</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tags fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Manajemen Kategori Pasar</h3>
-            <p class="lead text-muted">Atur kategori makanan dan pasar</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.6 ===== --->
-
-<!--- ===== BLOK 18.7 Semua Order ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Semua Order</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-shopping-cart fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Semua Order</h3>
-            <p class="lead text-muted">Daftar semua pesanan makanan masuk</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.7 ===== --->
-
-<!--- ===== BLOK 18.8 Proses Order & Status ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Proses Order & Status</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tasks fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Proses Order & Status</h3>
-            <p class="lead text-muted">Proses pesanan dan update status masakan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.8 ===== --->
-
-<!--- ===== BLOK 18.9 Atur Pengiriman & Jam Operasional ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Atur Pengiriman & Jam Operasional</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-clock fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Atur Pengiriman & Jam Operasional</h3>
-            <p class="lead text-muted">Tentukan jam buka dan wilayah pengiriman</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.9 ===== --->
-
-<!--- ===== BLOK 18.10 Transaksi Penjualan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-money-bill me-2"></i>Transaksi Penjualan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-money-bill fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Transaksi Penjualan</h3>
-            <p class="lead text-muted">Catatan semua transaksi penjualan makanan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.10 ===== --->
-
-<!--- ===== BLOK 18.11 Tagihan Fee Platform ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Tagihan Fee Platform</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Tagihan Fee Platform</h3>
-            <p class="lead text-muted">Lihat dan bayar tagihan fee platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.11 ===== --->
-
-<!--- ===== BLOK 18.12 Buku Kas / Catatan Pengeluaran ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-book me-2"></i>Buku Kas / Catatan Pengeluaran</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-book fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Buku Kas / Catatan Pengeluaran</h3>
-            <p class="lead text-muted">Catat pemasukan dan pengeluaran usaha</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 18.12 ===== --->
-
-<!--- ===== BLOK 18.13 Pengajuan Tambah Slot Produk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-plus-square me-2"></i>Pengajuan Tambah Slot Produk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-plus-square fa-5x te    
-</body>
-</html>
+<script>
+<!--- ===== AKHIR BLOK 9.1 ===== --->
+    
