@@ -1173,26 +1173,51 @@ function kembaliKeDasbor() {
 }
 <!--- ===== AKHIR BLOK 9.4 ===== --->
 
-<!--- ===== BLOK 9.5 JavaScript Pendaftaran, Geolocation, Generate ID, Lupa Password ===== --->
+<!--- ===== BLOK 9.5 TAMBAHAN JavaScript Buat Akun Baru ===== --->
 // ============================================
-// GENERATE ID OTOMATIS
+// TOGGLE PASSWORD BUAT AKUN
 // ============================================
-function generateID(kodeRole) {
+function togglePasswordBuat() {
+    const passwordInput = document.getElementById('passwordBuat');
+    const icon = document.getElementById('iconTogglePasswordBuat');
+    if (passwordInput && icon) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+}
+
+// ============================================
+// GENERATE ID OTOMATIS BUAT AKUN
+// ============================================
+function generateIDBuat(kodeRole) {
     const formatID = {
+        'ADM': 'ID_TK2R_ADM',
+        'SOT': 'ID_TK2R_SOT',
+        'SOO': 'ID_TK2R_SOO',
+        'MKT': 'ID_TK2R_MKT',
+        'TGH': 'ID_TK2R_TGH',
+        'CS': 'ID_TK2R_CS',
         'CT': 'ID_TK2R_CUST',
         'TK': 'ID_TK2R_TK',
+        'OJ': 'ID_TK2R_OJ',
         'PP': 'ID_TK2R_PS',
         'PM': 'ID_TK2R_PM',
-        'COD': 'ID_TK2R_CS',
-        'OJ': 'ID_TK2R_OJ'
+        'COD': 'ID_TK2R_CS'
     };
     
-    const idOtomatisInput = document.getElementById('idOtomatis');
+    const idOtomatisInput = document.getElementById('idOtomatisBuat');
     if (!idOtomatisInput) return '';
     
     if (!formatID[kodeRole]) {
         idOtomatisInput.value = '';
-        idOtomatisInput.placeholder = 'Pilih role terlebih dahulu';
+        idOtomatisInput.placeholder = 'Pilih jenis akun terlebih dahulu';
         return '';
     }
     
@@ -1204,28 +1229,172 @@ function generateID(kodeRole) {
 }
 
 // ============================================
-// PROSES DAFTAR
+// CEK ROLE BUAT AKUN
 // ============================================
-function prosesDaftar(event) {
+function cekRoleBuatAkun() {
+    const role = document.getElementById('roleAkunBuat').value;
+    const bagianNIK = document.getElementById('bagianNIKBuat');
+    const nikInput = document.getElementById('nikKtpBuat');
+    const infoRole = document.getElementById('infoRoleBuat');
+    
+    if (role === 'ADM') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-user-shield me-1" style="color: #2196F3;"></i>Akun Staf Admin - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('ADM');
+    } else if (role === 'SOT') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-store-alt me-1" style="color: #FF8C00;"></i>Akun Staf Owner Toko - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('SOT');
+    } else if (role === 'SOO') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-motorcycle me-1" style="color: #FF6B00;"></i>Akun Staf Owner Ojek - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('SOO');
+    } else if (role === 'MKT') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-chart-line me-1" style="color: #FF9800;"></i>Akun Staf Marketing - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('MKT');
+    } else if (role === 'TGH') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-file-invoice me-1" style="color: #F44336;"></i>Akun Staf Penagihan - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('TGH');
+    } else if (role === 'CS') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-headset me-1" style="color: #00BCD4;"></i>Akun Customer Service - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('CS');
+    } else if (role === 'CT') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #4CAF50;"></i>Akun Customer - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('CT');
+    } else if (role === 'TK') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-store me-1" style="color: #FF8C00;"></i>Akun Toko - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('TK');
+    } else if (role === 'OJ') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-motorcycle me-1" style="color: #FF6B00;"></i>Akun Ojek - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('OJ');
+    } else if (role === 'PP') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-shopping-basket me-1" style="color: #FF8C00;"></i>Akun Pedagang Pasar - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('PP');
+    } else if (role === 'PM') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-utensils me-1" style="color: #FF8C00;"></i>Akun Pedagang Makanan - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('PM');
+    } else if (role === 'COD') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-truck me-1" style="color: #FF8C00;"></i>Akun COD Seller - Dibuat oleh SuperAdmin, langsung AKTIF';
+        generateIDBuat('COD');
+    } else {
+        bagianNIK.style.display = 'block';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '';
+        document.getElementById('idOtomatisBuat').value = '';
+        document.getElementById('idOtomatisBuat').placeholder = 'Pilih jenis akun terlebih dahulu';
+    }
+    
+    cekTombolBuatAktif();
+}
+
+// ============================================
+// AMBIL KOORDINAT BUAT AKUN
+// ============================================
+function ambilKoordinatBuat() {
+    const statusKoordinat = document.getElementById('statusKoordinatBuat');
+    const koordinatText = document.getElementById('koordinatTextBuat');
+    const tombolAmbil = document.getElementById('tombolAmbilKoordinatBuat');
+    
+    if (!navigator.geolocation) {
+        statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>Browser tidak mendukung Geolocation';
+        alert('Browser Anda tidak mendukung Geolocation. Gunakan Chrome atau Kiwi Browser.');
+        return;
+    }
+    statusKoordinat.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="color: #FF8C00;"></span>Mengambil lokasi...';
+    tombolAmbil.disabled = true;
+    
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            document.getElementById('latitudeBuat').value = lat;
+            document.getElementById('longitudeBuat').value = lng;
+            document.getElementById('textLatitudeBuat').textContent = lat;
+            document.getElementById('textLongitudeBuat').textContent = lng;
+            statusKoordinat.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Lokasi berhasil diambil!';
+            statusKoordinat.className = 'mt-2 small fw-bold';
+            statusKoordinat.style.color = '#FF8C00';
+            koordinatText.classList.remove('d-none');
+            tombolAmbil.disabled = false;
+            tombolAmbil.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
+            cekTombolBuatAktif();
+        },
+        function(error) {
+            let pesanError = 'Gagal mengambil lokasi';
+            if (error.code === error.PERMISSION_DENIED) pesanError = 'Izin lokasi ditolak. Aktifkan GPS';
+            else if (error.code === error.POSITION_UNAVAILABLE) pesanError = 'Informasi lokasi tidak tersedia';
+            else if (error.code === error.TIMEOUT) pesanError = 'Waktu permintaan habis';
+            statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>' + pesanError;
+            statusKoordinat.className = 'mt-2 small text-danger';
+            tombolAmbil.disabled = false;
+            tombolAmbil.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Lagi';
+            alert('Gagal: ' + pesanError);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+}
+
+// ============================================
+// CEK TOMBOL BUAT AKUN AKTIF
+// ============================================
+function cekTombolBuatAktif() {
+    const lat = document.getElementById('latitudeBuat').value;
+    const lng = document.getElementById('longitudeBuat').value;
+    const role = document.getElementById('roleAkunBuat').value;
+    const idOtomatis = document.getElementById('idOtomatisBuat').value;
+    const tombolBuat = document.getElementById('tombolBuatAkun');
+    if (lat !== '' && lng !== '' && role !== '' && idOtomatis !== '') {
+        tombolBuat.disabled = false;
+    } else {
+        tombolBuat.disabled = true;
+    }
+}
+
+// ============================================
+// PROSES BUAT AKUN
+// ============================================
+function prosesBuatAkun(event) {
     event.preventDefault();
-    const notifikasi = document.getElementById('notifikasiDaftar');
-    const password = document.getElementById('passwordDaftar').value;
-    const konfirmasi = document.getElementById('konfirmasiPassword').value;
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    const idOtomatis = document.getElementById('idOtomatis').value;
+    const notifikasi = document.getElementById('notifikasiBuatAkun');
+    const password = document.getElementById('passwordBuat').value;
+    const konfirmasi = document.getElementById('konfirmasiPasswordBuat').value;
+    const lat = document.getElementById('latitudeBuat').value;
+    const lng = document.getElementById('longitudeBuat').value;
+    const role = document.getElementById('roleAkunBuat').value;
+    const idOtomatis = document.getElementById('idOtomatisBuat').value;
+    const nama = document.getElementById('namaLengkapBuat').value;
     
     if (lat === '' || lng === '') {
         notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anda wajib mengambil titik koordinat lokasi terlebih dahulu!';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anda wajib mengambil titik koordinat lokasi!';
         notifikasi.classList.remove('d-none');
         window.scrollTo(0, 0);
         return false;
     }
     if (role === '') {
         notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Silakan pilih jenis akun terlebih dahulu!';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Silakan pilih jenis akun!';
         notifikasi.classList.remove('d-none');
         window.scrollTo(0, 0);
         return false;
@@ -1239,197 +1408,35 @@ function prosesDaftar(event) {
     }
     
     notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pendaftaran berhasil! ID Anda: <strong>' + idOtomatis + '</strong>. Silakan login.';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Akun <strong>' + nama + '</strong> berhasil dibuat!<br>ID: <strong>' + idOtomatis + '</strong><br>Username: <strong>' + document.getElementById('usernameBuat').value + '</strong><br>Status: <strong>AKTIF</strong><br>Akun sudah bisa digunakan untuk login.';
     notifikasi.classList.remove('d-none');
-    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
+    
+    document.getElementById('formBuatAkun').reset();
+    document.getElementById('idOtomatisBuat').value = '';
+    document.getElementById('idOtomatisBuat').placeholder = 'Pilih jenis akun terlebih dahulu';
+    document.getElementById('tombolBuatAkun').disabled = true;
+    document.getElementById('koordinatTextBuat').classList.add('d-none');
+    document.getElementById('statusKoordinatBuat').innerHTML = '<i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!';
+    document.getElementById('statusKoordinatBuat').className = 'mt-2 small text-muted';
+    
+    window.scrollTo(0, 0);
     return false;
 }
 
 // ============================================
-// CEK ROLE PENDAFTARAN
+// TAMPILKAN HALAMAN BUAT AKUN DARI MENU
 // ============================================
-function cekRolePendaftaran() {
-    const role = document.getElementById('roleAkun').value;
-    const bagianNIK = document.getElementById('bagianNIK');
-    const nikInput = document.getElementById('nikKtp');
-    const infoRole = document.getElementById('infoRole');
+function tampilkanBuatAkun() {
+    const kontenDasbor = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) {
+        kontenAsliDasbor = kontenDasbor.innerHTML;
+    }
+    kontenDasbor.innerHTML = document.getElementById('halamanDaftarAkunBaru').innerHTML;
     
-    if (role === 'CT') {
-        bagianNIK.style.display = 'none';
-        nikInput.removeAttribute('required');
-        infoRole.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #4CAF50;"></i>Akun Customer akan langsung aktif tanpa persetujuan';
-        generateID('CT');
-    } else if (role === 'TK') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-store me-1" style="color: #FF8C00;"></i>Akun Toko memerlukan verifikasi Admin';
-        generateID('TK');
-    } else if (role === 'OJ') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-motorcycle me-1" style="color: #FF6B00;"></i>Akun Ojek memerlukan verifikasi Admin';
-        generateID('OJ');
-    } else if (role === 'PP') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-shopping-basket me-1" style="color: #FF8C00;"></i>Akun Pedagang Pasar memerlukan verifikasi Admin';
-        generateID('PP');
-    } else if (role === 'PM') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-utensils me-1" style="color: #FF8C00;"></i>Akun Pedagang Makanan memerlukan verifikasi Admin';
-        generateID('PM');
-    } else if (role === 'COD') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-truck me-1" style="color: #FF8C00;"></i>Akun COD Seller memerlukan verifikasi Admin';
-        generateID('COD');
-    } else {
-        bagianNIK.style.display = 'block';
-        nikInput.removeAttribute('required');
-        infoRole.innerHTML = '';
-        document.getElementById('idOtomatis').value = '';
-        document.getElementById('idOtomatis').placeholder = 'Pilih role terlebih dahulu';
-    }
-    
-    cekTombolAktif();
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) offcanvas.hide();
 }
-
-// ============================================
-// AMBIL KOORDINAT
-// ============================================
-function ambilKoordinat() {
-    const statusKoordinat = document.getElementById('statusKoordinat');
-    const koordinatText = document.getElementById('koordinatText');
-    const tombolAmbil = document.getElementById('tombolAmbilKoordinat');
-    
-    if (!navigator.geolocation) {
-        statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>Browser Anda tidak mendukung Geolocation';
-        alert('Browser Anda tidak mendukung Geolocation. Gunakan Chrome atau Kiwi Browser.');
-        return;
-    }
-    statusKoordinat.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="color: #FF8C00;"></span>Mengambil lokasi...';
-    tombolAmbil.disabled = true;
-    
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-            document.getElementById('textLatitude').textContent = lat;
-            document.getElementById('textLongitude').textContent = lng;
-            statusKoordinat.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Lokasi berhasil diambil!';
-            statusKoordinat.className = 'mt-2 small fw-bold';
-            statusKoordinat.style.color = '#FF8C00';
-            koordinatText.classList.remove('d-none');
-            tombolAmbil.disabled = false;
-            tombolAmbil.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
-            cekTombolAktif();
-        },
-        function(error) {
-            let pesanError = 'Gagal mengambil lokasi';
-            if (error.code === error.PERMISSION_DENIED) pesanError = 'Izin lokasi ditolak. Aktifkan GPS di pengaturan browser';
-            else if (error.code === error.POSITION_UNAVAILABLE) pesanError = 'Informasi lokasi tidak tersedia';
-            else if (error.code === error.TIMEOUT) pesanError = 'Waktu permintaan lokasi habis';
-            statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>' + pesanError;
-            statusKoordinat.className = 'mt-2 small text-danger';
-            tombolAmbil.disabled = false;
-            tombolAmbil.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Ambil Lokasi Lagi';
-            alert('Gagal: ' + pesanError);
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-}
-
-// ============================================
-// CEK TOMBOL AKTIF
-// ============================================
-function cekTombolAktif() {
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    const idOtomatis = document.getElementById('idOtomatis').value;
-    const tombolDaftar = document.getElementById('tombolDaftar');
-    const tombolAjukan = document.getElementById('tombolAjukan');
-    if (lat !== '' && lng !== '' && role !== '' && idOtomatis !== '') {
-        tombolDaftar.disabled = false;
-        tombolAjukan.disabled = false;
-    } else {
-        tombolDaftar.disabled = true;
-        tombolAjukan.disabled = true;
-    }
-}
-
-// ============================================
-// AJUKAN PENDAFTARAN
-// ============================================
-function ajukanPendaftaran() {
-    const notifikasi = document.getElementById('notifikasiDaftar');
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    const idOtomatis = document.getElementById('idOtomatis').value;
-    
-    if (lat === '' || lng === '' || role === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Pastikan Anda sudah memilih role dan mengambil koordinat!';
-        notifikasi.classList.remove('d-none');
-        window.scrollTo(0, 0);
-        return;
-    }
-    notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pengajuan berhasil dikirim! ID Anda: <strong>' + idOtomatis + '</strong>. Admin akan memproses.';
-    notifikasi.classList.remove('d-none');
-    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
-}
-
-// ============================================
-// PROSES LUPA PASSWORD
-// ============================================
-function prosesLupaPassword(event) {
-    event.preventDefault();
-    const identitas = document.getElementById('identitasLupa').value.trim();
-    const notifikasi = document.getElementById('notifikasiLupaPassword');
-    if (identitas === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username atau Email wajib diisi!';
-        notifikasi.classList.remove('d-none');
-        return false;
-    }
-    notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link reset password telah dikirim ke email Anda.';
-    notifikasi.classList.remove('d-none');
-    return false;
-}
-
-// ============================================
-// PROSES RESET PASSWORD
-// ============================================
-function prosesResetPassword(event) {
-    event.preventDefault();
-    const passwordBaru = document.getElementById('passwordBaru').value;
-    const konfirmasi = document.getElementById('konfirmasiPasswordBaru').value;
-    const notifikasi = document.getElementById('notifikasiLupaPassword');
-    if (passwordBaru.length < 6) {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password minimal 6 karakter!';
-        notifikasi.classList.remove('d-none');
-        return false;
-    }
-    if (passwordBaru !== konfirmasi) {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi tidak cocok!';
-        notifikasi.classList.remove('d-none');
-        return false;
-    }
-    notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Password berhasil direset! Silakan login.';
-    notifikasi.classList.remove('d-none');
-    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiLupaPassword').classList.add('d-none'); }, 2000);
-    return false;
-}
-<!--- ===== AKHIR BLOK 9.5 ===== --->    
+<!--- ===== AKHIR BLOK 9.5 TAMBAHAN ===== --->    
 <!--- ===== BLOK 9.6 Penutup JavaScript ===== --->
 </script>
 <!--- ===== AKHIR BLOK 9.6 ===== --->
