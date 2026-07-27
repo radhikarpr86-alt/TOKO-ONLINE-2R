@@ -1030,3 +1030,258 @@ function prosesLogout() {
     document.getElementById('passwordLogin').value = '';
 }
 <!--- ===== AKHIR BLOK 9.3 ===== --->    
+<!--- ===== BLOK 9.4 JavaScript Konfigurasi Menu Semua Role ===== --->
+// ============================================
+// KONFIGURASI MENU BERDASARKAN ROLE
+// ============================================
+const menuConfig = {
+    'SA': {
+        namaRole: 'SuperAdmin',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '10.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '10.2' },
+            { nama: 'Penagihan Otomatis', ikon: 'fas fa-robot', blok: '10.3' },
+            { nama: 'Riwayat Penagihan', ikon: 'fas fa-history', blok: '10.4' },
+            { nama: 'Laporan Keuangan', ikon: 'fas fa-file-invoice', blok: '10.5' },
+            { nama: 'Setting Harga Aplikasi', ikon: 'fas fa-tags', blok: '10.6' },
+            { nama: 'Data Penagihan', ikon: 'fas fa-database', blok: '10.7' },
+            { nama: 'Semua Transaksi', ikon: 'fas fa-exchange-alt', blok: '10.8' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '10.9' },
+            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
+            { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
+            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12' },
+            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
+            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
+            { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
+            { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
+            { nama: 'Setting Rekening Master', ikon: 'fas fa-university', blok: '10.17' },
+            { nama: 'Menu Iklan', ikon: 'fas fa-ad', blok: '10.18' },
+            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', blok: '10.19' },
+            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', blok: '10.20' },
+            { nama: 'Katalog Produk', ikon: 'fas fa-th-list', blok: '10.21' },
+            { nama: 'Manajemen Katalog', ikon: 'fas fa-folder', blok: '10.22' },
+            { nama: 'Penataan Produk', ikon: 'fas fa-sort', blok: '10.23' },
+            { nama: 'Kelola Wilayah', ikon: 'fas fa-map-marked-alt', blok: '10.24' },
+            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', blok: '10.25' },
+            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', blok: '10.26' },
+            { nama: 'Notepad+', ikon: 'fas fa-sticky-note', blok: '10.27' },
+            { nama: 'Keamanan Sistem', ikon: 'fas fa-shield-alt', blok: '10.28' },
+            { nama: 'Histori Aktivitas', ikon: 'fas fa-history', blok: '10.29' },
+            { nama: 'Log Aktivitas Lanjutan', ikon: 'fas fa-clipboard-list', blok: '10.30' },
+            { nama: 'Pengaturan Umum', ikon: 'fas fa-cog', blok: '10.31' },
+            { nama: 'Restart System', ikon: 'fas fa-power-off', blok: '10.32' },
+            { nama: 'Bantuan & FAQ', ikon: 'fas fa-question-circle', blok: '10.33' },
+            { nama: 'Dokumentasi', ikon: 'fas fa-book', blok: '10.34' }
+        ]
+    },
+    'ADM': {
+        namaRole: 'Staf Admin',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '11.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '11.2' },
+            { nama: 'Manajemen Akun (Reset Password)', ikon: 'fas fa-users-cog', blok: '11.3' },
+            { nama: 'Verifikasi Dokumen (Bantuan)', ikon: 'fas fa-check-circle', blok: '11.4' },
+            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', blok: '11.5' },
+            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', blok: '11.6' },
+            { nama: 'Histori Aktivitas & Log Lanjutan', ikon: 'fas fa-history', blok: '11.7' },
+            { nama: 'Pengaturan Umum (Maintenance)', ikon: 'fas fa-cog', blok: '11.8' },
+            { nama: 'Restart System', ikon: 'fas fa-power-off', blok: '11.9' }
+        ]
+    },
+    'SOT': {
+        namaRole: 'Staf Owner Toko',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '12.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '12.2' },
+            { nama: 'Manajemen Rekrutan', ikon: 'fas fa-users', blok: '12.3' },
+            { nama: 'Buat Akun Toko', ikon: 'fas fa-user-plus', blok: '12.4' },
+            { nama: 'Verifikasi Rekrutan (Pra-verifikasi)', ikon: 'fas fa-check-circle', blok: '12.5' },
+            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', blok: '12.6' },
+            { nama: 'Laporan Kinerja Rekrutan', ikon: 'fas fa-chart-bar', blok: '12.7' },
+            { nama: 'Manajemen Produk Toko Induk', ikon: 'fas fa-boxes', blok: '12.8' },
+            { nama: 'Semua Order Toko Induk', ikon: 'fas fa-shopping-cart', blok: '12.9' },
+            { nama: 'Laporan Penjualan & Komisi', ikon: 'fas fa-file-invoice', blok: '12.10' },
+            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', blok: '12.11' }
+        ]
+    },
+    'SOO': {
+        namaRole: 'Staf Owner Ojek',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '13.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '13.2' },
+            { nama: 'Manajemen Rekrutan Driver', ikon: 'fas fa-users', blok: '13.3' },
+            { nama: 'Tambah Rekrutan Driver', ikon: 'fas fa-user-plus', blok: '13.4' },
+            { nama: 'Verifikasi Rekrutan (Pra-verifikasi)', ikon: 'fas fa-check-circle', blok: '13.5' },
+            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', blok: '13.6' },
+            { nama: 'Laporan Kinerja Driver', ikon: 'fas fa-chart-bar', blok: '13.7' },
+            { nama: 'Manajemen Order Armada Induk (Dispatcher)', ikon: 'fas fa-tasks', blok: '13.8' },
+            { nama: 'Monitoring Driver Online', ikon: 'fas fa-map-marker-alt', blok: '13.9' },
+            { nama: 'Laporan Setoran & Komisi', ikon: 'fas fa-file-invoice', blok: '13.10' },
+            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', blok: '13.11' },
+            { nama: 'Log Aktivitas & Pelanggaran Driver', ikon: 'fas fa-clipboard-list', blok: '13.12' }
+        ]
+    },
+    'MKT': {
+        namaRole: 'Staf Marketing',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '14.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '14.2' },
+            { nama: 'Manajemen Iklan', ikon: 'fas fa-ad', blok: '14.3' },
+            { nama: 'Manajemen Promo', ikon: 'fas fa-percent', blok: '14.4' },
+            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', blok: '14.5' },
+            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', blok: '14.6' },
+            { nama: 'Analitik & Laporan Pemasaran', ikon: 'fas fa-chart-pie', blok: '14.7' },
+            { nama: 'Katalog Produk (Riset Pasar)', ikon: 'fas fa-search', blok: '14.8' },
+            { nama: 'Usulan Produk Unggulan', ikon: 'fas fa-star', blok: '14.9' }
+        ]
+    },
+    'TGH': {
+        namaRole: 'Staf Penagihan',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '15.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '15.2' },
+            { nama: 'Daftar Tagihan (Filter Status)', ikon: 'fas fa-list-alt', blok: '15.3' },
+            { nama: 'Kirim Reminder', ikon: 'fas fa-envelope', blok: '15.4' },
+            { nama: 'Laporan Keuangan (View Only)', ikon: 'fas fa-file-invoice', blok: '15.5' },
+            { nama: 'Data Penagihan Manual (Catatan)', ikon: 'fas fa-edit', blok: '15.6' }
+        ]
+    },
+    'CS': {
+        namaRole: 'Customer Service',
+        menu: [
+            { nama: 'Dasbor CS', ikon: 'fas fa-tachometer-alt', blok: '16.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '16.2' },
+            { nama: 'Semua Tiket Masuk', ikon: 'fas fa-ticket-alt', blok: '16.3' },
+            { nama: 'Filter Tiket Berdasarkan Role', ikon: 'fas fa-filter', blok: '16.4' },
+            { nama: 'Ruang Chat', ikon: 'fas fa-comments', blok: '16.5' },
+            { nama: 'Cari & Bantuan Akun (Reset Password)', ikon: 'fas fa-search', blok: '16.6' },
+            { nama: 'Chat Internal dengan SuperAdmin', ikon: 'fas fa-comment-dots', blok: '16.7' },
+            { nama: 'Manajemen FAQ', ikon: 'fas fa-question-circle', blok: '16.8' },
+            { nama: 'Histori Aktivitas CS', ikon: 'fas fa-history', blok: '16.9' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '16.10' }
+        ]
+    },
+    'TK': {
+        namaRole: 'Toko',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '17.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '17.2' },
+            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', blok: '17.3' },
+            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', blok: '17.4' },
+            { nama: 'Kategori Produk', ikon: 'fas fa-tags', blok: '17.5' },
+            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', blok: '17.6' },
+            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', blok: '17.7' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '17.8' },
+            { nama: 'Proses Order', ikon: 'fas fa-tasks', blok: '17.9' },
+            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', blok: '17.10' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '17.11' },
+            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', blok: '17.12' },
+            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', blok: '17.13' },
+            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', blok: '17.14' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '17.15' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '17.16' }
+        ]
+    },
+    'PM': {
+        namaRole: 'Pedagang Makanan',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '18.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '18.2' },
+            { nama: 'Daftar Jualan Saya', ikon: 'fas fa-list', blok: '18.3' },
+            { nama: 'Tambah Jualan Baru', ikon: 'fas fa-plus-circle', blok: '18.4' },
+            { nama: 'Manajemen Stok & Bahan Baku', ikon: 'fas fa-boxes', blok: '18.5' },
+            { nama: 'Manajemen Kategori Pasar', ikon: 'fas fa-tags', blok: '18.6' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '18.7' },
+            { nama: 'Proses Order & Status', ikon: 'fas fa-tasks', blok: '18.8' },
+            { nama: 'Atur Pengiriman & Jam Operasional', ikon: 'fas fa-clock', blok: '18.9' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '18.10' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '18.11' },
+            { nama: 'Buku Kas / Catatan Pengeluaran', ikon: 'fas fa-book', blok: '18.12' },
+            { nama: 'Pengajuan Tambah Slot Produk', ikon: 'fas fa-plus-square', blok: '18.13' },
+            { nama: 'Verifikasi Dokumen Usaha', ikon: 'fas fa-check-circle', blok: '18.14' },
+            { nama: 'Mode Kasir / Input Penjualan Offline', ikon: 'fas fa-cash-register', blok: '18.15' },
+            { nama: 'Manajemen Resep & Kalkulator Bahan', ikon: 'fas fa-calculator', blok: '18.16' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '18.17' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '18.18' }
+        ]
+    },
+    'PP': {
+        namaRole: 'Pedagang Pasar',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '19.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '19.2' },
+            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', blok: '19.3' },
+            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', blok: '19.4' },
+            { nama: 'Kategori Produk', ikon: 'fas fa-tags', blok: '19.5' },
+            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', blok: '19.6' },
+            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', blok: '19.7' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '19.8' },
+            { nama: 'Proses Order', ikon: 'fas fa-tasks', blok: '19.9' },
+            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', blok: '19.10' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '19.11' },
+            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', blok: '19.12' },
+            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', blok: '19.13' },
+            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', blok: '19.14' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '19.15' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '19.16' }
+        ]
+    },
+    'COD': {
+        namaRole: 'COD Seller',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '20.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '20.2' },
+            { nama: 'Daftar Barang Jualan COD', ikon: 'fas fa-list', blok: '20.3' },
+            { nama: 'Tambah / Edit Barang', ikon: 'fas fa-edit', blok: '20.4' },
+            { nama: 'Update Stok', ikon: 'fas fa-boxes', blok: '20.5' },
+            { nama: 'Input Order COD (Transaksi Manual)', ikon: 'fas fa-cart-plus', blok: '20.6' },
+            { nama: 'Daftar Semua Order COD', ikon: 'fas fa-clipboard-list', blok: '20.7' },
+            { nama: 'Proses Konfirmasi Pembayaran & Pengiriman', ikon: 'fas fa-check-circle', blok: '20.8' },
+            { nama: 'Atur Rute / Jadwal Pengiriman', ikon: 'fas fa-route', blok: '20.9' },
+            { nama: 'Transaksi Penjualan COD', ikon: 'fas fa-money-bill', blok: '20.10' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '20.11' },
+            { nama: 'Verifikasi Dokumen COD', ikon: 'fas fa-check-circle', blok: '20.12' },
+            { nama: 'Pengajuan Tambah Slot Barang', ikon: 'fas fa-plus-square', blok: '20.13' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '20.14' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '20.15' }
+        ]
+    },
+    'OJ': {
+        namaRole: 'Ojek',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '21.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '21.2' },
+            { nama: 'Data Kendaraan', ikon: 'fas fa-motorcycle', blok: '21.3' },
+            { nama: 'Order Baru (Permintaan Antar)', ikon: 'fas fa-bell', blok: '21.4' },
+            { nama: 'Order Sedang Berjalan', ikon: 'fas fa-spinner', blok: '21.5' },
+            { nama: 'Riwayat Pengiriman Saya', ikon: 'fas fa-history', blok: '21.6' },
+            { nama: 'Pendapatan Fee Ojek', ikon: 'fas fa-money-bill', blok: '21.7' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '21.8' },
+            { nama: 'Catatan Uang COD', ikon: 'fas fa-sticky-note', blok: '21.9' },
+            { nama: 'Verifikasi Dokumen & Kendaraan', ikon: 'fas fa-check-circle', blok: '21.10' },
+            { nama: 'Atur Radius Operasional', ikon: 'fas fa-map-marker-alt', blok: '21.11' },
+            { nama: 'Peta / Navigasi Sederhana', ikon: 'fas fa-map', blok: '21.12' },
+            { nama: 'Log Aktivitas Ojek', ikon: 'fas fa-clipboard-list', blok: '21.13' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '21.14' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '21.15' }
+        ]
+    },
+    'CT': {
+        namaRole: 'Customer',
+        menu: [
+            { nama: 'Dasbor / Beranda', ikon: 'fas fa-home', blok: '22.1' },
+            { nama: 'Profil Customer', ikon: 'fas fa-user', blok: '22.2' },
+            { nama: 'Katalog Produk / Cari Barang', ikon: 'fas fa-search', blok: '22.3' },
+            { nama: 'Keranjang Belanja', ikon: 'fas fa-shopping-cart', blok: '22.4' },
+            { nama: 'Checkout & Pembayaran', ikon: 'fas fa-credit-card', blok: '22.5' },
+            { nama: 'Order Saya (Riwayat Belanja)', ikon: 'fas fa-clipboard-list', blok: '22.6' },
+            { nama: 'Lacak Pengiriman', ikon: 'fas fa-truck', blok: '22.7' },
+            { nama: 'Ulasan / Review Produk', ikon: 'fas fa-star', blok: '22.8' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '22.9' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '22.10' }
+        ]
+    }
+};
+<!--- ===== AKHIR BLOK 9.4 ===== --->
+
+    
