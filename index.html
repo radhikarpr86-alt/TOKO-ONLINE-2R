@@ -11,473 +11,288 @@
 <!--- ===== AKHIR BLOK 1 ===== --->
 
 <!--- ===== BLOK 1.1 Bootstrap 5 CSS ===== --->
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <!--- ===== AKHIR BLOK 1.1 ===== --->
 
-<!--- ===== BLOK 1.2 Custom CSS & Geolocation Flag ===== --->
-    <!-- Custom CSS -->
-    <link href="assets/css/style.css" rel="stylesheet">
-    
-    <!-- Geolocation API Ready -->
-    <script>
-        let koordinatReady = false;
-        let userLatitude = null;
-        let userLongitude = null;
-    </script>
+<!--- ===== BLOK 1.2 Custom CSS & Global Style ===== --->
+    <style>
+        /* Global Background Orange */
+        body {
+            background-color: #FF8C00;
+            background-image: linear-gradient(135deg, #FF8C00 0%, #FF6B00 50%, #FF5500 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Card Styling */
+        .card {
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        /* Button Styling */
+        .btn-success {
+            background-color: #FF8C00;
+            border-color: #FF8C00;
+        }
+        .btn-success:hover {
+            background-color: #FF6B00;
+            border-color: #FF6B00;
+        }
+        .btn-outline-success {
+            color: #FF8C00;
+            border-color: #FF8C00;
+        }
+        .btn-outline-success:hover {
+            background-color: #FF8C00;
+            border-color: #FF8C00;
+            color: white;
+        }
+        
+        /* Navbar Orange */
+        .navbar-orange {
+            background-color: #FF6B00 !important;
+        }
+        
+        /* Text Colors */
+        .text-success {
+            color: #FF8C00 !important;
+        }
+        .text-orange {
+            color: #FF8C00 !important;
+        }
+        
+        /* Badge */
+        .bg-success {
+            background-color: #FF8C00 !important;
+        }
+        
+        /* Page Section */
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF5500 100%);
+        }
+        
+        /* Hover Card */
+        .hover-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 107, 0, 0.3);
+        }
+        
+        /* Input Group */
+        .input-group-text.bg-success {
+            background-color: #FF8C00 !important;
+        }
+        
+        /* Menu Item */
+        .menu-item {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .menu-item:hover {
+            background: rgba(255, 140, 0, 0.1) !important;
+        }
+        
+        /* Link */
+        a {
+            color: #FF8C00;
+        }
+        a:hover {
+            color: #FF6B00;
+        }
+        
+        /* Alert */
+        .alert-success {
+            background-color: #FFF3E0;
+            border-color: #FF8C00;
+            color: #FF6B00;
+        }
+        
+        /* Badge */
+        .badge.bg-success {
+            background-color: #FF8C00 !important;
+        }
+        
+        /* Button Warning */
+        .btn-warning {
+            background-color: #FFB347;
+            border-color: #FFB347;
+            color: #333;
+        }
+        .btn-warning:hover {
+            background-color: #FFA500;
+            border-color: #FFA500;
+            color: #333;
+        }
+        
+        /* Text Warning */
+        .text-warning {
+            color: #FF8C00 !important;
+        }
+        
+        /* Spinner */
+        .spinner-border.text-success {
+            color: #FF8C00 !important;
+        }
+        
+        /* List Group Item */
+        .list-group-item.bg-dark {
+            background-color: #1a1a1a !important;
+        }
+        .list-group-item.bg-dark:hover {
+            background-color: #2a2a2a !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    </style>
+<!--- ===== AKHIR BLOK 1.2 ===== --->
 </head>
 <body>
-<!--- ===== AKHIR BLOK 1.2 ===== --->
+<!--- ===== BLOK 2 Halaman Login Multi-Login (Halaman Utama) ===== --->
+<div id="halamanLogin" class="page-section active">
 
-<!--- ===== BLOK 1.3 Navigasi Utama (Sebelum Login) ===== --->
-<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-            <i class="fas fa-store-alt me-2"></i>Toko Online 2R
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php"><i class="fas fa-home me-1"></i>Beranda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#produk"><i class="fas fa-box me-1"></i>Produk</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#toko"><i class="fas fa-store me-1"></i>Toko</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php" class="btn btn-outline-light btn-sm ms-2">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="daftar.php" class="btn btn-light btn-sm ms-2 text-success">
-                        <i class="fas fa-user-plus me-1"></i>Daftar
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<!--- ===== AKHIR BLOK 1.3 ===== --->
-
-<!--- ===== BLOK 1.4 Hero Section ===== --->
-<section class="hero-section bg-success text-white py-5">
-    <div class="container text-center">
-        <h1 class="display-4 fw-bold mb-3">Selamat Datang di Toko Online 2R</h1>
-        <p class="lead mb-4">Platform Marketplace Terlengkap untuk Kebutuhan Anda</p>
-        
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="#produk" class="btn btn-warning btn-lg">
-                <i class="fas fa-search me-2"></i>Cari Produk
-            </a>
-            <a href="#toko" class="btn btn-outline-light btn-lg">
-                <i class="fas fa-store me-2"></i>Lihat Toko Terdekat
-            </a>
-            <a href="#ojek" class="btn btn-outline-light btn-lg">
-                <i class="fas fa-motorcycle me-2"></i>Lihat Ojek Terdekat
-            </a>
-        </div>
-    </div>
-</section>
-<!--- ===== AKHIR BLOK 1.4 ===== --->
-
-<!--- ===== BLOK 1.5 Jam & Tanggal Real-Time WIB ===== --->
-<section class="bg-light py-3 border-bottom">
-    <div class="container text-center">
-        <div class="row align-items-center">
-            <div class="col-md-4">
-                <i class="fas fa-map-marker-alt text-success me-2"></i>
-                <span class="fw-bold">Waktu Jakarta (WIB)</span>
-            </div>
-            <div class="col-md-4">
-                <span id="tanggalSekarang" class="fw-bold fs-5"></span>
-            </div>
-            <div class="col-md-4">
-                <span id="jamSekarang" class="fw-bold fs-4 text-success"></span>
-                <span class="ms-2" id="detikSekarang"></span>
-            </div>
-        </div>
-    </div>
-</section>
-<!--- ===== AKHIR BLOK 1.5 ===== --->
-
-<!--- ===== BLOK 1.6 Bagian Utama Toko, Ojek & Produk ===== --->
-<main class="container my-4">
-
-    <div id="notifikasi" class="alert d-none" role="alert"></div>
-
-    <!-- Toko Terdekat -->
-    <section id="toko" class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold"><i class="fas fa-store text-success me-2"></i>Toko Sekitar Anda</h3>
-            <a href="login.php" class="btn btn-outline-success btn-sm">Lihat Semua</a>
-        </div>
-        <div class="row" id="daftarToko">
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-store-alt fa-3x text-muted mb-3"></i>
-                <p>Login untuk melihat toko terdekat dari lokasi Anda</p>
-                <a href="login.php" class="btn btn-success">Login Sekarang</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Ojek Terdekat -->
-    <section id="ojek" class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold"><i class="fas fa-motorcycle text-primary me-2"></i>Ojek Terdekat</h3>
-            <a href="login.php" class="btn btn-outline-primary btn-sm">Lihat Semua</a>
-        </div>
-        <div class="row" id="daftarOjek">
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-motorcycle fa-3x text-muted mb-3"></i>
-                <p>Login untuk melihat ojek terdekat dari lokasi Anda</p>
-                <a href="login.php" class="btn btn-primary">Login Sekarang</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Semua Produk -->
-    <section id="produk" class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold"><i class="fas fa-box-open text-warning me-2"></i>Produk Terbaru</h3>
-            <a href="login.php" class="btn btn-outline-warning btn-sm">Lihat Semua</a>
-        </div>
-        
-        <div class="input-group mb-4">
-            <input type="text" id="cariProduk" class="form-control" placeholder="Cari produk...">
-            <button class="btn btn-warning" type="button">
-                <i class="fas fa-search"></i> Cari
-            </button>
-        </div>
-        
-        <div class="row" id="daftarProduk">
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                <p>Produk akan ditampilkan di sini</p>
-            </div>
-        </div>
-    </section>
-
-</main>
-<!--- ===== AKHIR BLOK 1.6 ===== --->
-
-<!--- ===== BLOK 1.7 Footer ===== --->
-<footer class="bg-dark text-white py-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h5><i class="fas fa-store-alt me-2"></i>Toko Online 2R</h5>
-                <p class="text-muted small">Platform Marketplace Terpercaya © 2026</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <a href="login.php" class="text-white me-3">Login</a>
-                <a href="daftar.php" class="text-white me-3">Daftar</a>
-                <a href="#" class="text-white">Bantuan</a>
-            </div>
-        </div>
-    </div>
-</footer>
-<!--- ===== AKHIR BLOK 1.7 ===== --->
-
-<!--- ===== BLOK 1.8 Bootstrap JS ===== --->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!--- ===== AKHIR BLOK 1.8 ===== --->
-
-<!--- ===== BLOK 1.9 JavaScript Waktu & Geolocation ===== --->
-<script>
-function updateWaktu() {
-    const sekarang = new Date();
-    
-    const opsiTanggal = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        timeZone: 'Asia/Jakarta'
-    };
-    
-    const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
-    const jamStr = sekarang.toLocaleTimeString('id-ID', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        timeZone: 'Asia/Jakarta'
-    });
-    const detikStr = sekarang.toLocaleTimeString('id-ID', { 
-        second: '2-digit',
-        timeZone: 'Asia/Jakarta'
-    });
-    
-    document.getElementById('tanggalSekarang').textContent = tanggalStr;
-    document.getElementById('jamSekarang').textContent = jamStr;
-    document.getElementById('detikSekarang').textContent = detikStr + ' WIB';
-}
-
-setInterval(updateWaktu, 1000);
-updateWaktu();
-
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            koordinatReady = true;
-            userLatitude = position.coords.latitude;
-            userLongitude = position.coords.longitude;
-        },
-        function(error) {
-            console.log('Geolocation tidak tersedia');
-        }
-    );
-}
-</script>
-<!--- ===== AKHIR BLOK 1.9 ===== --->
-
-</body>
-</html>
-<!--- ===== AKHIR BLOK 1 SELURUH HALAMAN INDEX ===== --->
-<!--- ===== BLOK 2 Halaman Login Multi-Login ===== --->
-<!--- ===== BLOK 2.1 Navigasi Atas Halaman Login ===== --->
-<nav class="navbar navbar-dark bg-success">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-            <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
-        </a>
-    </div>
-</nav>
-<!--- ===== AKHIR BLOK 2.1 ===== --->
-
-<!--- ===== BLOK 2.2 Container Utama Login ===== --->
+<!--- ===== BLOK 2.1 Header Login ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5 col-lg-4">
             
-            <!-- Logo & Judul -->
             <div class="text-center mb-4">
-                <i class="fas fa-store-alt fa-4x text-success mb-3"></i>
-                <h3 class="fw-bold">Toko Online 2R</h3>
-                <p class="text-muted">Silakan login ke akun Anda</p>
+                <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <i class="fas fa-store-alt fa-3x" style="color: #FF8C00;"></i>
+                </div>
+                <h3 class="fw-bold text-white">Toko Online 2R</h3>
+                <p class="text-white opacity-75">Silakan login ke akun Anda</p>
             </div>
             
-            <!-- Kartu Login -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-4">
                     
-                    <!-- Notifikasi Error/Sukses -->
                     <div id="notifikasiLogin" class="alert d-none" role="alert"></div>
                     
-                    <!-- Form Login -->
-                    <form id="formLogin" method="POST" action="auth/login-proses.php">
+                    <form id="formLogin" onsubmit="return prosesLogin(event)">
                         
-                        <!-- Input Username -->
                         <div class="mb-3">
-                            <label for="username" class="form-label fw-bold">
-                                <i class="fas fa-user text-success me-1"></i>Username
+                            <label for="usernameLogin" class="form-label fw-bold text-dark">
+                                <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Username
                             </label>
                             <div class="input-group">
-                                <span class="input-group-text bg-success text-white">
+                                <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input 
-                                    type="text" 
-                                    id="username" 
-                                    name="username" 
-                                    class="form-control" 
-                                    placeholder="Masukkan username Anda"
-                                    required
-                                    autocomplete="username"
-                                >
+                                <input type="text" id="usernameLogin" name="username" class="form-control" placeholder="Masukkan username Anda" required autocomplete="username">
                             </div>
                         </div>
                         
-                        <!-- Input Password -->
                         <div class="mb-3">
-                            <label for="password" class="form-label fw-bold">
-                                <i class="fas fa-lock text-success me-1"></i>Password
+                            <label for="passwordLogin" class="form-label fw-bold text-dark">
+                                <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password
                             </label>
                             <div class="input-group">
-                                <span class="input-group-text bg-success text-white">
+                                <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-lock"></i>
                                 </span>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    class="form-control" 
-                                    placeholder="Masukkan password Anda"
-                                    required
-                                    autocomplete="current-password"
-                                >
-                                <button 
-                                    class="btn btn-outline-secondary" 
-                                    type="button" 
-                                    id="togglePassword"
-                                    title="Lihat password"
-                                >
-                                    <i class="fas fa-eye"></i>
+                                <input type="password" id="passwordLogin" name="password" class="form-control" placeholder="Masukkan password Anda" required autocomplete="current-password">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordLogin()" title="Lihat password">
+                                    <i class="fas fa-eye" id="iconToggleLogin"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Tombol Login -->
                         <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-success btn-lg fw-bold">
+                            <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login
                             </button>
                         </div>
                         
                     </form>
                     
-                    <!-- Garis Pemisah -->
                     <hr>
                     
-                    <!-- Link Tambahan -->
                     <div class="d-grid gap-2">
-                        <a href="daftar.php" class="btn btn-outline-success">
+                        <button class="btn btn-outline-secondary" onclick="tampilkanHalaman('daftar')" style="border-color: #FF8C00; color: #FF8C00;">
                             <i class="fas fa-user-plus me-1"></i>Daftar Akun Baru
-                        </a>
-                        <a href="daftar.php?mode=ajukan" class="btn btn-outline-primary">
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="tampilkanHalaman('daftar')" style="border-color: #FF6B00; color: #FF6B00;">
                             <i class="fas fa-paper-plane me-1"></i>Ajukan Daftar ke Admin
-                        </a>
-                        <a href="lupa-password.php" class="btn btn-link text-muted">
+                        </button>
+                        <button class="btn btn-link text-muted" onclick="tampilkanHalaman('lupaPassword')">
                             <i class="fas fa-question-circle me-1"></i>Lupa Password?
-                        </a>
+                        </button>
                     </div>
                     
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
-            <div class="text-center mt-4 text-muted small">
+            <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
             
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 2.2 ===== --->
+<!--- ===== AKHIR BLOK 2.1 ===== --->
 
-<!--- ===== BLOK 2.3 JavaScript Login ===== --->
-<script>
-// Toggle Lihat Password
-document.getElementById('togglePassword').addEventListener('click', function() {
-    const passwordInput = document.getElementById('password');
-    const icon = this.querySelector('i');
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-});
-
-// Submit Form Login via AJAX
-document.getElementById('formLogin').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const notifikasi = document.getElementById('notifikasiLogin');
-    
-    if (username === '' || password === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username dan Password wajib diisi!';
-        notifikasi.classList.remove('d-none');
-        return;
-    }
-    
-    const tombolLogin = this.querySelector('button[type="submit"]');
-    const teksAsli = tombolLogin.innerHTML;
-    tombolLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sedang login...';
-    tombolLogin.disabled = true;
-    
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    
-    fetch('auth/login-proses.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sukses') {
-            notifikasi.className = 'alert alert-success';
-            notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            setTimeout(function() {
-                window.location.href = data.redirect;
-            }, 1000);
-        } else {
-            notifikasi.className = 'alert alert-danger';
-            notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            tombolLogin.innerHTML = teksAsli;
-            tombolLogin.disabled = false;
-        }
-    })
-    .catch(error => {
-        console.log('AJAX gagal, menggunakan POST biasa');
-        this.submit();
-    });
-});
-
-// Fokus ke input username
-document.getElementById('username').focus();
-</script>
-<!--- ===== AKHIR BLOK 2.3 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 2 Halaman Login Multi-Login ===== --->
 <!--- ===== BLOK 3 Halaman Pendaftaran ===== --->
-<!--- ===== BLOK 3.1 Navigasi Atas Halaman Pendaftaran ===== --->
-<nav class="navbar navbar-dark bg-success">
+<div id="halamanDaftar" class="page-section">
+
+<!--- ===== BLOK 3.1 Navigasi Atas Pendaftaran ===== --->
+<nav class="navbar navbar-orange">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-            <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
+        <a class="navbar-brand fw-bold text-white" href="#" onclick="tampilkanHalaman('login')">
+            <i class="fas fa-arrow-left me-2"></i>Kembali ke Login
         </a>
     </div>
 </nav>
 <!--- ===== AKHIR BLOK 3.1 ===== --->
 
-<!--- ===== BLOK 3.2 Container Utama Pendaftaran ===== --->
+<!--- ===== BLOK 3.2 Form Pendaftaran ===== --->
 <div class="container mt-4 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             
-            <!-- Logo & Judul -->
             <div class="text-center mb-4">
-                <i class="fas fa-user-plus fa-4x text-success mb-3"></i>
-                <h3 class="fw-bold">Pendaftaran Akun Baru</h3>
-                <p class="text-muted">Isi formulir di bawah untuk mendaftar</p>
+                <i class="fas fa-user-plus fa-4x text-white mb-3"></i>
+                <h3 class="fw-bold text-white">Pendaftaran Akun Baru</h3>
+                <p class="text-white opacity-75">Isi formulir di bawah untuk mendaftar</p>
             </div>
             
-            <!-- Kartu Pendaftaran -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-4">
                     
-                    <!-- Notifikasi Error/Sukses -->
                     <div id="notifikasiDaftar" class="alert d-none" role="alert"></div>
                     
-                    <!-- Form Pendaftaran -->
-                    <form id="formDaftar" method="POST" action="auth/daftar-proses.php">
+                    <form id="formDaftar" onsubmit="return prosesDaftar(event)">
                         
-                        <!-- Pilihan Role Akun -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-user-tag text-success me-1"></i>Daftar Sebagai
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-user-tag me-1" style="color: #FF8C00;"></i>Daftar Sebagai
                             </label>
-                            <select id="roleAkun" name="role" class="form-select" required>
+                            <select id="roleAkun" name="role" class="form-select" required onchange="cekRolePendaftaran()">
                                 <option value="">-- Pilih Jenis Akun --</option>
                                 <option value="TK">Toko</option>
                                 <option value="OJ">Ojek</option>
@@ -489,83 +304,44 @@ document.getElementById('username').focus();
                             <small class="text-muted" id="infoRole"></small>
                         </div>
                         
-                        <!-- Nama Lengkap -->
                         <div class="mb-3">
-                            <label for="namaLengkap" class="form-label fw-bold">
-                                <i class="fas fa-user text-success me-1"></i>Nama Lengkap
+                            <label for="namaLengkap" class="form-label fw-bold text-dark">
+                                <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Nama Lengkap
                             </label>
-                            <input 
-                                type="text" 
-                                id="namaLengkap" 
-                                name="nama_lengkap" 
-                                class="form-control" 
-                                placeholder="Masukkan nama lengkap sesuai KTP"
-                                required
-                            >
+                            <input type="text" id="namaLengkap" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap sesuai KTP" required>
                         </div>
                         
-                        <!-- Nomor HP -->
                         <div class="mb-3">
-                            <label for="nomorHp" class="form-label fw-bold">
-                                <i class="fas fa-phone text-success me-1"></i>Nomor HP
+                            <label for="nomorHp" class="form-label fw-bold text-dark">
+                                <i class="fas fa-phone me-1" style="color: #FF8C00;"></i>Nomor HP
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">+62</span>
-                                <input 
-                                    type="tel" 
-                                    id="nomorHp" 
-                                    name="hp" 
-                                    class="form-control" 
-                                    placeholder="81234567890"
-                                    pattern="[0-9]{10,13}"
-                                    required
-                                >
+                                <input type="tel" id="nomorHp" name="hp" class="form-control" placeholder="81234567890" pattern="[0-9]{10,13}" required>
                             </div>
                             <small class="text-muted">Nomor HP aktif untuk verifikasi</small>
                         </div>
                         
-                        <!-- Email -->
                         <div class="mb-3">
-                            <label for="email" class="form-label fw-bold">
-                                <i class="fas fa-envelope text-success me-1"></i>Email
+                            <label for="email" class="form-label fw-bold text-dark">
+                                <i class="fas fa-envelope me-1" style="color: #FF8C00;"></i>Email
                             </label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                class="form-control" 
-                                placeholder="contoh@email.com"
-                                required
-                            >
+                            <input type="email" id="email" name="email" class="form-control" placeholder="contoh@email.com" required>
                         </div>
                         
-                        <!-- Alamat Lengkap -->
                         <div class="mb-3">
-                            <label for="alamat" class="form-label fw-bold">
-                                <i class="fas fa-map-marker-alt text-success me-1"></i>Alamat Lengkap
+                            <label for="alamat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-map-marker-alt me-1" style="color: #FF8C00;"></i>Alamat Lengkap
                             </label>
-                            <textarea 
-                                id="alamat" 
-                                name="alamat" 
-                                class="form-control" 
-                                rows="3" 
-                                placeholder="Masukkan alamat lengkap Anda"
-                                required
-                            ></textarea>
+                            <textarea id="alamat" name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap Anda" required></textarea>
                         </div>
                         
-                        <!-- Ambil Titik Koordinat Lokasi -->
-                        <div class="mb-3 p-3 bg-light rounded border">
-                            <label class="form-label fw-bold">
+                        <div class="mb-3 p-3 rounded border" style="background-color: #FFF3E0;">
+                            <label class="form-label fw-bold text-dark">
                                 <i class="fas fa-map-pin text-danger me-1"></i>Titik Koordinat Lokasi (WAJIB)
                             </label>
                             <div class="d-grid gap-2">
-                                <button 
-                                    type="button" 
-                                    id="tombolAmbilKoordinat" 
-                                    class="btn btn-outline-danger"
-                                    onclick="ambilKoordinat()"
-                                >
+                                <button type="button" id="tombolAmbilKoordinat" class="btn btn-outline-secondary" onclick="ambilKoordinat()" style="border-color: #FF8C00; color: #FF8C00;">
                                     <i class="fas fa-location-crosshairs me-2"></i>Ambil Titik Lokasi Sekarang
                                 </button>
                             </div>
@@ -580,100 +356,47 @@ document.getElementById('username').focus();
                             </div>
                         </div>
                         
-                        <!-- Username -->
                         <div class="mb-3">
-                            <label for="usernameDaftar" class="form-label fw-bold">
-                                <i class="fas fa-user-circle text-success me-1"></i>Username
+                            <label for="usernameDaftar" class="form-label fw-bold text-dark">
+                                <i class="fas fa-user-circle me-1" style="color: #FF8C00;"></i>Username
                             </label>
-                            <input 
-                                type="text" 
-                                id="usernameDaftar" 
-                                name="username" 
-                                class="form-control" 
-                                placeholder="Buat username untuk login"
-                                minlength="5"
-                                required
-                            >
+                            <input type="text" id="usernameDaftar" name="username" class="form-control" placeholder="Buat username untuk login" minlength="5" required>
                             <small class="text-muted">Minimal 5 karakter, digunakan untuk login</small>
                         </div>
                         
-                        <!-- Password -->
                         <div class="mb-3">
-                            <label for="passwordDaftar" class="form-label fw-bold">
-                                <i class="fas fa-lock text-success me-1"></i>Password
+                            <label for="passwordDaftar" class="form-label fw-bold text-dark">
+                                <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password
                             </label>
                             <div class="input-group">
-                                <input 
-                                    type="password" 
-                                    id="passwordDaftar" 
-                                    name="password" 
-                                    class="form-control" 
-                                    placeholder="Buat password minimal 6 karakter"
-                                    minlength="6"
-                                    required
-                                >
-                                <button 
-                                    class="btn btn-outline-secondary" 
-                                    type="button" 
-                                    id="togglePasswordDaftar"
-                                    title="Lihat password"
-                                >
-                                    <i class="fas fa-eye"></i>
+                                <input type="password" id="passwordDaftar" name="password" class="form-control" placeholder="Buat password minimal 6 karakter" minlength="6" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordDaftar()" title="Lihat password">
+                                    <i class="fas fa-eye" id="iconToggleDaftar"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Konfirmasi Password -->
                         <div class="mb-3">
-                            <label for="konfirmasiPassword" class="form-label fw-bold">
-                                <i class="fas fa-check-circle text-success me-1"></i>Konfirmasi Password
+                            <label for="konfirmasiPassword" class="form-label fw-bold text-dark">
+                                <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password
                             </label>
-                            <input 
-                                type="password" 
-                                id="konfirmasiPassword" 
-                                name="konfirmasi_password" 
-                                class="form-control" 
-                                placeholder="Ketik ulang password"
-                                minlength="6"
-                                required
-                            >
+                            <input type="password" id="konfirmasiPassword" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password" minlength="6" required>
                         </div>
                         
-                        <!-- NIK KTP (Wajib untuk Toko/Ojek/Pedagang/COD) -->
                         <div class="mb-3" id="bagianNIK">
-                            <label for="nikKtp" class="form-label fw-bold">
-                                <i class="fas fa-id-card text-success me-1"></i>NIK KTP
+                            <label for="nikKtp" class="form-label fw-bold text-dark">
+                                <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>NIK KTP
                                 <span class="text-danger">*</span>
                             </label>
-                            <input 
-                                type="text" 
-                                id="nikKtp" 
-                                name="nik_ktp" 
-                                class="form-control" 
-                                placeholder="Masukkan 16 digit NIK KTP"
-                                pattern="[0-9]{16}"
-                                maxlength="16"
-                            >
+                            <input type="text" id="nikKtp" name="nik_ktp" class="form-control" placeholder="Masukkan 16 digit NIK KTP" pattern="[0-9]{16}" maxlength="16">
                             <small class="text-muted">Wajib diisi untuk Toko, Ojek, Pedagang, dan COD Seller</small>
                         </div>
                         
-                        <!-- Tombol Daftar & Ajukan -->
                         <div class="d-grid gap-2 mb-3">
-                            <button 
-                                type="submit" 
-                                id="tombolDaftar" 
-                                class="btn btn-success btn-lg fw-bold"
-                                disabled
-                            >
+                            <button type="submit" id="tombolDaftar" class="btn btn-lg fw-bold text-white" disabled style="background-color: #FF8C00; border-color: #FF8C00;">
                                 <i class="fas fa-user-plus me-2"></i>Daftar
                             </button>
-                            <button 
-                                type="button" 
-                                id="tombolAjukan" 
-                                class="btn btn-primary btn-lg fw-bold"
-                                disabled
-                                onclick="ajukanPendaftaran()"
-                            >
+                            <button type="button" id="tombolAjukan" class="btn btn-lg fw-bold text-white" disabled onclick="ajukanPendaftaran()" style="background-color: #FF6B00; border-color: #FF6B00;">
                                 <i class="fas fa-paper-plane me-2"></i>Ajukan Pembuatan Akun
                             </button>
                         </div>
@@ -685,21 +408,18 @@ document.getElementById('username').focus();
                         
                     </form>
                     
-                    <!-- Garis Pemisah -->
                     <hr>
                     
-                    <!-- Link ke Login -->
                     <div class="text-center">
                         <p>Sudah punya akun? 
-                            <a href="login.php" class="fw-bold text-success">Login di sini</a>
+                            <a href="#" class="fw-bold" style="color: #FF8C00;" onclick="tampilkanHalaman('login')">Login di sini</a>
                         </p>
                     </div>
                     
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
-            <div class="text-center mt-4 text-muted small">
+            <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
             
@@ -708,326 +428,15 @@ document.getElementById('username').focus();
 </div>
 <!--- ===== AKHIR BLOK 3.2 ===== --->
 
-<!--- ===== BLOK 3.3 JavaScript Pendaftaran ===== --->
-<script>
-// ============================================
-// Toggle Lihat Password
-// ============================================
-document.getElementById('togglePasswordDaftar').addEventListener('click', function() {
-    const passwordInput = document.getElementById('passwordDaftar');
-    const icon = this.querySelector('i');
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-});
-
-// ============================================
-// Cek Role yang Dipilih (Tampilkan/Sembunyikan NIK)
-// ============================================
-document.getElementById('roleAkun').addEventListener('change', function() {
-    const role = this.value;
-    const bagianNIK = document.getElementById('bagianNIK');
-    const nikInput = document.getElementById('nikKtp');
-    const infoRole = document.getElementById('infoRole');
-    
-    if (role === 'CT') {
-        // Customer tidak wajib NIK
-        bagianNIK.style.display = 'none';
-        nikInput.removeAttribute('required');
-        infoRole.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i>Akun Customer akan langsung aktif tanpa persetujuan';
-    } else if (role === 'TK') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-store text-primary me-1"></i>Akun Toko memerlukan verifikasi Admin';
-    } else if (role === 'OJ') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-motorcycle text-primary me-1"></i>Akun Ojek memerlukan verifikasi Admin';
-    } else if (role === 'PP') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-shopping-basket text-primary me-1"></i>Akun Pedagang Pasar memerlukan verifikasi Admin';
-    } else if (role === 'PM') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-utensils text-primary me-1"></i>Akun Pedagang Makanan memerlukan verifikasi Admin';
-    } else if (role === 'COD') {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-truck text-primary me-1"></i>Akun COD Seller memerlukan verifikasi Admin';
-    } else {
-        bagianNIK.style.display = 'block';
-        nikInput.removeAttribute('required');
-        infoRole.innerHTML = '';
-    }
-    
-    cekTombolAktif();
-});
-
-// ============================================
-// Ambil Koordinat Lokasi
-// ============================================
-function ambilKoordinat() {
-    const statusKoordinat = document.getElementById('statusKoordinat');
-    const koordinatText = document.getElementById('koordinatText');
-    const tombolAmbil = document.getElementById('tombolAmbilKoordinat');
-    
-    if (!navigator.geolocation) {
-        statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>Browser Anda tidak mendukung Geolocation';
-        return;
-    }
-    
-    statusKoordinat.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengambil lokasi...';
-    tombolAmbil.disabled = true;
-    
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-            document.getElementById('textLatitude').textContent = lat;
-            document.getElementById('textLongitude').textContent = lng;
-            
-            statusKoordinat.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i>Lokasi berhasil diambil!';
-            statusKoordinat.className = 'mt-2 small text-success';
-            koordinatText.classList.remove('d-none');
-            tombolAmbil.disabled = false;
-            tombolAmbil.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
-            
-            cekTombolAktif();
-        },
-        function(error) {
-            let pesanError = 'Gagal mengambil lokasi';
-            
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    pesanError = 'Izin lokasi ditolak. Aktifkan GPS/lokasi di pengaturan browser';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    pesanError = 'Informasi lokasi tidak tersedia';
-                    break;
-                case error.TIMEOUT:
-                    pesanError = 'Waktu permintaan lokasi habis';
-                    break;
-            }
-            
-            statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>' + pesanError;
-            statusKoordinat.className = 'mt-2 small text-danger';
-            tombolAmbil.disabled = false;
-            tombolAmbil.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Ambil Lokasi Lagi';
-        },
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-        }
-    );
-}
-
-// ============================================
-// Cek Apakah Tombol Daftar & Ajukan Bisa Diaktifkan
-// ============================================
-function cekTombolAktif() {
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    const tombolDaftar = document.getElementById('tombolDaftar');
-    const tombolAjukan = document.getElementById('tombolAjukan');
-    
-    if (lat !== '' && lng !== '' && role !== '') {
-        tombolDaftar.disabled = false;
-        tombolAjukan.disabled = false;
-    } else {
-        tombolDaftar.disabled = true;
-        tombolAjukan.disabled = true;
-    }
-}
-
-// ============================================
-// Submit Form Pendaftaran Biasa
-// ============================================
-document.getElementById('formDaftar').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const notifikasi = document.getElementById('notifikasiDaftar');
-    const tombolDaftar = document.getElementById('tombolDaftar');
-    const password = document.getElementById('passwordDaftar').value;
-    const konfirmasi = document.getElementById('konfirmasiPassword').value;
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    
-    // Validasi koordinat
-    if (lat === '' || lng === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anda wajib mengambil titik koordinat lokasi terlebih dahulu!';
-        notifikasi.classList.remove('d-none');
-        window.scrollTo(0, 0);
-        return;
-    }
-    
-    // Validasi role
-    if (role === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Silakan pilih jenis akun terlebih dahulu!';
-        notifikasi.classList.remove('d-none');
-        window.scrollTo(0, 0);
-        return;
-    }
-    
-    // Validasi password
-    if (password !== konfirmasi) {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi Password tidak cocok!';
-        notifikasi.classList.remove('d-none');
-        window.scrollTo(0, 0);
-        return;
-    }
-    
-    // Tampilkan loading
-    const teksAsli = tombolDaftar.innerHTML;
-    tombolDaftar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sedang mendaftar...';
-    tombolDaftar.disabled = true;
-    
-    // Kirim data
-    const formData = new FormData(this);
-    
-    fetch('auth/daftar-proses.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sukses') {
-            notifikasi.className = 'alert alert-success';
-            notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            if (data.auto_login) {
-                setTimeout(function() {
-                    window.location.href = 'dasbor.php';
-                }, 2000);
-            } else {
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 3000);
-            }
-        } else {
-            notifikasi.className = 'alert alert-danger';
-            notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            tombolDaftar.innerHTML = teksAsli;
-            tombolDaftar.disabled = false;
-        }
-        window.scrollTo(0, 0);
-    })
-    .catch(error => {
-        console.log('AJAX gagal, menggunakan POST biasa');
-        this.submit();
-    });
-});
-
-// ============================================
-// Fungsi Ajukan Pendaftaran
-// ============================================
-function ajukanPendaftaran() {
-    const notifikasi = document.getElementById('notifikasiDaftar');
-    const lat = document.getElementById('latitude').value;
-    const lng = document.getElementById('longitude').value;
-    const role = document.getElementById('roleAkun').value;
-    
-    if (lat === '' || lng === '' || role === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Pastikan Anda sudah memilih role dan mengambil koordinat lokasi!';
-        notifikasi.classList.remove('d-none');
-        window.scrollTo(0, 0);
-        return;
-    }
-    
-    // Redirect ke form ajukan dengan parameter
-    const formData = new FormData(document.getElementById('formDaftar'));
-    const params = new URLSearchParams();
-    
-    params.append('mode', 'ajukan');
-    params.append('role', role);
-    params.append('nama_lengkap', document.getElementById('namaLengkap').value);
-    params.append('hp', document.getElementById('nomorHp').value);
-    params.append('email', document.getElementById('email').value);
-    params.append('alamat', document.getElementById('alamat').value);
-    params.append('latitude', lat);
-    params.append('longitude', lng);
-    params.append('username', document.getElementById('usernameDaftar').value);
-    params.append('nik_ktp', document.getElementById('nikKtp').value);
-    
-    window.location.href = 'daftar.php?' + params.toString();
-}
-
-// ============================================
-// Cek URL Parameter untuk Mode Ajukan
-// ============================================
-window.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-    
-    if (mode === 'ajukan') {
-        // Pre-fill form dari parameter URL
-        document.getElementById('roleAkun').value = urlParams.get('role') || '';
-        document.getElementById('namaLengkap').value = urlParams.get('nama_lengkap') || '';
-        document.getElementById('nomorHp').value = urlParams.get('hp') || '';
-        document.getElementById('email').value = urlParams.get('email') || '';
-        document.getElementById('alamat').value = urlParams.get('alamat') || '';
-        document.getElementById('latitude').value = urlParams.get('latitude') || '';
-        document.getElementById('longitude').value = urlParams.get('longitude') || '';
-        document.getElementById('usernameDaftar').value = urlParams.get('username') || '';
-        document.getElementById('nikKtp').value = urlParams.get('nik_ktp') || '';
-        
-        if (urlParams.get('latitude') && urlParams.get('longitude')) {
-            document.getElementById('textLatitude').textContent = urlParams.get('latitude');
-            document.getElementById('textLongitude').textContent = urlParams.get('longitude');
-            document.getElementById('koordinatText').classList.remove('d-none');
-            document.getElementById('statusKoordinat').innerHTML = '<i class="fas fa-check-circle text-success me-1"></i>Lokasi sudah diambil!';
-            document.getElementById('statusKoordinat').className = 'mt-2 small text-success';
-            cekTombolAktif();
-        }
-        
-        // Trigger change event untuk role
-        document.getElementById('roleAkun').dispatchEvent(new Event('change'));
-        
-        // Ubah judul
-        document.querySelector('h3.fw-bold').textContent = 'Ajukan Pembuatan Akun';
-        document.querySelector('p.text-muted').textContent = 'Formulir pengajuan akun ke Admin';
-        
-        // Ubah tombol
-        document.getElementById('tombolDaftar').style.display = 'none';
-        document.getElementById('tombolAjukan').classList.remove('btn-primary');
-        document.getElementById('tombolAjukan').classList.add('btn-success', 'btn-lg', 'd-grid', 'w-100');
-        document.getElementById('tombolAjukan').style.display = 'block';
-    }
-});
-
-// ============================================
-// Cek koordinat setiap ada perubahan input
-// ============================================
-document.getElementById('latitude').addEventListener('change', cekTombolAktif);
-document.getElementById('longitude').addEventListener('change', cekTombolAktif);
-</script>
-<!--- ===== AKHIR BLOK 3.3 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 3 Halaman Pendaftaran ===== --->
 <!--- ===== BLOK 4 Halaman Lupa Password ===== --->
-<!--- ===== BLOK 4.1 Navigasi Atas Halaman Lupa Password ===== --->
-<nav class="navbar navbar-dark bg-success">
+<div id="halamanLupaPassword" class="page-section">
+
+<!--- ===== BLOK 4.1 Navigasi Atas Lupa Password ===== --->
+<nav class="navbar navbar-orange">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="login.php">
+        <a class="navbar-brand fw-bold text-white" href="#" onclick="tampilkanHalaman('login')">
             <i class="fas fa-arrow-left me-2"></i>Kembali ke Login
         </a>
     </div>
@@ -1039,124 +448,87 @@ document.getElementById('longitude').addEventListener('change', cekTombolAktif);
     <div class="row justify-content-center">
         <div class="col-md-5 col-lg-4">
             
-            <!-- Logo & Judul -->
             <div class="text-center mb-4">
-                <i class="fas fa-unlock-alt fa-4x text-warning mb-3"></i>
-                <h3 class="fw-bold">Lupa Password</h3>
-                <p class="text-muted">Masukkan username atau email untuk reset password</p>
+                <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <i class="fas fa-unlock-alt fa-3x" style="color: #FF8C00;"></i>
+                </div>
+                <h3 class="fw-bold text-white">Lupa Password</h3>
+                <p class="text-white opacity-75">Masukkan username atau email untuk reset password</p>
             </div>
             
-            <!-- Kartu Lupa Password -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-4">
                     
-                    <!-- Notifikasi Error/Sukses -->
                     <div id="notifikasiLupaPassword" class="alert d-none" role="alert"></div>
                     
                     <!-- Tahap 1: Input Username/Email -->
-                    <div id="tahapSatu">
-                        <form id="formLupaPassword" method="POST" action="auth/reset-password-proses.php">
-                            
+                    <div id="tahapSatuLupaPassword">
+                        <form onsubmit="return prosesLupaPassword(event)">
                             <div class="mb-3">
-                                <label for="identitas" class="form-label fw-bold">
-                                    <i class="fas fa-user text-warning me-1"></i>Username atau Email
+                                <label for="identitasLupa" class="form-label fw-bold text-dark">
+                                    <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Username atau Email
                                 </label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-warning text-dark">
+                                    <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-user"></i>
                                     </span>
-                                    <input 
-                                        type="text" 
-                                        id="identitas" 
-                                        name="identitas" 
-                                        class="form-control" 
-                                        placeholder="Masukkan username atau email"
-                                        required
-                                        autocomplete="username"
-                                    >
+                                    <input type="text" id="identitasLupa" name="identitas" class="form-control" placeholder="Masukkan username atau email" required autocomplete="username">
                                 </div>
                                 <small class="text-muted">Masukkan username atau email yang terdaftar</small>
                             </div>
-                            
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-warning btn-lg fw-bold">
+                                <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-paper-plane me-2"></i>Kirim Link Reset Password
                                 </button>
                             </div>
-                            
                         </form>
                     </div>
                     
-                    <!-- Tahap 2: Input Password Baru (Muncul setelah verifikasi token) -->
-                    <div id="tahapDua" class="d-none">
-                        <form id="formResetPassword" method="POST" action="auth/reset-password-simpan.php">
-                            
+                    <!-- Tahap 2: Input Password Baru -->
+                    <div id="tahapDuaLupaPassword" class="d-none">
+                        <form onsubmit="return prosesResetPassword(event)">
                             <input type="hidden" id="tokenReset" name="token" value="">
                             
                             <div class="mb-3">
-                                <label for="passwordBaru" class="form-label fw-bold">
-                                    <i class="fas fa-lock text-warning me-1"></i>Password Baru
+                                <label for="passwordBaru" class="form-label fw-bold text-dark">
+                                    <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password Baru
                                 </label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-warning text-dark">
+                                    <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-lock"></i>
                                     </span>
-                                    <input 
-                                        type="password" 
-                                        id="passwordBaru" 
-                                        name="password_baru" 
-                                        class="form-control" 
-                                        placeholder="Masukkan password baru"
-                                        minlength="6"
-                                        required
-                                    >
-                                    <button 
-                                        class="btn btn-outline-secondary" 
-                                        type="button" 
-                                        id="togglePasswordBaru"
-                                        title="Lihat password"
-                                    >
-                                        <i class="fas fa-eye"></i>
+                                    <input type="password" id="passwordBaru" name="password_baru" class="form-control" placeholder="Masukkan password baru" minlength="6" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBaru()" title="Lihat password">
+                                        <i class="fas fa-eye" id="iconToggleBaru"></i>
                                     </button>
                                 </div>
                                 <small class="text-muted">Minimal 6 karakter</small>
                             </div>
                             
                             <div class="mb-3">
-                                <label for="konfirmasiPasswordBaru" class="form-label fw-bold">
-                                    <i class="fas fa-check-circle text-warning me-1"></i>Konfirmasi Password Baru
+                                <label for="konfirmasiPasswordBaru" class="form-label fw-bold text-dark">
+                                    <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password Baru
                                 </label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-warning text-dark">
+                                    <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-check-circle"></i>
                                     </span>
-                                    <input 
-                                        type="password" 
-                                        id="konfirmasiPasswordBaru" 
-                                        name="konfirmasi_password" 
-                                        class="form-control" 
-                                        placeholder="Ketik ulang password baru"
-                                        minlength="6"
-                                        required
-                                    >
+                                    <input type="password" id="konfirmasiPasswordBaru" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password baru" minlength="6" required>
                                 </div>
                             </div>
                             
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-success btn-lg fw-bold">
+                                <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-save me-2"></i>Simpan Password Baru
                                 </button>
                             </div>
-                            
                         </form>
                     </div>
                     
-                    <!-- Garis Pemisah -->
                     <hr>
                     
-                    <!-- Link Kembali ke Login -->
                     <div class="text-center">
-                        <a href="login.php" class="text-success fw-bold">
+                        <a href="#" class="fw-bold" style="color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-arrow-left me-1"></i>Kembali ke Halaman Login
                         </a>
                     </div>
@@ -1164,8 +536,7 @@ document.getElementById('longitude').addEventListener('change', cekTombolAktif);
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
-            <div class="text-center mt-4 text-muted small">
+            <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
             
@@ -1174,276 +545,86 @@ document.getElementById('longitude').addEventListener('change', cekTombolAktif);
 </div>
 <!--- ===== AKHIR BLOK 4.2 ===== --->
 
-<!--- ===== BLOK 4.3 JavaScript Lupa Password ===== --->
-<script>
-// ============================================
-// Toggle Lihat Password Baru
-// ============================================
-document.getElementById('togglePasswordBaru').addEventListener('click', function() {
-    const passwordInput = document.getElementById('passwordBaru');
-    const icon = this.querySelector('i');
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-});
-
-// ============================================
-// Submit Form Lupa Password (Tahap 1)
-// ============================================
-document.getElementById('formLupaPassword').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const identitas = document.getElementById('identitas').value.trim();
-    const notifikasi = document.getElementById('notifikasiLupaPassword');
-    const tombolKirim = this.querySelector('button[type="submit"]');
-    
-    // Validasi input kosong
-    if (identitas === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username atau Email wajib diisi!';
-        notifikasi.classList.remove('d-none');
-        return;
-    }
-    
-    // Tampilkan loading
-    const teksAsli = tombolKirim.innerHTML;
-    tombolKirim.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sedang mengirim...';
-    tombolKirim.disabled = true;
-    
-    // Kirim data ke server
-    const formData = new FormData();
-    formData.append('identitas', identitas);
-    
-    fetch('auth/reset-password-proses.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sukses') {
-            notifikasi.className = 'alert alert-success';
-            notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            // Sembunyikan form tahap 1
-            document.getElementById('tahapSatu').classList.add('d-none');
-            
-            // Jika ada token di response, tampilkan tahap 2
-            if (data.token) {
-                document.getElementById('tokenReset').value = data.token;
-                document.getElementById('tahapDua').classList.remove('d-none');
-            }
-        } else {
-            notifikasi.className = 'alert alert-danger';
-            notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-        }
-        
-        tombolKirim.innerHTML = teksAsli;
-        tombolKirim.disabled = false;
-    })
-    .catch(error => {
-        console.log('AJAX gagal, menggunakan POST biasa');
-        this.submit();
-    });
-});
-
-// ============================================
-// Submit Form Reset Password (Tahap 2)
-// ============================================
-document.getElementById('formResetPassword').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const passwordBaru = document.getElementById('passwordBaru').value;
-    const konfirmasiPassword = document.getElementById('konfirmasiPasswordBaru').value;
-    const token = document.getElementById('tokenReset').value;
-    const notifikasi = document.getElementById('notifikasiLupaPassword');
-    const tombolSimpan = this.querySelector('button[type="submit"]');
-    
-    // Validasi password
-    if (passwordBaru.length < 6) {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password minimal 6 karakter!';
-        notifikasi.classList.remove('d-none');
-        return;
-    }
-    
-    if (passwordBaru !== konfirmasiPassword) {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi Password tidak cocok!';
-        notifikasi.classList.remove('d-none');
-        return;
-    }
-    
-    // Tampilkan loading
-    const teksAsli = tombolSimpan.innerHTML;
-    tombolSimpan.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sedang menyimpan...';
-    tombolSimpan.disabled = true;
-    
-    // Kirim data ke server
-    const formData = new FormData();
-    formData.append('token', token);
-    formData.append('password_baru', passwordBaru);
-    
-    fetch('auth/reset-password-simpan.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sukses') {
-            notifikasi.className = 'alert alert-success';
-            notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            // Sembunyikan form tahap 2
-            document.getElementById('tahapDua').classList.add('d-none');
-            
-            // Redirect ke login setelah 3 detik
-            setTimeout(function() {
-                window.location.href = 'login.php';
-            }, 3000);
-        } else {
-            notifikasi.className = 'alert alert-danger';
-            notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>' + data.pesan;
-            notifikasi.classList.remove('d-none');
-            
-            tombolSimpan.innerHTML = teksAsli;
-            tombolSimpan.disabled = false;
-        }
-    })
-    .catch(error => {
-        console.log('AJAX gagal, menggunakan POST biasa');
-        this.submit();
-    });
-});
-
-// ============================================
-// Cek URL Parameter untuk Token Reset
-// ============================================
-window.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    
-    if (token) {
-        // Langsung tampilkan tahap 2
-        document.getElementById('tahapSatu').classList.add('d-none');
-        document.getElementById('tokenReset').value = token;
-        document.getElementById('tahapDua').classList.remove('d-none');
-        
-        // Ubah judul
-        document.querySelector('h3.fw-bold').textContent = 'Reset Password';
-        document.querySelector('p.text-muted').textContent = 'Masukkan password baru Anda';
-        
-        // Fokus ke input password baru
-        document.getElementById('passwordBaru').focus();
-    } else {
-        // Fokus ke input identitas
-        document.getElementById('identitas').focus();
-    }
-});
-</script>
-<!--- ===== AKHIR BLOK 4.3 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 4 Halaman Lupa Password ===== --->
 <!--- ===== BLOK 5 Halaman Dasbor Default Setelah Login ===== --->
-<!--- ===== BLOK 5.1 Navigasi Atas Dasbor Default ===== --->
-<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+<div id="halamanDasbor" class="page-section">
+
+<!--- ===== BLOK 5.1 Navigasi Atas Dasbor ===== --->
+<nav class="navbar navbar-expand-lg navbar-orange sticky-top">
     <div class="container">
-        <!-- Tombol Hamburger Menu (Khusus Mobile) -->
-        <button class="btn btn-success me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+        <!-- Tombol Hamburger -->
+        <button class="btn text-white me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
             <i class="fas fa-bars fa-lg"></i>
         </button>
         
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="dasbor.php">
+        <a class="navbar-brand fw-bold text-white" href="#">
             <i class="fas fa-store-alt me-2"></i>Toko Online 2R
         </a>
         
-        <!-- Toggle untuk Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDasbor" aria-controls="navbarDasbor" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDasbor">
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <!-- Menu Kanan -->
         <div class="collapse navbar-collapse" id="navbarDasbor">
             <ul class="navbar-nav ms-auto align-items-center">
-                
-                <!-- Nama User & Role -->
+                <!-- User Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle fa-lg me-1"></i>
                         <span id="namaUserDisplay">Pengguna</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><span class="dropdown-item-text fw-bold" id="roleUserDisplay">Role: -</span></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-2"></i>Profil</a></li>
-                        <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="tampilkanHalaman('login')"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </li>
                 
                 <!-- Notifikasi -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-bell fa-lg"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="jumlahNotifikasi">
-                            0
-                        </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="jumlahNotifikasi">0</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" id="daftarNotifikasi" style="min-width: 300px;">
-                        <li><span class="dropdown-item-text text-muted">Memuat notifikasi...</span></li>
+                    <ul class="dropdown-menu dropdown-menu-end" id="daftarNotifikasi" style="min-width: 300px;">
+                        <li><span class="dropdown-item-text text-muted">Belum ada notifikasi</span></li>
                     </ul>
                 </li>
-                
             </ul>
         </div>
     </div>
 </nav>
 <!--- ===== AKHIR BLOK 5.1 ===== --->
 
-<!--- ===== BLOK 5.2 Offcanvas Sidebar Menu (Hamburger) ===== --->
-<div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
-    <div class="offcanvas-header bg-success">
-        <h5 class="offcanvas-title fw-bold" id="offcanvasMenuLabel">
-            <i class="fas fa-bars me-2"></i>Menu
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<!--- ===== BLOK 5.2 Offcanvas Sidebar Menu ===== --->
+<div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasMenu">
+    <div class="offcanvas-header" style="background-color: #FF6B00;">
+        <h5 class="offcanvas-title fw-bold"><i class="fas fa-bars me-2"></i>Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-        
-        <!-- Info User -->
         <div class="text-center mb-4 pb-3 border-bottom border-secondary">
-            <i class="fas fa-user-circle fa-3x text-success mb-2"></i>
+            <i class="fas fa-user-circle fa-3x mb-2" style="color: #FF8C00;"></i>
             <h6 id="offcanvasNamaUser">Pengguna</h6>
-            <span class="badge bg-success" id="offcanvasRoleUser">Role</span>
+            <span class="badge" style="background-color: #FF8C00;" id="offcanvasRoleUser">Role</span>
         </div>
-        
-        <!-- Daftar Menu Dinamis (Diisi JavaScript Sesuai Role) -->
         <nav id="menuNavigasi" class="list-group list-group-flush">
-            <!-- Menu akan dimuat via JavaScript -->
             <div class="text-center py-3">
-                <span class="spinner-border spinner-border-sm text-success me-2"></span>Memuat menu...
+                <span class="spinner-border spinner-border-sm me-2" style="color: #FF8C00;"></span>Memuat menu...
             </div>
         </nav>
-        
     </div>
 </div>
 <!--- ===== AKHIR BLOK 5.2 ===== --->
 
-<!--- ===== BLOK 5.3 Konten Utama Dasbor Default ===== --->
-<main class="container-fluid px-4 py-4">
+<!--- ===== BLOK 5.3 Konten Utama Dasbor ===== --->
+<main class="container-fluid px-4 py-4" id="kontenDasbor">
     
-    <!-- Baris Informasi Waktu & Tanggal -->
+    <!-- Baris Waktu & Tanggal -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card border-0 shadow-sm bg-success text-white">
+            <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #FF6B00 0%, #FF5500 100%);">
                 <div class="card-body py-3">
                     <div class="row align-items-center text-center">
                         <div class="col-md-4 mb-2 mb-md-0">
@@ -1464,15 +645,15 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
     
-    <!-- Baris Tombol Aksi Utama -->
+    <!-- Tombol Aksi Utama -->
     <div class="row mb-4 g-3">
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
                 <div class="card-body text-center py-4">
-                    <i class="fas fa-store fa-3x text-success mb-3"></i>
+                    <i class="fas fa-store fa-3x mb-3" style="color: #FF8C00;"></i>
                     <h5 class="fw-bold">Toko Terdekat</h5>
-                    <p class="text-muted small">Lihat toko-toko yang ada di sekitar lokasi Anda</p>
-                    <button class="btn btn-success" onclick="lihatTokoTerdekat()">
+                    <p class="text-muted small">Lihat toko-toko di sekitar lokasi Anda</p>
+                    <button class="btn text-white" style="background-color: #FF8C00;" onclick="alert('Fitur Toko Terdekat akan segera tersedia')">
                         <i class="fas fa-store me-2"></i>Lihat Toko
                     </button>
                 </div>
@@ -1482,10 +663,10 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
                 <div class="card-body text-center py-4">
-                    <i class="fas fa-motorcycle fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-motorcycle fa-3x mb-3" style="color: #FF6B00;"></i>
                     <h5 class="fw-bold">Ojek Terdekat</h5>
-                    <p class="text-muted small">Cari ojek untuk pengiriman barang Anda</p>
-                    <button class="btn btn-primary" onclick="lihatOjekTerdekat()">
+                    <p class="text-muted small">Cari ojek untuk pengiriman barang</p>
+                    <button class="btn text-white" style="background-color: #FF6B00;" onclick="alert('Fitur Ojek Terdekat akan segera tersedia')">
                         <i class="fas fa-motorcycle me-2"></i>Lihat Ojek
                     </button>
                 </div>
@@ -1495,10 +676,10 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 hover-card">
                 <div class="card-body text-center py-4">
-                    <i class="fas fa-search fa-3x text-warning mb-3"></i>
+                    <i class="fas fa-search fa-3x mb-3" style="color: #FF8C00;"></i>
                     <h5 class="fw-bold">Cari Produk</h5>
                     <p class="text-muted small">Temukan produk yang Anda butuhkan</p>
-                    <button class="btn btn-warning" onclick="fokusCariProduk()">
+                    <button class="btn text-white" style="background-color: #FF8C00;" onclick="alert('Fitur Cari Produk akan segera tersedia')">
                         <i class="fas fa-search me-2"></i>Cari Produk
                     </button>
                 </div>
@@ -1506,13 +687,13 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
     
-    <!-- Baris Statistik Ringkas (Placeholder) -->
+    <!-- Statistik -->
     <div class="row mb-4 g-3">
         <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm bg-light">
                 <div class="card-body text-center py-3">
-                    <i class="fas fa-store fa-2x text-success mb-2"></i>
-                    <h4 class="fw-bold mb-0" id="statToko">0</h4>
+                    <i class="fas fa-store fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
                     <small class="text-muted">Total Toko</small>
                 </div>
             </div>
@@ -1520,8 +701,8 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm bg-light">
                 <div class="card-body text-center py-3">
-                    <i class="fas fa-box fa-2x text-warning mb-2"></i>
-                    <h4 class="fw-bold mb-0" id="statProduk">0</h4>
+                    <i class="fas fa-box fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
                     <small class="text-muted">Total Produk</small>
                 </div>
             </div>
@@ -1529,8 +710,8 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm bg-light">
                 <div class="card-body text-center py-3">
-                    <i class="fas fa-motorcycle fa-2x text-primary mb-2"></i>
-                    <h4 class="fw-bold mb-0" id="statOjek">0</h4>
+                    <i class="fas fa-motorcycle fa-2x mb-2" style="color: #FF6B00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
                     <small class="text-muted">Ojek Online</small>
                 </div>
             </div>
@@ -1538,69 +719,60 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm bg-light">
                 <div class="card-body text-center py-3">
-                    <i class="fas fa-shopping-cart fa-2x text-info mb-2"></i>
-                    <h4 class="fw-bold mb-0" id="statOrder">0</h4>
+                    <i class="fas fa-shopping-cart fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
                     <small class="text-muted">Order Hari Ini</small>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Baris Produk & Toko Terbaru -->
+    <!-- Toko Terdekat & Produk -->
     <div class="row g-4">
-        
-        <!-- Daftar Toko Terdekat -->
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-store text-success me-2"></i>Toko Terdekat
+                    <i class="fas fa-store me-2" style="color: #FF8C00;"></i>Toko Terdekat
                 </div>
-                <div class="card-body" id="daftarTokoTerdekat">
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-spinner fa-spin me-2"></i>Memuat data toko...
-                    </div>
+                <div class="card-body text-center py-4 text-muted">
+                    <i class="fas fa-store-alt fa-2x mb-2"></i>
+                    <p>Daftar toko terdekat akan ditampilkan di sini</p>
+                    <small>Fitur dalam pengembangan</small>
                 </div>
             </div>
         </div>
         
-        <!-- Daftar Produk Terbaru -->
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-box-open text-warning me-2"></i>Produk Terbaru
+                    <i class="fas fa-box-open me-2" style="color: #FF8C00;"></i>Produk Terbaru
                 </div>
                 <div class="card-body">
-                    <!-- Pencarian Produk -->
                     <div class="input-group mb-3">
-                        <input type="text" id="cariProdukInput" class="form-control" placeholder="Cari produk...">
-                        <button class="btn btn-warning" type="button" onclick="cariProduk()">
-                            <i class="fas fa-search"></i> Cari
-                        </button>
+                        <input type="text" class="form-control" placeholder="Cari produk...">
+                        <button class="btn text-white" style="background-color: #FF8C00;"><i class="fas fa-search"></i> Cari</button>
                     </div>
-                    
-                    <!-- List Produk -->
-                    <div id="daftarProdukTerbaru">
-                        <div class="text-center py-4 text-muted">
-                            <i class="fas fa-spinner fa-spin me-2"></i>Memuat data produk...
-                        </div>
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-box-open fa-2x mb-2"></i>
+                        <p>Daftar produk terbaru akan ditampilkan di sini</p>
+                        <small>Fitur dalam pengembangan</small>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
     
-    <!-- Baris Ojek Online -->
+    <!-- Ojek Online -->
     <div class="row mt-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-motorcycle text-primary me-2"></i>Ojek Online di Sekitar Anda
+                    <i class="fas fa-motorcycle me-2" style="color: #FF6B00;"></i>Ojek Online di Sekitar Anda
                 </div>
-                <div class="card-body" id="daftarOjekOnline">
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-spinner fa-spin me-2"></i>Memuat data ojek...
-                    </div>
+                <div class="card-body text-center py-4 text-muted">
+                    <i class="fas fa-motorcycle fa-2x mb-2"></i>
+                    <p>Daftar ojek online akan ditampilkan di sini</p>
+                    <small>Fitur dalam pengembangan</small>
                 </div>
             </div>
         </div>
@@ -1609,609 +781,56 @@ window.addEventListener('DOMContentLoaded', function() {
 </main>
 <!--- ===== AKHIR BLOK 5.3 ===== --->
 
-<!--- ===== BLOK 5.4 JavaScript Dasbor Default ===== --->
-<script>
-// ============================================
-// Data User dari Session (Diisi oleh PHP)
-// ============================================
-const dataUser = {
-    nama: 'Nama User',
-    role: 'Customer',
-    kodeRole: 'CT',
-    idUser: ''
-};
-
-// ============================================
-// Update Waktu Real-Time
-// ============================================
-function updateWaktu() {
-    const sekarang = new Date();
-    
-    const opsiTanggal = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        timeZone: 'Asia/Jakarta'
-    };
-    
-    const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
-    const jamStr = sekarang.toLocaleTimeString('id-ID', { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit',
-        timeZone: 'Asia/Jakarta'
-    });
-    
-    document.getElementById('tanggalSekarang').textContent = tanggalStr;
-    document.getElementById('jamSekarang').textContent = jamStr + ' WIB';
-}
-
-setInterval(updateWaktu, 1000);
-updateWaktu();
-
-// ============================================
-// Konfigurasi Menu Berdasarkan Role
-// ============================================
-const menuConfig = {
-    'SA': { // SuperAdmin
-        namaRole: 'SuperAdmin',
-        icon: 'fas fa-crown text-warning',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Penagihan Otomatis', ikon: 'fas fa-robot', link: '#' },
-            { nama: 'Riwayat Penagihan', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Laporan Keuangan', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Setting Harga Aplikasi', ikon: 'fas fa-tags', link: '#' },
-            { nama: 'Data Penagihan', ikon: 'fas fa-database', link: '#' },
-            { nama: 'Semua Transaksi', ikon: 'fas fa-exchange-alt', link: '#' },
-            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', link: '#' },
-            { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', link: '#' },
-            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', link: '#' },
-            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', link: '#' },
-            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', link: '#' },
-            { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', link: '#' },
-            { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', link: '#' },
-            { nama: 'Setting Rekening Master', ikon: 'fas fa-university', link: '#' },
-            { nama: 'Menu Iklan', ikon: 'fas fa-ad', link: '#' },
-            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', link: '#' },
-            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', link: '#' },
-            { nama: 'Katalog Produk', ikon: 'fas fa-th-list', link: '#' },
-            { nama: 'Manajemen Katalog', ikon: 'fas fa-folder', link: '#' },
-            { nama: 'Penataan Produk', ikon: 'fas fa-sort', link: '#' },
-            { nama: 'Kelola Wilayah', ikon: 'fas fa-map-marked-alt', link: '#' },
-            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', link: '#' },
-            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', link: '#' },
-            { nama: 'Notepad+', ikon: 'fas fa-sticky-note', link: '#' },
-            { nama: 'Keamanan Sistem', ikon: 'fas fa-shield-alt', link: '#' },
-            { nama: 'Histori Aktivitas', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Log Aktivitas Lanjutan', ikon: 'fas fa-clipboard-list', link: '#' },
-            { nama: 'Pengaturan Umum', ikon: 'fas fa-cog', link: '#' },
-            { nama: 'Restart System', ikon: 'fas fa-power-off', link: '#' },
-            { nama: 'Bantuan & FAQ', ikon: 'fas fa-question-circle', link: '#' },
-            { nama: 'Dokumentasi', ikon: 'fas fa-book', link: '#' }
-        ]
-    },
-    'ADM': { // Staf Admin
-        namaRole: 'Staf Admin',
-        icon: 'fas fa-user-shield text-info',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Manajemen Akun', ikon: 'fas fa-users-cog', link: '#' },
-            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', link: '#' },
-            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', link: '#' },
-            { nama: 'Histori Aktivitas & Log', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Pengaturan Umum', ikon: 'fas fa-cog', link: '#' },
-            { nama: 'Restart System', ikon: 'fas fa-power-off', link: '#' }
-        ]
-    },
-    'SOT': { // Staf Owner Toko
-        namaRole: 'Staf Owner Toko',
-        icon: 'fas fa-store-alt text-success',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Manajemen Rekrutan', ikon: 'fas fa-users', link: '#' },
-            { nama: 'Buat Akun Toko', ikon: 'fas fa-user-plus', link: '#' },
-            { nama: 'Verifikasi Rekrutan', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', link: '#' },
-            { nama: 'Laporan Kinerja Rekrutan', ikon: 'fas fa-chart-bar', link: '#' },
-            { nama: 'Manajemen Produk Toko Induk', ikon: 'fas fa-boxes', link: '#' },
-            { nama: 'Semua Order Toko Induk', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Laporan Penjualan & Komisi', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', link: '#' }
-        ]
-    },
-    'SOO': { // Staf Owner Ojek
-        namaRole: 'Staf Owner Ojek',
-        icon: 'fas fa-motorcycle text-primary',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Manajemen Rekrutan Driver', ikon: 'fas fa-users', link: '#' },
-            { nama: 'Tambah Rekrutan Driver', ikon: 'fas fa-user-plus', link: '#' },
-            { nama: 'Verifikasi Rekrutan', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', link: '#' },
-            { nama: 'Laporan Kinerja Driver', ikon: 'fas fa-chart-bar', link: '#' },
-            { nama: 'Manajemen Order Armada', ikon: 'fas fa-tasks', link: '#' },
-            { nama: 'Monitoring Driver Online', ikon: 'fas fa-map-marker-alt', link: '#' },
-            { nama: 'Laporan Setoran & Komisi', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', link: '#' },
-            { nama: 'Log Aktivitas & Pelanggaran', ikon: 'fas fa-clipboard-list', link: '#' }
-        ]
-    },
-    'MKT': { // Staf Marketing
-        namaRole: 'Staf Marketing',
-        icon: 'fas fa-chart-line text-warning',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Manajemen Iklan', ikon: 'fas fa-ad', link: '#' },
-            { nama: 'Manajemen Promo', ikon: 'fas fa-percent', link: '#' },
-            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', link: '#' },
-            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', link: '#' },
-            { nama: 'Analitik & Laporan Pemasaran', ikon: 'fas fa-chart-pie', link: '#' },
-            { nama: 'Katalog Produk (Riset)', ikon: 'fas fa-search', link: '#' },
-            { nama: 'Usulan Produk Unggulan', ikon: 'fas fa-star', link: '#' }
-        ]
-    },
-    'TGH': { // Staf Penagihan
-        namaRole: 'Staf Penagihan',
-        icon: 'fas fa-file-invoice-dollar text-danger',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Daftar Tagihan', ikon: 'fas fa-list-alt', link: '#' },
-            { nama: 'Kirim Reminder', ikon: 'fas fa-envelope', link: '#' },
-            { nama: 'Laporan Keuangan', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Data Penagihan Manual', ikon: 'fas fa-edit', link: '#' }
-        ]
-    },
-    'CS': { // Customer Service
-        namaRole: 'Customer Service',
-        icon: 'fas fa-headset text-info',
-        menu: [
-            { nama: 'Dasbor CS', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Semua Tiket Masuk', ikon: 'fas fa-ticket-alt', link: '#' },
-            { nama: 'Filter Tiket', ikon: 'fas fa-filter', link: '#' },
-            { nama: 'Ruang Chat', ikon: 'fas fa-comments', link: '#' },
-            { nama: 'Cari & Bantuan Akun', ikon: 'fas fa-search', link: '#' },
-            { nama: 'Chat Internal', ikon: 'fas fa-comment-dots', link: '#' },
-            { nama: 'Manajemen FAQ', ikon: 'fas fa-question-circle', link: '#' },
-            { nama: 'Histori Aktivitas CS', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'TK': { // Toko
-        namaRole: 'Toko',
-        icon: 'fas fa-store text-success',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', link: '#' },
-            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', link: '#' },
-            { nama: 'Kategori Produk', ikon: 'fas fa-tags', link: '#' },
-            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', link: '#' },
-            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Proses Order', ikon: 'fas fa-tasks', link: '#' },
-            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', link: '#' },
-            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', link: '#' },
-            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'PM': { // Pedagang Makanan
-        namaRole: 'Pedagang Makanan',
-        icon: 'fas fa-utensils text-danger',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Daftar Jualan Saya', ikon: 'fas fa-list', link: '#' },
-            { nama: 'Tambah Jualan Baru', ikon: 'fas fa-plus-circle', link: '#' },
-            { nama: 'Manajemen Stok & Bahan Baku', ikon: 'fas fa-boxes', link: '#' },
-            { nama: 'Manajemen Kategori Pasar', ikon: 'fas fa-tags', link: '#' },
-            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Proses Order & Status', ikon: 'fas fa-tasks', link: '#' },
-            { nama: 'Atur Pengiriman & Jam Operasional', ikon: 'fas fa-clock', link: '#' },
-            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', link: '#' },
-            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Buku Kas / Catatan Pengeluaran', ikon: 'fas fa-book', link: '#' },
-            { nama: 'Pengajuan Tambah Slot Produk', ikon: 'fas fa-plus-square', link: '#' },
-            { nama: 'Verifikasi Dokumen Usaha', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Mode Kasir / Input Offline', ikon: 'fas fa-cash-register', link: '#' },
-            { nama: 'Manajemen Resep & Kalkulator Bahan', ikon: 'fas fa-calculator', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'PP': { // Pedagang Pasar
-        namaRole: 'Pedagang Pasar',
-        icon: 'fas fa-shopping-basket text-success',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', link: '#' },
-            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', link: '#' },
-            { nama: 'Kategori Produk', ikon: 'fas fa-tags', link: '#' },
-            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', link: '#' },
-            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Proses Order', ikon: 'fas fa-tasks', link: '#' },
-            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', link: '#' },
-            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', link: '#' },
-            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'COD': { // COD Seller
-        namaRole: 'COD Seller',
-        icon: 'fas fa-truck text-orange',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Daftar Barang Jualan COD', ikon: 'fas fa-list', link: '#' },
-            { nama: 'Tambah / Edit Barang', ikon: 'fas fa-edit', link: '#' },
-            { nama: 'Update Stok', ikon: 'fas fa-boxes', link: '#' },
-            { nama: 'Input Order COD', ikon: 'fas fa-cart-plus', link: '#' },
-            { nama: 'Daftar Semua Order COD', ikon: 'fas fa-clipboard-list', link: '#' },
-            { nama: 'Konfirmasi Pembayaran & Pengiriman', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Atur Rute / Jadwal', ikon: 'fas fa-route', link: '#' },
-            { nama: 'Transaksi Penjualan COD', ikon: 'fas fa-money-bill', link: '#' },
-            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Verifikasi Dokumen COD', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Pengajuan Tambah Slot Barang', ikon: 'fas fa-plus-square', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'OJ': { // Ojek
-        namaRole: 'Ojek',
-        icon: 'fas fa-motorcycle text-primary',
-        menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', link: '#' },
-            { nama: 'Profil', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Data Kendaraan', ikon: 'fas fa-motorcycle', link: '#' },
-            { nama: 'Order Baru', ikon: 'fas fa-bell', link: '#' },
-            { nama: 'Order Sedang Berjalan', ikon: 'fas fa-spinner', link: '#' },
-            { nama: 'Riwayat Pengiriman', ikon: 'fas fa-history', link: '#' },
-            { nama: 'Pendapatan Fee Ojek', ikon: 'fas fa-money-bill', link: '#' },
-            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', link: '#' },
-            { nama: 'Catatan Uang COD', ikon: 'fas fa-sticky-note', link: '#' },
-            { nama: 'Verifikasi Dokumen & Kendaraan', ikon: 'fas fa-check-circle', link: '#' },
-            { nama: 'Atur Radius Operasional', ikon: 'fas fa-map-marker-alt', link: '#' },
-            { nama: 'Peta / Navigasi', ikon: 'fas fa-map', link: '#' },
-            { nama: 'Log Aktivitas Ojek', ikon: 'fas fa-clipboard-list', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    },
-    'CT': { // Customer
-        namaRole: 'Customer',
-        icon: 'fas fa-user text-success',
-        menu: [
-            { nama: 'Dasbor / Beranda', ikon: 'fas fa-home', link: '#' },
-            { nama: 'Profil Customer', ikon: 'fas fa-user', link: '#' },
-            { nama: 'Katalog Produk / Cari Barang', ikon: 'fas fa-search', link: '#' },
-            { nama: 'Keranjang Belanja', ikon: 'fas fa-shopping-cart', link: '#' },
-            { nama: 'Checkout & Pembayaran', ikon: 'fas fa-credit-card', link: '#' },
-            { nama: 'Order Saya', ikon: 'fas fa-clipboard-list', link: '#' },
-            { nama: 'Lacak Pengiriman', ikon: 'fas fa-truck', link: '#' },
-            { nama: 'Ulasan / Review Produk', ikon: 'fas fa-star', link: '#' },
-            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', link: '#' },
-            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', link: '#' }
-        ]
-    }
-};
-
-// ============================================
-// Inisialisasi Halaman
-// ============================================
-function inisialisasiDasbor() {
-    const kodeRole = dataUser.kodeRole;
-    const config = menuConfig[kodeRole] || menuConfig['CT'];
-    
-    // Update nama & role di navbar
-    document.getElementById('namaUserDisplay').textContent = dataUser.nama;
-    document.getElementById('roleUserDisplay').textContent = config.namaRole;
-    
-    // Update offcanvas
-    document.getElementById('offcanvasNamaUser').textContent = dataUser.nama;
-    document.getElementById('offcanvasRoleUser').textContent = config.namaRole;
-    
-    // Load menu navigasi
-    loadMenuNavigasi(config.menu);
-    
-    // Load statistik
-    loadStatistik();
-    
-    // Load toko terdekat
-    loadTokoTerdekat();
-    
-    // Load produk terbaru
-    loadProdukTerbaru();
-    
-    // Load ojek online
-    loadOjekOnline();
-    
-    // Load notifikasi
-    loadNotifikasi();
-}
-
-// ============================================
-// Load Menu Navigasi ke Offcanvas & Sidebar
-// ============================================
-function loadMenuNavigasi(menuItems) {
-    const menuContainer = document.getElementById('menuNavigasi');
-    let htmlMenu = '';
-    
-    menuItems.forEach(function(item, index) {
-        htmlMenu += `
-            <a href="${item.link}" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" data-menu="${item.nama}">
-                <i class="${item.ikon} me-2"></i>${item.nama}
-            </a>
-        `;
-    });
-    
-    menuContainer.innerHTML = htmlMenu;
-    
-    // Tambahkan event listener ke setiap menu
-    document.querySelectorAll('.menu-item').forEach(function(element) {
-        element.addEventListener('click', function(event) {
-            event.preventDefault();
-            const namaMenu = this.getAttribute('data-menu');
-            tampilkanPlaceholderMenu(namaMenu);
-            
-            // Tutup offcanvas di mobile
-            const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-            if (offcanvas) {
-                offcanvas.hide();
-            }
-        });
-    });
-}
-
-// ============================================
-// Tampilkan Placeholder Menu
-// ============================================
-function tampilkanPlaceholderMenu(namaMenu) {
-    const mainContent = document.querySelector('main');
-    
-    // Simpan konten utama saat ini untuk kembali
-    if (!window.kontenSebelumnya) {
-        window.kontenSebelumnya = mainContent.innerHTML;
-    }
-    
-    mainContent.innerHTML = `
-        <div class="container-fluid px-4 py-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>${namaMenu}</h5>
-                    <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
-                        <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
-                    </button>
-                </div>
-                <div class="card-body text-center py-5">
-                    <i class="fas fa-tools fa-5x text-muted mb-4"></i>
-                    <h3 class="text-muted">${namaMenu}</h3>
-                    <p class="lead text-muted">Halaman ini masih dalam pengembangan</p>
-                    <p class="text-muted">Fitur akan segera tersedia</p>
-                    <button class="btn btn-success btn-lg mt-3" onclick="kembaliKeDasbor()">
-                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// ============================================
-// Kembali ke Dasbor Default
-// ============================================
-function kembaliKeDasbor() {
-    if (window.kontenSebelumnya) {
-        document.querySelector('main').innerHTML = window.kontenSebelumnya;
-        window.kontenSebelumnya = null;
-        
-        // Re-inisialisasi
-        inisialisasiDasbor();
-    }
-}
-
-// ============================================
-// Fungsi Tombol Aksi Utama
-// ============================================
-function lihatTokoTerdekat() {
-    const sectionToko = document.getElementById('daftarTokoTerdekat');
-    if (sectionToko) {
-        sectionToko.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-function lihatOjekTerdekat() {
-    const sectionOjek = document.getElementById('daftarOjekOnline');
-    if (sectionOjek) {
-        sectionOjek.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-function fokusCariProduk() {
-    const inputCari = document.getElementById('cariProdukInput');
-    if (inputCari) {
-        inputCari.scrollIntoView({ behavior: 'smooth' });
-        inputCari.focus();
-    }
-}
-
-function cariProduk() {
-    const keyword = document.getElementById('cariProdukInput').value.trim();
-    if (keyword !== '') {
-        alert('Mencari produk: ' + keyword + '\nFitur pencarian akan segera tersedia.');
-    }
-}
-
-// ============================================
-// Load Statistik (Placeholder)
-// ============================================
-function loadStatistik() {
-    // Placeholder data statistik
-    document.getElementById('statToko').textContent = '...';
-    document.getElementById('statProduk').textContent = '...';
-    document.getElementById('statOjek').textContent = '...';
-    document.getElementById('statOrder').textContent = '...';
-}
-
-// ============================================
-// Load Toko Terdekat (Placeholder)
-// ============================================
-function loadTokoTerdekat() {
-    const container = document.getElementById('daftarTokoTerdekat');
-    container.innerHTML = `
-        <div class="text-center py-3 text-muted">
-            <i class="fas fa-store-alt fa-2x mb-2"></i>
-            <p>Daftar toko terdekat akan ditampilkan di sini</p>
-            <small>Fitur dalam pengembangan</small>
-        </div>
-    `;
-}
-
-// ============================================
-// Load Produk Terbaru (Placeholder)
-// ============================================
-function loadProdukTerbaru() {
-    const container = document.getElementById('daftarProdukTerbaru');
-    container.innerHTML = `
-        <div class="text-center py-3 text-muted">
-            <i class="fas fa-box-open fa-2x mb-2"></i>
-            <p>Daftar produk terbaru akan ditampilkan di sini</p>
-            <small>Fitur dalam pengembangan</small>
-        </div>
-    `;
-}
-
-// ============================================
-// Load Ojek Online (Placeholder)
-// ============================================
-function loadOjekOnline() {
-    const container = document.getElementById('daftarOjekOnline');
-    container.innerHTML = `
-        <div class="text-center py-3 text-muted">
-            <i class="fas fa-motorcycle fa-2x mb-2"></i>
-            <p>Daftar ojek online akan ditampilkan di sini</p>
-            <small>Fitur dalam pengembangan</small>
-        </div>
-    `;
-}
-
-// ============================================
-// Load Notifikasi (Placeholder)
-// ============================================
-function loadNotifikasi() {
-    const container = document.getElementById('daftarNotifikasi');
-    document.getElementById('jumlahNotifikasi').textContent = '0';
-    container.innerHTML = `
-        <li><span class="dropdown-item-text text-muted">
-            <i class="fas fa-inbox me-2"></i>Belum ada notifikasi
-        </span></li>
-    `;
-}
-
-// ============================================
-// Event Listener Saat Halaman Dimuat
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Data user akan diisi oleh PHP, ini fallback
-    if (typeof phpDataUser !== 'undefined') {
-        dataUser.nama = phpDataUser.nama;
-        dataUser.role = phpDataUser.role;
-        dataUser.kodeRole = phpDataUser.kodeRole;
-        dataUser.idUser = phpDataUser.idUser;
-    }
-    
-    inisialisasiDasbor();
-});
-
-// ============================================
-// Reset konten sebelumnya saat resize (responsive)
-// ============================================
-window.addEventListener('resize', function() {
-    if (window.innerWidth >= 992 && window.kontenSebelumnya) {
-        // Kembali ke dasbor saat resize ke desktop
-        kembaliKeDasbor();
-    }
-});
-</script>
-<!--- ===== AKHIR BLOK 5.4 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 5 Halaman Dasbor Default ===== --->
 <!--- ===== BLOK 6 Halaman Logout ===== --->
-<!--- ===== BLOK 6.1 Container Utama Logout ===== --->
+<div id="halamanLogout" class="page-section">
+
+<!--- ===== BLOK 6.1 Container Logout ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             
-            <!-- Kartu Logout -->
-            <div class="card shadow-sm border-0 text-center">
+            <div class="card shadow-lg border-0 text-center">
                 <div class="card-body p-5">
                     
-                    <!-- Spinner Loading -->
+                    <!-- Loading -->
                     <div id="logoutLoading">
-                        <div class="spinner-border text-success mb-3" style="width: 3rem; height: 3rem;" role="status">
+                        <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        <h4 class="fw-bold text-success mb-2">Sedang Logout...</h4>
+                        <h4 class="fw-bold mb-2" style="color: #FF8C00;">Sedang Logout...</h4>
                         <p class="text-muted">Anda akan dialihkan ke halaman login</p>
                     </div>
                     
-                    <!-- Sukses Logout (Awalnya disembunyikan) -->
+                    <!-- Sukses -->
                     <div id="logoutSukses" class="d-none">
-                        <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
-                        <h4 class="fw-bold text-success mb-2">Logout Berhasil!</h4>
+                        <i class="fas fa-check-circle fa-5x mb-3" style="color: #FF8C00;"></i>
+                        <h4 class="fw-bold mb-2" style="color: #FF8C00;">Logout Berhasil!</h4>
                         <p class="text-muted">Sampai jumpa kembali</p>
                         <div class="mt-3">
-                            <a href="login.php" class="btn btn-success btn-lg">
+                            <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('login')">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login Kembali
-                            </a>
-                        </div>
-                        <div class="mt-2">
-                            <a href="index.php" class="btn btn-outline-success">
-                                <i class="fas fa-home me-2"></i>Ke Beranda
-                            </a>
+                            </button>
                         </div>
                     </div>
                     
-                    <!-- Gagal Logout (Awalnya disembunyikan) -->
+                    <!-- Gagal -->
                     <div id="logoutGagal" class="d-none">
-                        <i class="fas fa-exclamation-triangle fa-5x text-warning mb-3"></i>
-                        <h4 class="fw-bold text-warning mb-2">Gagal Logout</h4>
-                        <p class="text-muted" id="pesanError">Terjadi kesalahan saat logout</p>
+                        <i class="fas fa-exclamation-triangle fa-5x mb-3" style="color: #FF6B00;"></i>
+                        <h4 class="fw-bold mb-2" style="color: #FF6B00;">Gagal Logout</h4>
+                        <p class="text-muted">Terjadi kesalahan saat logout</p>
                         <div class="mt-3">
-                            <button class="btn btn-warning btn-lg" onclick="window.location.reload()">
-                                <i class="fas fa-redo me-2"></i>Coba Lagi
-                            </button>
-                        </div>
-                        <div class="mt-2">
-                            <a href="dasbor.php" class="btn btn-outline-warning">
+                            <button class="btn btn-lg text-white fw-bold" style="background-color: #FF6B00;" onclick="tampilkanHalaman('dasbor')">
                                 <i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor
-                            </a>
+                            </button>
                         </div>
                     </div>
                     
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
-            <div class="text-center mt-4 text-muted small">
+            <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
             
@@ -2220,105 +839,26 @@ window.addEventListener('resize', function() {
 </div>
 <!--- ===== AKHIR BLOK 6.1 ===== --->
 
-<!--- ===== BLOK 6.2 JavaScript Logout ===== --->
-<script>
-// ============================================
-// Proses Logout Otomatis
-// ============================================
-function prosesLogout() {
-    
-    // Kirim request logout ke server
-    fetch('auth/logout-proses.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            action: 'logout'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sukses') {
-            // Tampilkan pesan sukses
-            document.getElementById('logoutLoading').classList.add('d-none');
-            document.getElementById('logoutSukses').classList.remove('d-none');
-            
-            // Redirect ke login setelah 2 detik
-            setTimeout(function() {
-                window.location.href = 'login.php';
-            }, 2000);
-            
-        } else {
-            // Tampilkan pesan gagal
-            document.getElementById('logoutLoading').classList.add('d-none');
-            document.getElementById('logoutGagal').classList.remove('d-none');
-            document.getElementById('pesanError').textContent = data.pesan || 'Terjadi kesalahan saat logout';
-        }
-    })
-    .catch(error => {
-        console.log('AJAX gagal, lakukan redirect langsung');
-        
-        // Fallback: redirect langsung ke login
-        document.getElementById('logoutLoading').classList.add('d-none');
-        document.getElementById('logoutSukses').classList.remove('d-none');
-        
-        setTimeout(function() {
-            window.location.href = 'login.php';
-        }, 1000);
-    });
-    
-}
-
-// ============================================
-// Jalankan proses logout saat halaman dimuat
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Delay sedikit untuk efek visual
-    setTimeout(function() {
-        prosesLogout();
-    }, 500);
-});
-
-// ============================================
-// Jika user mencoba kembali, cegah cache
-// ============================================
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {
-        window.location.reload();
-    }
-});
-</script>
-<!--- ===== AKHIR BLOK 6.2 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 6 Halaman Logout ===== --->
 <!--- ===== BLOK 7 Halaman 404 Not Found ===== --->
-<!--- ===== BLOK 7.1 Navigasi Atas Halaman 404 ===== --->
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-            <i class="fas fa-store-alt me-2"></i>Toko Online 2R
-        </a>
-    </div>
-</nav>
-<!--- ===== AKHIR BLOK 7.1 ===== --->
+<div id="halaman404" class="page-section">
 
-<!--- ===== BLOK 7.2 Container Utama Halaman 404 ===== --->
+<!--- ===== BLOK 7.1 Container 404 ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
             
-            <!-- Ilustrasi 404 -->
             <div class="mb-4">
-                <i class="fas fa-map-signs fa-6x text-muted mb-3"></i>
-                <h1 class="display-1 fw-bold text-muted">404</h1>
+                <i class="fas fa-map-signs fa-6x text-white mb-3"></i>
+                <h1 class="display-1 fw-bold text-white">404</h1>
             </div>
             
-            <!-- Pesan -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
                     
                     <h3 class="fw-bold text-dark mb-3">
-                        <i class="fas fa-exclamation-circle text-warning me-2"></i>
+                        <i class="fas fa-exclamation-circle me-2" style="color: #FF8C00;"></i>
                         Halaman Tidak Ditemukan
                     </h3>
                     
@@ -2328,12 +868,12 @@ window.addEventListener('pageshow', function(event) {
                     </p>
                     
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="index.php" class="btn btn-success btn-lg">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-home me-2"></i>Ke Beranda
-                        </a>
-                        <a href="dasbor.php" class="btn btn-outline-success btn-lg">
+                        </button>
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF6B00;" onclick="tampilkanHalaman('dasbor')">
                             <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
-                        </a>
+                        </button>
                         <button class="btn btn-outline-secondary btn-lg" onclick="history.back()">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </button>
@@ -2342,82 +882,31 @@ window.addEventListener('pageshow', function(event) {
                 </div>
             </div>
             
-            <!-- Bantuan -->
-            <div class="mt-4 text-muted small">
-                <p>
-                    Butuh bantuan? 
-                    <a href="#" class="text-success fw-bold">Hubungi Customer Service</a>
-                </p>
+            <div class="mt-4 text-white small">
+                <p>Butuh bantuan? <a href="#" class="text-white fw-bold">Hubungi Customer Service</a></p>
             </div>
             
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 7.2 ===== --->
+<!--- ===== AKHIR BLOK 7.1 ===== --->
 
-<!--- ===== BLOK 7.3 JavaScript Halaman 404 ===== --->
-<script>
-// ============================================
-// Auto-redirect setelah beberapa detik
-// ============================================
-let hitungMundur = 15;
-const intervalRedirect = setInterval(function() {
-    hitungMundur--;
-    
-    if (hitungMundur <= 0) {
-        clearInterval(intervalRedirect);
-        window.location.href = 'dasbor.php';
-    }
-}, 1000);
-
-// ============================================
-// Cek apakah user masih login
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Cek session via fetch
-    fetch('auth/cek-session.php')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.login) {
-                // Jika tidak login, ubah tombol dasbor ke login
-                const tombolDasbor = document.querySelector('a[href="dasbor.php"]');
-                if (tombolDasbor) {
-                    tombolDasbor.href = 'login.php';
-                    tombolDasbor.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
-                }
-            }
-        })
-        .catch(() => {
-            // Abaikan error
-        });
-});
-</script>
-<!--- ===== AKHIR BLOK 7.3 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 7 Halaman 404 Not Found ===== --->
-<!--- ===== BLOK 8 Halaman Akses Ditolak (403 Forbidden) ===== --->
-<!--- ===== BLOK 8.1 Navigasi Atas Halaman 403 ===== --->
-<nav class="navbar navbar-dark bg-danger">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-            <i class="fas fa-store-alt me-2"></i>Toko Online 2R
-        </a>
-    </div>
-</nav>
-<!--- ===== AKHIR BLOK 8.1 ===== --->
+<!--- ===== BLOK 8 Halaman 403 Forbidden ===== --->
+<div id="halaman403" class="page-section">
 
-<!--- ===== BLOK 8.2 Container Utama Halaman 403 ===== --->
+<!--- ===== BLOK 8.1 Container 403 ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
             
-            <!-- Ilustrasi 403 -->
             <div class="mb-4">
-                <i class="fas fa-lock fa-6x text-danger mb-3"></i>
-                <h1 class="display-1 fw-bold text-danger">403</h1>
+                <i class="fas fa-lock fa-6x text-white mb-3"></i>
+                <h1 class="display-1 fw-bold text-white">403</h1>
             </div>
             
-            <!-- Pesan -->
-            <div class="card shadow-sm border-0 border-danger border-2">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
                     
                     <h3 class="fw-bold text-dark mb-3">
@@ -2431,107 +920,77 @@ document.addEventListener('DOMContentLoaded', function() {
                     </p>
                     
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="dasbor.php" class="btn btn-success btn-lg">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('dasbor')">
                             <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
-                        </a>
-                        <a href="logout.php" class="btn btn-outline-danger btn-lg">
+                        </button>
+                        <button class="btn btn-outline-secondary btn-lg" onclick="tampilkanHalaman('logout')">
                             <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a>
+                        </button>
                     </div>
                     
                 </div>
             </div>
             
-            <!-- Bantuan -->
-            <div class="mt-4 text-muted small">
-                <p>
-                    Butuh bantuan? 
-                    <a href="#" class="text-danger fw-bold">Hubungi Administrator</a>
-                </p>
+            <div class="mt-4 text-white small">
+                <p>Butuh bantuan? <a href="#" class="text-white fw-bold">Hubungi Administrator</a></p>
             </div>
             
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 8.2 ===== --->
+<!--- ===== AKHIR BLOK 8.1 ===== --->
 
-<!--- ===== BLOK 8.3 JavaScript Halaman 403 ===== --->
-<script>
-// ============================================
-// Cek role user untuk pesan yang lebih spesifik
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('auth/cek-session.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.login) {
-                console.log('User login sebagai: ' + data.role);
-            } else {
-                // Jika tidak login, arahkan ke login
-                const tombolDasbor = document.querySelector('a[href="dasbor.php"]');
-                if (tombolDasbor) {
-                    tombolDasbor.href = 'login.php';
-                    tombolDasbor.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
-                }
-            }
-        })
-        .catch(() => {
-            // Abaikan error
-        });
-});
-</script>
-<!--- ===== AKHIR BLOK 8.3 ===== --->
-<!--- ===== AKHIR BLOK 8 Halaman Akses Ditolak ===== --->
+</div>
+<!--- ===== AKHIR BLOK 8 Halaman 403 Forbidden ===== --->
 <!--- ===== BLOK 9 Halaman Maintenance ===== --->
-<!--- ===== BLOK 9.1 Container Utama Maintenance ===== --->
+<div id="halamanMaintenance" class="page-section">
+
+<!--- ===== BLOK 9.1 Container Maintenance ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
             
-            <!-- Ilustrasi Maintenance -->
             <div class="mb-4">
-                <i class="fas fa-tools fa-6x text-warning mb-3"></i>
-                <h1 class="display-4 fw-bold text-warning">Maintenance</h1>
+                <i class="fas fa-tools fa-6x text-white mb-3"></i>
+                <h1 class="display-4 fw-bold text-white">Maintenance</h1>
             </div>
             
-            <!-- Pesan -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
                     
-                    <div class="spinner-border text-warning mb-3" style="width: 3rem; height: 3rem;" role="status">
+                    <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                     
                     <h3 class="fw-bold text-dark mb-3">
-                        <i class="fas fa-cog fa-spin text-warning me-2"></i>
+                        <i class="fas fa-cog fa-spin me-2" style="color: #FF8C00;"></i>
                         Sedang Dalam Perbaikan
                     </h3>
                     
                     <p class="text-muted mb-4">
-                        Maaf, sistem sedang dalam masa pemeliharaan. 
+                        Maaf, sistem sedang dalam masa pemeliharaan.
                         Kami sedang melakukan peningkatan untuk memberikan layanan yang lebih baik.
                         Silakan coba beberapa saat lagi.
                     </p>
                     
-                    <div class="alert alert-warning">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <span id="estimasiSelesai">Estimasi selesai: 30 menit</span>
+                    <div class="alert text-dark" style="background-color: #FFF3E0; border-color: #FF8C00;">
+                        <i class="fas fa-info-circle me-2" style="color: #FF8C00;"></i>
+                        Estimasi selesai: 30 menit
                     </div>
                     
                     <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
-                        <button class="btn btn-warning btn-lg" onclick="window.location.reload()">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="location.reload()">
                             <i class="fas fa-redo me-2"></i>Coba Lagi
                         </button>
-                        <a href="index.php" class="btn btn-outline-secondary btn-lg">
+                        <button class="btn btn-outline-secondary btn-lg" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-home me-2"></i>Ke Beranda
-                        </a>
+                        </button>
                     </div>
                     
                 </div>
             </div>
             
-            <!-- Footer -->
-            <div class="mt-4 text-muted small">
+            <div class="mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
             
@@ -2540,50 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
 
-<!--- ===== BLOK 9.2 JavaScript Maintenance ===== --->
-<script>
-// ============================================
-// Cek status maintenance secara berkala
-// ============================================
-function cekStatusMaintenance() {
-    fetch('auth/cek-maintenance.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'online') {
-                // Sistem sudah online, reload halaman
-                window.location.reload();
-            } else if (data.estimasi) {
-                // Update estimasi selesai
-                document.getElementById('estimasiSelesai').textContent = 'Estimasi selesai: ' + data.estimasi;
-            }
-        })
-        .catch(() => {
-            // Abaikan error, coba lagi nanti
-        });
-}
-
-// Cek setiap 30 detik
-setInterval(cekStatusMaintenance, 30000);
-
-// ============================================
-// Cek awal saat halaman dimuat
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Cek apakah maintenance mode aktif
-    fetch('auth/cek-maintenance.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'online') {
-                // Jika sudah online, redirect ke dasbor
-                window.location.href = 'dasbor.php';
-            }
-        })
-        .catch(() => {
-            // Abaikan error
-        });
-});
-</script>
-<!--- ===== AKHIR BLOK 9.2 ===== --->
+</div>
 <!--- ===== AKHIR BLOK 9 Halaman Maintenance ===== --->
 <!--- ===== BLOK 10 Placeholder Menu SuperAdmin (35 Menu) ===== --->
 <!--- ===== BLOK 10.1 Dasbor SuperAdmin ===== --->
@@ -3044,1009 +1460,6 @@ document.addEventListener('DOMContentLoaded', function() {
             <h3 class="text-muted">Histori Aktivitas</h3>
             <p class="lead text-muted">Catatan semua aktivitas di sistem</p>
             <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.29 ===== --->
-
-<!--- ===== BLOK 10.30 Log Aktivitas Lanjutan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Log Aktivitas Lanjutan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-clipboard-list fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Log Aktivitas Lanjutan</h3>
-            <p class="lead text-muted">Log detail dengan filter dan pencarian lanjutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.30 ===== --->
-
-<!--- ===== BLOK 10.31 Pengaturan Umum ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Pengaturan Umum</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-cog fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pengaturan Umum</h3>
-            <p class="lead text-muted">Konfigurasi umum aplikasi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.31 ===== --->
-
-<!--- ===== BLOK 10.32 Restart System ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-power-off me-2"></i>Restart System</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-power-off fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Restart System</h3>
-            <p class="lead text-muted">Restart ulang sistem aplikasi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.32 ===== --->
-
-<!--- ===== BLOK 10.33 Bantuan & FAQ ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Bantuan & FAQ</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-question-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Bantuan & FAQ</h3>
-            <p class="lead text-muted">Pertanyaan umum dan panduan penggunaan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.33 ===== --->
-
-<!--- ===== BLOK 10.34 Dokumentasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-book me-2"></i>Dokumentasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-book fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Dokumentasi</h3>
-            <p class="lead text-muted">Dokumentasi teknis dan panduan developer</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.34 ===== --->
-<!--- ===== AKHIR BLOK 10 Placeholder Menu SuperAdmin ===== --->
-<!--- ===== BLOK 11 Placeholder Menu Staf Admin (9 Menu) ===== --->
-<!--- ===== BLOK 11.1 Dasbor Staf Admin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Staf Admin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-shield fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Dasbor Staf Admin</h3>
-            <p class="lead text-muted">Ringkasan tugas dan aktivitas staf admin</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.1 ===== --->
-
-<!--- ===== BLOK 11.2 Profil Staf Admin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Staf Admin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Profil Staf Admin</h3>
-            <p class="lead text-muted">Pengaturan profil staf admin</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.2 ===== --->
-
-<!--- ===== BLOK 11.3 Manajemen Akun (Reset Password) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Manajemen Akun (Reset Password)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-key fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Manajemen Akun</h3>
-            <p class="lead text-muted">Reset password dan bantuan akun pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.3 ===== --->
-
-<!--- ===== BLOK 11.4 Verifikasi Dokumen (Bantuan) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verifikasi Dokumen (Bantuan)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-check-circle fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Verifikasi Dokumen</h3>
-            <p class="lead text-muted">Bantu SuperAdmin dalam verifikasi dokumen</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.4 ===== --->
-
-<!--- ===== BLOK 11.5 Backup & Restore ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-cloud-upload-alt me-2"></i>Backup & Restore</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-cloud-upload-alt fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Backup & Restore</h3>
-            <p class="lead text-muted">Backup database dan restore data</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.5 ===== --->
-
-<!--- ===== BLOK 11.6 Reset & Pembersihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-broom me-2"></i>Reset & Pembersihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-broom fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Reset & Pembersihan</h3>
-            <p class="lead text-muted">Bersihkan cache dan data sementara</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.6 ===== --->
-
-<!--- ===== BLOK 11.7 Histori Aktivitas & Log Lanjutan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Histori Aktivitas & Log Lanjutan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-clipboard-list fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Histori Aktivitas & Log Lanjutan</h3>
-            <p class="lead text-muted">Pantau aktivitas dan log sistem</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.7 ===== --->
-
-<!--- ===== BLOK 11.8 Pengaturan Umum (Maintenance) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Pengaturan Umum (Maintenance)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-cog fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Pengaturan Umum</h3>
-            <p class="lead text-muted">Aktifkan mode maintenance dan pengaturan dasar</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.8 ===== --->
-
-<!--- ===== BLOK 11.9 Restart System ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-power-off me-2"></i>Restart System</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-power-off fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Restart System</h3>
-            <p class="lead text-muted">Restart ulang sistem aplikasi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 11.9 ===== --->
-<!--- ===== AKHIR BLOK 11 Placeholder Menu Staf Admin ===== --->
-<!--- ===== BLOK 12 Placeholder Menu Staf Owner Toko (11 Menu) ===== --->
-<!--- ===== BLOK 12.1 Dasbor Staf Owner Toko ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Staf Owner Toko</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-store-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Dasbor Staf Owner Toko</h3>
-            <p class="lead text-muted">Ringkasan toko rekrutan dan performa penjualan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.1 ===== --->
-
-<!--- ===== BLOK 12.2 Profil Staf Owner Toko ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Staf Owner Toko</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Profil Staf Owner Toko</h3>
-            <p class="lead text-muted">Pengaturan profil dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.2 ===== --->
-
-<!--- ===== BLOK 12.3 Manajemen Rekrutan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Manajemen Rekrutan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-users fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Manajemen Rekrutan</h3>
-            <p class="lead text-muted">Kelola semua toko yang sudah direkrut</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.3 ===== --->
-
-<!--- ===== BLOK 12.4 Buat Akun Toko ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Buat Akun Toko</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-plus fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Buat Akun Toko</h3>
-            <p class="lead text-muted">Daftarkan toko baru ke dalam sistem</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.4 ===== --->
-
-<!--- ===== BLOK 12.5 Verifikasi Rekrutan (Pra-verifikasi) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verifikasi Rekrutan (Pra-verifikasi)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Verifikasi Rekrutan</h3>
-            <p class="lead text-muted">Verifikasi awal dokumen toko rekrutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.5 ===== --->
-
-<!--- ===== BLOK 12.6 Pengajuan ke SuperAdmin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Pengajuan ke SuperAdmin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-paper-plane fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Pengajuan ke SuperAdmin</h3>
-            <p class="lead text-muted">Ajukan akun toko yang sudah diverifikasi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.6 ===== --->
-
-<!--- ===== BLOK 12.7 Laporan Kinerja Rekrutan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Laporan Kinerja Rekrutan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-chart-bar fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Laporan Kinerja Rekrutan</h3>
-            <p class="lead text-muted">Pantau performa penjualan setiap toko rekrutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.7 ===== --->
-
-<!--- ===== BLOK 12.8 Manajemen Produk Toko Induk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-boxes me-2"></i>Manajemen Produk Toko Induk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-boxes fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Manajemen Produk Toko Induk</h3>
-            <p class="lead text-muted">Kelola produk dari toko induk sendiri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.8 ===== --->
-
-<!--- ===== BLOK 12.9 Semua Order Toko Induk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Semua Order Toko Induk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-shopping-cart fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Semua Order Toko Induk</h3>
-            <p class="lead text-muted">Lihat semua pesanan toko induk</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.9 ===== --->
-
-<!--- ===== BLOK 12.10 Laporan Penjualan & Komisi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Laporan Penjualan & Komisi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Laporan Penjualan & Komisi</h3>
-            <p class="lead text-muted">Laporan penjualan dan komisi dari rekrutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.10 ===== --->
-
-<!--- ===== BLOK 12.11 Riwayat Pembayaran Komisi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-money-check-alt me-2"></i>Riwayat Pembayaran Komisi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-money-check-alt fa-5x text-success mb-4"></i>
-            <h3 class="text-muted">Riwayat Pembayaran Komisi</h3>
-            <p class="lead text-muted">Catatan semua pembayaran komisi yang diterima</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 12.11 ===== --->
-<!--- ===== AKHIR BLOK 12 Placeholder Menu Staf Owner Toko ===== --->
-<!--- ===== BLOK 13 Placeholder Menu Staf Owner Ojek (12 Menu) ===== --->
-<!--- ===== BLOK 13.1 Dasbor Staf Owner Ojek ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Staf Owner Ojek</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-motorcycle fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Dasbor Staf Owner Ojek</h3>
-            <p class="lead text-muted">Ringkasan driver rekrutan dan performa pengiriman</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.1 ===== --->
-
-<!--- ===== BLOK 13.2 Profil Staf Owner Ojek ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Staf Owner Ojek</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Profil Staf Owner Ojek</h3>
-            <p class="lead text-muted">Pengaturan profil dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.2 ===== --->
-
-<!--- ===== BLOK 13.3 Manajemen Rekrutan Driver ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Manajemen Rekrutan Driver</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-users fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Manajemen Rekrutan Driver</h3>
-            <p class="lead text-muted">Kelola semua driver ojek yang sudah direkrut</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.3 ===== --->
-
-<!--- ===== BLOK 13.4 Tambah Rekrutan Driver ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Tambah Rekrutan Driver</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-plus fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Tambah Rekrutan Driver</h3>
-            <p class="lead text-muted">Daftarkan driver ojek baru ke dalam sistem</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.4 ===== --->
-
-<!--- ===== BLOK 13.5 Verifikasi Rekrutan (Pra-verifikasi) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verifikasi Rekrutan (Pra-verifikasi)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-check-circle fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Verifikasi Rekrutan</h3>
-            <p class="lead text-muted">Verifikasi awal dokumen driver rekrutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.5 ===== --->
-
-<!--- ===== BLOK 13.6 Pengajuan ke SuperAdmin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Pengajuan ke SuperAdmin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-paper-plane fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Pengajuan ke SuperAdmin</h3>
-            <p class="lead text-muted">Ajukan akun driver yang sudah diverifikasi</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.6 ===== --->
-
-<!--- ===== BLOK 13.7 Laporan Kinerja Driver ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Laporan Kinerja Driver</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-chart-bar fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Laporan Kinerja Driver</h3>
-            <p class="lead text-muted">Pantau performa pengiriman setiap driver</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.7 ===== --->
-
-<!--- ===== BLOK 13.8 Manajemen Order Armada Induk (Dispatcher) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Manajemen Order Armada Induk (Dispatcher)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-tasks fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Manajemen Order Armada Induk</h3>
-            <p class="lead text-muted">Atur dan kirim order ke driver yang tersedia</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.8 ===== --->
-
-<!--- ===== BLOK 13.9 Monitoring Driver Online ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Monitoring Driver Online</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-map-marker-alt fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Monitoring Driver Online</h3>
-            <p class="lead text-muted">Pantau posisi dan status driver yang sedang online</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.9 ===== --->
-
-<!--- ===== BLOK 13.10 Laporan Setoran & Komisi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Laporan Setoran & Komisi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Laporan Setoran & Komisi</h3>
-            <p class="lead text-muted">Laporan setoran dan komisi dari driver rekrutan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.10 ===== --->
-
-<!--- ===== BLOK 13.11 Riwayat Pembayaran Komisi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-money-check-alt me-2"></i>Riwayat Pembayaran Komisi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-money-check-alt fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Riwayat Pembayaran Komisi</h3>
-            <p class="lead text-muted">Catatan semua pembayaran komisi yang diterima</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.11 ===== --->
-
-<!--- ===== BLOK 13.12 Log Aktivitas & Pelanggaran Driver ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Log Aktivitas & Pelanggaran Driver</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-clipboard-list fa-5x text-primary mb-4"></i>
-            <h3 class="text-muted">Log Aktivitas & Pelanggaran Driver</h3>
-            <p class="lead text-muted">Catatan aktivitas dan pelanggaran setiap driver</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 13.12 ===== --->
-<!--- ===== AKHIR BLOK 13 Placeholder Menu Staf Owner Ojek ===== --->
-<!--- ===== BLOK 14 Placeholder Menu Staf Marketing (9 Menu) ===== --->
-<!--- ===== BLOK 14.1 Dasbor Staf Marketing ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Staf Marketing</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-chart-line fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Dasbor Staf Marketing</h3>
-            <p class="lead text-muted">Ringkasan kampanye iklan dan performa pemasaran</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.1 ===== --->
-
-<!--- ===== BLOK 14.2 Profil Staf Marketing ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Staf Marketing</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Profil Staf Marketing</h3>
-            <p class="lead text-muted">Pengaturan profil dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.2 ===== --->
-
-<!--- ===== BLOK 14.3 Manajemen Iklan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-ad me-2"></i>Manajemen Iklan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-ad fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Manajemen Iklan</h3>
-            <p class="lead text-muted">Buat dan kelola iklan yang tampil di platform</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.3 ===== --->
-
-<!--- ===== BLOK 14.4 Manajemen Promo ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-percent me-2"></i>Manajemen Promo</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-percent fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Manajemen Promo</h3>
-            <p class="lead text-muted">Buat dan atur promo untuk menarik pembeli</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.4 ===== --->
-
-<!--- ===== BLOK 14.5 Papan Informasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Papan Informasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-bullhorn fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Papan Informasi</h3>
-            <p class="lead text-muted">Kelola pengumuman dan informasi untuk pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.5 ===== --->
-
-<!--- ===== BLOK 14.6 Notifikasi Broadcast ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notifikasi Broadcast</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-bell fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Notifikasi Broadcast</h3>
-            <p class="lead text-muted">Kirim notifikasi massal ke pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.6 ===== --->
-
-<!--- ===== BLOK 14.7 Analitik & Laporan Pemasaran ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Analitik & Laporan Pemasaran</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-chart-pie fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Analitik & Laporan Pemasaran</h3>
-            <p class="lead text-muted">Analisis performa iklan dan kampanye pemasaran</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.7 ===== --->
-
-<!--- ===== BLOK 14.8 Katalog Produk (Riset Pasar) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-search me-2"></i>Katalog Produk (Riset Pasar)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-search fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Katalog Produk (Riset Pasar)</h3>
-            <p class="lead text-muted">Riset produk trending dan analisis pasar</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.8 ===== --->
-
-<!--- ===== BLOK 14.9 Usulan Produk Unggulan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0"><i class="fas fa-star me-2"></i>Usulan Produk Unggulan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-star fa-5x text-warning mb-4"></i>
-            <h3 class="text-muted">Usulan Produk Unggulan</h3>
-            <p class="lead text-muted">Pilih dan usulkan produk unggulan ke SuperAdmin</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 14.9 ===== --->
-<!--- ===== AKHIR BLOK 14 Placeholder Menu Staf Marketing ===== --->
-<!--- ===== BLOK 15 Placeholder Menu Staf Penagihan (6 Menu) ===== --->
-<!--- ===== BLOK 15.1 Dasbor Staf Penagihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor Staf Penagihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice-dollar fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Dasbor Staf Penagihan</h3>
-            <p class="lead text-muted">Ringkasan tagihan dan status pembayaran</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.1 ===== --->
-
-<!--- ===== BLOK 15.2 Profil Staf Penagihan ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil Staf Penagihan</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Profil Staf Penagihan</h3>
-            <p class="lead text-muted">Pengaturan profil dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.2 ===== --->
-
-<!--- ===== BLOK 15.3 Daftar Tagihan (Filter Status) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-list-alt me-2"></i>Daftar Tagihan (Filter Status)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-list-alt fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Daftar Tagihan</h3>
-            <p class="lead text-muted">Lihat dan filter semua tagihan berdasarkan status</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.3 ===== --->
-
-<!--- ===== BLOK 15.4 Kirim Reminder ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Kirim Reminder</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-envelope fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Kirim Reminder</h3>
-            <p class="lead text-muted">Kirim pengingat pembayaran ke pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.4 ===== --->
-
-<!--- ===== BLOK 15.5 Laporan Keuangan (View Only) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Laporan Keuangan (View Only)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-file-invoice fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Laporan Keuangan</h3>
-            <p class="lead text-muted">Lihat laporan keuangan (hanya baca)</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.5 ===== --->
-
-<!--- ===== BLOK 15.6 Data Penagihan Manual (Catatan) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Data Penagihan Manual (Catatan)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-edit fa-5x text-danger mb-4"></i>
-            <h3 class="text-muted">Data Penagihan Manual</h3>
-            <p class="lead text-muted">Catat dan kelola penagihan manual</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 15.6 ===== --->
-<!--- ===== AKHIR BLOK 15 Placeholder Menu Staf Penagihan ===== --->
-<!--- ===== BLOK 16 Placeholder Menu Customer Service (10 Menu) ===== --->
-<!--- ===== BLOK 16.1 Dasbor CS ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dasbor CS</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-headset fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Dasbor Customer Service</h3>
-            <p class="lead text-muted">Ringkasan tiket masuk dan status penanganan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.1 ===== --->
-
-<!--- ===== BLOK 16.2 Profil CS ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Profil CS</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-user-circle fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Profil Customer Service</h3>
-            <p class="lead text-muted">Pengaturan profil dan data diri</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.2 ===== --->
-
-<!--- ===== BLOK 16.3 Semua Tiket Masuk ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Semua Tiket Masuk</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-ticket-alt fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Semua Tiket Masuk</h3>
-            <p class="lead text-muted">Daftar semua tiket bantuan dari pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.3 ===== --->
-
-<!--- ===== BLOK 16.4 Filter Tiket Berdasarkan Role ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filter Tiket Berdasarkan Role</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-filter fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Filter Tiket Berdasarkan Role</h3>
-            <p class="lead text-muted">Filter tiket berdasarkan jenis akun pengguna</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.4 ===== --->
-
-<!--- ===== BLOK 16.5 Ruang Chat ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Ruang Chat</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-comments fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Ruang Chat</h3>
-            <p class="lead text-muted">Chat langsung dengan pengguna yang membutuhkan bantuan</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.5 ===== --->
-
-<!--- ===== BLOK 16.6 Cari & Bantuan Akun (Reset Password) ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-search me-2"></i>Cari & Bantuan Akun (Reset Password)</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-key fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Cari & Bantuan Akun</h3>
-            <p class="lead text-muted">Cari akun pengguna dan bantu reset password</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.6 ===== --->
-
-<!--- ===== BLOK 16.7 Chat Internal dengan SuperAdmin ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-comment-dots me-2"></i>Chat Internal dengan SuperAdmin</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-comment-dots fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Chat Internal dengan SuperAdmin</h3>
-            <p class="lead text-muted">Komunikasi internal dengan SuperAdmin</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.7 ===== --->
-
-<!--- ===== BLOK 16.8 Manajemen FAQ ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Manajemen FAQ</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-question-circle fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Manajemen FAQ</h3>
-            <p class="lead text-muted">Kelola pertanyaan dan jawaban umum</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.8 ===== --->
-
-<!--- ===== BLOK 16.9 Histori Aktivitas CS ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Histori Aktivitas CS</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-history fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Histori Aktivitas CS</h3>
-            <p class="lead text-muted">Catatan semua aktivitas customer service</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.9 ===== --->
-
-<!--- ===== BLOK 16.10 Kotak Masuk Notifikasi ===== --->
-<div class="container-fluid px-4 py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-inbox me-2"></i>Kotak Masuk Notifikasi</h5>
-        </div>
-        <div class="card-body text-center py-5">
-            <i class="fas fa-inbox fa-5x text-info mb-4"></i>
-            <h3 class="text-muted">Kotak Masuk Notifikasi</h3>
-            <p class="lead text-muted">Pesan dan pemberitahuan untuk CS</p>
-            <p class="text-muted">Fitur akan segera tersedia</p>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 16.10 ===== --->
-<!--- ===== AKHIR BLOK 16 Placeholder Menu Customer Service ===== --->
 <!--- ===== BLOK 17 Placeholder Menu Toko (16 Menu) ===== --->
 <!--- ===== BLOK 17.1 Dasbor Toko ===== --->
 <div class="container-fluid px-4 py-4">
@@ -4506,6 +1919,6 @@ document.addEventListener('DOMContentLoaded', function() {
             <h5 class="mb-0"><i class="fas fa-plus-square me-2"></i>Pengajuan Tambah Slot Produk</h5>
         </div>
         <div class="card-body text-center py-5">
-            <i class="fas fa-plus-square fa-5x te
+            <i class="fas fa-plus-square fa-5x te    
 </body>
 </html>
