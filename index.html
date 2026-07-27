@@ -1128,7 +1128,11 @@ function loadMenuNavigasi(kodeRole) {
         document.getElementById('menuNavigasi').innerHTML = '<div class="text-center py-3 text-muted">Menu tidak tersedia</div>';
         return;
     }
-    
+    if (item.aksi === 'buatAkun') {
+    htmlMenu += '<a href="#" class="list-group-item..." onclick="tampilkanBuatAkun()">...</a>';
+} else {
+    htmlMenu += '<a href="#" class="list-group-item..." onclick="tampilkanPlaceholderMenu(...)">...</a>';
+    }
     const menuContainer = document.getElementById('menuNavigasi');
     let htmlMenu = '';
     
