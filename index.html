@@ -897,142 +897,171 @@
         // ============================================================ //
 
         // ============================================================ //
-        // BLOK 10 - SIDEBAR & NAVIGASI                                  //
-        // ============================================================ //
-        // Deskripsi: Membangun menu sidebar berdasarkan role user,      //
-        // dan mengatur navigasi ke halaman yang sesuai.                 //
-        // ============================================================ //
+// BLOK 10 - SIDEBAR & NAVIGASI (VERSI LENGKAP)                  //
+// ============================================================ //
+// Deskripsi: Membangun menu sidebar berdasarkan role user,      //
+// dan mengatur navigasi ke semua halaman SuperAdmin.            //
+// ============================================================ //
 
-        // ===== BLOK 10.1 - BUAT SIDEBAR HTML =====
-        function buatSidebarHTML(role) {
-            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-            
-            var menuRole = {
-                'superadmin': [
-                    { judul: '📊 Dashboard', items: [
-                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dashboard' },
-                        { halaman: 'dashboard-richer', icon: 'fa-chart-line', label: 'Dashboard Diperkaya' }
-                    ] },
-                    { judul: '👤 Manajemen Akun', items: [
-                        { halaman: 'daftar-akun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
-                        { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                        { halaman: 'kelola-akun', icon: 'fa-users-cog', label: 'Kelola Akun' },
-                        { halaman: 'pengajuan-buka', icon: 'fa-file-signature', label: 'Pengajuan Buka Akun' },
-                        { halaman: 'profil', icon: 'fa-user-circle', label: 'Profil SuperAdmin' }
-                    ] },
-                    { judul: '💰 Penagihan & Keuangan', items: [
-                        { halaman: 'penagihan-otomatis', icon: 'fa-file-invoice-dollar', label: 'Penagihan Otomatis' },
-                        { halaman: 'riwayat-penagihan', icon: 'fa-history', label: 'Riwayat Penagihan' },
-                        { halaman: 'laporan-keuangan', icon: 'fa-chart-line', label: 'Laporan Keuangan' },
-                        { halaman: 'setting-harga', icon: 'fa-tags', label: 'Setting Harga' },
-                        { halaman: 'data-penagihan', icon: 'fa-file-invoice', label: 'Data Penagihan (Manual)' }
-                    ] },
-                    { judul: '📦 Monitoring', items: [
-                        { halaman: 'semua-transaksi', icon: 'fa-credit-card', label: 'Semua Transaksi' },
-                        { halaman: 'semua-order', icon: 'fa-shopping-cart', label: 'Semua Order' }
-                    ] },
-                    { judul: '🔍 Verifikasi & Owner', items: [
-                        { halaman: 'verifikasi-dokumen', icon: 'fa-file-signature', label: 'Verifikasi Dokumen' },
-                        { halaman: 'manajemen-owner', icon: 'fa-users-cog', label: 'Manajemen Owner' }
-                    ] },
-                    { judul: '💬 Komunikasi', items: [
-                        { halaman: 'menu-iklan', icon: 'fa-ad', label: 'Menu Iklan' },
-                        { halaman: 'papan-informasi', icon: 'fa-bullhorn', label: 'Papan Informasi' }
-                    ] },
-                    { judul: '⚙️ Sistem', items: [
-                        { halaman: 'backup-restore', icon: 'fa-database', label: 'Backup & Restore' },
-                        { halaman: 'reset-cleanup', icon: 'fa-broom', label: 'Reset & Pembersihan' },
-                        { halaman: 'notepad', icon: 'fa-sticky-note', label: 'Notepad+' },
-                        { halaman: 'setting-rekening', icon: 'fa-university', label: 'Setting Rekening' },
-                        { halaman: 'kelola-wilayah', icon: 'fa-map-marked-alt', label: 'Kelola Wilayah' },
-                        { halaman: 'pengajuan-upload', icon: 'fa-upload', label: 'Pengajuan Upload Produk' }
-                    ] }
-                ],
-                'customer': [
-                    { judul: '🛍️ Belanja', items: [
-                        { halaman: 'dashboard-default', icon: 'fa-th-large', label: 'Dashboard' }
-                    ] }
+// ===== BLOK 10.1 - BUAT SIDEBAR HTML =====
+function buatSidebarHTML(role) {
+    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+    
+    var menuRole = {
+        'superadmin': [
+            // === DASHBOARD ===
+            {
+                judul: '📊 Dashboard',
+                items: [
+                    { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dashboard' },
+                    { halaman: 'dashboard-richer', icon: 'fa-chart-line', label: 'Dashboard Diperkaya' }
                 ]
-            };
-
-            var daftarMenu = menuRole[role] || menuRole['customer'];
-            var html = '';
-            for (var i = 0; i < daftarMenu.length; i++) {
-                var bagian = daftarMenu[i];
-                html += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
-                for (var j = 0; j < bagian.items.length; j++) {
-                    var item = bagian.items[j];
-                    var active = (item.halaman === 'dashboard' || item.halaman === 'dashboard-default') ? ' active' : '';
-                    html += '<div class="sidebar-menu-item' + active + '" data-page="' + item.halaman + '">';
-                    html += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
-                }
+            },
+            // === MANAJEMEN AKUN ===
+            {
+                judul: '👤 Manajemen Akun',
+                items: [
+                    { halaman: 'daftar-akun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
+                    { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
+                    { halaman: 'kelola-akun', icon: 'fa-users-cog', label: 'Kelola Akun' },
+                    { halaman: 'pengajuan-buka', icon: 'fa-file-signature', label: 'Pengajuan Buka Akun' },
+                    { halaman: 'profil', icon: 'fa-user-circle', label: 'Profil SuperAdmin' }
+                ]
+            },
+            // === PENAGIHAN & KEUANGAN ===
+            {
+                judul: '💰 Penagihan & Keuangan',
+                items: [
+                    { halaman: 'penagihan-otomatis', icon: 'fa-file-invoice-dollar', label: 'Penagihan Otomatis' },
+                    { halaman: 'riwayat-penagihan', icon: 'fa-history', label: 'Riwayat Penagihan' },
+                    { halaman: 'laporan-keuangan', icon: 'fa-chart-line', label: 'Laporan Keuangan' },
+                    { halaman: 'setting-harga', icon: 'fa-tags', label: 'Setting Harga' },
+                    { halaman: 'data-penagihan', icon: 'fa-file-invoice', label: 'Data Penagihan (Manual)' }
+                ]
+            },
+            // === MONITORING ===
+            {
+                judul: '📦 Monitoring',
+                items: [
+                    { halaman: 'semua-transaksi', icon: 'fa-credit-card', label: 'Semua Transaksi' },
+                    { halaman: 'semua-order', icon: 'fa-shopping-cart', label: 'Semua Order' }
+                ]
+            },
+            // === VERIFIKASI & OWNER ===
+            {
+                judul: '🔍 Verifikasi & Owner',
+                items: [
+                    { halaman: 'verifikasi-dokumen', icon: 'fa-file-signature', label: 'Verifikasi Dokumen' },
+                    { halaman: 'manajemen-owner', icon: 'fa-users-cog', label: 'Manajemen Owner' }
+                ]
+            },
+            // === KOMUNIKASI ===
+            {
+                judul: '💬 Komunikasi',
+                items: [
+                    { halaman: 'menu-iklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                    { halaman: 'papan-informasi', icon: 'fa-bullhorn', label: 'Papan Informasi' }
+                ]
+            },
+            // === SISTEM & ALAT BANTU ===
+            {
+                judul: '⚙️ Sistem',
+                items: [
+                    { halaman: 'backup-restore', icon: 'fa-database', label: 'Backup & Restore' },
+                    { halaman: 'reset-cleanup', icon: 'fa-broom', label: 'Reset & Pembersihan' },
+                    { halaman: 'notepad', icon: 'fa-sticky-note', label: 'Notepad+' },
+                    { halaman: 'setting-rekening', icon: 'fa-university', label: 'Setting Rekening' },
+                    { halaman: 'kelola-wilayah', icon: 'fa-map-marked-alt', label: 'Kelola Wilayah' },
+                    { halaman: 'pengajuan-upload', icon: 'fa-upload', label: 'Pengajuan Upload Produk' }
+                ]
             }
-            return html;
+        ],
+        'customer': [
+            { judul: '🛍️ Belanja', items: [
+                { halaman: 'dashboard-default', icon: 'fa-th-large', label: 'Dashboard' }
+            ] }
+        ]
+    };
+
+    var daftarMenu = menuRole[role] || menuRole['customer'];
+    var html = '';
+    for (var i = 0; i < daftarMenu.length; i++) {
+        var bagian = daftarMenu[i];
+        html += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
+        for (var j = 0; j < bagian.items.length; j++) {
+            var item = bagian.items[j];
+            var active = (item.halaman === 'dashboard' || item.halaman === 'dashboard-default') ? ' active' : '';
+            html += '<div class="sidebar-menu-item' + active + '" data-page="' + item.halaman + '">';
+            html += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
         }
+    }
+    return html;
+}
 
-        // ===== BLOK 10.2 - SETUP NAVIGASI SIDEBAR =====
-        function setupNavigasiSidebar() {
-            var items = document.querySelectorAll('.sidebar-menu-item');
-            items.forEach(function(item) {
-                item.onclick = function() {
-                    var halaman = this.getAttribute('data-page');
-                    if (!halaman) return;
-                    items.forEach(function(m) { m.classList.remove('active'); });
-                    this.classList.add('active');
-                    navigasiKeHalaman(halaman);
-                    if (window.innerWidth <= 767) {
-                        document.getElementById('sidebarContainer').classList.remove('open');
-                        document.getElementById('sidebarOverlay').classList.remove('active');
-                    }
-                };
-            });
-        }
+// ===== BLOK 10.2 - SETUP NAVIGASI SIDEBAR =====
+function setupNavigasiSidebar() {
+    var items = document.querySelectorAll('.sidebar-menu-item');
+    items.forEach(function(item) {
+        item.onclick = function() {
+            var halaman = this.getAttribute('data-page');
+            if (!halaman) return;
+            items.forEach(function(m) { m.classList.remove('active'); });
+            this.classList.add('active');
+            navigasiKeHalaman(halaman);
+            if (window.innerWidth <= 767) {
+                document.getElementById('sidebarContainer').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        };
+    });
+}
 
-        // ===== BLOK 10.3 - NAVIGASI KE HALAMAN =====
-        function navigasiKeHalaman(namaHalaman) {
-            var areaKonten = document.getElementById('mainContent');
-            if (!areaKonten) return;
+// ===== BLOK 10.3 - NAVIGASI KE HALAMAN =====
+function navigasiKeHalaman(namaHalaman) {
+    var areaKonten = document.getElementById('mainContent');
+    if (!areaKonten) return;
 
-            // SuperAdmin
-            if (namaHalaman === 'dashboard') renderDashboard();
-            else if (namaHalaman === 'dashboard-richer') renderDashboardRicher();
-            else if (namaHalaman === 'daftar-akun') renderDaftarAkun();
-            else if (namaHalaman === 'persetujuan') renderPersetujuanAkun();
-            else if (namaHalaman === 'kelola-akun') renderKelolaAkun();
-            else if (namaHalaman === 'pengajuan-buka') renderPengajuanBukaAkun();
-            else if (namaHalaman === 'profil') renderProfilSuperAdmin();
-            else if (namaHalaman === 'setting-rekening') renderSettingRekening();
-            else if (namaHalaman === 'setting-harga') renderSettingHargaAplikasi();
-            else if (namaHalaman === 'penagihan-otomatis') renderPenagihanOtomatis();
-            else if (namaHalaman === 'riwayat-penagihan') renderRiwayatPenagihan();
-            else if (namaHalaman === 'laporan-keuangan') renderLaporanKeuangan();
-            else if (namaHalaman === 'semua-transaksi') renderSemuaTransaksi();
-            else if (namaHalaman === 'semua-order') renderSemuaOrder();
-            else if (namaHalaman === 'verifikasi-dokumen') renderVerifikasiDokumen();
-            else if (namaHalaman === 'manajemen-owner') renderManajemenOwner();
-            else if (namaHalaman === 'menu-iklan') renderMenuIklan();
-            else if (namaHalaman === 'papan-informasi') renderPapanInformasi();
-            else if (namaHalaman === 'backup-restore') renderBackupRestore();
-            else if (namaHalaman === 'reset-cleanup') renderResetCleanup();
-            else if (namaHalaman === 'notepad') renderNotepad();
-            else if (namaHalaman === 'kelola-wilayah') renderKelolaWilayah();
-            else if (namaHalaman === 'pengajuan-upload') renderPengajuanUploadProduk();
-            else if (namaHalaman === 'data-penagihan') renderDataPenagihan();
+    // SuperAdmin
+    if (namaHalaman === 'dashboard') renderDashboard();
+    else if (namaHalaman === 'dashboard-richer') renderDashboardRicher();
+    else if (namaHalaman === 'daftar-akun') renderDaftarAkun();
+    else if (namaHalaman === 'persetujuan') renderPersetujuanAkun();
+    else if (namaHalaman === 'kelola-akun') renderKelolaAkun();
+    else if (namaHalaman === 'pengajuan-buka') renderPengajuanBukaAkun();
+    else if (namaHalaman === 'profil') renderProfilSuperAdmin();
+    else if (namaHalaman === 'setting-rekening') renderSettingRekening();
+    else if (namaHalaman === 'setting-harga') renderSettingHargaAplikasi();
+    else if (namaHalaman === 'penagihan-otomatis') renderPenagihanOtomatis();
+    else if (namaHalaman === 'riwayat-penagihan') renderRiwayatPenagihan();
+    else if (namaHalaman === 'laporan-keuangan') renderLaporanKeuangan();
+    else if (namaHalaman === 'semua-transaksi') renderSemuaTransaksi();
+    else if (namaHalaman === 'semua-order') renderSemuaOrder();
+    else if (namaHalaman === 'verifikasi-dokumen') renderVerifikasiDokumen();
+    else if (namaHalaman === 'manajemen-owner') renderManajemenOwner();
+    else if (namaHalaman === 'menu-iklan') renderMenuIklan();
+    else if (namaHalaman === 'papan-informasi') renderPapanInformasi();
+    else if (namaHalaman === 'backup-restore') renderBackupRestore();
+    else if (namaHalaman === 'reset-cleanup') renderResetCleanup();
+    else if (namaHalaman === 'notepad') renderNotepad();
+    else if (namaHalaman === 'kelola-wilayah') renderKelolaWilayah();
+    else if (namaHalaman === 'pengajuan-upload') renderPengajuanUploadProduk();
+    else if (namaHalaman === 'data-penagihan') renderDataPenagihan();
 
-            // Customer / Default
-            else if (namaHalaman === 'dashboard-default') renderDashboardDefault();
-            else renderPlaceholder(namaHalaman);
-        }
+    // Customer / Default
+    else if (namaHalaman === 'dashboard-default') renderDashboardDefault();
+    else renderPlaceholder(namaHalaman);
+}
 
-        function renderPlaceholder(judul) {
-            var areaKonten = document.getElementById('mainContent');
-            var html = '<div class="page-header"><h2>' + judul + '</h2><p>Halaman ini sedang dalam pengembangan.</p></div>';
-            html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Sedang Dikembangkan</h3></div></div>';
-            areaKonten.innerHTML = html;
-        }
-        // ============================================================ //
-        // AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            //
-        // ============================================================ //
+// ===== BLOK 10.4 - RENDER PLACEHOLDER (SEMENTARA) =====
+function renderPlaceholder(judul) {
+    var areaKonten = document.getElementById('mainContent');
+    var html = '<div class="page-header"><h2>' + judul + '</h2><p>Halaman ini sedang dalam pengembangan.</p></div>';
+    html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Sedang Dikembangkan</h3></div></div>';
+    areaKonten.innerHTML = html;
+}
+// ============================================================ //
+// AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            //
+// ============================================================ //
         // ============================================================ //
         // ============================================================ //
 // BLOK 11 - DAFTAR AKUN BARU                                    //
@@ -1213,6 +1242,94 @@ async function prosesDaftarAkun() {
 }
 // ============================================================ //
 // AKHIR BLOK 11 - DAFTAR AKUN BARU                              //
+// ============================================================ //
+// ============================================================ //
+// BLOK 12 - PERSETUJUAN AKUN                                    //
+// ============================================================ //
+// Deskripsi: SuperAdmin / Staf Admin dapat menyetujui atau     //
+// menolak akun yang statusnya "Menunggu Verifikasi".           //
+// ============================================================ //
+
+function renderPersetujuanAkun() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin' && role !== 'staf_admin') {
+        tampilkanToast('Akses ditolak!', 'error');
+        return;
+    }
+
+    var dataAkun = getDataAkun();
+    var daftarMenunggu = dataAkun.filter(function(u) {
+        return u.status === 'NONAKTIF (Menunggu Verifikasi)';
+    });
+
+    var html = '<div class="page-header"><h2>✅ Persetujuan Akun</h2><p>Daftar akun yang membutuhkan persetujuan admin.</p></div>';
+
+    if (daftarMenunggu.length === 0) {
+        html += '<div class="card"><div class="empty-state"><i class="fas fa-check-circle" style="color:#4CAF50;"></i><h3>Tidak ada akun menunggu verifikasi</h3></div></div>';
+    } else {
+        html += '<div class="card"><div class="card-header">Daftar Akun Menunggu Verifikasi <span style="font-weight:normal;font-size:13px;color:#888;">(Total: ' + daftarMenunggu.length + ')</span></div>';
+        html += '<div class="table-container"><table class="table"><thead><tr><th>No</th><th>ID</th><th>Role</th><th>Username</th><th>Nama</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+
+        for (var i = 0; i < daftarMenunggu.length; i++) {
+            var u = daftarMenunggu[i];
+            html += '<tr>';
+            html += '<td>' + (i + 1) + '</td>';
+            html += '<td>' + u.id + '</td>';
+            html += '<td>' + u.role + '</td>';
+            html += '<td>' + escapeHtml(u.username) + '</td>';
+            html += '<td>' + escapeHtml(u.nama) + '</td>';
+            html += '<td><span class="badge badge-warning">Menunggu</span></td>';
+            html += '<td>';
+            html += '  <button class="button button-success button-extra-small" onclick="setujuiAkun(\'' + u.id + '\')">✅ Setujui</button>';
+            html += '  <button class="button button-danger button-extra-small" onclick="bukaTolakAkun(\'' + u.id + '\')">❌ Tolak</button>';
+            html += '</td>';
+            html += '</tr>';
+        }
+
+        html += '</tbody></table></div></div>';
+    }
+
+    document.getElementById('mainContent').innerHTML = html;
+}
+
+// ===== BLOK 12.2 - SETUJUI AKUN =====
+function setujuiAkun(id) {
+    if (!confirm('Setujui akun ini? Akun akan diaktifkan.')) return;
+    var dataAkun = getDataAkun();
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id === id) {
+            dataAkun[i].status = 'AKTIF';
+            break;
+        }
+    }
+    simpanDataAkun(dataAkun);
+    renderPersetujuanAkun();
+    tampilkanToast('✅ Akun berhasil diaktifkan!', 'success');
+}
+
+// ===== BLOK 12.3 - BUKA MODAL TOLAK AKUN =====
+function bukaTolakAkun(id) {
+    document.getElementById('tolakIdAkun').value = id;
+    bukaModal('modalTolakAkun');
+}
+
+// ===== BLOK 12.4 - EKSEKUSI TOLAK AKUN =====
+function eksekusiTolakAkun() {
+    var id = document.getElementById('tolakIdAkun').value;
+    var dataAkun = getDataAkun();
+    var dataBaru = [];
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].id !== id) {
+            dataBaru.push(dataAkun[i]);
+        }
+    }
+    simpanDataAkun(dataBaru);
+    tutupModal('modalTolakAkun');
+    renderPersetujuanAkun();
+    tampilkanToast('❌ Akun ditolak dan dihapus dari sistem.', 'success');
+}
+// ============================================================ //
+// AKHIR BLOK 12 - PERSETUJUAN AKUN                              //
 // ============================================================ //
         // ============================================================ //
         // CATATAN: FUNGSI-FUNGSI RENDER (DASHBOARD, DAFTAR AKUN, DLL)  //
