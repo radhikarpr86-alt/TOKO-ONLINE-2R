@@ -17,8 +17,157 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Utama -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- ============================================================ -->
+    <!-- BLOK 6 - CSS GLOBAL & RESET (DI-SISIPKAN DI SINI)            -->
+    <!-- ============================================================ -->
+    <style>
+        /* ============================================================ */
+        /* BLOK 6 - CSS GLOBAL & RESET                                  */
+        /* ============================================================ */
+        /* Deskripsi: Semua gaya global, reset, variabel warna,         */
+        /* komponen UI seperti toast, modal, form, dashboard, dll.      */
+        /* ============================================================ */
+
+        /* ===== BLOK 6.1 - CSS RESET & VARIABEL ===== */
+        :root {
+            --primary: #FF6B00;
+            --primary-dark: #e65c00;
+            --primary-light: #fff5f0;
+            --bg: #f8f9fa;
+            --text: #333333;
+            --text-muted: #888888;
+            --border: #e9ecef;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh; color:var(--text); line-height:1.6; }
+
+        /* ===== BLOK 6.2 - KELAS TAMPILAN HALAMAN ===== */
+        .page-dashboard { display:none; }
+        .page-content { display:none; }
+        .page-content.active { display:block; }
+        .hidden { display:none !important; }
+        .hidden-form { display:none !important; }
+        .margin-top-10 { margin-top:10px; }
+
+        /* ===== BLOK 6.3 - TOAST NOTIFICATION ===== */
+        #toastContainer { position:fixed; top:20px; right:20px; z-index:99999; display:flex; flex-direction:column; gap:10px; max-width:400px; width:90%; }
+        .toast { padding:14px 20px; border-radius:var(--radius); color:white; font-size:14px; font-weight:500; box-shadow:var(--shadow); animation:slideInRight 0.4s ease; display:flex; align-items:center; gap:12px; backdrop-filter:blur(4px); }
+        .toast.success { background:#4CAF50; }
+        .toast.error { background:#F44336; }
+        .toast.warning { background:#FF9800; }
+        .toast.info { background:#2196F3; }
+        @keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+        /* ===== BLOK 6.4 - EMPTY STATE ===== */
+        .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); background:white; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
+        .empty-state i { font-size:48px; color:#ddd; display:block; margin-bottom:12px; }
+        .empty-state h3 { font-size:18px; font-weight:600; margin:10px 0 5px; }
+
+        /* ===== BLOK 6.5 - HALAMAN LOGIN/REGISTER ===== */
+        #pageAuthentication { display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(135deg, var(--primary-light), #ffe0cc); }
+        .authentication-wrapper { width:100%; max-width:450px; padding:20px; display:flex; justify-content:center; align-items:flex-start; margin:0 auto; }
+        .authentication-box { background:white; border-radius:var(--radius); padding:35px; box-shadow:var(--shadow); border:1px solid var(--border); width:100%; max-height:80vh; overflow-y:auto; transition:transform 0.3s; }
+        .authentication-box:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.12); }
+        .authentication-logo { text-align:center; margin-bottom:25px; }
+        .authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
+        .authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
+        .authentication-logo p { color:var(--text-muted); font-size:14px; }
+        .authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
+        .form-group { margin-bottom:15px; }
+        .form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
+        .input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:border-color 0.3s, background 0.3s; }
+        .input-group:focus-within { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(255,107,0,0.1); }
+        .input-group i { color:#aaa; font-size:16px; width:30px; text-align:center; }
+        .input-group input, .input-group select { border:none; background:transparent; padding:13px 0; font-size:14px; width:100%; outline:none; font-family:'Poppins', sans-serif; }
+        .button-submit { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; transition:background 0.3s, transform 0.2s; }
+        .button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
+        .authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
+        .authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; transition:color 0.3s; }
+        .authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
+
+        /* ===== BLOK 6.6 - DASHBOARD (NAVBAR, SIDEBAR, CONTENT) ===== */
+        .navbar { background:white; padding:12px 30px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary); position:fixed; top:0; left:0; right:0; z-index:1000; height:64px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+        .navbar-brand { font-size:20px; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:10px; }
+        .navbar-user { display:flex; align-items:center; gap:15px; }
+        .navbar-user .role-badge { background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:var(--radius); font-size:12px; font-weight:600; }
+        .button-logout { background:#f44336; color:white; border:none; padding:8px 16px; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:13px; transition:background 0.3s; }
+        .button-logout:hover { background:#d32f2f; }
+        .sidebar { position:fixed; top:64px; left:0; bottom:0; width:250px; background:white; border-right:1px solid var(--border); padding-top:15px; overflow-y:auto; z-index:999; box-shadow:2px 0 10px rgba(0,0,0,0.03); transition:left 0.3s; }
+        .sidebar-menu-title { font-size:11px; text-transform:uppercase; color:#aaa; padding:15px 25px 8px; font-weight:700; letter-spacing:1.5px; }
+        .sidebar-menu-item { padding:12px 25px; cursor:pointer; color:#555; font-weight:500; display:flex; align-items:center; gap:14px; font-size:14px; border-left:4px solid transparent; transition:all 0.2s; }
+        .sidebar-menu-item:hover { background:#fafafa; color:var(--primary); transform:translateX(4px); }
+        .sidebar-menu-item.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
+        .content { margin-left:250px; margin-top:64px; padding:25px; min-height:calc(100vh - 64px); background:var(--bg); transition:margin-left 0.3s; }
+        .page-header { margin-bottom:20px; }
+        .page-header h2 { font-size:22px; color:var(--text); font-weight:700; }
+        .page-header p { color:var(--text-muted); font-size:14px; }
+
+        /* ===== BLOK 6.7 - WIDGET, TABEL, MODAL, BUTTON ===== */
+        .card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:20px; padding:20px; border:1px solid var(--border); }
+        .card-header { font-weight:600; font-size:15px; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; }
+        .widget-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px; }
+        .widget-card { background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; transition:transform 0.2s; }
+        .widget-card:hover { transform:translateY(-4px); }
+        .widget-card .widget-icon { font-size:35px; margin-bottom:10px; }
+        .widget-card .widget-number { font-size:28px; font-weight:700; color:#333; }
+        .widget-card .widget-label { font-size:13px; color:#888; margin-top:5px; }
+        .grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; }
+        .table-container { overflow-x:auto; }
+        .table { width:100%; border-collapse:collapse; font-size:13px; }
+        .table thead { background:#f8f9fa; }
+        .table thead th { padding:12px 14px; text-align:left; font-weight:600; color:#555; border-bottom:2px solid #eee; }
+        .table tbody td { padding:10px 14px; border-bottom:1px solid #f5f5f5; }
+        .badge { display:inline-block; padding:4px 12px; border-radius:12px; font-size:11px; font-weight:600; }
+        .badge-success { background:#e8f5e9; color:#2e7d32; }
+        .badge-warning { background:#fff3e0; color:#e65100; }
+        .badge-danger { background:#ffebee; color:#c62828; }
+        .form-input { width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:var(--radius); font-size:14px; font-family:'Poppins', sans-serif; transition:border-color 0.3s; }
+        .form-input:focus { border-color:var(--primary); outline:none; }
+        .form-label { font-size:12px; color:#888; margin-bottom:4px; display:block; }
+        .button { padding:8px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:13px; border:none; font-family:'Poppins', sans-serif; display:inline-flex; align-items:center; gap:6px; transition:background 0.3s; }
+        .button-primary { background:var(--primary); color:white; }
+        .button-primary:hover { background:var(--primary-dark); }
+        .button-success { background:#4CAF50; color:white; }
+        .button-success:hover { background:#388E3C; }
+        .button-danger { background:#F44336; color:white; }
+        .button-danger:hover { background:#D32F2F; }
+        .button-warning { background:#FF9800; color:white; }
+        .button-extra-small { padding:4px 10px; font-size:11px; }
+        .button-small { padding:6px 14px; font-size:12px; }
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; display:none; justify-content:center; align-items:center; }
+        .modal-overlay.active { display:flex; }
+        .modal { background:white; border-radius:var(--radius); max-width:500px; width:90%; padding:25px; }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:15px; }
+        .modal-header h3 { font-size:18px; }
+        .modal-close { background:none; border:none; font-size:22px; cursor:pointer; color:#aaa; transition:color 0.3s; }
+        .modal-close:hover { color:#333; }
+        .modal-footer { display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:15px; margin-top:15px; }
+
+        /* ===== BLOK 6.8 - RESPONSIVE ===== */
+        @media (max-width:767px) {
+            #menuToggle { display:block !important; cursor:pointer; font-size:24px; color:var(--primary); background:none; border:none; padding:0; margin-right:10px; }
+            .sidebar { width:80%; top:64px; bottom:0; z-index:999; position:fixed; left:-100%; transition:left 0.3s ease-in-out; }
+            .sidebar.open { left:0; }
+            .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:998; }
+            .sidebar-overlay.active { display:block; }
+            .content { margin-left:0; padding:15px; margin-top:64px; }
+            .widget-grid { grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; }
+            .widget-card .widget-number { font-size:22px; }
+            .grid-2 { grid-template-columns:1fr; }
+            .table { font-size:12px; }
+            .modal { width:95%; padding:15px; }
+            .authentication-wrapper { padding:10px; align-items:flex-start; padding-top:30px; }
+            .authentication-box { padding:20px; max-height:70vh; overflow-y:auto; width:100%; margin-top:10px; }
+        }
+        /* ============================================================ */
+        /* AKHIR BLOK 6 - CSS GLOBAL & RESET                             */
+        /* ============================================================ */
+    </style>
+    <!-- ============================================================ -->
+    <!-- AKHIR BLOK 6 - CSS GLOBAL & RESET                             -->
+    <!-- ============================================================ -->
     
     <!-- Favicon Data URI -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
@@ -277,781 +426,688 @@
     <!-- ============================================================ -->
 
     <!-- ============================================================ -->
-    <!-- BLOK 5 - JAVASCRIPT EKSTERNAL                                 -->
+    <!-- BLOK 5 - JAVASCRIPT EKSTERNAL (DI-GABUNG MENJADI SATU)       -->
     <!-- ============================================================ -->
-    <!-- Deskripsi: Memuat semua modul JavaScript yang dibutuhkan.     -->
+    <!-- Deskripsi: Semua modul JavaScript yang dibutuhkan,            -->
+    <!-- digabung dalam satu blok script di akhir body.                -->
     <!-- ============================================================ -->
-    <script src="js/core.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/sidebar.js"></script>
+    <script>
+        // ============================================================ //
+        // BLOK 7 - CORE ENGINE                                          //
+        // ============================================================ //
+        // Deskripsi: Modul inti aplikasi. Menangani inisialisasi data,   //
+        // variabel global, fungsi toast, modal, generate ID, dan         //
+        // utilitas dasar lainnya.                                       //
+        // ============================================================ //
 
-    <!-- Modul Halaman -->
-    <script src="js/pages/dashboard-default.js"></script>
-    
-    <!-- Modul SuperAdmin -->
-    <script src="js/pages/superadmin/dashboard.js"></script>
-    <script src="js/pages/superadmin/daftar-akun.js"></script>
-    <script src="js/pages/superadmin/persetujuan.js"></script>
-    <script src="js/pages/superadmin/kelola-akun.js"></script>
-    <script src="js/pages/superadmin/pengajuan-buka.js"></script>
-    <script src="js/pages/superadmin/profil.js"></script>
-    <script src="js/pages/superadmin/setting-rekening.js"></script>
-    <script src="js/pages/superadmin/setting-harga.js"></script>
-    <script src="js/pages/superadmin/penagihan-otomatis.js"></script>
-    <script src="js/pages/superadmin/riwayat-penagihan.js"></script>
-    <script src="js/pages/superadmin/laporan-keuangan.js"></script>
-    <script src="js/pages/superadmin/semua-transaksi.js"></script>
-    <script src="js/pages/superadmin/semua-order.js"></script>
-    <script src="js/pages/superadmin/verifikasi-dokumen.js"></script>
-    <script src="js/pages/superadmin/manajemen-owner.js"></script>
+        // ===== BLOK 7.1 - VARIABEL GLOBAL =====
+        var dataAkun = []; // Akan diisi saat aplikasi dimuat
+        var penggunaAktif = null;
+
+        // ===== BLOK 7.2 - FUNGSI GET / SET DATA AKUN =====
+        function getDataAkun() {
+            var data = localStorage.getItem('2r_akun');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function simpanDataAkun(akun) {
+            localStorage.setItem('2r_akun', JSON.stringify(akun));
+        }
+
+        // ===== BLOK 7.3 - FUNGSI TOAST NOTIFICATION =====
+        function tampilkanToast(pesan, tipe) {
+            if (!tipe) tipe = 'success';
+            var container = document.getElementById('toastContainer');
+            var toast = document.createElement('div');
+            toast.className = 'toast ' + tipe;
+            var ikon = '';
+            if (tipe === 'success') ikon = 'fa-check-circle';
+            else if (tipe === 'error') ikon = 'fa-times-circle';
+            else if (tipe === 'warning') ikon = 'fa-exclamation-triangle';
+            else ikon = 'fa-info-circle';
+            toast.innerHTML = '<i class="fas ' + ikon + '"></i> ' + pesan;
+            container.appendChild(toast);
+            setTimeout(function() {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(function() { toast.remove(); }, 300);
+            }, 3500);
+        }
+
+        // ===== BLOK 7.4 - FUNGSI MODAL =====
+        function bukaModal(idModal) {
+            var modal = document.getElementById(idModal);
+            if (modal) modal.classList.add('active');
+        }
+
+        function tutupModal(idModal) {
+            var modal = document.getElementById(idModal);
+            if (modal) modal.classList.remove('active');
+        }
+
+        // ===== BLOK 7.5 - FUNGSI ESCAPE HTML (Anti-XSS) =====
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== BLOK 7.6 - FUNGSI GENERATE ID OTOMATIS =====
+        function generateId(role) {
+            var dataAkun = getDataAkun();
+            var daftar = [];
+            for (var i = 0; i < dataAkun.length; i++) {
+                if (dataAkun[i].role === role) daftar.push(dataAkun[i]);
+            }
+            var nomorUrut = 1;
+            for (var j = 0; j < daftar.length; j++) {
+                var bagian = daftar[j].id.split('-');
+                if (bagian.length === 2) {
+                    var nomor = parseInt(bagian[1]);
+                    if (nomor >= nomorUrut) nomorUrut = nomor + 1;
+                }
+            }
+            var prefix = '';
+            if (role === 'customer') prefix = 'CUST';
+            else if (role === 'toko') prefix = 'TOKO';
+            else if (role === 'ojek') prefix = 'OJEK';
+            else if (role === 'pedagang') prefix = 'PEDAGANG';
+            else if (role === 'codseller') prefix = 'COD';
+            else if (role === 'superadmin') prefix = 'SA';
+            else if (role === 'staf_admin') prefix = 'STA';
+            else if (role === 'staf_owner_ojek') prefix = 'SOO';
+            else if (role === 'staf_owner_toko') prefix = 'SOT';
+            else if (role === 'customer_service') prefix = 'CS';
+            else if (role === 'sponsor') prefix = 'SPN';
+            else prefix = 'USR';
+            return prefix + '-' + String(nomorUrut).padStart(3, '0');
+        }
+
+        // ===== BLOK 7.7 - FUNGSI UPDATE JAM TANGGAL =====
+        function updateJamTanggal() {
+            var jamEl = document.getElementById('displayJam');
+            var tanggalEl = document.getElementById('displayTanggal');
+            if (!jamEl || !tanggalEl) return;
+            var now = new Date();
+            var jam = now.getHours().toString().padStart(2, '0');
+            var menit = now.getMinutes().toString().padStart(2, '0');
+            var detik = now.getSeconds().toString().padStart(2, '0');
+            jamEl.textContent = jam + ':' + menit + ':' + detik;
+            var hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][now.getDay()];
+            var tanggal = now.getDate().toString().padStart(2, '0');
+            var bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][now.getMonth()];
+            var tahun = now.getFullYear();
+            tanggalEl.textContent = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
+        }
+
+        // ===== BLOK 7.8 - TOGGLE FORM LOGIN/REGISTER/AJUKAN =====
+        function toggleForm(tipe) {
+            var login = document.getElementById('loginForm');
+            var register = document.getElementById('registerForm');
+            var pengajuan = document.getElementById('pengajuanBukaAkunForm');
+            var error = document.getElementById('authenticationError');
+            if (error) error.style.display = 'none';
+            if (login) login.classList.add('hidden-form');
+            if (register) register.classList.add('hidden-form');
+            if (pengajuan) pengajuan.classList.add('hidden-form');
+            if (tipe === 'register') {
+                if (register) register.classList.remove('hidden-form');
+            } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
+                if (pengajuan) pengajuan.classList.remove('hidden-form');
+            } else {
+                if (login) login.classList.remove('hidden-form');
+            }
+        }
+
+        // ===== BLOK 7.9 - FUNGSI AMBIL LOKASI OTOMATIS =====
+        function ambilLokasiRegister() {
+            if (!navigator.geolocation) { tampilkanToast('Browser tidak mendukung geolokasi.', 'error'); return; }
+            tampilkanToast('Sedang mengambil lokasi...', 'info');
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                var lat = pos.coords.latitude;
+                var lng = pos.coords.longitude;
+                document.getElementById('registerLat').value = lat;
+                document.getElementById('registerLng').value = lng;
+                fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
+                    .then(function(response) { return response.json(); })
+                    .then(function(data) {
+                        var alamat = data.display_name || 'Lokasi tidak diketahui';
+                        document.getElementById('registerLokasi').value = alamat;
+                        tampilkanToast('Lokasi berhasil diambil!', 'success');
+                    })
+                    .catch(function() {
+                        document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
+                        tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
+                    });
+            }, function(err) {
+                tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
+            });
+        }
+
+        function ambilLokasiPengajuan() {
+            if (!navigator.geolocation) { tampilkanToast('Browser tidak mendukung geolokasi.', 'error'); return; }
+            tampilkanToast('Sedang mengambil lokasi...', 'info');
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                var lat = pos.coords.latitude;
+                var lng = pos.coords.longitude;
+                document.getElementById('pengajuanLat').value = lat;
+                document.getElementById('pengajuanLng').value = lng;
+                fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
+                    .then(function(response) { return response.json(); })
+                    .then(function(data) {
+                        var alamat = data.display_name || 'Lokasi tidak diketahui';
+                        document.getElementById('pengajuanLokasi').value = alamat;
+                        tampilkanToast('Lokasi berhasil diambil!', 'success');
+                    })
+                    .catch(function() {
+                        document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
+                        tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
+                    });
+            }, function(err) {
+                tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
+            });
+        }
+
+        // ===== BLOK 7.10 - INISIALISASI DATA AWAL =====
+        function inisialisasiDataAwal() {
+            var data = getDataAkun();
+            if (data.length === 0) {
+                // Buat SuperAdmin default jika belum ada
+                var superAdmin = {
+                    id: 'SA-001',
+                    role: 'superadmin',
+                    username: 'admin',
+                    password: 'admin123', // akan di-hash saat login
+                    nama: 'SuperAdmin',
+                    email: 'admin@2r.com',
+                    nomorHp: '081234567890',
+                    alamat: 'Kantor Pusat',
+                    namaBank: 'BCA',
+                    nomorRekening: '1234567890',
+                    pemilikRekening: 'SuperAdmin',
+                    status: 'AKTIF',
+                    isPro: true,
+                    waktuRegistrasi: new Date().toISOString()
+                };
+                data.push(superAdmin);
+                simpanDataAkun(data);
+            }
+        }
+
+        // ===== BLOK 7.11 - READY EVENT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            inisialisasiDataAwal();
+            setInterval(updateJamTanggal, 1000);
+            updateJamTanggal();
+            document.getElementById('menuToggle').addEventListener('click', function() {
+                document.getElementById('sidebarContainer').classList.toggle('open');
+                document.getElementById('sidebarOverlay').classList.toggle('active');
+            });
+            document.getElementById('sidebarOverlay').addEventListener('click', function() {
+                document.getElementById('sidebarContainer').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            });
+        });
+        // ============================================================ //
+        // AKHIR BLOK 7 - CORE ENGINE                                    //
+        // ============================================================ //
+
+        // ============================================================ //
+        // BLOK 8 - UTILS - FUNGSI KEUANGAN UNTUK SUPERADMIN             //
+        // ============================================================ //
+        // Deskripsi: Kumpulan fungsi untuk menghitung fee aplikasi,     //
+        // fee penjualan toko, fee ojek, fee COD, dan fee owner.        //
+        // ============================================================ //
+
+        // ===== BLOK 8.1 - HITUNG FEE PEMAKAIAN APLIKASI =====
+        function hitungFeePemakaianAplikasi(role) {
+            var hargaSewa = JSON.parse(localStorage.getItem('2r_harga_sewa_fee') || '{}');
+            return hargaSewa[role] ? hargaSewa[role].sewa : 0;
+        }
+
+        // ===== BLOK 8.2 - HITUNG FEE PENJUALAN TOKO =====
+        function hitungFeePenjualanToko(username, bulan, tahun) {
+            var transaksiKey = '2r_transaksi_' + username;
+            var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
+            var transaksiBulan = transaksi.filter(function(t) {
+                var tanggal = new Date(t.tanggal || '');
+                return tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
+            });
+            var totalPenjualan = transaksiBulan.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
+            var hargaSewa = JSON.parse(localStorage.getItem('2r_harga_sewa_fee') || '{}');
+            var feePersen = (hargaSewa && hargaSewa.toko_grosir) ? hargaSewa.toko_grosir.fee : 0;
+            return { totalPenjualan: totalPenjualan, feePersen: feePersen, fee: Math.floor(totalPenjualan * feePersen / 100) };
+        }
+
+        // ===== BLOK 8.3 - HITUNG FEE PENDAPATAN OJEK =====
+        function hitungFeePendapatanOjek(username, bulan, tahun) {
+            var orderDiambil = JSON.parse(localStorage.getItem('2r_order_diambil') || '[]');
+            var orderBulan = orderDiambil.filter(function(o) {
+                if (o.ojek !== username) return false;
+                if (o.status !== 'selesai') return false;
+                var tanggal = new Date(o.waktuSelesai || o.waktuAmbil || '');
+                return tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
+            });
+            var totalPendapatan = orderBulan.reduce(function(sum, o) { return sum + (o.ongkosKirim || 0); }, 0);
+            var feeOwner = JSON.parse(localStorage.getItem('2r_pengaturan_fee_owner') || '{"feeOwnerOjek":5}');
+            var feePersen = feeOwner.feeOwnerOjek || 5;
+            return { totalPendapatan: totalPendapatan, feePersen: feePersen, fee: Math.floor(totalPendapatan * feePersen / 100) };
+        }
+
+        // ===== BLOK 8.4 - HITUNG FEE COD =====
+        function hitungFeeCOD(username, bulan, tahun) {
+            var transaksiKey = '2r_transaksi_' + username;
+            var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
+            var transaksiCOD = transaksi.filter(function(t) {
+                var tanggal = new Date(t.tanggal || '');
+                return t.metode === 'COD' && tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
+            });
+            var totalPenjualanCOD = transaksiCOD.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
+            var pengaturanCOD = JSON.parse(localStorage.getItem('2r_pengaturan_cod') || '{"persentaseJasa":5}');
+            var feePersen = pengaturanCOD.persentaseJasa || 5;
+            return { totalPenjualanCOD: totalPenjualanCOD, feePersen: feePersen, fee: Math.floor(totalPenjualanCOD * feePersen / 100) };
+        }
+
+        // ===== BLOK 8.5 - HITUNG TOTAL FEE OWNER =====
+        function hitungTotalFeeOwner(ownerUsername, role) {
+            var rekrutanKey = '';
+            var roleRekrutan = '';
+            if (role === 'owner_ojek') {
+                rekrutanKey = '2r_owner_ojek_rekrutan';
+                roleRekrutan = 'ojek';
+            } else if (role === 'owner_toko') {
+                rekrutanKey = '2r_owner_toko_rekrutan';
+                roleRekrutan = 'toko';
+            } else {
+                return 0;
+            }
+            var rekrutan = JSON.parse(localStorage.getItem(rekrutanKey) || '[]');
+            var myRekrutan = rekrutan.filter(function(r) { return r.ownerUsername === ownerUsername; });
+            var feeOwner = JSON.parse(localStorage.getItem('2r_pengaturan_fee_owner') || '{"feeOwnerOjek":5,"feeOwnerToko":5}');
+            var feePersen = (role === 'owner_ojek') ? feeOwner.feeOwnerOjek : feeOwner.feeOwnerToko;
+            var totalFee = 0;
+            myRekrutan.forEach(function(r) {
+                var username = roleRekrutan === 'ojek' ? r.ojekUsername : r.tokoUsername;
+                var pendapatan = hitungPendapatanRekrutanGlobal(username, roleRekrutan);
+                totalFee += pendapatan * (feePersen / 100);
+            });
+            return Math.round(totalFee);
+        }
+
+        function hitungPendapatanRekrutanGlobal(username, role) {
+            if (role === 'ojek') {
+                var orderDiambil = JSON.parse(localStorage.getItem('2r_order_diambil') || '[]');
+                var orderSelesai = orderDiambil.filter(function(o) { return o.ojek === username && o.status === 'selesai'; });
+                return orderSelesai.reduce(function(sum, o) { return sum + (o.ongkosKirim || 0); }, 0);
+            }
+            if (role === 'toko') {
+                var transaksiKey = '2r_transaksi_' + username;
+                var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
+                return transaksi.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
+            }
+            return 0;
+        }
+        // ============================================================ //
+        // AKHIR BLOK 8 - UTILS - FUNGSI KEUANGAN                       //
+        // ============================================================ //
+
+        // ============================================================ //
+        // BLOK 9 - OTHENTIKASI & KEAMANAN                               //
+        // ============================================================ //
+        // Deskripsi: Menangani login, hash password, 2FA untuk          //
+        // SuperAdmin, register, dan logout.                            //
+        // ============================================================ //
+
+        // ===== BLOK 9.1 - HASH PASSWORD (SHA-256) =====
+        async function hashPassword(password) {
+            var encoder = new TextEncoder();
+            var data = encoder.encode(password);
+            var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            var hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+
+        async function verifikasiPassword(password, storedHash) {
+            var hashInput = await hashPassword(password);
+            return hashInput === storedHash;
+        }
+
+        // ===== BLOK 9.2 - EVENT LOGIN =====
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var username = document.getElementById('loginUsername').value.trim();
+            var password = document.getElementById('loginPassword').value.trim();
+            var errorBox = document.getElementById('authenticationError');
+            var errorText = document.getElementById('authenticationErrorText');
+            if (errorBox) errorBox.style.display = 'none';
+
+            var dataAkun = getDataAkun();
+            var user = null;
+            for (var i = 0; i < dataAkun.length; i++) {
+                if (dataAkun[i].username === username) { user = dataAkun[i]; break; }
+            }
+            if (!user) {
+                if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
+                return;
+            }
+
+            // Migrasi password jika masih plain
+            if (user.password.length < 64) {
+                var hash = await hashPassword(user.password);
+                user.password = hash;
+                simpanDataAkun(dataAkun);
+            }
+
+            var cocok = await verifikasiPassword(password, user.password);
+            if (!cocok) {
+                if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
+                return;
+            }
+
+            // Cek status
+            if (user.status !== 'AKTIF' && user.role !== 'superadmin') {
+                if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Akun belum aktif. Menunggu verifikasi admin.'; }
+                return;
+            }
+
+            // 2FA untuk SuperAdmin
+            if (user.role === 'superadmin') {
+                // Simulasi OTP
+                var otp = Math.floor(100000 + Math.random() * 900000);
+                alert('🔐 Kode OTP Anda: ' + otp);
+                var inputOtp = prompt('Masukkan kode OTP:');
+                if (inputOtp !== String(otp)) {
+                    tampilkanToast('OTP salah!', 'error');
+                    return;
+                }
+            }
+
+            // Login berhasil
+            penggunaAktif = user;
+            localStorage.setItem('2r_user', JSON.stringify(user));
+            localStorage.setItem('2r_user_role', user.role);
+            tampilkanDashboard(user);
+        });
+
+        // ===== BLOK 9.3 - EVENT REGISTER =====
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var role = document.getElementById('registerRole').value;
+            var username = document.getElementById('registerUsername').value.trim();
+            var password = document.getElementById('registerPassword').value.trim();
+            var nama = document.getElementById('registerNama').value.trim();
+            var lat = document.getElementById('registerLat').value;
+            var lng = document.getElementById('registerLng').value;
+            var alamat = document.getElementById('registerLokasi').value.trim();
+            if (!role || !username || !password || !nama) { tampilkanToast('Data belum lengkap!', 'warning'); return; }
+            var dataAkun = getDataAkun();
+            for (var i = 0; i < dataAkun.length; i++) {
+                if (dataAkun[i].username === username) { tampilkanToast('Username sudah digunakan!', 'error'); return; }
+            }
+            var status = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
+            var hash = await hashPassword(password);
+            var akunBaru = {
+                id: generateId(role),
+                role: role,
+                username: username,
+                password: hash,
+                nama: nama,
+                email: '',
+                nomorHp: '',
+                alamat: alamat,
+                latitude: lat,
+                longitude: lng,
+                alamatLokasi: alamat,
+                namaBank: '',
+                nomorRekening: '',
+                pemilikRekening: '',
+                status: status,
+                waktuRegistrasi: new Date().toISOString()
+            };
+            dataAkun.push(akunBaru);
+            simpanDataAkun(dataAkun);
+            tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + ' | Status: ' + status, 'success');
+            toggleForm('login');
+        });
+
+        // ===== BLOK 9.4 - EVENT LOGOUT =====
+        document.getElementById('buttonLogout').addEventListener('click', function() {
+            if (confirm('Keluar dari aplikasi?')) {
+                localStorage.removeItem('2r_user');
+                localStorage.removeItem('2r_user_role');
+                penggunaAktif = null;
+                location.reload();
+            }
+        });
+
+        // ===== BLOK 9.5 - TAMPILKAN DASHBOARD =====
+        function tampilkanDashboard(user) {
+            document.getElementById('pageAuthentication').style.display = 'none';
+            document.getElementById('pageDashboard').style.display = 'block';
+            document.getElementById('userNama').textContent = user.nama;
+            document.getElementById('roleBadge').textContent = user.role;
+            document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
+            setupNavigasiSidebar();
+            if (typeof renderDashboard === 'function') {
+                renderDashboard();
+            }
+        }
+        // ============================================================ //
+        // AKHIR BLOK 9 - OTHENTIKASI & KEAMANAN                         //
+        // ============================================================ //
+
+        // ============================================================ //
+        // BLOK 10 - SIDEBAR & NAVIGASI                                  //
+        // ============================================================ //
+        // Deskripsi: Membangun menu sidebar berdasarkan role user,      //
+        // dan mengatur navigasi ke halaman yang sesuai.                 //
+        // ============================================================ //
+
+        // ===== BLOK 10.1 - BUAT SIDEBAR HTML =====
+        function buatSidebarHTML(role) {
+            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+            
+            var menuRole = {
+                'superadmin': [
+                    { judul: '📊 Dashboard', items: [
+                        { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dashboard' },
+                        { halaman: 'dashboard-richer', icon: 'fa-chart-line', label: 'Dashboard Diperkaya' }
+                    ] },
+                    { judul: '👤 Manajemen Akun', items: [
+                        { halaman: 'daftar-akun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
+                        { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
+                        { halaman: 'kelola-akun', icon: 'fa-users-cog', label: 'Kelola Akun' },
+                        { halaman: 'pengajuan-buka', icon: 'fa-file-signature', label: 'Pengajuan Buka Akun' },
+                        { halaman: 'profil', icon: 'fa-user-circle', label: 'Profil SuperAdmin' }
+                    ] },
+                    { judul: '💰 Penagihan & Keuangan', items: [
+                        { halaman: 'penagihan-otomatis', icon: 'fa-file-invoice-dollar', label: 'Penagihan Otomatis' },
+                        { halaman: 'riwayat-penagihan', icon: 'fa-history', label: 'Riwayat Penagihan' },
+                        { halaman: 'laporan-keuangan', icon: 'fa-chart-line', label: 'Laporan Keuangan' },
+                        { halaman: 'setting-harga', icon: 'fa-tags', label: 'Setting Harga' },
+                        { halaman: 'data-penagihan', icon: 'fa-file-invoice', label: 'Data Penagihan (Manual)' }
+                    ] },
+                    { judul: '📦 Monitoring', items: [
+                        { halaman: 'semua-transaksi', icon: 'fa-credit-card', label: 'Semua Transaksi' },
+                        { halaman: 'semua-order', icon: 'fa-shopping-cart', label: 'Semua Order' }
+                    ] },
+                    { judul: '🔍 Verifikasi & Owner', items: [
+                        { halaman: 'verifikasi-dokumen', icon: 'fa-file-signature', label: 'Verifikasi Dokumen' },
+                        { halaman: 'manajemen-owner', icon: 'fa-users-cog', label: 'Manajemen Owner' }
+                    ] },
+                    { judul: '💬 Komunikasi', items: [
+                        { halaman: 'menu-iklan', icon: 'fa-ad', label: 'Menu Iklan' },
+                        { halaman: 'papan-informasi', icon: 'fa-bullhorn', label: 'Papan Informasi' }
+                    ] },
+                    { judul: '⚙️ Sistem', items: [
+                        { halaman: 'backup-restore', icon: 'fa-database', label: 'Backup & Restore' },
+                        { halaman: 'reset-cleanup', icon: 'fa-broom', label: 'Reset & Pembersihan' },
+                        { halaman: 'notepad', icon: 'fa-sticky-note', label: 'Notepad+' },
+                        { halaman: 'setting-rekening', icon: 'fa-university', label: 'Setting Rekening' },
+                        { halaman: 'kelola-wilayah', icon: 'fa-map-marked-alt', label: 'Kelola Wilayah' },
+                        { halaman: 'pengajuan-upload', icon: 'fa-upload', label: 'Pengajuan Upload Produk' }
+                    ] }
+                ],
+                'customer': [
+                    { judul: '🛍️ Belanja', items: [
+                        { halaman: 'dashboard-default', icon: 'fa-th-large', label: 'Dashboard' }
+                    ] }
+                ]
+            };
+
+            var daftarMenu = menuRole[role] || menuRole['customer'];
+            var html = '';
+            for (var i = 0; i < daftarMenu.length; i++) {
+                var bagian = daftarMenu[i];
+                html += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
+                for (var j = 0; j < bagian.items.length; j++) {
+                    var item = bagian.items[j];
+                    var active = (item.halaman === 'dashboard' || item.halaman === 'dashboard-default') ? ' active' : '';
+                    html += '<div class="sidebar-menu-item' + active + '" data-page="' + item.halaman + '">';
+                    html += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
+                }
+            }
+            return html;
+        }
+
+        // ===== BLOK 10.2 - SETUP NAVIGASI SIDEBAR =====
+        function setupNavigasiSidebar() {
+            var items = document.querySelectorAll('.sidebar-menu-item');
+            items.forEach(function(item) {
+                item.onclick = function() {
+                    var halaman = this.getAttribute('data-page');
+                    if (!halaman) return;
+                    items.forEach(function(m) { m.classList.remove('active'); });
+                    this.classList.add('active');
+                    navigasiKeHalaman(halaman);
+                    if (window.innerWidth <= 767) {
+                        document.getElementById('sidebarContainer').classList.remove('open');
+                        document.getElementById('sidebarOverlay').classList.remove('active');
+                    }
+                };
+            });
+        }
+
+        // ===== BLOK 10.3 - NAVIGASI KE HALAMAN =====
+        function navigasiKeHalaman(namaHalaman) {
+            var areaKonten = document.getElementById('mainContent');
+            if (!areaKonten) return;
+
+            // SuperAdmin
+            if (namaHalaman === 'dashboard') renderDashboard();
+            else if (namaHalaman === 'dashboard-richer') renderDashboardRicher();
+            else if (namaHalaman === 'daftar-akun') renderDaftarAkun();
+            else if (namaHalaman === 'persetujuan') renderPersetujuanAkun();
+            else if (namaHalaman === 'kelola-akun') renderKelolaAkun();
+            else if (namaHalaman === 'pengajuan-buka') renderPengajuanBukaAkun();
+            else if (namaHalaman === 'profil') renderProfilSuperAdmin();
+            else if (namaHalaman === 'setting-rekening') renderSettingRekening();
+            else if (namaHalaman === 'setting-harga') renderSettingHargaAplikasi();
+            else if (namaHalaman === 'penagihan-otomatis') renderPenagihanOtomatis();
+            else if (namaHalaman === 'riwayat-penagihan') renderRiwayatPenagihan();
+            else if (namaHalaman === 'laporan-keuangan') renderLaporanKeuangan();
+            else if (namaHalaman === 'semua-transaksi') renderSemuaTransaksi();
+            else if (namaHalaman === 'semua-order') renderSemuaOrder();
+            else if (namaHalaman === 'verifikasi-dokumen') renderVerifikasiDokumen();
+            else if (namaHalaman === 'manajemen-owner') renderManajemenOwner();
+            else if (namaHalaman === 'menu-iklan') renderMenuIklan();
+            else if (namaHalaman === 'papan-informasi') renderPapanInformasi();
+            else if (namaHalaman === 'backup-restore') renderBackupRestore();
+            else if (namaHalaman === 'reset-cleanup') renderResetCleanup();
+            else if (namaHalaman === 'notepad') renderNotepad();
+            else if (namaHalaman === 'kelola-wilayah') renderKelolaWilayah();
+            else if (namaHalaman === 'pengajuan-upload') renderPengajuanUploadProduk();
+            else if (namaHalaman === 'data-penagihan') renderDataPenagihan();
+
+            // Customer / Default
+            else if (namaHalaman === 'dashboard-default') renderDashboardDefault();
+            else renderPlaceholder(namaHalaman);
+        }
+
+        function renderPlaceholder(judul) {
+            var areaKonten = document.getElementById('mainContent');
+            var html = '<div class="page-header"><h2>' + judul + '</h2><p>Halaman ini sedang dalam pengembangan.</p></div>';
+            html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Sedang Dikembangkan</h3></div></div>';
+            areaKonten.innerHTML = html;
+        }
+        // ============================================================ //
+        // AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            //
+        // ============================================================ //
+
+        // ============================================================ //
+        // CATATAN: FUNGSI-FUNGSI RENDER (DASHBOARD, DAFTAR AKUN, DLL)  //
+        // AKAN DITAMBAHKAN DI MODUL-MODUL SELANJUTNYA.                  //
+        // UNTUK DEMO INI, KITA GUNAKAN FUNGSI RENDER DASHBOARD SEDERHANA//
+        // ============================================================ //
+
+        function renderDashboard() {
+            var role = localStorage.getItem('2r_user_role');
+            if (role !== 'superadmin') { tampilkanToast('Akses ditolak!', 'error'); return; }
+            var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
+            var dataAkun = getDataAkun();
+            var total = dataAkun.length;
+            var aktif = 0, menunggu = 0, nonaktif = 0;
+            for (var i = 0; i < dataAkun.length; i++) {
+                if (dataAkun[i].status === 'AKTIF') aktif++;
+                else if (dataAkun[i].status === 'NONAKTIF (Menunggu Verifikasi)') menunggu++;
+                else nonaktif++;
+            }
+            var html = '<div class="page-header"><h2>Dashboard SuperAdmin</h2><p>Selamat datang, <strong>' + (user.nama || 'SuperAdmin') + '</strong>!</p></div>';
+            html += '<div class="widget-grid">';
+            html += '<div class="widget-card"><div class="widget-icon" style="color:#2196F3;"><i class="fas fa-users"></i></div><div class="widget-number">' + total + '</div><div class="widget-label">Total Akun</div></div>';
+            html += '<div class="widget-card"><div class="widget-icon" style="color:#4CAF50;"><i class="fas fa-check-circle"></i></div><div class="widget-number">' + aktif + '</div><div class="widget-label">Akun Aktif</div></div>';
+            html += '<div class="widget-card"><div class="widget-icon" style="color:#FF9800;"><i class="fas fa-clock"></i></div><div class="widget-number">' + menunggu + '</div><div class="widget-label">Menunggu Verifikasi</div></div>';
+            html += '<div class="widget-card"><div class="widget-icon" style="color:#F44336;"><i class="fas fa-ban"></i></div><div class="widget-number">' + nonaktif + '</div><div class="widget-label">Dinonaktifkan</div></div>';
+            html += '</div>';
+            html += '<div class="card"><div class="card-header">Akses Cepat</div><div style="display:flex; gap:10px; flex-wrap:wrap;">';
+            html += '<button class="button button-primary" onclick="navigasiKeHalaman(\'daftar-akun\')">➕ Daftar Akun</button>';
+            html += '<button class="button button-success" onclick="navigasiKeHalaman(\'penagihan-otomatis\')">💰 Penagihan</button>';
+            html += '<button class="button button-warning" onclick="navigasiKeHalaman(\'kelola-akun\')">⚙️ Kelola Akun</button>';
+            html += '</div></div>';
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        function renderDashboardRicher() {
+            renderDashboard(); // Untuk sementara sama
+        }
+
+        function renderDashboardDefault() {
+            var areaKonten = document.getElementById('mainContent');
+            var html = '<div class="page-header"><h2>Dashboard Customer</h2><p>Halaman default untuk customer.</p></div>';
+            html += '<div class="card"><div class="empty-state"><i class="fas fa-store"></i><h3>Fitur dashboard default sedang dikembangkan</h3></div></div>';
+            areaKonten.innerHTML = html;
+        }
+
+        // Beberapa fungsi placeholder agar navigasi tidak error
+        function renderDaftarAkun() { renderPlaceholder('Daftar Akun Baru'); }
+        function renderPersetujuanAkun() { renderPlaceholder('Persetujuan Akun'); }
+        function renderKelolaAkun() { renderPlaceholder('Kelola Akun'); }
+        function renderPengajuanBukaAkun() { renderPlaceholder('Pengajuan Buka Akun'); }
+        function renderProfilSuperAdmin() { renderPlaceholder('Profil SuperAdmin'); }
+        function renderSettingRekening() { renderPlaceholder('Setting Rekening'); }
+        function renderSettingHargaAplikasi() { renderPlaceholder('Setting Harga Aplikasi'); }
+        function renderPenagihanOtomatis() { renderPlaceholder('Penagihan Otomatis'); }
+        function renderRiwayatPenagihan() { renderPlaceholder('Riwayat Penagihan'); }
+        function renderLaporanKeuangan() { renderPlaceholder('Laporan Keuangan'); }
+        function renderSemuaTransaksi() { renderPlaceholder('Semua Transaksi'); }
+        function renderSemuaOrder() { renderPlaceholder('Semua Order'); }
+        function renderVerifikasiDokumen() { renderPlaceholder('Verifikasi Dokumen'); }
+        function renderManajemenOwner() { renderPlaceholder('Manajemen Owner'); }
+        function renderMenuIklan() { renderPlaceholder('Menu Iklan'); }
+        function renderPapanInformasi() { renderPlaceholder('Papan Informasi'); }
+        function renderBackupRestore() { renderPlaceholder('Backup & Restore'); }
+        function renderResetCleanup() { renderPlaceholder('Reset & Pembersihan'); }
+        function renderNotepad() { renderPlaceholder('Notepad+'); }
+        function renderKelolaWilayah() { renderPlaceholder('Kelola Wilayah'); }
+        function renderPengajuanUploadProduk() { renderPlaceholder('Pengajuan Upload Produk'); }
+        function renderDataPenagihan() { renderPlaceholder('Data Penagihan (Manual)'); }
+    </script>
     <!-- ============================================================ -->
     <!-- AKHIR BLOK 5 - JAVASCRIPT EKSTERNAL                           -->
     <!-- ============================================================ -->
+
+</body>
+</html>
 <!-- ============================================================ -->
 <!-- AKHIR BLOK 1 - HALAMAN UTAMA (INDEX)                          -->
 <!-- ============================================================ -->
-/* ============================================================ */
-/* BLOK 6 - CSS GLOBAL & RESET                                  */
-/* ============================================================ */
-/* Deskripsi: Semua gaya global, reset, variabel warna,         */
-/* komponen UI seperti toast, modal, form, dashboard, dll.      */
-/* ============================================================ */
-
-/* ===== BLOK 6.1 - CSS RESET & VARIABEL ===== */
-:root {
-    --primary: #FF6B00;
-    --primary-dark: #e65c00;
-    --primary-light: #fff5f0;
-    --bg: #f8f9fa;
-    --text: #333333;
-    --text-muted: #888888;
-    --border: #e9ecef;
-    --shadow: 0 4px 20px rgba(0,0,0,0.08);
-    --radius: 12px;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Poppins', sans-serif; background:var(--bg); min-height:100vh; color:var(--text); line-height:1.6; }
-
-/* ===== BLOK 6.2 - KELAS TAMPILAN HALAMAN ===== */
-.page-dashboard { display:none; }
-.page-content { display:none; }
-.page-content.active { display:block; }
-.hidden { display:none !important; }
-.hidden-form { display:none !important; }
-.margin-top-10 { margin-top:10px; }
-
-/* ===== BLOK 6.3 - TOAST NOTIFICATION ===== */
-#toastContainer { position:fixed; top:20px; right:20px; z-index:99999; display:flex; flex-direction:column; gap:10px; max-width:400px; width:90%; }
-.toast { padding:14px 20px; border-radius:var(--radius); color:white; font-size:14px; font-weight:500; box-shadow:var(--shadow); animation:slideInRight 0.4s ease; display:flex; align-items:center; gap:12px; backdrop-filter:blur(4px); }
-.toast.success { background:#4CAF50; }
-.toast.error { background:#F44336; }
-.toast.warning { background:#FF9800; }
-.toast.info { background:#2196F3; }
-@keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
-
-/* ===== BLOK 6.4 - EMPTY STATE ===== */
-.empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); background:white; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.empty-state i { font-size:48px; color:#ddd; display:block; margin-bottom:12px; }
-.empty-state h3 { font-size:18px; font-weight:600; margin:10px 0 5px; }
-
-/* ===== BLOK 6.5 - HALAMAN LOGIN/REGISTER ===== */
-#pageAuthentication { display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(135deg, var(--primary-light), #ffe0cc); }
-.authentication-wrapper { width:100%; max-width:450px; padding:20px; display:flex; justify-content:center; align-items:flex-start; margin:0 auto; }
-.authentication-box { background:white; border-radius:var(--radius); padding:35px; box-shadow:var(--shadow); border:1px solid var(--border); width:100%; max-height:80vh; overflow-y:auto; transition:transform 0.3s; }
-.authentication-box:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.12); }
-.authentication-logo { text-align:center; margin-bottom:25px; }
-.authentication-logo i { font-size:45px; color:var(--primary); margin-bottom:10px; }
-.authentication-logo h1 { font-size:26px; color:var(--text); font-weight:700; }
-.authentication-logo p { color:var(--text-muted); font-size:14px; }
-.authentication-error { display:none; background:#ffebee; color:#d32f2f; padding:12px 16px; border-radius:var(--radius); margin-bottom:15px; font-size:14px; border-left:4px solid #d32f2f; }
-.form-group { margin-bottom:15px; }
-.form-group label { display:block; font-weight:600; font-size:13px; color:#555; margin-bottom:5px; }
-.input-group { display:flex; align-items:center; background:#f8f9fa; border-radius:var(--radius); padding:0 14px; border:2px solid transparent; transition:border-color 0.3s, background 0.3s; }
-.input-group:focus-within { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(255,107,0,0.1); }
-.input-group i { color:#aaa; font-size:16px; width:30px; text-align:center; }
-.input-group input, .input-group select { border:none; background:transparent; padding:13px 0; font-size:14px; width:100%; outline:none; font-family:'Poppins', sans-serif; }
-.button-submit { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; transition:background 0.3s, transform 0.2s; }
-.button-submit:hover { background:var(--primary-dark); transform:scale(1.02); }
-.authentication-footer { text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted); }
-.authentication-footer a { color:var(--primary); cursor:pointer; font-weight:600; text-decoration:none; transition:color 0.3s; }
-.authentication-footer a:hover { text-decoration:underline; color:var(--primary-dark); }
-
-/* ===== BLOK 6.6 - DASHBOARD (NAVBAR, SIDEBAR, CONTENT) ===== */
-.navbar { background:white; padding:12px 30px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary); position:fixed; top:0; left:0; right:0; z-index:1000; height:64px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-.navbar-brand { font-size:20px; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:10px; }
-.navbar-user { display:flex; align-items:center; gap:15px; }
-.navbar-user .role-badge { background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:var(--radius); font-size:12px; font-weight:600; }
-.button-logout { background:#f44336; color:white; border:none; padding:8px 16px; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:13px; transition:background 0.3s; }
-.button-logout:hover { background:#d32f2f; }
-.sidebar { position:fixed; top:64px; left:0; bottom:0; width:250px; background:white; border-right:1px solid var(--border); padding-top:15px; overflow-y:auto; z-index:999; box-shadow:2px 0 10px rgba(0,0,0,0.03); transition:left 0.3s; }
-.sidebar-menu-title { font-size:11px; text-transform:uppercase; color:#aaa; padding:15px 25px 8px; font-weight:700; letter-spacing:1.5px; }
-.sidebar-menu-item { padding:12px 25px; cursor:pointer; color:#555; font-weight:500; display:flex; align-items:center; gap:14px; font-size:14px; border-left:4px solid transparent; transition:all 0.2s; }
-.sidebar-menu-item:hover { background:#fafafa; color:var(--primary); transform:translateX(4px); }
-.sidebar-menu-item.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
-.content { margin-left:250px; margin-top:64px; padding:25px; min-height:calc(100vh - 64px); background:var(--bg); transition:margin-left 0.3s; }
-.page-header { margin-bottom:20px; }
-.page-header h2 { font-size:22px; color:var(--text); font-weight:700; }
-.page-header p { color:var(--text-muted); font-size:14px; }
-
-/* ===== BLOK 6.7 - WIDGET, TABEL, MODAL, BUTTON ===== */
-.card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:20px; padding:20px; border:1px solid var(--border); }
-.card-header { font-weight:600; font-size:15px; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; }
-.widget-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px; }
-.widget-card { background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; transition:transform 0.2s; }
-.widget-card:hover { transform:translateY(-4px); }
-.widget-card .widget-icon { font-size:35px; margin-bottom:10px; }
-.widget-card .widget-number { font-size:28px; font-weight:700; color:#333; }
-.widget-card .widget-label { font-size:13px; color:#888; margin-top:5px; }
-.grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; }
-.table-container { overflow-x:auto; }
-.table { width:100%; border-collapse:collapse; font-size:13px; }
-.table thead { background:#f8f9fa; }
-.table thead th { padding:12px 14px; text-align:left; font-weight:600; color:#555; border-bottom:2px solid #eee; }
-.table tbody td { padding:10px 14px; border-bottom:1px solid #f5f5f5; }
-.badge { display:inline-block; padding:4px 12px; border-radius:12px; font-size:11px; font-weight:600; }
-.badge-success { background:#e8f5e9; color:#2e7d32; }
-.badge-warning { background:#fff3e0; color:#e65100; }
-.badge-danger { background:#ffebee; color:#c62828; }
-.form-input { width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:var(--radius); font-size:14px; font-family:'Poppins', sans-serif; transition:border-color 0.3s; }
-.form-input:focus { border-color:var(--primary); outline:none; }
-.form-label { font-size:12px; color:#888; margin-bottom:4px; display:block; }
-.button { padding:8px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:13px; border:none; font-family:'Poppins', sans-serif; display:inline-flex; align-items:center; gap:6px; transition:background 0.3s; }
-.button-primary { background:var(--primary); color:white; }
-.button-primary:hover { background:var(--primary-dark); }
-.button-success { background:#4CAF50; color:white; }
-.button-success:hover { background:#388E3C; }
-.button-danger { background:#F44336; color:white; }
-.button-danger:hover { background:#D32F2F; }
-.button-warning { background:#FF9800; color:white; }
-.button-extra-small { padding:4px 10px; font-size:11px; }
-.button-small { padding:6px 14px; font-size:12px; }
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; display:none; justify-content:center; align-items:center; }
-.modal-overlay.active { display:flex; }
-.modal { background:white; border-radius:var(--radius); max-width:500px; width:90%; padding:25px; }
-.modal-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:15px; }
-.modal-header h3 { font-size:18px; }
-.modal-close { background:none; border:none; font-size:22px; cursor:pointer; color:#aaa; transition:color 0.3s; }
-.modal-close:hover { color:#333; }
-.modal-footer { display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:15px; margin-top:15px; }
-
-/* ===== BLOK 6.8 - RESPONSIVE ===== */
-@media (max-width:767px) {
-    #menuToggle { display:block !important; cursor:pointer; font-size:24px; color:var(--primary); background:none; border:none; padding:0; margin-right:10px; }
-    .sidebar { width:80%; top:64px; bottom:0; z-index:999; position:fixed; left:-100%; transition:left 0.3s ease-in-out; }
-    .sidebar.open { left:0; }
-    .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:998; }
-    .sidebar-overlay.active { display:block; }
-    .content { margin-left:0; padding:15px; margin-top:64px; }
-    .widget-grid { grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; }
-    .widget-card .widget-number { font-size:22px; }
-    .grid-2 { grid-template-columns:1fr; }
-    .table { font-size:12px; }
-    .modal { width:95%; padding:15px; }
-    .authentication-wrapper { padding:10px; align-items:flex-start; padding-top:30px; }
-    .authentication-box { padding:20px; max-height:70vh; overflow-y:auto; width:100%; margin-top:10px; }
-}
-/* ============================================================ */
-/* AKHIR BLOK 6 - CSS GLOBAL & RESET                             */
-/* ============================================================ */
-/* ============================================================ */
-/* BLOK 7 - CORE ENGINE                                          */
-/* ============================================================ */
-/* Deskripsi: Modul inti aplikasi. Menangani inisialisasi data,   */
-/* variabel global, fungsi toast, modal, generate ID, dan         */
-/* utilitas dasar lainnya.                                       */
-/* ============================================================ */
-
-// ===== BLOK 7.1 - VARIABEL GLOBAL =====
-var dataAkun = []; // Akan diisi saat aplikasi dimuat
-var penggunaAktif = null;
-
-// ===== BLOK 7.2 - FUNGSI GET / SET DATA AKUN =====
-function getDataAkun() {
-    var data = localStorage.getItem('2r_akun');
-    return data ? JSON.parse(data) : [];
-}
-
-function simpanDataAkun(akun) {
-    localStorage.setItem('2r_akun', JSON.stringify(akun));
-}
-
-// ===== BLOK 7.3 - FUNGSI TOAST NOTIFICATION =====
-function tampilkanToast(pesan, tipe) {
-    if (!tipe) tipe = 'success';
-    var container = document.getElementById('toastContainer');
-    var toast = document.createElement('div');
-    toast.className = 'toast ' + tipe;
-    var ikon = '';
-    if (tipe === 'success') ikon = 'fa-check-circle';
-    else if (tipe === 'error') ikon = 'fa-times-circle';
-    else if (tipe === 'warning') ikon = 'fa-exclamation-triangle';
-    else ikon = 'fa-info-circle';
-    toast.innerHTML = '<i class="fas ' + ikon + '"></i> ' + pesan;
-    container.appendChild(toast);
-    setTimeout(function() {
-        toast.style.animation = 'slideInRight 0.3s ease reverse';
-        setTimeout(function() { toast.remove(); }, 300);
-    }, 3500);
-}
-
-// ===== BLOK 7.4 - FUNGSI MODAL =====
-function bukaModal(idModal) {
-    var modal = document.getElementById(idModal);
-    if (modal) modal.classList.add('active');
-}
-
-function tutupModal(idModal) {
-    var modal = document.getElementById(idModal);
-    if (modal) modal.classList.remove('active');
-}
-
-// ===== BLOK 7.5 - FUNGSI ESCAPE HTML (Anti-XSS) =====
-function escapeHtml(text) {
-    if (!text) return '';
-    var div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// ===== BLOK 7.6 - FUNGSI GENERATE ID OTOMATIS =====
-function generateId(role) {
-    var dataAkun = getDataAkun();
-    var daftar = [];
-    for (var i = 0; i < dataAkun.length; i++) {
-        if (dataAkun[i].role === role) daftar.push(dataAkun[i]);
-    }
-    var nomorUrut = 1;
-    for (var j = 0; j < daftar.length; j++) {
-        var bagian = daftar[j].id.split('-');
-        if (bagian.length === 2) {
-            var nomor = parseInt(bagian[1]);
-            if (nomor >= nomorUrut) nomorUrut = nomor + 1;
-        }
-    }
-    var prefix = '';
-    if (role === 'customer') prefix = 'CUST';
-    else if (role === 'toko') prefix = 'TOKO';
-    else if (role === 'ojek') prefix = 'OJEK';
-    else if (role === 'pedagang') prefix = 'PEDAGANG';
-    else if (role === 'codseller') prefix = 'COD';
-    else if (role === 'superadmin') prefix = 'SA';
-    else if (role === 'staf_admin') prefix = 'STA';
-    else if (role === 'staf_owner_ojek') prefix = 'SOO';
-    else if (role === 'staf_owner_toko') prefix = 'SOT';
-    else if (role === 'customer_service') prefix = 'CS';
-    else if (role === 'sponsor') prefix = 'SPN';
-    else prefix = 'USR';
-    return prefix + '-' + String(nomorUrut).padStart(3, '0');
-}
-
-// ===== BLOK 7.7 - FUNGSI UPDATE JAM TANGGAL =====
-function updateJamTanggal() {
-    var jamEl = document.getElementById('displayJam');
-    var tanggalEl = document.getElementById('displayTanggal');
-    if (!jamEl || !tanggalEl) return;
-    var now = new Date();
-    var jam = now.getHours().toString().padStart(2, '0');
-    var menit = now.getMinutes().toString().padStart(2, '0');
-    var detik = now.getSeconds().toString().padStart(2, '0');
-    jamEl.textContent = jam + ':' + menit + ':' + detik;
-    var hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][now.getDay()];
-    var tanggal = now.getDate().toString().padStart(2, '0');
-    var bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][now.getMonth()];
-    var tahun = now.getFullYear();
-    tanggalEl.textContent = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
-}
-
-// ===== BLOK 7.8 - TOGGLE FORM LOGIN/REGISTER/AJUKAN =====
-function toggleForm(tipe) {
-    var login = document.getElementById('loginForm');
-    var register = document.getElementById('registerForm');
-    var pengajuan = document.getElementById('pengajuanBukaAkunForm');
-    var error = document.getElementById('authenticationError');
-    if (error) error.style.display = 'none';
-    if (login) login.classList.add('hidden-form');
-    if (register) register.classList.add('hidden-form');
-    if (pengajuan) pengajuan.classList.add('hidden-form');
-    if (tipe === 'register') {
-        if (register) register.classList.remove('hidden-form');
-    } else if (tipe === 'pengajuan' || tipe === 'pengajuanBukaAkun') {
-        if (pengajuan) pengajuan.classList.remove('hidden-form');
-    } else {
-        if (login) login.classList.remove('hidden-form');
-    }
-}
-
-// ===== BLOK 7.9 - FUNGSI AMBIL LOKASI OTOMATIS =====
-function ambilLokasiRegister() {
-    if (!navigator.geolocation) { tampilkanToast('Browser tidak mendukung geolokasi.', 'error'); return; }
-    tampilkanToast('Sedang mengambil lokasi...', 'info');
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        var lat = pos.coords.latitude;
-        var lng = pos.coords.longitude;
-        document.getElementById('registerLat').value = lat;
-        document.getElementById('registerLng').value = lng;
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var alamat = data.display_name || 'Lokasi tidak diketahui';
-                document.getElementById('registerLokasi').value = alamat;
-                tampilkanToast('Lokasi berhasil diambil!', 'success');
-            })
-            .catch(function() {
-                document.getElementById('registerLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
-                tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
-            });
-    }, function(err) {
-        tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
-    });
-}
-
-function ambilLokasiPengajuan() {
-    if (!navigator.geolocation) { tampilkanToast('Browser tidak mendukung geolokasi.', 'error'); return; }
-    tampilkanToast('Sedang mengambil lokasi...', 'info');
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        var lat = pos.coords.latitude;
-        var lng = pos.coords.longitude;
-        document.getElementById('pengajuanLat').value = lat;
-        document.getElementById('pengajuanLng').value = lng;
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var alamat = data.display_name || 'Lokasi tidak diketahui';
-                document.getElementById('pengajuanLokasi').value = alamat;
-                tampilkanToast('Lokasi berhasil diambil!', 'success');
-            })
-            .catch(function() {
-                document.getElementById('pengajuanLokasi').value = 'Lat: ' + lat + ', Lng: ' + lng;
-                tampilkanToast('Lokasi berhasil diambil (tanpa alamat).', 'success');
-            });
-    }, function(err) {
-        tampilkanToast('Gagal mengambil lokasi: ' + err.message, 'error');
-    });
-}
-
-// ===== BLOK 7.10 - INISIALISASI DATA AWAL =====
-function inisialisasiDataAwal() {
-    var data = getDataAkun();
-    if (data.length === 0) {
-        // Buat SuperAdmin default jika belum ada
-        var superAdmin = {
-            id: 'SA-001',
-            role: 'superadmin',
-            username: 'admin',
-            password: 'admin123', // akan di-hash saat login
-            nama: 'SuperAdmin',
-            email: 'admin@2r.com',
-            nomorHp: '081234567890',
-            alamat: 'Kantor Pusat',
-            namaBank: 'BCA',
-            nomorRekening: '1234567890',
-            pemilikRekening: 'SuperAdmin',
-            status: 'AKTIF',
-            isPro: true,
-            waktuRegistrasi: new Date().toISOString()
-        };
-        data.push(superAdmin);
-        simpanDataAkun(data);
-    }
-}
-
-// ===== BLOK 7.11 - READY EVENT =====
-document.addEventListener('DOMContentLoaded', function() {
-    inisialisasiDataAwal();
-    setInterval(updateJamTanggal, 1000);
-    updateJamTanggal();
-    document.getElementById('menuToggle').addEventListener('click', function() {
-        document.getElementById('sidebarContainer').classList.toggle('open');
-        document.getElementById('sidebarOverlay').classList.toggle('active');
-    });
-    document.getElementById('sidebarOverlay').addEventListener('click', function() {
-        document.getElementById('sidebarContainer').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('active');
-    });
-});
-/* ============================================================ */
-/* AKHIR BLOK 7 - CORE ENGINE                                    */
-/* ============================================================ */
-/* ============================================================ */
-/* BLOK 8 - UTILS - FUNGSI KEUANGAN UNTUK SUPERADMIN             */
-/* ============================================================ */
-/* Deskripsi: Kumpulan fungsi untuk menghitung fee aplikasi,     */
-/* fee penjualan toko, fee ojek, fee COD, dan fee owner.        */
-/* ============================================================ */
-
-// ===== BLOK 8.1 - HITUNG FEE PEMAKAIAN APLIKASI =====
-function hitungFeePemakaianAplikasi(role) {
-    var hargaSewa = JSON.parse(localStorage.getItem('2r_harga_sewa_fee') || '{}');
-    return hargaSewa[role] ? hargaSewa[role].sewa : 0;
-}
-
-// ===== BLOK 8.2 - HITUNG FEE PENJUALAN TOKO =====
-function hitungFeePenjualanToko(username, bulan, tahun) {
-    var transaksiKey = '2r_transaksi_' + username;
-    var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
-    var transaksiBulan = transaksi.filter(function(t) {
-        var tanggal = new Date(t.tanggal || '');
-        return tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
-    });
-    var totalPenjualan = transaksiBulan.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
-    var hargaSewa = JSON.parse(localStorage.getItem('2r_harga_sewa_fee') || '{}');
-    var feePersen = (hargaSewa && hargaSewa.toko_grosir) ? hargaSewa.toko_grosir.fee : 0;
-    return { totalPenjualan: totalPenjualan, feePersen: feePersen, fee: Math.floor(totalPenjualan * feePersen / 100) };
-}
-
-// ===== BLOK 8.3 - HITUNG FEE PENDAPATAN OJEK =====
-function hitungFeePendapatanOjek(username, bulan, tahun) {
-    var orderDiambil = JSON.parse(localStorage.getItem('2r_order_diambil') || '[]');
-    var orderBulan = orderDiambil.filter(function(o) {
-        if (o.ojek !== username) return false;
-        if (o.status !== 'selesai') return false;
-        var tanggal = new Date(o.waktuSelesai || o.waktuAmbil || '');
-        return tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
-    });
-    var totalPendapatan = orderBulan.reduce(function(sum, o) { return sum + (o.ongkosKirim || 0); }, 0);
-    var feeOwner = JSON.parse(localStorage.getItem('2r_pengaturan_fee_owner') || '{"feeOwnerOjek":5}');
-    var feePersen = feeOwner.feeOwnerOjek || 5;
-    return { totalPendapatan: totalPendapatan, feePersen: feePersen, fee: Math.floor(totalPendapatan * feePersen / 100) };
-}
-
-// ===== BLOK 8.4 - HITUNG FEE COD =====
-function hitungFeeCOD(username, bulan, tahun) {
-    var transaksiKey = '2r_transaksi_' + username;
-    var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
-    var transaksiCOD = transaksi.filter(function(t) {
-        var tanggal = new Date(t.tanggal || '');
-        return t.metode === 'COD' && tanggal.getMonth() === bulan && tanggal.getFullYear() === tahun;
-    });
-    var totalPenjualanCOD = transaksiCOD.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
-    var pengaturanCOD = JSON.parse(localStorage.getItem('2r_pengaturan_cod') || '{"persentaseJasa":5}');
-    var feePersen = pengaturanCOD.persentaseJasa || 5;
-    return { totalPenjualanCOD: totalPenjualanCOD, feePersen: feePersen, fee: Math.floor(totalPenjualanCOD * feePersen / 100) };
-}
-
-// ===== BLOK 8.5 - HITUNG TOTAL FEE OWNER =====
-function hitungTotalFeeOwner(ownerUsername, role) {
-    var rekrutanKey = '';
-    var roleRekrutan = '';
-    if (role === 'owner_ojek') {
-        rekrutanKey = '2r_owner_ojek_rekrutan';
-        roleRekrutan = 'ojek';
-    } else if (role === 'owner_toko') {
-        rekrutanKey = '2r_owner_toko_rekrutan';
-        roleRekrutan = 'toko';
-    } else {
-        return 0;
-    }
-    var rekrutan = JSON.parse(localStorage.getItem(rekrutanKey) || '[]');
-    var myRekrutan = rekrutan.filter(function(r) { return r.ownerUsername === ownerUsername; });
-    var feeOwner = JSON.parse(localStorage.getItem('2r_pengaturan_fee_owner') || '{"feeOwnerOjek":5,"feeOwnerToko":5}');
-    var feePersen = (role === 'owner_ojek') ? feeOwner.feeOwnerOjek : feeOwner.feeOwnerToko;
-    var totalFee = 0;
-    myRekrutan.forEach(function(r) {
-        var username = roleRekrutan === 'ojek' ? r.ojekUsername : r.tokoUsername;
-        var pendapatan = hitungPendapatanRekrutanGlobal(username, roleRekrutan);
-        totalFee += pendapatan * (feePersen / 100);
-    });
-    return Math.round(totalFee);
-}
-
-function hitungPendapatanRekrutanGlobal(username, role) {
-    if (role === 'ojek') {
-        var orderDiambil = JSON.parse(localStorage.getItem('2r_order_diambil') || '[]');
-        var orderSelesai = orderDiambil.filter(function(o) { return o.ojek === username && o.status === 'selesai'; });
-        return orderSelesai.reduce(function(sum, o) { return sum + (o.ongkosKirim || 0); }, 0);
-    }
-    if (role === 'toko') {
-        var transaksiKey = '2r_transaksi_' + username;
-        var transaksi = JSON.parse(localStorage.getItem(transaksiKey) || '[]');
-        return transaksi.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
-    }
-    return 0;
-}
-/* ============================================================ */
-/* AKHIR BLOK 8 - UTILS - FUNGSI KEUANGAN                       */
-/* ============================================================ */        
-/* ============================================================ */
-/* BLOK 9 - OTHENTIKASI & KEAMANAN                               */
-/* ============================================================ */
-/* Deskripsi: Menangani login, hash password, 2FA untuk          */
-/* SuperAdmin, register, dan logout.                            */
-/* ============================================================ */
-
-// ===== BLOK 9.1 - HASH PASSWORD (SHA-256) =====
-async function hashPassword(password) {
-    var encoder = new TextEncoder();
-    var data = encoder.encode(password);
-    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    var hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-}
-
-async function verifikasiPassword(password, storedHash) {
-    var hashInput = await hashPassword(password);
-    return hashInput === storedHash;
-}
-
-// ===== BLOK 9.2 - EVENT LOGIN =====
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    var username = document.getElementById('loginUsername').value.trim();
-    var password = document.getElementById('loginPassword').value.trim();
-    var errorBox = document.getElementById('authenticationError');
-    var errorText = document.getElementById('authenticationErrorText');
-    if (errorBox) errorBox.style.display = 'none';
-
-    var dataAkun = getDataAkun();
-    var user = null;
-    for (var i = 0; i < dataAkun.length; i++) {
-        if (dataAkun[i].username === username) { user = dataAkun[i]; break; }
-    }
-    if (!user) {
-        if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
-        return;
-    }
-
-    // Migrasi password jika masih plain
-    if (user.password.length < 64) {
-        var hash = await hashPassword(user.password);
-        user.password = hash;
-        simpanDataAkun(dataAkun);
-    }
-
-    var cocok = await verifikasiPassword(password, user.password);
-    if (!cocok) {
-        if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Username atau password salah!'; }
-        return;
-    }
-
-    // Cek status
-    if (user.status !== 'AKTIF' && user.role !== 'superadmin') {
-        if (errorBox) { errorBox.style.display = 'block'; errorText.textContent = 'Akun belum aktif. Menunggu verifikasi admin.'; }
-        return;
-    }
-
-    // 2FA untuk SuperAdmin
-    if (user.role === 'superadmin') {
-        // Simulasi OTP
-        var otp = Math.floor(100000 + Math.random() * 900000);
-        alert('🔐 Kode OTP Anda: ' + otp);
-        var inputOtp = prompt('Masukkan kode OTP:');
-        if (inputOtp !== String(otp)) {
-            tampilkanToast('OTP salah!', 'error');
-            return;
-        }
-    }
-
-    // Login berhasil
-    penggunaAktif = user;
-    localStorage.setItem('2r_user', JSON.stringify(user));
-    localStorage.setItem('2r_user_role', user.role);
-    tampilkanDashboard(user);
-});
-
-// ===== BLOK 9.3 - EVENT REGISTER =====
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    var role = document.getElementById('registerRole').value;
-    var username = document.getElementById('registerUsername').value.trim();
-    var password = document.getElementById('registerPassword').value.trim();
-    var nama = document.getElementById('registerNama').value.trim();
-    var lat = document.getElementById('registerLat').value;
-    var lng = document.getElementById('registerLng').value;
-    var alamat = document.getElementById('registerLokasi').value.trim();
-    if (!role || !username || !password || !nama) { tampilkanToast('Data belum lengkap!', 'warning'); return; }
-    var dataAkun = getDataAkun();
-    for (var i = 0; i < dataAkun.length; i++) {
-        if (dataAkun[i].username === username) { tampilkanToast('Username sudah digunakan!', 'error'); return; }
-    }
-    var status = (role === 'toko' || role === 'ojek') ? 'NONAKTIF (Menunggu Verifikasi)' : 'AKTIF';
-    var hash = await hashPassword(password);
-    var akunBaru = {
-        id: generateId(role),
-        role: role,
-        username: username,
-        password: hash,
-        nama: nama,
-        email: '',
-        nomorHp: '',
-        alamat: alamat,
-        latitude: lat,
-        longitude: lng,
-        alamatLokasi: alamat,
-        namaBank: '',
-        nomorRekening: '',
-        pemilikRekening: '',
-        status: status,
-        waktuRegistrasi: new Date().toISOString()
-    };
-    dataAkun.push(akunBaru);
-    simpanDataAkun(dataAkun);
-    tampilkanToast('Akun berhasil dibuat! ID: ' + akunBaru.id + ' | Status: ' + status, 'success');
-    toggleForm('login');
-});
-
-// ===== BLOK 9.4 - EVENT LOGOUT =====
-document.getElementById('buttonLogout').addEventListener('click', function() {
-    if (confirm('Keluar dari aplikasi?')) {
-        localStorage.removeItem('2r_user');
-        localStorage.removeItem('2r_user_role');
-        penggunaAktif = null;
-        location.reload();
-    }
-});
-
-// ===== BLOK 9.5 - TAMPILKAN DASHBOARD =====
-function tampilkanDashboard(user) {
-    document.getElementById('pageAuthentication').style.display = 'none';
-    document.getElementById('pageDashboard').style.display = 'block';
-    document.getElementById('userNama').textContent = user.nama;
-    document.getElementById('roleBadge').textContent = user.role;
-    document.getElementById('sidebarContainer').innerHTML = buatSidebarHTML(user.role);
-    setupNavigasiSidebar();
-    if (typeof renderDashboard === 'function') {
-        renderDashboard();
-    }
-}
-/* ============================================================ */
-/* AKHIR BLOK 9 - OTHENTIKASI & KEAMANAN                         */
-/* ============================================================ */
-/* ============================================================ */
-/* BLOK 10 - SIDEBAR & NAVIGASI                                  */
-/* ============================================================ */
-/* Deskripsi: Membangun menu sidebar berdasarkan role user,      */
-/* dan mengatur navigasi ke halaman yang sesuai.                 */
-/* ============================================================ */
-
-// ===== BLOK 10.1 - BUAT SIDEBAR HTML =====
-function buatSidebarHTML(role) {
-    var user = JSON.parse(localStorage.getItem('2r_user') || '{}');
-    
-    var menuRole = {
-        'superadmin': [
-            { judul: '📊 Dashboard', items: [
-                { halaman: 'dashboard', icon: 'fa-th-large', label: 'Dashboard' },
-                { halaman: 'dashboard-richer', icon: 'fa-chart-line', label: 'Dashboard Diperkaya' }
-            ] },
-            { judul: '👤 Manajemen Akun', items: [
-                { halaman: 'daftar-akun', icon: 'fa-user-plus', label: 'Daftar Akun Baru' },
-                { halaman: 'persetujuan', icon: 'fa-check-double', label: 'Persetujuan Akun' },
-                { halaman: 'kelola-akun', icon: 'fa-users-cog', label: 'Kelola Akun' },
-                { halaman: 'pengajuan-buka', icon: 'fa-file-signature', label: 'Pengajuan Buka Akun' },
-                { halaman: 'profil', icon: 'fa-user-circle', label: 'Profil SuperAdmin' }
-            ] },
-            { judul: '💰 Penagihan & Keuangan', items: [
-                { halaman: 'penagihan-otomatis', icon: 'fa-file-invoice-dollar', label: 'Penagihan Otomatis' },
-                { halaman: 'riwayat-penagihan', icon: 'fa-history', label: 'Riwayat Penagihan' },
-                { halaman: 'laporan-keuangan', icon: 'fa-chart-line', label: 'Laporan Keuangan' },
-                { halaman: 'setting-harga', icon: 'fa-tags', label: 'Setting Harga' },
-                { halaman: 'data-penagihan', icon: 'fa-file-invoice', label: 'Data Penagihan (Manual)' }
-            ] },
-            { judul: '📦 Monitoring', items: [
-                { halaman: 'semua-transaksi', icon: 'fa-credit-card', label: 'Semua Transaksi' },
-                { halaman: 'semua-order', icon: 'fa-shopping-cart', label: 'Semua Order' }
-            ] },
-            { judul: '🔍 Verifikasi & Owner', items: [
-                { halaman: 'verifikasi-dokumen', icon: 'fa-file-signature', label: 'Verifikasi Dokumen' },
-                { halaman: 'manajemen-owner', icon: 'fa-users-cog', label: 'Manajemen Owner' }
-            ] },
-            { judul: '💬 Komunikasi', items: [
-                { halaman: 'menu-iklan', icon: 'fa-ad', label: 'Menu Iklan' },
-                { halaman: 'papan-informasi', icon: 'fa-bullhorn', label: 'Papan Informasi' }
-            ] },
-            { judul: '⚙️ Sistem', items: [
-                { halaman: 'backup-restore', icon: 'fa-database', label: 'Backup & Restore' },
-                { halaman: 'reset-cleanup', icon: 'fa-broom', label: 'Reset & Pembersihan' },
-                { halaman: 'notepad', icon: 'fa-sticky-note', label: 'Notepad+' },
-                { halaman: 'setting-rekening', icon: 'fa-university', label: 'Setting Rekening' },
-                { halaman: 'kelola-wilayah', icon: 'fa-map-marked-alt', label: 'Kelola Wilayah' },
-                { halaman: 'pengajuan-upload', icon: 'fa-upload', label: 'Pengajuan Upload Produk' }
-            ] }
-        ],
-        'customer': [
-            { judul: '🛍️ Belanja', items: [
-                { halaman: 'dashboard-default', icon: 'fa-th-large', label: 'Dashboard' }
-            ] }
-        ]
-    };
-
-    var daftarMenu = menuRole[role] || menuRole['customer'];
-    var html = '';
-    for (var i = 0; i < daftarMenu.length; i++) {
-        var bagian = daftarMenu[i];
-        html += '<div class="sidebar-menu-title">' + bagian.judul + '</div>';
-        for (var j = 0; j < bagian.items.length; j++) {
-            var item = bagian.items[j];
-            var active = (item.halaman === 'dashboard' || item.halaman === 'dashboard-default') ? ' active' : '';
-            html += '<div class="sidebar-menu-item' + active + '" data-page="' + item.halaman + '">';
-            html += '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span></div>';
-        }
-    }
-    return html;
-}
-
-// ===== BLOK 10.2 - SETUP NAVIGASI SIDEBAR =====
-function setupNavigasiSidebar() {
-    var items = document.querySelectorAll('.sidebar-menu-item');
-    items.forEach(function(item) {
-        item.onclick = function() {
-            var halaman = this.getAttribute('data-page');
-            if (!halaman) return;
-            items.forEach(function(m) { m.classList.remove('active'); });
-            this.classList.add('active');
-            navigasiKeHalaman(halaman);
-            if (window.innerWidth <= 767) {
-                document.getElementById('sidebarContainer').classList.remove('open');
-                document.getElementById('sidebarOverlay').classList.remove('active');
-            }
-        };
-    });
-}
-
-// ===== BLOK 10.3 - NAVIGASI KE HALAMAN =====
-function navigasiKeHalaman(namaHalaman) {
-    var areaKonten = document.getElementById('mainContent');
-    if (!areaKonten) return;
-
-    // SuperAdmin
-    if (namaHalaman === 'dashboard') renderDashboard();
-    else if (namaHalaman === 'dashboard-richer') renderDashboardRicher();
-    else if (namaHalaman === 'daftar-akun') renderDaftarAkun();
-    else if (namaHalaman === 'persetujuan') renderPersetujuanAkun();
-    else if (namaHalaman === 'kelola-akun') renderKelolaAkun();
-    else if (namaHalaman === 'pengajuan-buka') renderPengajuanBukaAkun();
-    else if (namaHalaman === 'profil') renderProfilSuperAdmin();
-    else if (namaHalaman === 'setting-rekening') renderSettingRekening();
-    else if (namaHalaman === 'setting-harga') renderSettingHargaAplikasi();
-    else if (namaHalaman === 'penagihan-otomatis') renderPenagihanOtomatis();
-    else if (namaHalaman === 'riwayat-penagihan') renderRiwayatPenagihan();
-    else if (namaHalaman === 'laporan-keuangan') renderLaporanKeuangan();
-    else if (namaHalaman === 'semua-transaksi') renderSemuaTransaksi();
-    else if (namaHalaman === 'semua-order') renderSemuaOrder();
-    else if (namaHalaman === 'verifikasi-dokumen') renderVerifikasiDokumen();
-    else if (namaHalaman === 'manajemen-owner') renderManajemenOwner();
-    else if (namaHalaman === 'menu-iklan') renderMenuIklan();
-    else if (namaHalaman === 'papan-informasi') renderPapanInformasi();
-    else if (namaHalaman === 'backup-restore') renderBackupRestore();
-    else if (namaHalaman === 'reset-cleanup') renderResetCleanup();
-    else if (namaHalaman === 'notepad') renderNotepad();
-    else if (namaHalaman === 'kelola-wilayah') renderKelolaWilayah();
-    else if (namaHalaman === 'pengajuan-upload') renderPengajuanUploadProduk();
-    else if (namaHalaman === 'data-penagihan') renderDataPenagihan();
-
-    // Customer / Default
-    else if (namaHalaman === 'dashboard-default') renderDashboardDefault();
-    else renderPlaceholder(namaHalaman);
-}
-
-function renderPlaceholder(judul) {
-    var areaKonten = document.getElementById('mainContent');
-    var html = '<div class="page-header"><h2>' + judul + '</h2><p>Halaman ini sedang dalam pengembangan.</p></div>';
-    html += '<div class="card"><div class="empty-state"><i class="fas fa-tools" style="color:#FF9800;"></i><h3>Fitur Sedang Dikembangkan</h3></div></div>';
-    areaKonten.innerHTML = html;
-}
-/* ============================================================ */
-/* AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            */
-/* ============================================================ */
-</script>      
-</body>
-</html>
