@@ -523,3 +523,523 @@
 </div>
 <!--- ===== AKHIR BLOK 5.2 ===== --->
     
+<!--- ===== BLOK 5.3 Konten Utama Dasbor ===== --->
+<main class="container-fluid px-4 py-4" id="kontenDasbor">
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #FF6B00 0%, #FF5500 100%);">
+                <div class="card-body py-3">
+                    <div class="row align-items-center text-center">
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            <span id="tanggalSekarang" class="fw-bold fs-5"></span>
+                        </div>
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <i class="fas fa-clock me-2"></i>
+                            <span id="jamSekarang" class="fw-bold fs-4"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span class="fw-bold">WIB (Jakarta)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-card">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-store fa-3x mb-3" style="color: #FF8C00;"></i>
+                    <h5 class="fw-bold">Toko Terdekat</h5>
+                    <p class="text-muted small">Lihat toko-toko di sekitar lokasi Anda</p>
+                    <button class="btn text-white" style="background-color: #FF8C00;" onclick="alert('Fitur Toko Terdekat akan segera tersedia')">
+                        <i class="fas fa-store me-2"></i>Lihat Toko
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-card">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-motorcycle fa-3x mb-3" style="color: #FF6B00;"></i>
+                    <h5 class="fw-bold">Ojek Terdekat</h5>
+                    <p class="text-muted small">Cari ojek untuk pengiriman barang</p>
+                    <button class="btn text-white" style="background-color: #FF6B00;" onclick="alert('Fitur Ojek Terdekat akan segera tersedia')">
+                        <i class="fas fa-motorcycle me-2"></i>Lihat Ojek
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-card">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-search fa-3x mb-3" style="color: #FF8C00;"></i>
+                    <h5 class="fw-bold">Cari Produk</h5>
+                    <p class="text-muted small">Temukan produk yang Anda butuhkan</p>
+                    <button class="btn text-white" style="background-color: #FF8C00;" onclick="alert('Fitur Cari Produk akan segera tersedia')">
+                        <i class="fas fa-search me-2"></i>Cari Produk
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4 g-3">
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-3">
+                    <i class="fas fa-store fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
+                    <small class="text-muted">Total Toko</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-3">
+                    <i class="fas fa-box fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
+                    <small class="text-muted">Total Produk</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-3">
+                    <i class="fas fa-motorcycle fa-2x mb-2" style="color: #FF6B00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
+                    <small class="text-muted">Ojek Online</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-3">
+                    <i class="fas fa-shopping-cart fa-2x mb-2" style="color: #FF8C00;"></i>
+                    <h4 class="fw-bold mb-0">0</h4>
+                    <small class="text-muted">Order Hari Ini</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom fw-bold">
+                    <i class="fas fa-store me-2" style="color: #FF8C00;"></i>Toko Terdekat
+                </div>
+                <div class="card-body text-center py-4 text-muted">
+                    <i class="fas fa-store-alt fa-2x mb-2"></i>
+                    <p>Daftar toko terdekat akan ditampilkan di sini</p>
+                    <small>Fitur dalam pengembangan</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom fw-bold">
+                    <i class="fas fa-box-open me-2" style="color: #FF8C00;"></i>Produk Terbaru
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Cari produk...">
+                        <button class="btn text-white" style="background-color: #FF8C00;"><i class="fas fa-search"></i> Cari</button>
+                    </div>
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-box-open fa-2x mb-2"></i>
+                        <p>Daftar produk terbaru akan ditampilkan di sini</p>
+                        <small>Fitur dalam pengembangan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom fw-bold">
+                    <i class="fas fa-motorcycle me-2" style="color: #FF6B00;"></i>Ojek Online di Sekitar Anda
+                </div>
+                <div class="card-body text-center py-4 text-muted">
+                    <i class="fas fa-motorcycle fa-2x mb-2"></i>
+                    <p>Daftar ojek online akan ditampilkan di sini</p>
+                    <small>Fitur dalam pengembangan</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</main>
+<!--- ===== AKHIR BLOK 5.3 ===== --->
+
+</div>
+<!--- ===== AKHIR BLOK 5 Halaman Dasbor Default ===== --->
+
+<!--- ===== BLOK 6 Halaman Logout ===== --->
+<div id="halamanLogout" class="page-section">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 text-center">
+                <div class="card-body p-5">
+                    <div id="logoutLoading">
+                        <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h4 class="fw-bold mb-2" style="color: #FF8C00;">Sedang Logout...</h4>
+                        <p class="text-muted">Anda akan dialihkan ke halaman login</p>
+                    </div>
+                    <div id="logoutSukses" class="d-none">
+                        <i class="fas fa-check-circle fa-5x mb-3" style="color: #FF8C00;"></i>
+                        <h4 class="fw-bold mb-2" style="color: #FF8C00;">Logout Berhasil!</h4>
+                        <p class="text-muted">Sampai jumpa kembali</p>
+                        <div class="mt-3">
+                            <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('login')">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login Kembali
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-white small">
+                <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!--- ===== AKHIR BLOK 6 Halaman Logout ===== --->
+
+<!--- ===== BLOK 7 Halaman 404 Not Found ===== --->
+<div id="halaman404" class="page-section">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <div class="mb-4">
+                <i class="fas fa-map-signs fa-6x text-white mb-3"></i>
+                <h1 class="display-1 fw-bold text-white">404</h1>
+            </div>
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold text-dark mb-3">
+                        <i class="fas fa-exclamation-circle me-2" style="color: #FF8C00;"></i>
+                        Halaman Tidak Ditemukan
+                    </h3>
+                    <p class="text-muted mb-4">
+                        Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('login')">
+                            <i class="fas fa-home me-2"></i>Ke Beranda
+                        </button>
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF6B00;" onclick="tampilkanHalaman('dasbor')">
+                            <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!--- ===== AKHIR BLOK 7 Halaman 404 Not Found ===== --->
+
+<!--- ===== BLOK 8 Halaman 403 Forbidden ===== --->
+<div id="halaman403" class="page-section">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <div class="mb-4">
+                <i class="fas fa-lock fa-6x text-white mb-3"></i>
+                <h1 class="display-1 fw-bold text-white">403</h1>
+            </div>
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold text-dark mb-3">
+                        <i class="fas fa-ban text-danger me-2"></i>
+                        Akses Ditolak
+                    </h3>
+                    <p class="text-muted mb-4">
+                        Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="tampilkanHalaman('dasbor')">
+                            <i class="fas fa-tachometer-alt me-2"></i>Ke Dasbor
+                        </button>
+                        <button class="btn btn-outline-secondary btn-lg" onclick="prosesLogout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!--- ===== AKHIR BLOK 8 Halaman 403 Forbidden ===== --->
+
+<!--- ===== BLOK 9 Halaman Maintenance ===== --->
+<div id="halamanMaintenance" class="page-section">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <div class="mb-4">
+                <i class="fas fa-tools fa-6x text-white mb-3"></i>
+                <h1 class="display-4 fw-bold text-white">Maintenance</h1>
+            </div>
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: #FF8C00;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-3">
+                        <i class="fas fa-cog fa-spin me-2" style="color: #FF8C00;"></i>
+                        Sedang Dalam Perbaikan
+                    </h3>
+                    <p class="text-muted mb-4">
+                        Maaf, sistem sedang dalam masa pemeliharaan.
+                        Silakan coba beberapa saat lagi.
+                    </p>
+                    <div class="alert text-dark" style="background-color: #FFF3E0; border-color: #FF8C00;">
+                        <i class="fas fa-info-circle me-2" style="color: #FF8C00;"></i>
+                        Estimasi selesai: 30 menit
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+                        <button class="btn btn-lg text-white fw-bold" style="background-color: #FF8C00;" onclick="location.reload()">
+                            <i class="fas fa-redo me-2"></i>Coba Lagi
+                        </button>
+                        <button class="btn btn-outline-secondary btn-lg" onclick="tampilkanHalaman('login')">
+                            <i class="fas fa-home me-2"></i>Ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!--- ===== AKHIR BLOK 9 Halaman Maintenance ===== --->
+
+<!--- ===== BLOK 10.12 Halaman Buat Akun Baru (SuperAdmin) ===== --->
+<div id="halamanDaftarAkunBaru" class="page-section">
+
+<nav class="navbar navbar-orange sticky-top">
+    <div class="container">
+        <button class="btn text-white me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+            <i class="fas fa-bars fa-lg"></i>
+        </button>
+        <a class="navbar-brand fw-bold text-white" href="#">
+            <i class="fas fa-store-alt me-2"></i>Toko Online 2R
+        </a>
+        <div class="ms-auto">
+            <span class="text-white me-3 fw-bold">SuperAdmin</span>
+            <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            
+            <div class="text-center mb-4">
+                <i class="fas fa-user-plus fa-4x text-white mb-3"></i>
+                <h3 class="fw-bold text-white">Buat Akun Baru</h3>
+                <p class="text-white opacity-75">SuperAdmin dapat membuat akun untuk semua role termasuk Staf</p>
+            </div>
+            
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    
+                    <div id="notifikasiBuatAkun" class="alert d-none" role="alert"></div>
+                    
+                    <form id="formBuatAkun" onsubmit="return prosesBuatAkun(event)">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-user-tag me-1" style="color: #FF8C00;"></i>Jenis Akun
+                            </label>
+                            <select id="roleAkunBuat" name="role" class="form-select" required onchange="cekRoleBuatAkun()">
+                                <option value="">-- Pilih Jenis Akun --</option>
+                                <optgroup label="Akun Staf">
+                                    <option value="ADM">Staf Admin</option>
+                                    <option value="SOT">Staf Owner Toko</option>
+                                    <option value="SOO">Staf Owner Ojek</option>
+                                    <option value="MKT">Staf Marketing</option>
+                                    <option value="TGH">Staf Penagihan</option>
+                                    <option value="CS">Customer Service</option>
+                                </optgroup>
+                                <optgroup label="Akun Seller">
+                                    <option value="TK">Toko</option>
+                                    <option value="OJ">Ojek</option>
+                                    <option value="PP">Pedagang Pasar</option>
+                                    <option value="PM">Pedagang Makanan</option>
+                                    <option value="COD">COD Seller</option>
+                                </optgroup>
+                                <optgroup label="Akun Umum">
+                                    <option value="CT">Customer</option>
+                                </optgroup>
+                            </select>
+                            <small class="text-muted" id="infoRoleBuat"></small>
+                        </div>
+                        
+                        <div class="mb-3 p-3 rounded border" style="background-color: #E8F5E9;">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>ID Otomatis
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-white" style="background-color: #4CAF50; border-color: #4CAF50;">
+                                    <i class="fas fa-qrcode"></i>
+                                </span>
+                                <input type="text" id="idOtomatisBuat" name="id_otomatis" class="form-control bg-light fw-bold text-success text-center" placeholder="Pilih jenis akun terlebih dahulu" readonly>
+                            </div>
+                            <small class="text-muted">ID akan dibuat otomatis berdasarkan jenis akun yang dipilih</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="namaLengkapBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Nama Lengkap
+                            </label>
+                            <input type="text" id="namaLengkapBuat" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap sesuai KTP" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="nomorHpBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-phone me-1" style="color: #FF8C00;"></i>Nomor HP
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">+62</span>
+                                <input type="tel" id="nomorHpBuat" name="hp" class="form-control" placeholder="81234567890" pattern="[0-9]{10,13}" required>
+                            </div>
+                            <small class="text-muted">Nomor HP aktif untuk verifikasi</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="emailBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-envelope me-1" style="color: #FF8C00;"></i>Email
+                            </label>
+                            <input type="email" id="emailBuat" name="email" class="form-control" placeholder="contoh@email.com" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="alamatBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-map-marker-alt me-1" style="color: #FF8C00;"></i>Alamat Lengkap
+                            </label>
+                            <textarea id="alamatBuat" name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3 p-3 rounded border" style="background-color: #FFF3E0;">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-map-pin text-danger me-1"></i>Titik Koordinat Lokasi (WAJIB)
+                            </label>
+                            <div class="d-grid gap-2">
+                                <button type="button" id="tombolAmbilKoordinatBuat" class="btn btn-outline-secondary" onclick="ambilKoordinatBuat()" style="border-color: #FF8C00; color: #FF8C00;">
+                                    <i class="fas fa-location-crosshairs me-2"></i>Ambil Titik Lokasi Sekarang
+                                </button>
+                            </div>
+                            <div id="statusKoordinatBuat" class="mt-2 small text-muted">
+                                <i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!
+                            </div>
+                            <input type="hidden" id="latitudeBuat" name="latitude" value="">
+                            <input type="hidden" id="longitudeBuat" name="longitude" value="">
+                            <div id="koordinatTextBuat" class="mt-2 small d-none">
+                                <span class="fw-bold">Latitude:</span> <span id="textLatitudeBuat"></span><br>
+                                <span class="fw-bold">Longitude:</span> <span id="textLongitudeBuat"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="usernameBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-user-circle me-1" style="color: #FF8C00;"></i>Username
+                            </label>
+                            <input type="text" id="usernameBuat" name="username" class="form-control" placeholder="Buat username untuk login" minlength="5" required>
+                            <small class="text-muted">Minimal 5 karakter, digunakan untuk login</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="passwordBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" id="passwordBuat" name="password" class="form-control" placeholder="Buat password minimal 6 karakter" minlength="6" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBuat()" title="Lihat password">
+                                    <i class="fas fa-eye" id="iconTogglePasswordBuat"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="konfirmasiPasswordBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password
+                            </label>
+                            <input type="password" id="konfirmasiPasswordBuat" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password" minlength="6" required>
+                        </div>
+                        
+                        <div class="mb-3" id="bagianNIKBuat">
+                            <label for="nikKtpBuat" class="form-label fw-bold text-dark">
+                                <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>NIK KTP
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" id="nikKtpBuat" name="nik_ktp" class="form-control" placeholder="Masukkan 16 digit NIK KTP" pattern="[0-9]{16}" maxlength="16">
+                            <small class="text-muted">Wajib diisi untuk Toko, Ojek, Pedagang, dan COD Seller</small>
+                        </div>
+                        
+                        <div class="mb-3 p-3 rounded border" style="background-color: #E3F2FD;">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-user-shield me-1" style="color: #FF8C00;"></i>Dibuat Oleh
+                            </label>
+                            <input type="text" class="form-control bg-light fw-bold" value="SuperAdmin - ID_TK2R_SA-0001" readonly>
+                            <small class="text-muted">Akun ini dibuat langsung oleh SuperAdmin, status langsung AKTIF</small>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" id="tombolBuatAkun" class="btn btn-lg fw-bold text-white" disabled style="background-color: #4CAF50; border-color: #4CAF50;">
+                                <i class="fas fa-user-check me-2"></i>Buat Akun Sekarang (Langsung Aktif)
+                            </button>
+                        </div>
+                        
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-outline-secondary" onclick="kembaliKeDasbor()">
+                            <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="text-center mt-4 text-white small">
+                <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+</div>
+<!--- ===== AKHIR BLOK 10.12 Halaman Buat Akun Baru ===== --->
+
+<!--- ===== BLOK 9.1 Penghubung ke JavaScript ===== --->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+<!--- ===== AKHIR BLOK 9.1 ===== --->
