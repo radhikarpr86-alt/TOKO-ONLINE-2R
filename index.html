@@ -821,4 +821,212 @@
 
 <script>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
+<!--- ===== BLOK 9.2 JavaScript Core: Variabel Global, Navigasi, Toggle Password, Waktu ===== --->
+// ============================================
+// DATA SUPERADMIN (Tertanam)
+// Username: AppTokoOnLine2R
+// Password: MyHand0286
+// ============================================
+const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
+const SUPERADMIN_PASSWORD = 'MyHand0286';
+
+// ============================================
+// VARIABEL GLOBAL
+// ============================================
+let userAktif = null;
+let kontenAsliDasbor = null;
+
+// ============================================
+// NAVIGASI HALAMAN
+// ============================================
+function tampilkanHalaman(halaman) {
+    const semuaHalaman = document.querySelectorAll('.page-section');
+    semuaHalaman.forEach(function(hal) {
+        hal.classList.remove('active');
+    });
     
+    const target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
+    if (target) {
+        target.classList.add('active');
+    }
+    
+    window.scrollTo(0, 0);
+}
+
+// ============================================
+// TOGGLE PASSWORD
+// ============================================
+function togglePasswordLogin() {
+    const passwordInput = document.getElementById('passwordLogin');
+    const icon = document.getElementById('iconToggleLogin');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+function togglePasswordDaftar() {
+    const passwordInput = document.getElementById('passwordDaftar');
+    const icon = document.getElementById('iconToggleDaftar');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+function togglePasswordBaru() {
+    const passwordInput = document.getElementById('passwordBaru');
+    const icon = document.getElementById('iconToggleBaru');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// ============================================
+// UPDATE WAKTU REAL-TIME WIB
+// ============================================
+function updateWaktu() {
+    const sekarang = new Date();
+    const opsiTanggal = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    };
+    const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
+    const jamStr = sekarang.toLocaleTimeString('id-ID', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        timeZone: 'Asia/Jakarta'
+    });
+    const elTanggal = document.getElementById('tanggalSekarang');
+    const elJam = document.getElementById('jamSekarang');
+    if (elTanggal) elTanggal.textContent = tanggalStr;
+    if (elJam) elJam.textContent = jamStr + ' WIB';
+}
+setInterval(updateWaktu, 1000);
+updateWaktu();
+<!--- ===== AKHIR BLOK 9.2 ===== --->
+<!--- ===== BLOK 9.3 JavaScript Login, Akun Demo, Masuk Dasbor, Logout ===== --->
+// ============================================
+// PROSES LOGIN
+// ============================================
+function prosesLogin(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('usernameLogin').value.trim();
+    const password = document.getElementById('passwordLogin').value.trim();
+    const notifikasi = document.getElementById('notifikasiLogin');
+    
+    if (username === '' || password === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username dan Password wajib diisi!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    
+    // Cek SuperAdmin
+    if (username === SUPERADMIN_USERNAME && password === SUPERADMIN_PASSWORD) {
+        userAktif = {
+            nama: 'SuperAdmin',
+            role: 'SuperAdmin',
+            kodeRole: 'SA',
+            idUser: 'SA-20260727-0001'
+        };
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login SuperAdmin berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { masukDasbor(); }, 1000);
+        return false;
+    }
+    
+    // Cek akun demo lainnya
+    const akunDemo = cekAkunDemo(username, password);
+    if (akunDemo) {
+        userAktif = akunDemo;
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { masukDasbor(); }, 1000);
+        return false;
+    }
+    
+    // Login gagal
+    notifikasi.className = 'alert alert-danger';
+    notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>Username atau Password salah!';
+    notifikasi.classList.remove('d-none');
+    return false;
+}
+
+// ============================================
+// CEK AKUN DEMO (Simulasi Database)
+// ============================================
+function cekAkunDemo(username, password) {
+    const akunDemo = {
+        'admin': { password: 'admin123', nama: 'Staf Admin', role: 'Staf Admin', kodeRole: 'ADM', idUser: 'ADM-20260727-0001' },
+        'owner': { password: 'owner123', nama: 'Staf Owner Toko', role: 'Staf Owner Toko', kodeRole: 'SOT', idUser: 'SOT-20260727-0001' },
+        'ojekowner': { password: 'ojek123', nama: 'Staf Owner Ojek', role: 'Staf Owner Ojek', kodeRole: 'SOO', idUser: 'SOO-20260727-0001' },
+        'marketing': { password: 'marketing123', nama: 'Staf Marketing', role: 'Staf Marketing', kodeRole: 'MKT', idUser: 'MKT-20260727-0001' },
+        'penagihan': { password: 'penagihan123', nama: 'Staf Penagihan', role: 'Staf Penagihan', kodeRole: 'TGH', idUser: 'TGH-20260727-0001' },
+        'cs': { password: 'cs123', nama: 'Customer Service', role: 'Customer Service', kodeRole: 'CS', idUser: 'CS-20260727-0001' },
+        'toko': { password: 'toko123', nama: 'Toko Berkah', role: 'Toko', kodeRole: 'TK', idUser: 'TK-20260727-0001' },
+        'makanan': { password: 'makanan123', nama: 'Pedagang Makanan', role: 'Pedagang Makanan', kodeRole: 'PM', idUser: 'PM-20260727-0001' },
+        'pasar': { password: 'pasar123', nama: 'Pedagang Pasar', role: 'Pedagang Pasar', kodeRole: 'PP', idUser: 'PP-20260727-0001' },
+        'cod': { password: 'cod123', nama: 'COD Seller', role: 'COD Seller', kodeRole: 'COD', idUser: 'COD-20260727-0001' },
+        'driver': { password: 'driver123', nama: 'Ojek Driver', role: 'Ojek', kodeRole: 'OJ', idUser: 'OJ-20260727-0001' },
+        'customer': { password: 'customer123', nama: 'Customer', role: 'Customer', kodeRole: 'CT', idUser: 'CT-20260727-0001' }
+    };
+    
+    if (akunDemo[username] && akunDemo[username].password === password) {
+        return akunDemo[username];
+    }
+    return null;
+}
+
+// ============================================
+// MASUK KE DASBOR
+// ============================================
+function masukDasbor() {
+    document.getElementById('namaUserDisplay').textContent = userAktif.nama;
+    document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
+    document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
+    document.getElementById('offcanvasRoleUser').textContent = userAktif.role;
+    loadMenuNavigasi(userAktif.kodeRole);
+    tampilkanHalaman('dasbor');
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+    document.getElementById('notifikasiLogin').classList.add('d-none');
+    updateWaktu();
+}
+
+// ============================================
+// PROSES LOGOUT
+// ============================================
+function prosesLogout() {
+    userAktif = null;
+    kontenAsliDasbor = null;
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) { offcanvas.hide(); }
+    tampilkanHalaman('login');
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+}
+<!--- ===== AKHIR BLOK 9.3 ===== --->    
