@@ -1034,7 +1034,186 @@
         // AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            //
         // ============================================================ //
         // ============================================================ //
+        // ============================================================ //
+// BLOK 11 - DAFTAR AKUN BARU                                    //
+// ============================================================ //
+// Deskripsi: Halaman untuk SuperAdmin membuat akun baru         //
+// untuk berbagai role. Akun langsung tersimpan di localStorage. //
+// ============================================================ //
 
+// ===== BLOK 11.1 - RENDER HALAMAN DAFTAR AKUN =====
+function renderDaftarAkun() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin') {
+        tampilkanToast('Akses ditolak!', 'error');
+        return;
+    }
+
+    var html = '';
+    html += '<div class="page-header">';
+    html += '  <h2>📝 Daftar Akun Baru</h2>';
+    html += '  <p>Buat akun baru untuk role apa pun. <strong>Role Toko dan Ojek</strong> otomatis berstatus "Menunggu Verifikasi".</p>';
+    html += '</div>';
+
+    html += '<div class="card">';
+    html += '  <div class="card-header">Form Pendaftaran</div>';
+    html += '  <div class="form-group">';
+    html += '    <label>Role Akun</label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-user-tag"></i>';
+    html += '      <select id="daftarRole" class="form-input" onchange="updatePreviewId()">';
+    html += '        <option value="customer">Customer</option>';
+    html += '        <option value="toko">Toko</option>';
+    html += '        <option value="ojek">Ojek</option>';
+    html += '        <option value="pedagang">Pedagang Pasar</option>';
+    html += '        <option value="codseller">COD Seller</option>';
+    html += '        <option value="staf_admin">Staf Admin</option>';
+    html += '        <option value="customer_service">Customer Service</option>';
+    html += '        <option value="sponsor">Sponsor</option>';
+    html += '      </select>';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>ID Akun (Otomatis)</label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-id-card"></i>';
+    html += '      <input type="text" id="daftarIdPreview" class="form-input" value="' + generateId('customer') + '" disabled style="background-color:#f0f0f0; color:#666666;">';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>Username <span style="color:#d32f2f;">*</span></label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-user"></i>';
+    html += '      <input type="text" id="daftarUsername" class="form-input" placeholder="Masukkan username" required>';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>Password <span style="color:#d32f2f;">*</span></label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-lock"></i>';
+    html += '      <input type="password" id="daftarPassword" class="form-input" placeholder="Masukkan password" required>';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>Nama Lengkap <span style="color:#d32f2f;">*</span></label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-id-card"></i>';
+    html += '      <input type="text" id="daftarNama" class="form-input" placeholder="Nama lengkap" required>';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>Email</label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-envelope"></i>';
+    html += '      <input type="email" id="daftarEmail" class="form-input" placeholder="Masukkan email (opsional)">';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="form-group">';
+    html += '    <label>Nomor HP</label>';
+    html += '    <div class="input-group">';
+    html += '      <i class="fas fa-phone"></i>';
+    html += '      <input type="tel" id="daftarHp" class="form-input" placeholder="Masukkan nomor HP (opsional)">';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <button class="button button-primary" onclick="prosesDaftarAkun()" style="width:100%; margin-top:10px;">';
+    html += '    <i class="fas fa-user-plus"></i> Buat Akun Baru';
+    html += '  </button>';
+    html += '</div>';
+
+    document.getElementById('mainContent').innerHTML = html;
+}
+
+// ===== BLOK 11.2 - UPDATE PREVIEW ID AKUN =====
+function updatePreviewId() {
+    var role = document.getElementById('daftarRole').value;
+    var preview = document.getElementById('daftarIdPreview');
+    if (preview) {
+        preview.value = generateId(role);
+    }
+}
+
+// ===== BLOK 11.3 - PROSES SIMPAN AKUN BARU =====
+async function prosesDaftarAkun() {
+    // Ambil data dari form
+    var role = document.getElementById('daftarRole').value;
+    var username = document.getElementById('daftarUsername').value.trim();
+    var password = document.getElementById('daftarPassword').value.trim();
+    var nama = document.getElementById('daftarNama').value.trim();
+    var email = document.getElementById('daftarEmail').value.trim();
+    var hp = document.getElementById('daftarHp').value.trim();
+
+    // Validasi input wajib
+    if (!role) { tampilkanToast('Pilih role terlebih dahulu!', 'warning'); return; }
+    if (!username) { tampilkanToast('Username tidak boleh kosong!', 'warning'); document.getElementById('daftarUsername').focus(); return; }
+    if (username.length < 4) { tampilkanToast('Username minimal 4 karakter!', 'warning'); document.getElementById('daftarUsername').focus(); return; }
+    if (!password) { tampilkanToast('Password tidak boleh kosong!', 'warning'); document.getElementById('daftarPassword').focus(); return; }
+    if (password.length < 6) { tampilkanToast('Password minimal 6 karakter!', 'warning'); document.getElementById('daftarPassword').focus(); return; }
+    if (!nama) { tampilkanToast('Nama lengkap tidak boleh kosong!', 'warning'); document.getElementById('daftarNama').focus(); return; }
+
+    // Cek duplikat username
+    var dataAkun = getDataAkun();
+    for (var i = 0; i < dataAkun.length; i++) {
+        if (dataAkun[i].username === username) {
+            tampilkanToast('Username "' + username + '" sudah digunakan!', 'error');
+            document.getElementById('daftarUsername').focus();
+            return;
+        }
+    }
+
+    // Tentukan status awal
+    // Role Toko dan Ojek membutuhkan verifikasi admin
+    var statusAwal = (role === 'toko' || role === 'ojek' || role === 'pedagang' || role === 'codseller') 
+        ? 'NONAKTIF (Menunggu Verifikasi)' 
+        : 'AKTIF';
+
+    // Hash password
+    var passwordHash = await hashPassword(password);
+
+    // Siapkan objek akun baru
+    var akunBaru = {
+        id: generateId(role),
+        role: role,
+        username: username,
+        password: passwordHash,
+        nama: nama,
+        email: email || '',
+        nomorHp: hp || '',
+        alamat: '',
+        latitude: '',
+        longitude: '',
+        alamatLokasi: '',
+        namaBank: '',
+        nomorRekening: '',
+        pemilikRekening: '',
+        status: statusAwal,
+        waktuRegistrasi: new Date().toISOString()
+    };
+
+    // Simpan ke localStorage
+    dataAkun.push(akunBaru);
+    simpanDataAkun(dataAkun);
+
+    // Reset form
+    document.getElementById('daftarUsername').value = '';
+    document.getElementById('daftarPassword').value = '';
+    document.getElementById('daftarNama').value = '';
+    document.getElementById('daftarEmail').value = '';
+    document.getElementById('daftarHp').value = '';
+    updatePreviewId();
+
+    // Berhasil
+    tampilkanToast('✅ Akun "' + nama + '" berhasil dibuat! ID: ' + akunBaru.id + ' | Status: ' + statusAwal, 'success');
+}
+// ============================================================ //
+// AKHIR BLOK 11 - DAFTAR AKUN BARU                              //
+// ============================================================ //
         // ============================================================ //
         // CATATAN: FUNGSI-FUNGSI RENDER (DASHBOARD, DAFTAR AKUN, DLL)  //
         // AKAN DITAMBAHKAN DI MODUL-MODUL SELANJUTNYA.                  //
