@@ -166,7 +166,7 @@
 </nav>
 <!--- ===== AKHIR BLOK 3.1 ===== --->
 
-<!--- ===== BLOK 3.2 Form Pendaftaran ===== --->
+<!--- ===== BLOK 3.2 REVISI Form Pendaftaran dengan ID Otomatis ===== --->
 <div class="container mt-4 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
@@ -198,6 +198,19 @@
                                 <option value="CT">Customer (Langsung Aktif)</option>
                             </select>
                             <small class="text-muted" id="infoRole"></small>
+                        </div>
+                        
+                        <div class="mb-3 p-3 rounded border" style="background-color: #E8F5E9;">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>ID Otomatis
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-white" style="background-color: #4CAF50; border-color: #4CAF50;">
+                                    <i class="fas fa-qrcode"></i>
+                                </span>
+                                <input type="text" id="idOtomatis" name="id_otomatis" class="form-control bg-light fw-bold text-success text-center" placeholder="Pilih role terlebih dahulu" readonly>
+                            </div>
+                            <small class="text-muted">ID akan dibuat otomatis berdasarkan jenis akun yang dipilih</small>
                         </div>
                         
                         <div class="mb-3">
@@ -323,8 +336,7 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 3.2 ===== --->
-
-</div>
+    
 <!--- ===== AKHIR BLOK 3 Halaman Pendaftaran ===== --->
 
 <!--- ===== BLOK 4 Halaman Lupa Password ===== --->
