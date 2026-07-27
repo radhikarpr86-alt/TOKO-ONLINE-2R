@@ -1033,6 +1033,245 @@
         // ============================================================ //
         // AKHIR BLOK 10 - SIDEBAR & NAVIGASI                            //
         // ============================================================ //
+        // ============================================================ //
+// BLOK 20 - PENAGIHAN OTOMATIS                                  //
+// ============================================================ //
+// Deskripsi: Menampilkan daftar tagihan, statistik, dan tombol  //
+// untuk menjalankan proses penagihan otomatis.                 //
+// ============================================================ //
+
+function renderPenagihanOtomatis() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin') { tampilkanToast('Akses ditolak!', 'error'); return; }
+
+    // Ambil data tagihan dari localStorage
+    var tagihan = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
+    
+    // Statistik
+    var total = tagihan.length;
+    var belum = tagihan.filter(function(t) { return t.status === 'Belum'; }).length;
+    var lunas = tagihan.filter(function(t) { return t.status === 'Lunas'; }).length;
+    var overdue = tagihan.filter(function(t) { return t.status === 'Overdue'; }).length;
+
+    var html = '<div class="page-header"><h2>💰 Penagihan Otomatis</h2><p>Fee aplikasi, fee penjualan toko, fee ojek.</p></div>';
+    html += '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:15px; margin-bottom:20px;">';
+    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #1a1a2e;"><strong>' + total + '</strong><br><span style="color:#888;">Total Tagihan</span></div>';
+    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #ff9800;"><strong>' + belum + '</strong><br><span style="color:#888;">Belum Dibayar</span></div>';
+    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #4caf50;"><strong>' + lunas + '</strong><br><span style="color:#888;">Lunas</span></div>';
+    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #f44336;"><strong>' + overdue + '</strong><br><span style="color:#888;">Overdue</span></div>';
+    html += '</div>';
+
+    html += '<button class="button button-primary" onclick="jalankanPenagihanOtomatis()" style="margin-bottom:20px;">⚡ Jalankan Penagihan Otomatis</button>';
+
+    if (tagihan.length === 0) {
+        html += '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><p>Belum ada tagihan.</p></div></div>';
+    } else {
+        html += '<div class="table-responsive"><table class="table"><thead><tr><th>Nama</th><th>Role</th><th>Fee Aplikasi</th><th>Fee Penjualan</th><th>Fee Ojek</th><th>Total</th><th>Periode</th><th>Status</th></tr></thead><tbody>';
+        tagihan.forEach(function(t) {
+            var statusClass = t.status === 'Lunas' ? 'badge-success' : (t.status === 'Overdue' ? 'badge-danger' : 'badge-warning');
+            html += '<tr><td><strong>' + t.nama + '</strong></td><td>' + t.role + '</td><td>Rp ' + (t.feeAplikasi||0).toLocaleString('id-ID') + '</td><td>Rp ' + (t.feePenjualan||0).toLocaleString('id-ID') + '</td><td>Rp ' + (t.feeOjek||0).toLocaleString('id-ID') + '</td><td><strong>Rp ' + (t.total||0).toLocaleString('id-ID') + '</strong></td><td>' + t.periode + '</td><td><span class="' + statusClass + '">' + t.status + '</span></td></tr>';
+        });
+        html += '</tbody></table></div>';
+    }
+    document.getElementById('mainContent').innerHTML = html;
+}
+
+function jalankanPenagihanOtomatis() {
+    if (!confirm('Yakin ingin menjalankan penagihan otomatis? Ini akan membuat tagihan baru untuk bulan lalu.')) return;
+
+    var sekarang = new Date();
+    var bulanLalu = sekarang.getMonth() - 1;
+    var tahun = sekarang.getFullYear();
+    var bulanTagihan = (bulanLalu < 0) ? 11 : bulanLalu;
+    var tahunTagihan = (bulanLalu < 0) ? tahun - 1 : tahun;
+
+    var users = JSON.parse(localStorage.getItem('2r_akun') || '[]');
+    var targetUsers = users.filter(function(u) {
+        return ['toko_grosir','toko_standar','toko_kecil','toko_kaki_lima','toko_makanan','toko_cod_seller','ojek'].includes(u.role) && u.status === 'AKTIF';
+    });
+
+    var tagihanBaru = [];
+    var periode = tahunTagihan + '-' + String(bulanTagihan + 1).padStart(2, '0');
+
+    targetUsers.forEach(function(user) {
+        var feeAplikasi = hitungFeePemakaianAplikasi(user.role);
+        var feePenjualan = 0, feeOjek = 0;
+        if (user.role === 'ojek') {
+            var result = hitungFeePendapatanOjek(user.username, bulanTagihan, tahunTagihan);
+            feeOjek = result.fee;
+        } else {
+            var result = hitungFeePenjualanToko(user.username, bulanTagihan, tahunTagihan);
+            feePenjualan = result.fee;
+        }
+        var totalTagihan = feeAplikasi + feePenjualan + feeOjek;
+        if (totalTagihan > 0) {
+            var existing = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
+            var sudahAda = existing.some(function(t) { return t.username === user.username && t.periode === periode; });
+            if (!sudahAda) {
+                tagihanBaru.push({
+                    id: Date.now() + Math.floor(Math.random() * 1000),
+                    username: user.username,
+                    nama: user.nama,
+                    role: user.role,
+                    feeAplikasi: feeAplikasi,
+                    feePenjualan: feePenjualan,
+                    feeOjek: feeOjek,
+                    total: totalTagihan,
+                    periode: periode,
+                    tanggalTagihan: new Date().toISOString().split('T')[0],
+                    jatuhTempo: new Date(sekarang.getFullYear(), sekarang.getMonth(), 10).toISOString().split('T')[0],
+                    status: 'Belum'
+                });
+            }
+        }
+    });
+
+    var existing = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
+    var allTagihan = existing.concat(tagihanBaru);
+    localStorage.setItem('2r_tagihan_otomatis', JSON.stringify(allTagihan));
+    tampilkanToast('✅ ' + tagihanBaru.length + ' tagihan baru berhasil dibuat!', 'success');
+    renderPenagihanOtomatis();
+}
+// ============================================================ //
+// AKHIR BLOK 20 - PENAGIHAN OTOMATIS                            //
+// ============================================================ //
+
+
+// ============================================================ //
+// BLOK 21 - RIWAYAT PENAGIHAN                                  //
+// ============================================================ //
+// Deskripsi: Menampilkan histori tagihan dengan filter          //
+// periode dan status.                                          //
+// ============================================================ //
+
+function renderRiwayatPenagihan() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin') { tampilkanToast('Akses ditolak!', 'error'); return; }
+
+    var tagihan = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
+    var periodeDefault = new Date().toISOString().slice(0, 7);
+    var filterPeriode = document.getElementById('filter-periode-penagihan') ? document.getElementById('filter-periode-penagihan').value : periodeDefault;
+    var filterStatus = document.getElementById('filter-status-penagihan') ? document.getElementById('filter-status-penagihan').value : 'Semua';
+
+    var filtered = tagihan;
+    if (filterPeriode) filtered = filtered.filter(function(t) { return t.periode === filterPeriode; });
+    if (filterStatus !== 'Semua') filtered = filtered.filter(function(t) { return t.status === filterStatus; });
+
+    var totalPendapatan = filtered.reduce(function(sum, t) { return sum + (t.total || 0); }, 0);
+
+    var html = '<div class="page-header"><h2>📜 Riwayat Penagihan</h2><p>Total pendapatan periode ini: <strong>Rp ' + totalPendapatan.toLocaleString('id-ID') + '</strong></p></div>';
+    html += '<div class="card"><div class="card-header">Filter</div>';
+    html += '<div style="display:flex; gap:10px; flex-wrap:wrap;">';
+    html += '<select id="filter-periode-penagihan" class="form-input" style="width:150px;" onchange="renderRiwayatPenagihan()">';
+    html += '<option value="' + periodeDefault + '">' + periodeDefault + '</option>';
+    html += '</select>';
+    html += '<select id="filter-status-penagihan" class="form-input" style="width:150px;" onchange="renderRiwayatPenagihan()">';
+    html += '<option value="Semua">Semua Status</option>';
+    html += '<option value="Belum">Belum</option>';
+    html += '<option value="Lunas">Lunas</option>';
+    html += '<option value="Overdue">Overdue</option>';
+    html += '</select>';
+    html += '</div></div>';
+
+    if (filtered.length === 0) {
+        html += '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><p>Tidak ada tagihan untuk periode ini.</p></div></div>';
+    } else {
+        html += '<div class="table-responsive"><table class="table"><thead><tr><th>Nama</th><th>Role</th><th>Total</th><th>Periode</th><th>Status</th></tr></thead><tbody>';
+        filtered.forEach(function(t) {
+            var statusClass = t.status === 'Lunas' ? 'badge-success' : (t.status === 'Overdue' ? 'badge-danger' : 'badge-warning');
+            html += '<tr><td><strong>' + t.nama + '</strong></td><td>' + t.role + '</td><td>Rp ' + (t.total||0).toLocaleString('id-ID') + '</td><td>' + t.periode + '</td><td><span class="' + statusClass + '">' + t.status + '</span></td></tr>';
+        });
+        html += '</tbody></table></div>';
+        html += '<div style="margin-top:15px; text-align:right; font-weight:bold;">Total: Rp ' + totalPendapatan.toLocaleString('id-ID') + '</div>';
+    }
+    document.getElementById('mainContent').innerHTML = html;
+}
+// ============================================================ //
+// AKHIR BLOK 21 - RIWAYAT PENAGIHAN                            //
+// ============================================================ //
+
+
+// ============================================================ //
+// BLOK 22 - LAPORAN KEUANGAN                                   //
+// ============================================================ //
+// Deskripsi: Menampilkan pendapatan dari Sewa, Fee, COD, Owner //
+// dengan filter periode dan grafik.                            //
+// ============================================================ //
+
+function renderLaporanKeuangan() {
+    var role = localStorage.getItem('2r_user_role');
+    if (role !== 'superadmin') { tampilkanToast('Akses ditolak!', 'error'); return; }
+
+    var html = '<div class="page-header"><h2>📊 Laporan Keuangan</h2><p>Pendapatan dari Sewa, Fee, COD, dan Fee Owner.</p></div>';
+    html += '<div class="card"><div class="card-header">Filter Periode</div>';
+    html += '<div style="display:flex; gap:10px; flex-wrap:wrap;">';
+    html += '<select id="filter-periode-laporan" class="form-input" style="width:150px;" onchange="renderHasilLaporan()"><option value="bulanan">Bulanan</option><option value="harian">Harian</option><option value="mingguan">Mingguan</option><option value="tahunan">Tahunan</option></select>';
+    html += '<input type="month" id="filter-input-laporan" class="form-input" style="width:150px;" value="' + new Date().toISOString().slice(0,7) + '">';
+    html += '<button class="button button-primary" onclick="renderHasilLaporan()">🔍 Tampilkan</button>';
+    html += '</div></div>';
+    html += '<div id="laporan-result"><div class="empty-state"><div class="empty-icon">📊</div><p>Pilih periode dan klik Tampilkan.</p></div></div>';
+    document.getElementById('mainContent').innerHTML = html;
+}
+
+function renderHasilLaporan() {
+    var periode = document.getElementById('filter-periode-laporan').value;
+    var input = document.getElementById('filter-input-laporan').value;
+    
+    // 1. Ambil data dari tagihan otomatis (Sewa & Fee)
+    var tagihan = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
+    var tagihanFilter = tagihan.filter(function(t) {
+        if (periode === 'bulanan') return t.periode === input;
+        // Untuk demo, kita gunakan data dummy jika filter tidak sesuai
+        return true;
+    });
+    var totalSewa = 0, totalFee = 0;
+    tagihanFilter.forEach(function(t) {
+        totalSewa += (t.feeAplikasi || 0);
+        totalFee += (t.feePenjualan || 0);
+    });
+
+    // 2. Ambil data COD dari order_diambil
+    var orderDiambil = JSON.parse(localStorage.getItem('2r_order_diambil') || '[]');
+    var pengaturanCOD = JSON.parse(localStorage.getItem('2r_pengaturan_cod') || '{"persentaseJasa":5}');
+    var totalCOD = 0;
+    orderDiambil.forEach(function(o) {
+        if (o.metodePembayaran === 'COD' && o.status === 'selesai') {
+            totalCOD += Math.floor((o.totalBelanja || 0) * pengaturanCOD.persentaseJasa / 100);
+        }
+    });
+
+    // 3. Ambil data Fee Owner
+    var penagihanOwner = JSON.parse(localStorage.getItem('2r_penagihan_owner') || '[]');
+    var totalFeeOwner = 0;
+    penagihanOwner.forEach(function(p) {
+        if (p.status === 'Disetujui') totalFeeOwner += (p.jumlah || 0);
+    });
+
+    var total = totalSewa + totalFee + totalCOD + totalFeeOwner;
+
+    // Build HTML
+    var html = '<div class="widget-grid">';
+    html += '<div class="widget-card"><div class="widget-number">Rp ' + totalSewa.toLocaleString('id-ID') + '</div><div class="widget-label">Sewa Aplikasi</div></div>';
+    html += '<div class="widget-card"><div class="widget-number">Rp ' + totalFee.toLocaleString('id-ID') + '</div><div class="widget-label">Fee Penjualan</div></div>';
+    html += '<div class="widget-card"><div class="widget-number">Rp ' + totalCOD.toLocaleString('id-ID') + '</div><div class="widget-label">Jasa COD</div></div>';
+    html += '<div class="widget-card"><div class="widget-number">Rp ' + totalFeeOwner.toLocaleString('id-ID') + '</div><div class="widget-label">Fee Owner</div></div>';
+    html += '<div class="widget-card" style="border-left-color:#e65100;"><div class="widget-number" style="color:#e65100;">Rp ' + total.toLocaleString('id-ID') + '</div><div class="widget-label">TOTAL</div></div>';
+    html += '</div>';
+
+    // Grafik sederhana (horizontal bar)
+    var max = Math.max(totalSewa, totalFee, totalCOD, totalFeeOwner, 1);
+    html += '<div class="card"><h4>📈 Grafik Pendapatan</h4><div style="display:flex; flex-direction:column; gap:10px;">';
+    html += '<div><span>Sewa: </span><div style="width:' + ((totalSewa/max)*100) + '%; height:20px; background:#4caf50; border-radius:4px; display:inline-block;"></div></div>';
+    html += '<div><span>Fee: </span><div style="width:' + ((totalFee/max)*100) + '%; height:20px; background:#2196f3; border-radius:4px; display:inline-block;"></div></div>';
+    html += '<div><span>COD: </span><div style="width:' + ((totalCOD/max)*100) + '%; height:20px; background:#ff9800; border-radius:4px; display:inline-block;"></div></div>';
+    html += '<div><span>Owner: </span><div style="width:' + ((totalFeeOwner/max)*100) + '%; height:20px; background:#9c27b0; border-radius:4px; display:inline-block;"></div></div>';
+    html += '</div></div>';
+
+    document.getElementById('laporan-result').innerHTML = html;
+}
+// ============================================================ //
+// AKHIR BLOK 22 - LAPORAN KEUANGAN                             //
+// ============================================================ //
 
         // ============================================================ //
         // CATATAN: FUNGSI-FUNGSI RENDER (DASHBOARD, DAFTAR AKUN, DLL)  //
@@ -1108,128 +1347,7 @@
 <!-- ============================================================ -->
 <!-- AKHIR BLOK 1 - HALAMAN UTAMA (INDEX)                          -->
 <!-- ============================================================ -->
-// ============================================================ //
-// BLOK 20 - PENAGIHAN OTOMATIS                                  //
-// ============================================================ //
-// Deskripsi: Menampilkan daftar tagihan, statistik, dan tombol  //
-// untuk menjalankan proses penagihan otomatis.                 //
-// ============================================================ //
 
-// ===== BLOK 20.1 - RENDER HALAMAN PENAGIHAN OTOMATIS =====
-function renderPenagihanOtomatis() {
-    var role = localStorage.getItem('2r_user_role');
-    if (role !== 'superadmin') {
-        tampilkanToast('Akses ditolak!', 'error');
-        return;
-    }
-
-    // Ambil data tagihan dari localStorage
-    var tagihan = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
-    
-    // Hitung statistik
-    var total = tagihan.length;
-    var belum = tagihan.filter(function(t) { return t.status === 'Belum'; }).length;
-    var lunas = tagihan.filter(function(t) { return t.status === 'Lunas'; }).length;
-    var overdue = tagihan.filter(function(t) { return t.status === 'Overdue'; }).length;
-
-    // Bangun HTML
-    var html = '<div class="page-header"><h2>💰 Penagihan Otomatis</h2><p>Fee aplikasi, fee penjualan toko, fee ojek.</p></div>';
-    
-    // Statistik
-    html += '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:15px; margin-bottom:20px;">';
-    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #1a1a2e;"><strong>' + total + '</strong><br><span style="color:#888;">Total Tagihan</span></div>';
-    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #ff9800;"><strong>' + belum + '</strong><br><span style="color:#888;">Belum Dibayar</span></div>';
-    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #4caf50;"><strong>' + lunas + '</strong><br><span style="color:#888;">Lunas</span></div>';
-    html += '<div style="background:white;padding:15px;border-radius:10px;text-align:center;border-left:5px solid #f44336;"><strong>' + overdue + '</strong><br><span style="color:#888;">Overdue</span></div>';
-    html += '</div>';
-
-    // Tombol jalankan penagihan
-    html += '<button class="button button-primary" onclick="jalankanPenagihanOtomatis()" style="margin-bottom:20px;">⚡ Jalankan Penagihan Otomatis</button>';
-
-    // Tabel tagihan
-    if (tagihan.length === 0) {
-        html += '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><p>Belum ada tagihan.</p></div></div>';
-    } else {
-        html += '<div class="table-responsive"><table class="table"><thead><tr><th>Nama</th><th>Role</th><th>Fee Aplikasi</th><th>Fee Penjualan</th><th>Fee Ojek</th><th>Total</th><th>Periode</th><th>Status</th></tr></thead><tbody>';
-        tagihan.forEach(function(t) {
-            var statusClass = t.status === 'Lunas' ? 'badge-success' : (t.status === 'Overdue' ? 'badge-danger' : 'badge-warning');
-            html += '<tr><td><strong>' + t.nama + '</strong></td><td>' + t.role + '</td><td>Rp ' + (t.feeAplikasi||0).toLocaleString('id-ID') + '</td><td>Rp ' + (t.feePenjualan||0).toLocaleString('id-ID') + '</td><td>Rp ' + (t.feeOjek||0).toLocaleString('id-ID') + '</td><td><strong>Rp ' + (t.total||0).toLocaleString('id-ID') + '</strong></td><td>' + t.periode + '</td><td><span class="' + statusClass + '">' + t.status + '</span></td></tr>';
-        });
-        html += '</tbody></table></div>';
-    }
-
-    document.getElementById('mainContent').innerHTML = html;
-}
-
-// ===== BLOK 20.2 - FUNGSI JALANKAN PENAGIHAN OTOMATIS =====
-function jalankanPenagihanOtomatis() {
-    // Konfirmasi
-    if (!confirm('Yakin ingin menjalankan penagihan otomatis? Ini akan membuat tagihan baru untuk bulan lalu.')) return;
-
-    var sekarang = new Date();
-    var bulanLalu = sekarang.getMonth() - 1;
-    var tahun = sekarang.getFullYear();
-    var bulanTagihan = (bulanLalu < 0) ? 11 : bulanLalu;
-    var tahunTagihan = (bulanLalu < 0) ? tahun - 1 : tahun;
-
-    // Ambil data user
-    var users = JSON.parse(localStorage.getItem('2r_akun') || '[]');
-    var targetUsers = users.filter(function(u) {
-        return ['toko_grosir','toko_standar','toko_kecil','toko_kaki_lima','toko_makanan','toko_cod_seller','ojek'].includes(u.role) && u.status === 'AKTIF';
-    });
-
-    var tagihanBaru = [];
-    var periode = tahunTagihan + '-' + String(bulanTagihan + 1).padStart(2, '0');
-
-    targetUsers.forEach(function(user) {
-        var feeAplikasi = hitungFeePemakaianAplikasi(user.role);
-        var feePenjualan = 0, feeOjek = 0, totalPendapatan = 0;
-        
-        if (user.role === 'ojek') {
-            var result = hitungFeePendapatanOjek(user.username, bulanTagihan, tahunTagihan);
-            feeOjek = result.fee;
-            totalPendapatan = result.totalPendapatan;
-        } else {
-            var result = hitungFeePenjualanToko(user.username, bulanTagihan, tahunTagihan);
-            feePenjualan = result.fee;
-            totalPendapatan = result.totalPenjualan;
-        }
-
-        var totalTagihan = feeAplikasi + feePenjualan + feeOjek;
-        if (totalTagihan > 0) {
-            // Cek apakah tagihan untuk user ini dan periode ini sudah ada
-            var existing = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
-            var sudahAda = existing.some(function(t) { return t.username === user.username && t.periode === periode; });
-            if (!sudahAda) {
-                tagihanBaru.push({
-                    id: Date.now() + Math.floor(Math.random() * 1000),
-                    username: user.username,
-                    nama: user.nama,
-                    role: user.role,
-                    feeAplikasi: feeAplikasi,
-                    feePenjualan: feePenjualan,
-                    feeOjek: feeOjek,
-                    total: totalTagihan,
-                    periode: periode,
-                    tanggalTagihan: new Date().toISOString().split('T')[0],
-                    jatuhTempo: new Date(sekarang.getFullYear(), sekarang.getMonth(), 10).toISOString().split('T')[0],
-                    status: 'Belum'
-                });
-            }
-        }
-    });
-
-    // Gabungkan dengan tagihan yang sudah ada
-    var existing = JSON.parse(localStorage.getItem('2r_tagihan_otomatis') || '[]');
-    var allTagihan = existing.concat(tagihanBaru);
-    localStorage.setItem('2r_tagihan_otomatis', JSON.stringify(allTagihan));
-
-    tampilkanToast('✅ ' + tagihanBaru.length + ' tagihan baru berhasil dibuat!', 'success');
-    renderPenagihanOtomatis();
-}
-// ============================================================ //
-// AKHIR BLOK 20 - PENAGIHAN OTOMATIS                            //
-// ============================================================ //
 </body>
 </html>
 
