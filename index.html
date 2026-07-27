@@ -1808,3 +1808,115 @@ function cekTombolBuatAktif() {
 // ============================================
 // PROSES BUAT AKUN (SUPERADMIN)
 // ============================================
+// ============================================
+// PROSES BUAT AKUN (SUPERADMIN)
+// ============================================
+function prosesBuatAkun(event) {
+    event.preventDefault();
+    const notifikasi = document.getElementById('notifikasiBuatAkun');
+    const password = document.getElementById('passwordBuat').value;
+    const konfirmasi = document.getElementById('konfirmasiPasswordBuat').value;
+    const lat = document.getElementById('latitudeBuat').value;
+    const lng = document.getElementById('longitudeBuat').value;
+    const role = document.getElementById('roleAkunBuat').value;
+    const idOtomatis = document.getElementById('idOtomatisBuat').value;
+    const nama = document.getElementById('namaLengkapBuat').value;
+    const username = document.getElementById('usernameBuat').value;
+    
+    if (lat === '' || lng === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anda wajib mengambil titik koordinat lokasi!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return false;
+    }
+    if (role === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Silakan pilih jenis akun!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return false;
+    }
+    if (password !== konfirmasi) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi Password tidak cocok!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return false;
+    }
+    
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Akun berhasil dibuat!</strong><br><br><strong>Nama:</strong> ' + nama + '<br><strong>ID:</strong> ' + idOtomatis + '<br><strong>Username:</strong> ' + username + '<br><strong>Status:</strong> <span class="badge bg-success">AKTIF</span><br><br>Akun sudah bisa digunakan untuk login.';
+    notifikasi.classList.remove('d-none');
+    
+    // Reset form
+    document.getElementById('formBuatAkun').reset();
+    document.getElementById('idOtomatisBuat').value = '';
+    document.getElementById('idOtomatisBuat').placeholder = 'Pilih jenis akun terlebih dahulu';
+    document.getElementById('tombolBuatAkun').disabled = true;
+    document.getElementById('koordinatTextBuat').classList.add('d-none');
+    document.getElementById('statusKoordinatBuat').innerHTML = '<i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!';
+    document.getElementById('statusKoordinatBuat').className = 'mt-2 small text-muted';
+    document.getElementById('bagianNIKBuat').style.display = 'block';
+    document.getElementById('nikKtpBuat').removeAttribute('required');
+    document.getElementById('infoRoleBuat').innerHTML = '';
+    
+    window.scrollTo(0, 0);
+    return false;
+}
+
+// ============================================
+// PROSES LUPA PASSWORD
+// ============================================
+function prosesLupaPassword(event) {
+    event.preventDefault();
+    const identitas = document.getElementById('identitasLupa').value.trim();
+    const notifikasi = document.getElementById('notifikasiLupaPassword');
+    if (identitas === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username atau Email wajib diisi!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link reset password telah dikirim ke email Anda.';
+    notifikasi.classList.remove('d-none');
+    return false;
+}
+
+// ============================================
+// PROSES RESET PASSWORD
+// ============================================
+function prosesResetPassword(event) {
+    event.preventDefault();
+    const passwordBaru = document.getElementById('passwordBaru').value;
+    const konfirmasi = document.getElementById('konfirmasiPasswordBaru').value;
+    const notifikasi = document.getElementById('notifikasiLupaPassword');
+    if (passwordBaru.length < 6) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password minimal 6 karakter!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    if (passwordBaru !== konfirmasi) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi tidak cocok!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Password berhasil direset! Silakan login.';
+    notifikasi.classList.remove('d-none');
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiLupaPassword').classList.add('d-none'); }, 2000);
+    return false;
+}
+<!--- ===== AKHIR BLOK 9.5 ===== --->
+
+<!--- ===== BLOK 9.6 Penutup JavaScript ===== --->
+</script>
+<!--- ===== AKHIR BLOK 9.6 ===== --->
+
+<!--- ===== BLOK 9.7 Penutup HTML ===== --->
+</body>
+</html>
+<!--- ===== AKHIR BLOK 9.7 ===== --->
