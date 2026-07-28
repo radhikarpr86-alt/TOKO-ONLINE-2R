@@ -897,27 +897,94 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 10.12 ===== --->
+<!--- ===== BLOK 10.13 Container Persetujuan Akun ===== --->
+<div id="halamanPersetujuanAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h5>
+                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="notifikasiPersetujuan" class="alert d-none"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Tanggal Daftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPending">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tidakAdaPending" class="text-center py-4 text-muted d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h5>Tidak ada akun yang menunggu persetujuan</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.13 ===== --->
 
-<!--- ===== BLOK 9.1 Script ===== --->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-<!--- ===== AKHIR BLOK 9.1 ===== --->
+<!--- ===== BLOK 10.14 Container Kelola Akun Aktif ===== --->
+<div id="halamanKelolaAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Kelola Akun Aktif</h5>
+                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="notifikasiKelolaAkun" class="alert d-none"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelAkunAktif">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tidakAdaAkunAktif" class="text-center py-4 text-muted d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h5>Tidak ada akun aktif</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.14 ===== --->
 
-<!--- ===== BLOK 9.2 JavaScript Core (REVISI TOTAL, TANPA ERROR) ===== --->
-// Variabel global
+<!--- ===== BLOK 9.2 JavaScript Core (REVISI AMAN, TANPA ERROR) ===== --->
 var SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 var SUPERADMIN_PASSWORD = 'MyHand0286';
 var userAktif = null;
 var kontenAsliDasbor = null;
 
-// Simpan konten asli dasbor saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
     var konten = document.getElementById('kontenDasbor');
     if (konten) kontenAsliDasbor = konten.innerHTML;
     updateWaktu();
 });
 
-// Navigasi halaman
 function tampilkanHalaman(halaman) {
     var semua = document.querySelectorAll('.page-section');
     for (var i = 0; i < semua.length; i++) {
@@ -928,7 +995,6 @@ function tampilkanHalaman(halaman) {
     window.scrollTo(0, 0);
 }
 
-// Toggle password
 function togglePasswordLogin() {
     var pw = document.getElementById('passwordLogin');
     var icon = document.getElementById('iconToggleLogin');
@@ -948,7 +1014,6 @@ function togglePasswordBaru() {
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
 
-// Update waktu real-time
 function updateWaktu() {
     var s = new Date();
     var opt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' };
@@ -961,7 +1026,6 @@ function updateWaktu() {
 }
 setInterval(updateWaktu, 1000);
 
-// Proses login
 function prosesLogin(event) {
     event.preventDefault();
     var u = document.getElementById('usernameLogin').value.trim();
@@ -988,7 +1052,6 @@ function prosesLogin(event) {
     return false;
 }
 
-// Masuk dasbor
 function masukDasbor() {
     var konten = document.getElementById('kontenDasbor');
     if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
@@ -1004,7 +1067,6 @@ function masukDasbor() {
     updateWaktu();
 }
 
-// Logout
 function prosesLogout() {
     var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
@@ -1057,7 +1119,7 @@ var menuConfig = {
     }
 };
 
-// ===================== LOAD MENU (TANPA ERROR) =====================
+// ===================== LOAD MENU (TANPA TEMPLATE LITERAL) =====================
 function loadMenuNavigasi(kodeRole) {
     var config = menuConfig[kodeRole] || menuConfig['CT'];
     var menuContainer = document.getElementById('menuNavigasi');
@@ -1082,7 +1144,6 @@ function loadMenuNavigasi(kodeRole) {
     menuContainer.innerHTML = htmlMenu;
 }
 
-// Placeholder untuk menu yang belum ada halamannya
 function tampilkanPlaceholderMenu(nama, blok) {
     var konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
@@ -1091,7 +1152,6 @@ function tampilkanPlaceholderMenu(nama, blok) {
     if (offcanvas) offcanvas.hide();
 }
 
-// Kembali ke dasbor
 function kembaliKeDasbor() {
     if (kontenAsliDasbor) {
         document.getElementById('kontenDasbor').innerHTML = kontenAsliDasbor;
@@ -1132,7 +1192,7 @@ function cekRoleBuatAkun() {
     var nikInput = document.getElementById('nikKtpBuat');
     var info = document.getElementById('infoRoleBuat');
     var nikRoles = ['SOT','SOO','TK','OJ','PP','PM','COD'];
-    if (nikRoles.includes(role)) {
+    if (nikRoles.indexOf(role) !== -1) {
         bagianNIK.style.display = 'block';
         nikInput.setAttribute('required','');
     } else {
