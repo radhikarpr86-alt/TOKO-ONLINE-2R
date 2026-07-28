@@ -3,8 +3,6 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <!-- Favicon kosong untuk mencegah error 404 -->
-    <link rel="icon" href="data:,">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Toko Online 2R - Platform Marketplace Terpercaya">
     <meta name="author" content="Toko Online 2R">
@@ -13,9 +11,7 @@
 <!--- ===== AKHIR BLOK 1 ===== --->
 
 <!--- ===== BLOK 1.1 Bootstrap 5 CSS ===== --->
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <!--- ===== AKHIR BLOK 1.1 ===== --->
 
@@ -69,6 +65,7 @@
 <!--- ===== AKHIR BLOK 1.2 ===== --->
 </head>
 <body>
+
 <!--- ===== BLOK 2 Halaman Login Multi-Login (Halaman Utama) ===== --->
 <div id="halamanLogin" class="page-section active">
 
@@ -867,198 +864,19 @@
 
 </div>
 <!--- ===== AKHIR BLOK 9 Halaman Maintenance ===== --->
-<!--- ===== BLOK 10.12 Halaman Buat Akun Baru (SuperAdmin) ===== --->
-<!-- Konten ini akan dimuat ke dalam #kontenDasbor melalui fungsi tampilkanFormBuatAkun() -->
-<div id="formBuatAkunContainer" style="display:none;">
-    <div class="container-fluid px-4 py-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                
-                <div class="text-center mb-4">
-                    <i class="fas fa-user-plus fa-4x text-white mb-3"></i>
-                    <h3 class="fw-bold text-white">Buat Akun Baru</h3>
-                    <p class="text-white opacity-75">SuperAdmin dapat membuat akun untuk semua role termasuk Staf</p>
-                </div>
-                
-                <div class="card shadow-lg border-0">
-                    <div class="card-body p-4">
-                        
-                        <div id="notifikasiBuatAkun" class="alert d-none" role="alert"></div>
-                        
-                        <form id="formBuatAkun" onsubmit="return prosesBuatAkun(event)">
-                            
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-tag me-1" style="color: #FF8C00;"></i>Jenis Akun
-                                </label>
-                                <select id="roleAkunBuat" name="role" class="form-select" required onchange="cekRoleBuatAkun()">
-                                    <option value="">-- Pilih Jenis Akun --</option>
-                                    <optgroup label="Akun Staf">
-                                        <option value="ADM">Staf Admin</option>
-                                        <option value="SOT">Staf Owner Toko</option>
-                                        <option value="SOO">Staf Owner Ojek</option>
-                                        <option value="MKT">Staf Marketing</option>
-                                        <option value="TGH">Staf Penagihan</option>
-                                        <option value="CS">Customer Service</option>
-                                    </optgroup>
-                                    <optgroup label="Akun Seller">
-                                        <option value="TK">Toko</option>
-                                        <option value="OJ">Ojek</option>
-                                        <option value="PP">Pedagang Pasar</option>
-                                        <option value="PM">Pedagang Makanan</option>
-                                        <option value="COD">COD Seller</option>
-                                    </optgroup>
-                                    <optgroup label="Akun Umum">
-                                        <option value="CT">Customer</option>
-                                    </optgroup>
-                                </select>
-                                <small class="text-muted" id="infoRoleBuat"></small>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #E8F5E9;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>ID Otomatis
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text text-white" style="background-color: #4CAF50; border-color: #4CAF50;">
-                                        <i class="fas fa-qrcode"></i>
-                                    </span>
-                                    <input type="text" id="idOtomatisBuat" name="id_otomatis" class="form-control bg-light fw-bold text-success text-center" placeholder="Pilih jenis akun terlebih dahulu" readonly>
-                                </div>
-                                <small class="text-muted">ID akan dibuat otomatis berdasarkan jenis akun yang dipilih</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="namaLengkapBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Nama Lengkap
-                                </label>
-                                <input type="text" id="namaLengkapBuat" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap sesuai KTP" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="nomorHpBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-phone me-1" style="color: #FF8C00;"></i>Nomor HP
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">+62</span>
-                                    <input type="tel" id="nomorHpBuat" name="hp" class="form-control" placeholder="81234567890" pattern="[0-9]{10,13}" required>
-                                </div>
-                                <small class="text-muted">Nomor HP aktif untuk verifikasi</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="emailBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-envelope me-1" style="color: #FF8C00;"></i>Email
-                                </label>
-                                <input type="email" id="emailBuat" name="email" class="form-control" placeholder="contoh@email.com" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="alamatBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-map-marker-alt me-1" style="color: #FF8C00;"></i>Alamat Lengkap
-                                </label>
-                                <textarea id="alamatBuat" name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #FFF3E0;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-map-pin text-danger me-1"></i>Titik Koordinat Lokasi (WAJIB)
-                                </label>
-                                <div class="d-grid gap-2">
-                                    <button type="button" id="tombolAmbilKoordinatBuat" class="btn btn-outline-secondary" onclick="ambilKoordinatBuat()" style="border-color: #FF8C00; color: #FF8C00;">
-                                        <i class="fas fa-location-crosshairs me-2"></i>Ambil Titik Lokasi Sekarang
-                                    </button>
-                                </div>
-                                <div id="statusKoordinatBuat" class="mt-2 small text-muted">
-                                    <i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!
-                                </div>
-                                <input type="hidden" id="latitudeBuat" name="latitude" value="">
-                                <input type="hidden" id="longitudeBuat" name="longitude" value="">
-                                <div id="koordinatTextBuat" class="mt-2 small d-none">
-                                    <span class="fw-bold">Latitude:</span> <span id="textLatitudeBuat"></span><br>
-                                    <span class="fw-bold">Longitude:</span> <span id="textLongitudeBuat"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="usernameBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-circle me-1" style="color: #FF8C00;"></i>Username
-                                </label>
-                                <input type="text" id="usernameBuat" name="username" class="form-control" placeholder="Buat username untuk login" minlength="5" required>
-                                <small class="text-muted">Minimal 5 karakter, digunakan untuk login</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="passwordBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password
-                                </label>
-                                <div class="input-group">
-                                    <input type="password" id="passwordBuat" name="password" class="form-control" placeholder="Buat password minimal 6 karakter" minlength="6" required>
-                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBuat()" title="Lihat password">
-                                        <i class="fas fa-eye" id="iconTogglePasswordBuat"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="konfirmasiPasswordBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password
-                                </label>
-                                <input type="password" id="konfirmasiPasswordBuat" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password" minlength="6" required>
-                            </div>
-                            
-                            <div class="mb-3" id="bagianNIKBuat">
-                                <label for="nikKtpBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>NIK KTP
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" id="nikKtpBuat" name="nik_ktp" class="form-control" placeholder="Masukkan 16 digit NIK KTP" pattern="[0-9]{16}" maxlength="16">
-                                <small class="text-muted">Wajib diisi untuk Toko, Ojek, Pedagang, dan COD Seller</small>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #E3F2FD;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-shield me-1" style="color: #FF8C00;"></i>Dibuat Oleh
-                                </label>
-                                <input type="text" class="form-control bg-light fw-bold" value="SuperAdmin - ID_TK2R_SA-0001" readonly>
-                                <small class="text-muted">Akun ini dibuat langsung oleh SuperAdmin, status langsung AKTIF</small>
-                            </div>
-                            
-                            <div class="d-grid gap-2 mb-3">
-                                <button type="submit" id="tombolBuatAkun" class="btn btn-lg fw-bold text-white" disabled style="background-color: #4CAF50; border-color: #4CAF50;">
-                                    <i class="fas fa-user-check me-2"></i>Buat Akun Sekarang (Langsung Aktif)
-                                </button>
-                            </div>
-                            
-                        </form>
-                        
-                        <hr>
-                        
-                        <div class="text-center">
-                            <button class="btn btn-outline-secondary" onclick="kembaliKeDasbor()">
-                                <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
-                            </button>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4 text-white small">
-                    <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-<!--- ===== BLOK 9.1 ===== --->
+
+<!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+<!--- ===== AKHIR BLOK 9.1 ===== --->
+<!--- ===== BLOK 9.2 JavaScript Core: Login, Navigasi, Toggle, Waktu ===== --->
 // ============================================
-// DATA SUPERADMIN
+// DATA SUPERADMIN (Tertanam)
 // ============================================
 const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 const SUPERADMIN_PASSWORD = 'MyHand0286';
+
 let userAktif = null;
 let kontenAsliDasbor = null;
 
@@ -1068,19 +886,14 @@ document.addEventListener('DOMContentLoaded', function() {
     updateWaktu();
 });
 
-// ============================================
-// NAVIGASI
-// ============================================
 function tampilkanHalaman(halaman) {
-    document.querySelectorAll('.page-section').forEach(h => h.classList.remove('active'));
+    const semua = document.querySelectorAll('.page-section');
+    semua.forEach(hal => hal.classList.remove('active'));
     const target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
     if (target) target.classList.add('active');
     window.scrollTo(0,0);
 }
 
-// ============================================
-// TOGGLE PASSWORD
-// ============================================
 function togglePasswordLogin() {
     const pw = document.getElementById('passwordLogin');
     const icon = document.getElementById('iconToggleLogin');
@@ -1100,9 +913,6 @@ function togglePasswordBaru() {
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
 
-// ============================================
-// WAKTU WIB
-// ============================================
 function updateWaktu() {
     const s = new Date();
     const opt = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Jakarta' };
@@ -1115,9 +925,6 @@ function updateWaktu() {
 }
 setInterval(updateWaktu, 1000);
 
-// ============================================
-// LOGIN SUPERADMIN
-// ============================================
 function prosesLogin(event) {
     event.preventDefault();
     const u = document.getElementById('usernameLogin').value.trim();
@@ -1133,11 +940,12 @@ function prosesLogin(event) {
     if (u === SUPERADMIN_USERNAME && p === SUPERADMIN_PASSWORD) {
         userAktif = { nama:'SuperAdmin', role:'SuperAdmin', kodeRole:'SA', idUser:'ID_TK2R_SA-0001' };
         notif.className = 'alert alert-success';
-        notif.innerHTML = 'Login SuperAdmin berhasil!';
+        notif.innerHTML = 'Login SuperAdmin berhasil! Mengalihkan...';
         notif.classList.remove('d-none');
         setTimeout(masukDasbor, 500);
         return false;
     }
+    // Akun demo (jika diperlukan, silakan tambahkan di sini)
     notif.className = 'alert alert-danger';
     notif.innerHTML = 'Username atau Password salah!';
     notif.classList.remove('d-none');
@@ -1145,8 +953,119 @@ function prosesLogin(event) {
 }
 
 function masukDasbor() {
+    // Reset konten dasbor ke asli
     const konten = document.getElementById('kontenDasbor');
     if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
+    
+    // Update info user
+    document.getElementById('namaUserDisplay').textContent = userAktif.nama;
+    document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
+    document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
+    document.getElementById('offcanvasRoleUser').textContent = userAktif.role;
+    
+    // Load menu (fungsi dari blok 9.5)
+    loadMenuNavigasi(userAktif.kodeRole);
+    
+    // Tampilkan halaman dasbor
+    tampilkanHalaman('dasbor');
+    
+    // Reset form login
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+    document.getElementById('notifikasiLogin').classList.add('d-none');
+    
+    updateWaktu();
+}
+
+function prosesLogout() {
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) offcanvas.hide();
+    userAktif = null;
+    tampilkanHalaman('login');
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+}
+<!--- ===== AKHIR BLOK 9.2 ===== --->
+    <!--- ===== BLOK 9.3 JavaScript Login, Akun Demo, Masuk Dasbor, Logout ===== --->
+// ============================================
+// PROSES LOGIN
+// ============================================
+function prosesLogin(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('usernameLogin').value.trim();
+    const password = document.getElementById('passwordLogin').value.trim();
+    const notifikasi = document.getElementById('notifikasiLogin');
+    
+    if (username === '' || password === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username dan Password wajib diisi!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    
+    // Cek SuperAdmin
+    if (username === SUPERADMIN_USERNAME && password === SUPERADMIN_PASSWORD) {
+        userAktif = {
+            nama: 'SuperAdmin',
+            role: 'SuperAdmin',
+            kodeRole: 'SA',
+            idUser: 'SA-20260727-0001'
+        };
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login SuperAdmin berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { masukDasbor(); }, 1000);
+        return false;
+    }
+    
+    // Cek akun demo lainnya
+    const akunDemo = cekAkunDemo(username, password);
+    if (akunDemo) {
+        userAktif = akunDemo;
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { masukDasbor(); }, 1000);
+        return false;
+    }
+    
+    // Login gagal
+    notifikasi.className = 'alert alert-danger';
+    notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>Username atau Password salah!';
+    notifikasi.classList.remove('d-none');
+    return false;
+}
+
+// ============================================
+// CEK AKUN DEMO (Simulasi Database)
+// ============================================
+function cekAkunDemo(username, password) {
+    const akunDemo = {
+        'admin': { password: 'admin123', nama: 'Staf Admin', role: 'Staf Admin', kodeRole: 'ADM', idUser: 'ADM-20260727-0001' },
+        'owner': { password: 'owner123', nama: 'Staf Owner Toko', role: 'Staf Owner Toko', kodeRole: 'SOT', idUser: 'SOT-20260727-0001' },
+        'ojekowner': { password: 'ojek123', nama: 'Staf Owner Ojek', role: 'Staf Owner Ojek', kodeRole: 'SOO', idUser: 'SOO-20260727-0001' },
+        'marketing': { password: 'marketing123', nama: 'Staf Marketing', role: 'Staf Marketing', kodeRole: 'MKT', idUser: 'MKT-20260727-0001' },
+        'penagihan': { password: 'penagihan123', nama: 'Staf Penagihan', role: 'Staf Penagihan', kodeRole: 'TGH', idUser: 'TGH-20260727-0001' },
+        'cs': { password: 'cs123', nama: 'Customer Service', role: 'Customer Service', kodeRole: 'CS', idUser: 'CS-20260727-0001' },
+        'toko': { password: 'toko123', nama: 'Toko Berkah', role: 'Toko', kodeRole: 'TK', idUser: 'TK-20260727-0001' },
+        'makanan': { password: 'makanan123', nama: 'Pedagang Makanan', role: 'Pedagang Makanan', kodeRole: 'PM', idUser: 'PM-20260727-0001' },
+        'pasar': { password: 'pasar123', nama: 'Pedagang Pasar', role: 'Pedagang Pasar', kodeRole: 'PP', idUser: 'PP-20260727-0001' },
+        'cod': { password: 'cod123', nama: 'COD Seller', role: 'COD Seller', kodeRole: 'COD', idUser: 'COD-20260727-0001' },
+        'driver': { password: 'driver123', nama: 'Ojek Driver', role: 'Ojek', kodeRole: 'OJ', idUser: 'OJ-20260727-0001' },
+        'customer': { password: 'customer123', nama: 'Customer', role: 'Customer', kodeRole: 'CT', idUser: 'CT-20260727-0001' }
+    };
+    
+    if (akunDemo[username] && akunDemo[username].password === password) {
+        return akunDemo[username];
+    }
+    return null;
+}
+
+// ============================================
+// MASUK KE DASBOR
+// ============================================
+function masukDasbor() {
     document.getElementById('namaUserDisplay').textContent = userAktif.nama;
     document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
     document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
@@ -1159,17 +1078,22 @@ function masukDasbor() {
     updateWaktu();
 }
 
+// ============================================
+// PROSES LOGOUT
+// ============================================
 function prosesLogout() {
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
     userAktif = null;
+    kontenAsliDasbor = null;
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) { offcanvas.hide(); }
     tampilkanHalaman('login');
     document.getElementById('usernameLogin').value = '';
     document.getElementById('passwordLogin').value = '';
 }
-
+<!--- ===== AKHIR BLOK 9.3 ===== --->
+    <!--- ===== BLOK 9.4 JavaScript Konfigurasi Menu Semua Role ===== --->
 // ============================================
-// MENU CONFIG (SuperAdmin saja, role lain bisa ditambahkan)
+// KONFIGURASI MENU BERDASARKAN ROLE
 // ============================================
 const menuConfig = {
     'SA': {
@@ -1186,7 +1110,7 @@ const menuConfig = {
             { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '10.9' },
             { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
-            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
+            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12' },
             { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
             { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
@@ -1210,150 +1134,564 @@ const menuConfig = {
             { nama: 'Bantuan & FAQ', ikon: 'fas fa-question-circle', blok: '10.33' },
             { nama: 'Dokumentasi', ikon: 'fas fa-book', blok: '10.34' }
         ]
+    },
+    'ADM': {
+        namaRole: 'Staf Admin',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '11.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '11.2' },
+            { nama: 'Manajemen Akun (Reset Password)', ikon: 'fas fa-users-cog', blok: '11.3' },
+            { nama: 'Verifikasi Dokumen (Bantuan)', ikon: 'fas fa-check-circle', blok: '11.4' },
+            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', blok: '11.5' },
+            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', blok: '11.6' },
+            { nama: 'Histori Aktivitas & Log Lanjutan', ikon: 'fas fa-history', blok: '11.7' },
+            { nama: 'Pengaturan Umum (Maintenance)', ikon: 'fas fa-cog', blok: '11.8' },
+            { nama: 'Restart System', ikon: 'fas fa-power-off', blok: '11.9' }
+        ]
+    },
+    'SOT': {
+        namaRole: 'Staf Owner Toko',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '12.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '12.2' },
+            { nama: 'Manajemen Rekrutan', ikon: 'fas fa-users', blok: '12.3' },
+            { nama: 'Buat Akun Toko', ikon: 'fas fa-user-plus', blok: '12.4' },
+            { nama: 'Verifikasi Rekrutan (Pra-verifikasi)', ikon: 'fas fa-check-circle', blok: '12.5' },
+            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', blok: '12.6' },
+            { nama: 'Laporan Kinerja Rekrutan', ikon: 'fas fa-chart-bar', blok: '12.7' },
+            { nama: 'Manajemen Produk Toko Induk', ikon: 'fas fa-boxes', blok: '12.8' },
+            { nama: 'Semua Order Toko Induk', ikon: 'fas fa-shopping-cart', blok: '12.9' },
+            { nama: 'Laporan Penjualan & Komisi', ikon: 'fas fa-file-invoice', blok: '12.10' },
+            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', blok: '12.11' }
+        ]
+    },
+    'SOO': {
+        namaRole: 'Staf Owner Ojek',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '13.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '13.2' },
+            { nama: 'Manajemen Rekrutan Driver', ikon: 'fas fa-users', blok: '13.3' },
+            { nama: 'Tambah Rekrutan Driver', ikon: 'fas fa-user-plus', blok: '13.4' },
+            { nama: 'Verifikasi Rekrutan (Pra-verifikasi)', ikon: 'fas fa-check-circle', blok: '13.5' },
+            { nama: 'Pengajuan ke SuperAdmin', ikon: 'fas fa-paper-plane', blok: '13.6' },
+            { nama: 'Laporan Kinerja Driver', ikon: 'fas fa-chart-bar', blok: '13.7' },
+            { nama: 'Manajemen Order Armada Induk (Dispatcher)', ikon: 'fas fa-tasks', blok: '13.8' },
+            { nama: 'Monitoring Driver Online', ikon: 'fas fa-map-marker-alt', blok: '13.9' },
+            { nama: 'Laporan Setoran & Komisi', ikon: 'fas fa-file-invoice', blok: '13.10' },
+            { nama: 'Riwayat Pembayaran Komisi', ikon: 'fas fa-money-check-alt', blok: '13.11' },
+            { nama: 'Log Aktivitas & Pelanggaran Driver', ikon: 'fas fa-clipboard-list', blok: '13.12' }
+        ]
+    },
+    'MKT': {
+        namaRole: 'Staf Marketing',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '14.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '14.2' },
+            { nama: 'Manajemen Iklan', ikon: 'fas fa-ad', blok: '14.3' },
+            { nama: 'Manajemen Promo', ikon: 'fas fa-percent', blok: '14.4' },
+            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', blok: '14.5' },
+            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', blok: '14.6' },
+            { nama: 'Analitik & Laporan Pemasaran', ikon: 'fas fa-chart-pie', blok: '14.7' },
+            { nama: 'Katalog Produk (Riset Pasar)', ikon: 'fas fa-search', blok: '14.8' },
+            { nama: 'Usulan Produk Unggulan', ikon: 'fas fa-star', blok: '14.9' }
+        ]
+    },
+    'TGH': {
+        namaRole: 'Staf Penagihan',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '15.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '15.2' },
+            { nama: 'Daftar Tagihan (Filter Status)', ikon: 'fas fa-list-alt', blok: '15.3' },
+            { nama: 'Kirim Reminder', ikon: 'fas fa-envelope', blok: '15.4' },
+            { nama: 'Laporan Keuangan (View Only)', ikon: 'fas fa-file-invoice', blok: '15.5' },
+            { nama: 'Data Penagihan Manual (Catatan)', ikon: 'fas fa-edit', blok: '15.6' }
+        ]
+    },
+    'CS': {
+        namaRole: 'Customer Service',
+        menu: [
+            { nama: 'Dasbor CS', ikon: 'fas fa-tachometer-alt', blok: '16.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '16.2' },
+            { nama: 'Semua Tiket Masuk', ikon: 'fas fa-ticket-alt', blok: '16.3' },
+            { nama: 'Filter Tiket Berdasarkan Role', ikon: 'fas fa-filter', blok: '16.4' },
+            { nama: 'Ruang Chat', ikon: 'fas fa-comments', blok: '16.5' },
+            { nama: 'Cari & Bantuan Akun (Reset Password)', ikon: 'fas fa-search', blok: '16.6' },
+            { nama: 'Chat Internal dengan SuperAdmin', ikon: 'fas fa-comment-dots', blok: '16.7' },
+            { nama: 'Manajemen FAQ', ikon: 'fas fa-question-circle', blok: '16.8' },
+            { nama: 'Histori Aktivitas CS', ikon: 'fas fa-history', blok: '16.9' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '16.10' }
+        ]
+    },
+    'TK': {
+        namaRole: 'Toko',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '17.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '17.2' },
+            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', blok: '17.3' },
+            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', blok: '17.4' },
+            { nama: 'Kategori Produk', ikon: 'fas fa-tags', blok: '17.5' },
+            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', blok: '17.6' },
+            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', blok: '17.7' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '17.8' },
+            { nama: 'Proses Order', ikon: 'fas fa-tasks', blok: '17.9' },
+            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', blok: '17.10' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '17.11' },
+            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', blok: '17.12' },
+            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', blok: '17.13' },
+            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', blok: '17.14' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '17.15' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '17.16' }
+        ]
+    },
+    'PM': {
+        namaRole: 'Pedagang Makanan',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '18.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '18.2' },
+            { nama: 'Daftar Jualan Saya', ikon: 'fas fa-list', blok: '18.3' },
+            { nama: 'Tambah Jualan Baru', ikon: 'fas fa-plus-circle', blok: '18.4' },
+            { nama: 'Manajemen Stok & Bahan Baku', ikon: 'fas fa-boxes', blok: '18.5' },
+            { nama: 'Manajemen Kategori Pasar', ikon: 'fas fa-tags', blok: '18.6' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '18.7' },
+            { nama: 'Proses Order & Status', ikon: 'fas fa-tasks', blok: '18.8' },
+            { nama: 'Atur Pengiriman & Jam Operasional', ikon: 'fas fa-clock', blok: '18.9' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '18.10' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '18.11' },
+            { nama: 'Buku Kas / Catatan Pengeluaran', ikon: 'fas fa-book', blok: '18.12' },
+            { nama: 'Pengajuan Tambah Slot Produk', ikon: 'fas fa-plus-square', blok: '18.13' },
+            { nama: 'Verifikasi Dokumen Usaha', ikon: 'fas fa-check-circle', blok: '18.14' },
+            { nama: 'Mode Kasir / Input Penjualan Offline', ikon: 'fas fa-cash-register', blok: '18.15' },
+            { nama: 'Manajemen Resep & Kalkulator Bahan', ikon: 'fas fa-calculator', blok: '18.16' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '18.17' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '18.18' }
+        ]
+    },
+    'PP': {
+        namaRole: 'Pedagang Pasar',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '19.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '19.2' },
+            { nama: 'Daftar Produk Saya', ikon: 'fas fa-list', blok: '19.3' },
+            { nama: 'Tambah Produk Baru', ikon: 'fas fa-plus-circle', blok: '19.4' },
+            { nama: 'Kategori Produk', ikon: 'fas fa-tags', blok: '19.5' },
+            { nama: 'Pengajuan Upload Slot', ikon: 'fas fa-upload', blok: '19.6' },
+            { nama: 'Riwayat Pengajuan', ikon: 'fas fa-history', blok: '19.7' },
+            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '19.8' },
+            { nama: 'Proses Order', ikon: 'fas fa-tasks', blok: '19.9' },
+            { nama: 'Manajemen Ongkir', ikon: 'fas fa-truck', blok: '19.10' },
+            { nama: 'Transaksi Penjualan', ikon: 'fas fa-money-bill', blok: '19.11' },
+            { nama: 'Tagihan Fee & Pembayaran', ikon: 'fas fa-file-invoice', blok: '19.12' },
+            { nama: 'Histori Pembayaran Fee', ikon: 'fas fa-history', blok: '19.13' },
+            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-circle', blok: '19.14' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '19.15' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '19.16' }
+        ]
+    },
+    'COD': {
+        namaRole: 'COD Seller',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '20.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '20.2' },
+            { nama: 'Daftar Barang Jualan COD', ikon: 'fas fa-list', blok: '20.3' },
+            { nama: 'Tambah / Edit Barang', ikon: 'fas fa-edit', blok: '20.4' },
+            { nama: 'Update Stok', ikon: 'fas fa-boxes', blok: '20.5' },
+            { nama: 'Input Order COD (Transaksi Manual)', ikon: 'fas fa-cart-plus', blok: '20.6' },
+            { nama: 'Daftar Semua Order COD', ikon: 'fas fa-clipboard-list', blok: '20.7' },
+            { nama: 'Proses Konfirmasi Pembayaran & Pengiriman', ikon: 'fas fa-check-circle', blok: '20.8' },
+            { nama: 'Atur Rute / Jadwal Pengiriman', ikon: 'fas fa-route', blok: '20.9' },
+            { nama: 'Transaksi Penjualan COD', ikon: 'fas fa-money-bill', blok: '20.10' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '20.11' },
+            { nama: 'Verifikasi Dokumen COD', ikon: 'fas fa-check-circle', blok: '20.12' },
+            { nama: 'Pengajuan Tambah Slot Barang', ikon: 'fas fa-plus-square', blok: '20.13' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '20.14' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '20.15' }
+        ]
+    },
+    'OJ': {
+        namaRole: 'Ojek',
+        menu: [
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '21.1' },
+            { nama: 'Profil', ikon: 'fas fa-user', blok: '21.2' },
+            { nama: 'Data Kendaraan', ikon: 'fas fa-motorcycle', blok: '21.3' },
+            { nama: 'Order Baru (Permintaan Antar)', ikon: 'fas fa-bell', blok: '21.4' },
+            { nama: 'Order Sedang Berjalan', ikon: 'fas fa-spinner', blok: '21.5' },
+            { nama: 'Riwayat Pengiriman Saya', ikon: 'fas fa-history', blok: '21.6' },
+            { nama: 'Pendapatan Fee Ojek', ikon: 'fas fa-money-bill', blok: '21.7' },
+            { nama: 'Tagihan Fee Platform', ikon: 'fas fa-file-invoice', blok: '21.8' },
+            { nama: 'Catatan Uang COD', ikon: 'fas fa-sticky-note', blok: '21.9' },
+            { nama: 'Verifikasi Dokumen & Kendaraan', ikon: 'fas fa-check-circle', blok: '21.10' },
+            { nama: 'Atur Radius Operasional', ikon: 'fas fa-map-marker-alt', blok: '21.11' },
+            { nama: 'Peta / Navigasi Sederhana', ikon: 'fas fa-map', blok: '21.12' },
+            { nama: 'Log Aktivitas Ojek', ikon: 'fas fa-clipboard-list', blok: '21.13' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '21.14' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '21.15' }
+        ]
+    },
+    'CT': {
+        namaRole: 'Customer',
+        menu: [
+            { nama: 'Dasbor / Beranda', ikon: 'fas fa-home', blok: '22.1' },
+            { nama: 'Profil Customer', ikon: 'fas fa-user', blok: '22.2' },
+            { nama: 'Katalog Produk / Cari Barang', ikon: 'fas fa-search', blok: '22.3' },
+            { nama: 'Keranjang Belanja', ikon: 'fas fa-shopping-cart', blok: '22.4' },
+            { nama: 'Checkout & Pembayaran', ikon: 'fas fa-credit-card', blok: '22.5' },
+            { nama: 'Order Saya (Riwayat Belanja)', ikon: 'fas fa-clipboard-list', blok: '22.6' },
+            { nama: 'Lacak Pengiriman', ikon: 'fas fa-truck', blok: '22.7' },
+            { nama: 'Ulasan / Review Produk', ikon: 'fas fa-star', blok: '22.8' },
+            { nama: 'Pusat Bantuan / Chat CS', ikon: 'fas fa-headset', blok: '22.9' },
+            { nama: 'Kotak Masuk Notifikasi', ikon: 'fas fa-inbox', blok: '22.10' }
+        ]
     }
 };
-
+<!--- ===== AKHIR BLOK 9.4 ===== --->
+    <!--- ===== BLOK 9.5 JavaScript Menu Navigasi & Placeholder ===== --->
 // ============================================
-// LOAD MENU KE SIDEBAR
+// LOAD MENU NAVIGASI KE SIDEBAR
 // ============================================
 function loadMenuNavigasi(kodeRole) {
     const config = menuConfig[kodeRole] || menuConfig['CT'];
     const menuContainer = document.getElementById('menuNavigasi');
+    
     let htmlMenu = '';
-
+    
     config.menu.forEach(function(item) {
-        if (item.aksi === 'buatAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-        } else {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-        }
+        htmlMenu += `
+            <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')">
+                <i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}
+            </a>
+        `;
     });
-
-    htmlMenu += `<hr class="border-secondary">
-                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+    
+    htmlMenu += `
+        <hr class="border-secondary">
+        <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()">
+            <i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout
+        </a>
+    `;
+    
     menuContainer.innerHTML = htmlMenu;
 }
 
+// ============================================
+// TAMPILKAN PLACEHOLDER MENU
+// ============================================
 function tampilkanPlaceholderMenu(namaMenu, blok) {
-    const konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    konten.innerHTML = `<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ${blok} - ${namaMenu}</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">${namaMenu}</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>`;
+    const kontenDasbor = document.getElementById('kontenDasbor');
+    
+    if (!kontenAsliDasbor) {
+        kontenAsliDasbor = kontenDasbor.innerHTML;
+    }
+    
+    kontenDasbor.innerHTML = `
+        <div class="container-fluid px-4 py-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                    <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ${blok} - ${namaMenu}</h5>
+                    <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                        <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                    </button>
+                </div>
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-tools fa-5x text-muted mb-4"></i>
+                    <h3 class="text-muted">${namaMenu}</h3>
+                    <p class="lead text-muted">Halaman ini masih dalam pengembangan</p>
+                    <p class="text-muted">Blok ${blok} - Fitur akan segera tersedia</p>
+                    <button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()">
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
     const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
+    if (offcanvas) { offcanvas.hide(); }
 }
 
+// ============================================
+// KEMBALI KE DASBOR
+// ============================================
 function kembaliKeDasbor() {
     if (kontenAsliDasbor) {
         document.getElementById('kontenDasbor').innerHTML = kontenAsliDasbor;
         updateWaktu();
     }
 }
-
+<!--- ===== AKHIR BLOK 9.5 ===== --->
+<!--- ===== BLOK 9.6 REVISI JavaScript Pendaftaran, Lupa Password, Geolocation, Generate ID ===== --->
 // ============================================
-// FORM BUAT AKUN (SUPERADMIN)
+// GENERATE ID OTOMATIS
 // ============================================
-function tampilkanFormBuatAkun() {
-    const konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    const form = document.getElementById('formBuatAkunContainer');
-    if (form) konten.innerHTML = form.innerHTML;
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
-}
-
-function togglePasswordBuat() {
-    const pw = document.getElementById('passwordBuat');
-    const icon = document.getElementById('iconTogglePasswordBuat');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
-}
-
-function generateIDBuat(kodeRole) {
-    const format = { ADM:'ID_TK2R_ADM', SOT:'ID_TK2R_SOT', SOO:'ID_TK2R_SOO', MKT:'ID_TK2R_MKT', TGH:'ID_TK2R_TGH', CS:'ID_TK2R_CS', CT:'ID_TK2R_CUST', TK:'ID_TK2R_TK', OJ:'ID_TK2R_OJ', PP:'ID_TK2R_PS', PM:'ID_TK2R_PM', COD:'ID_TK2R_CS' };
-    const input = document.getElementById('idOtomatisBuat');
-    if (!input) return '';
-    if (!format[kodeRole]) { input.value = ''; return ''; }
-    const id = format[kodeRole] + '-' + Math.floor(Math.random()*9000+1000);
-    input.value = id;
-    return id;
-}
-
-function cekRoleBuatAkun() {
-    const role = document.getElementById('roleAkunBuat').value;
-    const bagianNIK = document.getElementById('bagianNIKBuat');
-    const nikInput = document.getElementById('nikKtpBuat');
-    const info = document.getElementById('infoRoleBuat');
-    const nikRoles = ['SOT','SOO','TK','OJ','PP','PM','COD'];
-    if (nikRoles.includes(role)) {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required','');
-        info.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i> Akun ' + role + ' - Langsung AKTIF';
-    } else {
-        bagianNIK.style.display = 'none';
-        nikInput.removeAttribute('required');
-        info.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i> Akun ' + role + ' - Langsung AKTIF';
+function generateID(kodeRole) {
+    const formatID = {
+        'CT': 'ID_TK2R_CUST',
+        'TK': 'ID_TK2R_TK',
+        'PP': 'ID_TK2R_PS',
+        'PM': 'ID_TK2R_PM',
+        'COD': 'ID_TK2R_CS',
+        'OJ': 'ID_TK2R_OJ'
+    };
+    
+    if (!formatID[kodeRole]) {
+        document.getElementById('idOtomatis').value = '';
+        document.getElementById('idOtomatis').placeholder = 'Pilih role terlebih dahulu';
+        return '';
     }
-    generateIDBuat(role);
-    cekTombolBuatAktif();
+    
+    const nomorUrut = Math.floor(Math.random() * 9000) + 1000;
+    const idLengkap = formatID[kodeRole] + '-' + nomorUrut;
+    
+    document.getElementById('idOtomatis').value = idLengkap;
+    console.log('ID Otomatis dibuat:', idLengkap);
+    return idLengkap;
 }
 
-function ambilKoordinatBuat() {
-    const status = document.getElementById('statusKoordinatBuat');
-    const tombol = document.getElementById('tombolAmbilKoordinatBuat');
-    if (!navigator.geolocation) { status.innerHTML = 'Geolokasi tidak didukung'; return; }
-    status.innerHTML = 'Mengambil lokasi...';
-    tombol.disabled = true;
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        document.getElementById('latitudeBuat').value = pos.coords.latitude;
-        document.getElementById('longitudeBuat').value = pos.coords.longitude;
-        document.getElementById('textLatitudeBuat').textContent = pos.coords.latitude;
-        document.getElementById('textLongitudeBuat').textContent = pos.coords.longitude;
-        status.innerHTML = 'Lokasi berhasil!'; status.style.color = 'green';
-        document.getElementById('koordinatTextBuat').classList.remove('d-none');
-        tombol.disabled = false;
-        cekTombolBuatAktif();
-    }, function() {
-        status.innerHTML = 'Gagal mengambil lokasi'; status.style.color = 'red';
-        tombol.disabled = false;
-    });
-}
-
-function cekTombolBuatAktif() {
-    const lat = document.getElementById('latitudeBuat').value;
-    const lng = document.getElementById('longitudeBuat').value;
-    const role = document.getElementById('roleAkunBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
-    const btn = document.getElementById('tombolBuatAkun');
-    if (btn) btn.disabled = !(lat && lng && role && id);
-}
-
-function prosesBuatAkun(event) {
+// ============================================
+// PROSES DAFTAR
+// ============================================
+function prosesDaftar(event) {
     event.preventDefault();
-    const notif = document.getElementById('notifikasiBuatAkun');
-    const pass = document.getElementById('passwordBuat').value;
-    const konf = document.getElementById('konfirmasiPasswordBuat').value;
-    const nama = document.getElementById('namaLengkapBuat').value;
-    const user = document.getElementById('usernameBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
-
-    if (pass !== konf) {
-        notif.className = 'alert alert-warning';
-        notif.innerHTML = 'Password tidak cocok!';
-        notif.classList.remove('d-none');
+    const notifikasi = document.getElementById('notifikasiDaftar');
+    const password = document.getElementById('passwordDaftar').value;
+    const konfirmasi = document.getElementById('konfirmasiPassword').value;
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+    const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
+    
+    console.log('=== PROSES DAFTAR ===');
+    console.log('Role:', role);
+    console.log('ID Otomatis:', idOtomatis);
+    console.log('Latitude:', lat);
+    console.log('Longitude:', lng);
+    
+    if (lat === '' || lng === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anda wajib mengambil titik koordinat lokasi terlebih dahulu!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
         return false;
     }
-    notif.className = 'alert alert-success';
-    notif.innerHTML = `<strong>Akun berhasil dibuat!</strong><br>Nama: ${nama}<br>ID: ${id}<br>Username: ${user}<br>Status: AKTIF`;
-    notif.classList.remove('d-none');
-    document.getElementById('formBuatAkun').reset();
-    document.getElementById('idOtomatisBuat').value = '';
-    document.getElementById('tombolBuatAkun').disabled = true;
-    document.getElementById('koordinatTextBuat').classList.add('d-none');
+    if (role === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Silakan pilih jenis akun terlebih dahulu!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return false;
+    }
+    if (password !== konfirmasi) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi Password tidak cocok!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return false;
+    }
+    
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pendaftaran berhasil! ID Anda: ' + idOtomatis + '. Silakan login.';
+    notifikasi.classList.remove('d-none');
+    console.log('Pendaftaran sukses, ID:', idOtomatis);
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
     return false;
 }
-<!--- ===== AKHIR BLOK 9.1 ===== --->
+
+// ============================================
+// CEK ROLE PENDAFTARAN (dengan Generate ID)
+// ============================================
+function cekRolePendaftaran() {
+    const role = document.getElementById('roleAkun').value;
+    const bagianNIK = document.getElementById('bagianNIK');
+    const nikInput = document.getElementById('nikKtp');
+    const infoRole = document.getElementById('infoRole');
+    
+    console.log('Role dipilih:', role);
+    
+    if (role === 'CT') {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #4CAF50;"></i>Akun Customer akan langsung aktif tanpa persetujuan';
+        generateID('CT');
+    } else if (role === 'TK') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-store me-1" style="color: #FF8C00;"></i>Akun Toko memerlukan verifikasi Admin';
+        generateID('TK');
+    } else if (role === 'OJ') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-motorcycle me-1" style="color: #FF6B00;"></i>Akun Ojek memerlukan verifikasi Admin';
+        generateID('OJ');
+    } else if (role === 'PP') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-shopping-basket me-1" style="color: #FF8C00;"></i>Akun Pedagang Pasar memerlukan verifikasi Admin';
+        generateID('PP');
+    } else if (role === 'PM') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-utensils me-1" style="color: #FF8C00;"></i>Akun Pedagang Makanan memerlukan verifikasi Admin';
+        generateID('PM');
+    } else if (role === 'COD') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-truck me-1" style="color: #FF8C00;"></i>Akun COD Seller memerlukan verifikasi Admin';
+        generateID('COD');
+    } else {
+        bagianNIK.style.display = 'block';
+        nikInput.removeAttribute('required');
+        infoRole.innerHTML = '';
+        document.getElementById('idOtomatis').value = '';
+        document.getElementById('idOtomatis').placeholder = 'Pilih role terlebih dahulu';
+    }
+    
+    cekTombolAktif();
+}
+
+// ============================================
+// AMBIL KOORDINAT
+// ============================================
+function ambilKoordinat() {
+    const statusKoordinat = document.getElementById('statusKoordinat');
+    const koordinatText = document.getElementById('koordinatText');
+    const tombolAmbil = document.getElementById('tombolAmbilKoordinat');
+    
+    if (!navigator.geolocation) {
+        statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>Browser Anda tidak mendukung Geolocation';
+        return;
+    }
+    statusKoordinat.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="color: #FF8C00;"></span>Mengambil lokasi...';
+    tombolAmbil.disabled = true;
+    
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            document.getElementById('textLatitude').textContent = lat;
+            document.getElementById('textLongitude').textContent = lng;
+            statusKoordinat.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Lokasi berhasil diambil!';
+            statusKoordinat.className = 'mt-2 small fw-bold';
+            statusKoordinat.style.color = '#FF8C00';
+            koordinatText.classList.remove('d-none');
+            tombolAmbil.disabled = false;
+            tombolAmbil.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
+            console.log('Koordinat diambil:', lat, lng);
+            cekTombolAktif();
+        },
+        function(error) {
+            let pesanError = 'Gagal mengambil lokasi';
+            if (error.code === error.PERMISSION_DENIED) pesanError = 'Izin lokasi ditolak. Aktifkan GPS di pengaturan browser';
+            else if (error.code === error.POSITION_UNAVAILABLE) pesanError = 'Informasi lokasi tidak tersedia';
+            else if (error.code === error.TIMEOUT) pesanError = 'Waktu permintaan lokasi habis';
+            statusKoordinat.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>' + pesanError;
+            statusKoordinat.className = 'mt-2 small text-danger';
+            tombolAmbil.disabled = false;
+            tombolAmbil.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Ambil Lokasi Lagi';
+            console.log('Gagal ambil koordinat:', pesanError);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+}
+
+// ============================================
+// CEK TOMBOL AKTIF
+// ============================================
+function cekTombolAktif() {
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+    const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
+    const tombolDaftar = document.getElementById('tombolDaftar');
+    const tombolAjukan = document.getElementById('tombolAjukan');
+    if (lat !== '' && lng !== '' && role !== '' && idOtomatis !== '') {
+        tombolDaftar.disabled = false;
+        tombolAjukan.disabled = false;
+        console.log('Tombol Daftar dan Ajukan diaktifkan');
+    } else {
+        tombolDaftar.disabled = true;
+        tombolAjukan.disabled = true;
+    }
+}
+
+// ============================================
+// AJUKAN PENDAFTARAN
+// ============================================
+function ajukanPendaftaran() {
+    const notifikasi = document.getElementById('notifikasiDaftar');
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+    const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
+    
+    console.log('=== AJUKAN PENDAFTARAN ===');
+    console.log('ID Otomatis:', idOtomatis);
+    
+    if (lat === '' || lng === '' || role === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Pastikan Anda sudah memilih role dan mengambil koordinat!';
+        notifikasi.classList.remove('d-none');
+        window.scrollTo(0, 0);
+        return;
+    }
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pengajuan berhasil dikirim! ID Anda: ' + idOtomatis + '. Admin akan memproses.';
+    notifikasi.classList.remove('d-none');
+    console.log('Pengajuan sukses, ID:', idOtomatis);
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
+}
+
+// ============================================
+// PROSES LUPA PASSWORD
+// ============================================
+function prosesLupaPassword(event) {
+    event.preventDefault();
+    const identitas = document.getElementById('identitasLupa').value.trim();
+    const notifikasi = document.getElementById('notifikasiLupaPassword');
+    if (identitas === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username atau Email wajib diisi!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link reset password telah dikirim ke email Anda.';
+    notifikasi.classList.remove('d-none');
+    console.log('Lupa password untuk:', identitas);
+    return false;
+}
+
+// ============================================
+// PROSES RESET PASSWORD
+// ============================================
+function prosesResetPassword(event) {
+    event.preventDefault();
+    const passwordBaru = document.getElementById('passwordBaru').value;
+    const konfirmasi = document.getElementById('konfirmasiPasswordBaru').value;
+    const notifikasi = document.getElementById('notifikasiLupaPassword');
+    if (passwordBaru.length < 6) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password minimal 6 karakter!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    if (passwordBaru !== konfirmasi) {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password dan Konfirmasi tidak cocok!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    notifikasi.className = 'alert alert-success';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Password berhasil direset! Silakan login.';
+    notifikasi.classList.remove('d-none');
+    console.log('Password berhasil direset');
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiLupaPassword').classList.add('d-none'); }, 2000);
+    return false;
+}
+<!--- ===== AKHIR BLOK 9.6 ===== --->
+    <!--- ===== BLOK 9.7 Penutup HTML ===== --->
 </script>
 </body>
 </html>
-
+<!--- ===== AKHIR BLOK 9.7 ===== --->
      
