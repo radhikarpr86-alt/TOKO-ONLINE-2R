@@ -897,7 +897,44 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 10.12 ===== --->
-
+<!--- ===== BLOK 10.13 Container Persetujuan Akun (disembunyikan) ===== --->
+<div id="halamanPersetujuanAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h5>
+                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="notifikasiPersetujuan" class="alert d-none"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Tanggal Daftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPending">
+                            <!-- Data akan dimuat via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tidakAdaPending" class="text-center py-4 text-muted d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h5>Tidak ada akun yang menunggu persetujuan</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.13 ===== --->
 <!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -1020,7 +1057,7 @@ const menuConfig = {
             { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
             { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
-            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
+            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13', aksi: 'persetujuanAkun' }
             { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
             { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
@@ -1176,6 +1213,114 @@ function prosesBuatAkun(event) {
     return false;
 }
 <!--- ===== AKHIR BLOK 9.2 ===== --->
+<!--- ===== BLOK 9.9 JavaScript Persetujuan Akun ===== --->
+// ============================================
+// DATA DUMMY PENDAFTARAN PENDING
+// ============================================
+const dataPending = [
+    { id: 'ID_TK2R_TK-1001', nama: 'Toko Maju Jaya', role: 'Toko', username: 'tokomaju', tgl: '2026-07-25' },
+    { id: 'ID_TK2R_OJ-1002', nama: 'Ojek Sigap', role: 'Ojek', username: 'ojeksigap', tgl: '2026-07-26' },
+    { id: 'ID_TK2R_PM-1003', nama: 'Warung Makan Enak', role: 'Pedagang Makanan', username: 'wmakanenak', tgl: '2026-07-26' },
+    { id: 'ID_TK2R_CS-1004', nama: 'COD Seller Murah', role: 'COD Seller', username: 'codmurah', tgl: '2026-07-27' }
+];
+
+// ============================================
+// TAMPILKAN HALAMAN PERSETUJUAN
+// ============================================
+function tampilkanPersetujuanAkun() {
+    const konten = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
+    const container = document.getElementById('halamanPersetujuanAkunContainer');
+    if (container) {
+        konten.innerHTML = container.innerHTML;
+        muatTabelPending();
+    }
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) offcanvas.hide();
+}
+
+// ============================================
+// MUAT DATA PENDING KE TABEL
+// ============================================
+function muatTabelPending() {
+    const tbody = document.getElementById('tabelPending');
+    const tidakAda = document.getElementById('tidakAdaPending');
+    if (!tbody) return;
+    
+    if (dataPending.length === 0) {
+        tbody.innerHTML = '';
+        tidakAda.classList.remove('d-none');
+        return;
+    }
+    tidakAda.classList.add('d-none');
+    
+    let rows = '';
+    dataPending.forEach((item, index) => {
+        rows += `
+            <tr id="row-${index}">
+                <td><span class="fw-bold">${item.id}</span></td>
+                <td>${item.nama}</td>
+                <td>${item.role}</td>
+                <td>${item.username}</td>
+                <td>${item.tgl}</td>
+                <td>
+                    <button class="btn btn-sm btn-success me-1" onclick="setujuiAkun(${index})">
+                        <i class="fas fa-check"></i> Setujui
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="tolakAkun(${index})">
+                        <i class="fas fa-times"></i> Tolak
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = rows;
+}
+
+// ============================================
+// SETUJUI AKUN
+// ============================================
+function setujuiAkun(index) {
+    const notif = document.getElementById('notifikasiPersetujuan');
+    const item = dataPending[index];
+    if (!item) return;
+    
+    dataPending.splice(index, 1);
+    
+    notif.className = 'alert alert-success';
+    notif.innerHTML = `<i class="fas fa-check-circle me-2"></i>Akun <strong>${item.nama}</strong> (${item.id}) telah <strong>DISETUJUI</strong> dan sekarang AKTIF.`;
+    notif.classList.remove('d-none');
+    
+    muatTabelPending();
+    
+    setTimeout(() => {
+        notif.classList.add('d-none');
+    }, 4000);
+}
+
+// ============================================
+// TOLAK AKUN
+// ============================================
+function tolakAkun(index) {
+    const notif = document.getElementById('notifikasiPersetujuan');
+    const item = dataPending[index];
+    if (!item) return;
+    
+    if (!confirm(`Apakah Anda yakin menolak akun ${item.nama} (${item.id})?`)) return;
+    
+    dataPending.splice(index, 1);
+    
+    notif.className = 'alert alert-warning';
+    notif.innerHTML = `<i class="fas fa-times-circle me-2"></i>Akun <strong>${item.nama}</strong> (${item.id}) telah <strong>DITOLAK</strong>.`;
+    notif.classList.remove('d-none');
+    
+    muatTabelPending();
+    
+    setTimeout(() => {
+        notif.classList.add('d-none');
+    }, 4000);
+}
+<!--- ===== AKHIR BLOK 9.9 ===== --->
 </script>
 </body>
 </html>
