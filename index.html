@@ -973,12 +973,14 @@ function togglePasswordLogin() {
     if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
+
 function togglePasswordDaftar() {
     const pw = document.getElementById('passwordDaftar');
     const icon = document.getElementById('iconToggleDaftar');
     if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
+
 function togglePasswordBaru() {
     const pw = document.getElementById('passwordBaru');
     const icon = document.getElementById('iconToggleBaru');
@@ -1326,6 +1328,114 @@ function tampilkanPersetujuanAkun() {
 }
 </script>
 <!--- ===== AKHIR BLOK 9.5 ===== --->
+<!--- ===== BLOK 9.6 JavaScript Pendaftaran Akun ===== --->
+<script>
+// ========== PENDAFTARAN AKUN ==========
+function generateIDPendaftaran(kodeRole) {
+    const format = { TK:'ID_TK2R_TK', OJ:'ID_TK2R_OJ', PP:'ID_TK2R_PS', PM:'ID_TK2R_PM', COD:'ID_TK2R_CS', CT:'ID_TK2R_CUST' };
+    const input = document.getElementById('idOtomatis');
+    if (!input) return '';
+    if (!format[kodeRole]) { input.value = ''; return ''; }
+    const id = format[kodeRole] + '-' + Math.floor(Math.random()*9000+1000);
+    input.value = id;
+    return id;
+}
+
+function cekRolePendaftaran() {
+    const role = document.getElementById('roleAkun').value;
+    const bagianNIK = document.getElementById('bagianNIK');
+    const nikInput = document.getElementById('nikKtp');
+    const info = document.getElementById('infoRole');
+    const nikRoles = ['TK','OJ','PP','PM','COD'];
+    if (nikRoles.includes(role)) {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required','');
+    } else {
+        bagianNIK.style.display = 'none';
+        nikInput.removeAttribute('required');
+    }
+    if (role === 'CT') {
+        info.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i> Customer akan langsung AKTIF tanpa persetujuan';
+    } else {
+        info.innerHTML = '<i class="fas fa-info-circle me-1" style="color:#FF8C00;"></i> Akun akan menunggu persetujuan Admin';
+    }
+    generateIDPendaftaran(role);
+    cekTombolDaftarAktif();
+}
+
+function ambilKoordinat() {
+    const status = document.getElementById('statusKoordinat');
+    const tombol = document.getElementById('tombolAmbilKoordinat');
+    if (!navigator.geolocation) { status.innerHTML = 'Geolokasi tidak didukung'; return; }
+    status.innerHTML = 'Mengambil lokasi...';
+    tombol.disabled = true;
+    navigator.geolocation.getCurrentPosition(function(pos) {
+        document.getElementById('latitude').value = pos.coords.latitude;
+        document.getElementById('longitude').value = pos.coords.longitude;
+        document.getElementById('textLatitude').textContent = pos.coords.latitude;
+        document.getElementById('textLongitude').textContent = pos.coords.longitude;
+        status.innerHTML = 'Lokasi berhasil!'; status.style.color = 'green';
+        document.getElementById('koordinatText').classList.remove('d-none');
+        tombol.disabled = false;
+        cekTombolDaftarAktif();
+    }, function() {
+        status.innerHTML = 'Gagal mengambil lokasi'; status.style.color = 'red';
+        tombol.disabled = false;
+    });
+}
+
+function cekTombolDaftarAktif() {
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+    const role = document.getElementById('roleAkun').value;
+    const id = document.getElementById('idOtomatis').value;
+    const btnDaftar = document.getElementById('tombolDaftar');
+    const btnAjukan = document.getElementById('tombolAjukan');
+    const aktif = (lat && lng && role && id);
+    if (btnDaftar) btnDaftar.disabled = !aktif;
+    if (btnAjukan) btnAjukan.disabled = !aktif;
+}
+
+function prosesDaftar(event) {
+    event.preventDefault();
+    const role = document.getElementById('roleAkun').value;
+    const notif = document.getElementById('notifikasiDaftar');
+    if (role === 'CT') {
+        // Customer langsung aktif
+        notif.className = 'alert alert-success';
+        notif.innerHTML = 'Pendaftaran Customer berhasil! Akun langsung AKTIF.';
+        notif.classList.remove('d-none');
+        resetFormDaftar();
+    } else {
+        // Selain customer, kirim ke antrian persetujuan
+        notif.className = 'alert alert-info';
+        notif.innerHTML = 'Pendaftaran berhasil dikirim. Menunggu persetujuan Admin.';
+        notif.classList.remove('d-none');
+        resetFormDaftar();
+    }
+    return false;
+}
+
+function ajukanPendaftaran() {
+    const notif = document.getElementById('notifikasiDaftar');
+    notif.className = 'alert alert-info';
+    notif.innerHTML = 'Pengajuan pembuatan akun telah dikirim ke Admin.';
+    notif.classList.remove('d-none');
+    resetFormDaftar();
+}
+
+function resetFormDaftar() {
+    document.getElementById('formDaftar').reset();
+    document.getElementById('idOtomatis').value = '';
+    document.getElementById('latitude').value = '';
+    document.getElementById('longitude').value = '';
+    document.getElementById('koordinatText').classList.add('d-none');
+    document.getElementById('statusKoordinat').innerHTML = '<i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!';
+    document.getElementById('tombolDaftar').disabled = true;
+    document.getElementById('tombolAjukan').disabled = true;
+}
+</script>
+<!--- ===== AKHIR BLOK 9.6 ===== --->
 
 </body>
 </html>
