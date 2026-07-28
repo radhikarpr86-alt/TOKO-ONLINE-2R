@@ -455,18 +455,22 @@
 <!--- ===== BLOK 5 Halaman Dasbor Default Setelah Login ===== --->
 <div id="halamanDasbor" class="page-section">
 
-<!--- ===== BLOK 5.1 Navigasi Atas Dasbor ===== --->
+<!--- ===== BLOK 5.1 Navigasi Atas Dasbor (Revisi – Tombol Selalu Ada) ===== --->
 <nav class="navbar navbar-expand-lg navbar-orange sticky-top">
     <div class="container">
-        <button class="btn text-white me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+        <!-- Tombol hamburger TANPA d-lg-none, agar selalu tampil di semua layar -->
+        <button class="btn text-white me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
             <i class="fas fa-bars fa-lg"></i>
         </button>
+        
         <a class="navbar-brand fw-bold text-white" href="#">
             <i class="fas fa-store-alt me-2"></i>Toko Online 2R
         </a>
+        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDasbor">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarDasbor">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item dropdown">
@@ -474,7 +478,7 @@
                         <i class="fas fa-user-circle fa-lg me-1"></i>
                         <span id="namaUserDisplay">Pengguna</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><span class="dropdown-item-text fw-bold" id="roleUserDisplay">Role: -</span></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
@@ -485,7 +489,7 @@
                         <i class="fas fa-bell fa-lg"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="jumlahNotifikasi">0</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" id="daftarNotifikasi" style="min-width: 300px;">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 300px;">
                         <li><span class="dropdown-item-text text-muted">Belum ada notifikasi</span></li>
                     </ul>
                 </li>
