@@ -1051,20 +1051,14 @@
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 10.12 ===== --->
-
-<!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
+<!--- ===== BLOK 9.1 ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-<!--- ===== AKHIR BLOK 9.1 ===== --->
-<!--- ===== BLOK 9.2 JavaScript Core: Variabel Global, Navigasi, Toggle, Waktu ===== --->
 // ============================================
-// DATA SUPERADMIN (Tertanam)
+// DATA SUPERADMIN
 // ============================================
 const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 const SUPERADMIN_PASSWORD = 'MyHand0286';
-
 let userAktif = null;
 let kontenAsliDasbor = null;
 
@@ -1075,11 +1069,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// NAVIGASI HALAMAN
+// NAVIGASI
 // ============================================
 function tampilkanHalaman(halaman) {
-    const semua = document.querySelectorAll('.page-section');
-    semua.forEach(hal => hal.classList.remove('active'));
+    document.querySelectorAll('.page-section').forEach(h => h.classList.remove('active'));
     const target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
     if (target) target.classList.add('active');
     window.scrollTo(0,0);
@@ -1108,7 +1101,7 @@ function togglePasswordBaru() {
 }
 
 // ============================================
-// UPDATE WAKTU REAL‑TIME WIB
+// WAKTU WIB
 // ============================================
 function updateWaktu() {
     const s = new Date();
@@ -1123,7 +1116,7 @@ function updateWaktu() {
 setInterval(updateWaktu, 1000);
 
 // ============================================
-// PROSES LOGIN (HANYA SUPERADMIN)
+// LOGIN SUPERADMIN
 // ============================================
 function prosesLogin(event) {
     event.preventDefault();
@@ -1174,9 +1167,10 @@ function prosesLogout() {
     document.getElementById('usernameLogin').value = '';
     document.getElementById('passwordLogin').value = '';
 }
-<!--- ===== AKHIR BLOK 9.2 ===== --->
 
-<!--- ===== BLOK 9.3 KONFIGURASI MENU SEMUA ROLE ===== --->
+// ============================================
+// MENU CONFIG (SuperAdmin saja, role lain bisa ditambahkan)
+// ============================================
 const menuConfig = {
     'SA': {
         namaRole: 'SuperAdmin',
@@ -1216,12 +1210,12 @@ const menuConfig = {
             { nama: 'Bantuan & FAQ', ikon: 'fas fa-question-circle', blok: '10.33' },
             { nama: 'Dokumentasi', ikon: 'fas fa-book', blok: '10.34' }
         ]
-    },
-    // ... (data role lain tetap sama, tidak perlu diubah)
+    }
 };
-<!--- ===== AKHIR BLOK 9.3 ===== --->
 
-<!--- ===== BLOK 9.4 MENU NAVIGASI & PLACEHOLDER ===== --->
+// ============================================
+// LOAD MENU KE SIDEBAR
+// ============================================
 function loadMenuNavigasi(kodeRole) {
     const config = menuConfig[kodeRole] || menuConfig['CT'];
     const menuContainer = document.getElementById('menuNavigasi');
@@ -1254,24 +1248,15 @@ function kembaliKeDasbor() {
         updateWaktu();
     }
 }
-<!--- ===== AKHIR BLOK 9.4 ===== --->
 
-<!--- ===== BLOK 9.5 PENDATAAN & GEOLOKASI ===== --->
-// (Semua fungsi pendaftaran, generateID, cekRole, ambilKoordinat, dll tetap sama seperti sebelumnya)
-<!--- ===== AKHIR BLOK 9.5 ===== --->
-
-<!--- ===== BLOK 9.6 LUPA PASSWORD ===== --->
-// (Fungsi lupa password dan reset password tetap sama)
-<!--- ===== AKHIR BLOK 9.6 ===== --->
-
-<!--- ===== BLOK 9.7 FORM BUAT AKUN (SUPERADMIN) ===== --->
+// ============================================
+// FORM BUAT AKUN (SUPERADMIN)
+// ============================================
 function tampilkanFormBuatAkun() {
     const konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
     const form = document.getElementById('formBuatAkunContainer');
-    if (form) {
-        konten.innerHTML = form.innerHTML;
-    }
+    if (form) konten.innerHTML = form.innerHTML;
     const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
 }
@@ -1327,7 +1312,7 @@ function ambilKoordinatBuat() {
         document.getElementById('koordinatTextBuat').classList.remove('d-none');
         tombol.disabled = false;
         cekTombolBuatAktif();
-    }, function(err) {
+    }, function() {
         status.innerHTML = 'Gagal mengambil lokasi'; status.style.color = 'red';
         tombol.disabled = false;
     });
@@ -1366,206 +1351,9 @@ function prosesBuatAkun(event) {
     document.getElementById('koordinatTextBuat').classList.add('d-none');
     return false;
 }
-<!--- ===== AKHIR BLOK 9.7 ===== --->
-<!--- ===== BLOK 9.8 JavaScript Tambahan untuk Buat Akun ===== --->
-// ============================================
-// TAMPILKAN FORM BUAT AKUN DI DALAM KONTEN DASBOR
-// ============================================
-function tampilkanFormBuatAkun() {
-    const konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) {
-        kontenAsliDasbor = konten.innerHTML;
-    }
-    // Clone konten form buat akun
-    const formContainer = document.getElementById('formBuatAkunContainer');
-    if (formContainer) {
-        konten.innerHTML = formContainer.innerHTML;
-    }
-    // Tutup offcanvas
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
-}
-
-// ============================================
-// TOGGLE PASSWORD BUAT AKUN
-// ============================================
-function togglePasswordBuat() {
-    const pw = document.getElementById('passwordBuat');
-    const icon = document.getElementById('iconTogglePasswordBuat');
-    if (pw && icon) {
-        if (pw.type === 'password') {
-            pw.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            pw.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    }
-}
-
-// ============================================
-// GENERATE ID OTOMATIS BUAT AKUN
-// ============================================
-function generateIDBuat(kodeRole) {
-    const formatID = {
-        'ADM': 'ID_TK2R_ADM',
-        'SOT': 'ID_TK2R_SOT',
-        'SOO': 'ID_TK2R_SOO',
-        'MKT': 'ID_TK2R_MKT',
-        'TGH': 'ID_TK2R_TGH',
-        'CS': 'ID_TK2R_CS',
-        'CT': 'ID_TK2R_CUST',
-        'TK': 'ID_TK2R_TK',
-        'OJ': 'ID_TK2R_OJ',
-        'PP': 'ID_TK2R_PS',
-        'PM': 'ID_TK2R_PM',
-        'COD': 'ID_TK2R_CS'
-    };
-    const input = document.getElementById('idOtomatisBuat');
-    if (!input) return '';
-    if (!formatID[kodeRole]) {
-        input.value = '';
-        input.placeholder = 'Pilih jenis akun terlebih dahulu';
-        return '';
-    }
-    const nomor = Math.floor(Math.random() * 9000) + 1000;
-    const id = formatID[kodeRole] + '-' + nomor;
-    input.value = id;
-    return id;
-}
-
-// ============================================
-// CEK ROLE BUAT AKUN
-// ============================================
-function cekRoleBuatAkun() {
-    const role = document.getElementById('roleAkunBuat').value;
-    const bagianNIK = document.getElementById('bagianNIKBuat');
-    const nikInput = document.getElementById('nikKtpBuat');
-    const info = document.getElementById('infoRoleBuat');
-    
-    const roleInfo = {
-        'ADM': { nik: false, teks: 'Akun Staf Admin - Langsung AKTIF' },
-        'SOT': { nik: true, teks: 'Akun Staf Owner Toko - Langsung AKTIF' },
-        'SOO': { nik: true, teks: 'Akun Staf Owner Ojek - Langsung AKTIF' },
-        'MKT': { nik: false, teks: 'Akun Staf Marketing - Langsung AKTIF' },
-        'TGH': { nik: false, teks: 'Akun Staf Penagihan - Langsung AKTIF' },
-        'CS': { nik: false, teks: 'Akun Customer Service - Langsung AKTIF' },
-        'CT': { nik: false, teks: 'Akun Customer - Langsung AKTIF' },
-        'TK': { nik: true, teks: 'Akun Toko - Langsung AKTIF' },
-        'OJ': { nik: true, teks: 'Akun Ojek - Langsung AKTIF' },
-        'PP': { nik: true, teks: 'Akun Pedagang Pasar - Langsung AKTIF' },
-        'PM': { nik: true, teks: 'Akun Pedagang Makanan - Langsung AKTIF' },
-        'COD': { nik: true, teks: 'Akun COD Seller - Langsung AKTIF' }
-    };
-    
-    if (roleInfo[role]) {
-        bagianNIK.style.display = roleInfo[role].nik ? 'block' : 'none';
-        if (roleInfo[role].nik) {
-            nikInput.setAttribute('required', 'required');
-        } else {
-            nikInput.removeAttribute('required');
-        }
-        info.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i>' + roleInfo[role].teks;
-        generateIDBuat(role);
-    } else {
-        bagianNIK.style.display = 'block';
-        nikInput.removeAttribute('required');
-        info.innerHTML = '';
-        document.getElementById('idOtomatisBuat').value = '';
-    }
-    cekTombolBuatAktif();
-}
-
-// ============================================
-// AMBIL KOORDINAT BUAT AKUN
-// ============================================
-function ambilKoordinatBuat() {
-    const status = document.getElementById('statusKoordinatBuat');
-    const koordinatText = document.getElementById('koordinatTextBuat');
-    const tombol = document.getElementById('tombolAmbilKoordinatBuat');
-    
-    if (!navigator.geolocation) {
-        status.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>Geolocation tidak didukung';
-        return;
-    }
-    status.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="color:#FF8C00;"></span>Mengambil lokasi...';
-    tombol.disabled = true;
-    
-    navigator.geolocation.getCurrentPosition(
-        function(pos) {
-            document.getElementById('latitudeBuat').value = pos.coords.latitude;
-            document.getElementById('longitudeBuat').value = pos.coords.longitude;
-            document.getElementById('textLatitudeBuat').textContent = pos.coords.latitude;
-            document.getElementById('textLongitudeBuat').textContent = pos.coords.longitude;
-            status.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i>Lokasi berhasil diambil!';
-            status.style.color = '#4CAF50';
-            koordinatText.classList.remove('d-none');
-            tombol.disabled = false;
-            tombol.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
-            cekTombolBuatAktif();
-        },
-        function(err) {
-            let msg = 'Gagal mengambil lokasi';
-            if (err.code === 1) msg = 'Izin lokasi ditolak';
-            else if (err.code === 2) msg = 'Lokasi tidak tersedia';
-            else if (err.code === 3) msg = 'Timeout';
-            status.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i>' + msg;
-            status.style.color = 'red';
-            tombol.disabled = false;
-            tombol.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Lagi';
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-}
-
-// ============================================
-// CEK TOMBOL BUAT AKUN AKTIF
-// ============================================
-function cekTombolBuatAktif() {
-    const lat = document.getElementById('latitudeBuat').value;
-    const lng = document.getElementById('longitudeBuat').value;
-    const role = document.getElementById('roleAkunBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
-    const btn = document.getElementById('tombolBuatAkun');
-    if (btn) btn.disabled = !(lat && lng && role && id);
-}
-
-// ============================================
-// PROSES BUAT AKUN
-// ============================================
-function prosesBuatAkun(event) {
-    event.preventDefault();
-    const notif = document.getElementById('notifikasiBuatAkun');
-    const password = document.getElementById('passwordBuat').value;
-    const konfirmasi = document.getElementById('konfirmasiPasswordBuat').value;
-    const nama = document.getElementById('namaLengkapBuat').value;
-    const username = document.getElementById('usernameBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
-    
-    if (password !== konfirmasi) {
-        notif.className = 'alert alert-warning';
-        notif.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Password tidak cocok!';
-        notif.classList.remove('d-none');
-        return false;
-    }
-    
-    notif.className = 'alert alert-success';
-    notif.innerHTML = '<i class="fas fa-check-circle me-2"></i><strong>Akun berhasil dibuat!</strong><br>Nama: ' + nama + '<br>ID: ' + id + '<br>Username: ' + username + '<br>Status: <span class="badge bg-success">AKTIF</span>';
-    notif.classList.remove('d-none');
-    
-    // Reset form
-    document.getElementById('formBuatAkun').reset();
-    document.getElementById('idOtomatisBuat').value = '';
-    document.getElementById('tombolBuatAkun').disabled = true;
-    document.getElementById('koordinatTextBuat').classList.add('d-none');
-    document.getElementById('statusKoordinatBuat').innerHTML = '<i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil';
-    document.getElementById('statusKoordinatBuat').style.color = '';
-    return false;
-}
-<!--- ===== AKHIR BLOK 9.8 ===== --->
-    <!--- ===== BLOK 9.7 Penutup HTML ===== --->
+<!--- ===== AKHIR BLOK 9.1 ===== --->
 </script>
 </body>
 </html>
-<!--- ===== AKHIR BLOK 9.7 ===== --->
+
      
