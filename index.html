@@ -371,7 +371,6 @@
                     
                     <div id="notifikasiLupaPassword" class="alert d-none" role="alert"></div>
                     
-                    <!-- Tahap 1: Input Nomor HP atau Email -->
                     <div id="tahapSatuLupaPassword">
                         <form onsubmit="return prosesLupaPassword(event)">
                             <div class="mb-3">
@@ -404,7 +403,6 @@
                         </form>
                     </div>
                     
-                    <!-- Tahap 2: Input Password Baru (Muncul setelah verifikasi token) -->
                     <div id="tahapDuaLupaPassword" class="d-none">
                         <form onsubmit="return prosesResetPassword(event)">
                             <input type="hidden" id="tokenReset" name="token" value="">
@@ -463,7 +461,6 @@
                     
                     <hr>
                     
-                    <!-- Link Kembali ke Login -->
                     <div class="text-center">
                         <a href="#" class="fw-bold" style="color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-arrow-left me-1"></i>Kembali ke Halaman Login
@@ -473,7 +470,6 @@
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
             <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
@@ -898,81 +894,183 @@
 </div>
 <!--- ===== AKHIR BLOK 10.12 ===== --->
 
+<!--- ===== BLOK 10.13 Container Persetujuan Akun (disembunyikan) ===== --->
+<div id="halamanPersetujuanAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h5>
+                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="notifikasiPersetujuan" class="alert d-none"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Tanggal Daftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPending">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tidakAdaPending" class="text-center py-4 text-muted d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h5>Tidak ada akun yang menunggu persetujuan</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.13 ===== --->
+
+<!--- ===== BLOK 10.14 Container Kelola Akun Aktif (disembunyikan) ===== --->
+<div id="halamanKelolaAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Kelola Akun Aktif</h5>
+                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="notifikasiKelolaAkun" class="alert d-none"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelAkunAktif">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tidakAdaAkunAktif" class="text-center py-4 text-muted d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h5>Tidak ada akun aktif</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.14 ===== --->
+
 <!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
 
-<!--- ===== BLOK 9.2 JavaScript Core (BERSIH, TIDAK ADA DUPLIKASI) ===== --->
-const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
-const SUPERADMIN_PASSWORD = 'MyHand0286';
-let userAktif = null;
-let kontenAsliDasbor = null;
+<!--- ===== BLOK 9.2 JavaScript Core ===== --->
+var SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
+var SUPERADMIN_PASSWORD = 'MyHand0286';
+var userAktif = null;
+var kontenAsliDasbor = null;
 
 document.addEventListener('DOMContentLoaded', function() {
-    const kontenDasbor = document.getElementById('kontenDasbor');
-    if (kontenDasbor) kontenAsliDasbor = kontenDasbor.innerHTML;
+    var kontenDasbor = document.getElementById('kontenDasbor');
+    if (kontenDasbor) {
+        kontenAsliDasbor = kontenDasbor.innerHTML;
+    }
     updateWaktu();
 });
 
 function tampilkanHalaman(halaman) {
-    document.querySelectorAll('.page-section').forEach(hal => hal.classList.remove('active'));
-    const target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
-    if (target) target.classList.add('active');
-    window.scrollTo(0,0);
+    var semua = document.querySelectorAll('.page-section');
+    for (var i = 0; i < semua.length; i++) {
+        semua[i].classList.remove('active');
+    }
+    var target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
+    if (target) {
+        target.classList.add('active');
+    }
+    window.scrollTo(0, 0);
 }
 
 function togglePasswordLogin() {
-    const pw = document.getElementById('passwordLogin');
-    const icon = document.getElementById('iconToggleLogin');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
+    var pw = document.getElementById('passwordLogin');
+    var icon = document.getElementById('iconToggleLogin');
+    if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        pw.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
 }
+
 function togglePasswordDaftar() {
-    const pw = document.getElementById('passwordDaftar');
-    const icon = document.getElementById('iconToggleDaftar');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
+    var pw = document.getElementById('passwordDaftar');
+    var icon = document.getElementById('iconToggleDaftar');
+    if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        pw.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
 }
+
 function togglePasswordBaru() {
-    const pw = document.getElementById('passwordBaru');
-    const icon = document.getElementById('iconToggleBaru');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
+    var pw = document.getElementById('passwordBaru');
+    var icon = document.getElementById('iconToggleBaru');
+    if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        pw.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
 }
 
 function updateWaktu() {
-    const s = new Date();
-    const opt = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Jakarta' };
-    const tgl = s.toLocaleDateString('id-ID', opt);
-    const jam = s.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta' });
-    const elTgl = document.getElementById('tanggalSekarang');
-    const elJam = document.getElementById('jamSekarang');
-    if (elTgl) elTgl.textContent = tgl;
-    if (elJam) elJam.textContent = jam + ' WIB';
+    var sekarang = new Date();
+    var opsiTanggal = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' };
+    var tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
+    var jamStr = sekarang.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta' });
+    var elTgl = document.getElementById('tanggalSekarang');
+    var elJam = document.getElementById('jamSekarang');
+    if (elTgl) elTgl.textContent = tanggalStr;
+    if (elJam) elJam.textContent = jamStr + ' WIB';
 }
 setInterval(updateWaktu, 1000);
 
 function prosesLogin(event) {
     event.preventDefault();
-    const u = document.getElementById('usernameLogin').value.trim();
-    const p = document.getElementById('passwordLogin').value.trim();
-    const notif = document.getElementById('notifikasiLogin');
-    
-    if (!u || !p) {
+    var username = document.getElementById('usernameLogin').value.trim();
+    var password = document.getElementById('passwordLogin').value.trim();
+    var notif = document.getElementById('notifikasiLogin');
+
+    if (!username || !password) {
         notif.className = 'alert alert-warning';
         notif.innerHTML = 'Username dan Password wajib diisi!';
         notif.classList.remove('d-none');
         return false;
     }
-    if (u === SUPERADMIN_USERNAME && p === SUPERADMIN_PASSWORD) {
-        userAktif = { nama:'SuperAdmin', role:'SuperAdmin', kodeRole:'SA', idUser:'ID_TK2R_SA-0001' };
+
+    if (username === SUPERADMIN_USERNAME && password === SUPERADMIN_PASSWORD) {
+        userAktif = { nama: 'SuperAdmin', role: 'SuperAdmin', kodeRole: 'SA', idUser: 'ID_TK2R_SA-0001' };
         notif.className = 'alert alert-success';
         notif.innerHTML = 'Login SuperAdmin berhasil!';
         notif.classList.remove('d-none');
         setTimeout(masukDasbor, 500);
         return false;
     }
+
     notif.className = 'alert alert-danger';
     notif.innerHTML = 'Username atau Password salah!';
     notif.classList.remove('d-none');
@@ -980,8 +1078,10 @@ function prosesLogin(event) {
 }
 
 function masukDasbor() {
-    const konten = document.getElementById('kontenDasbor');
-    if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
+    var konten = document.getElementById('kontenDasbor');
+    if (konten && kontenAsliDasbor) {
+        konten.innerHTML = kontenAsliDasbor;
+    }
     document.getElementById('namaUserDisplay').textContent = userAktif.nama;
     document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
     document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
@@ -995,7 +1095,8 @@ function masukDasbor() {
 }
 
 function prosesLogout() {
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    var offcanvasEl = document.getElementById('offcanvasMenu');
+    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
     if (offcanvas) offcanvas.hide();
     userAktif = null;
     tampilkanHalaman('login');
@@ -1004,7 +1105,7 @@ function prosesLogout() {
 }
 
 // ========== MENU CONFIG ==========
-const menuConfig = {
+var menuConfig = {
     'SA': {
         namaRole: 'SuperAdmin',
         menu: [
@@ -1020,8 +1121,8 @@ const menuConfig = {
             { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
             { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
-            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
-            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
+            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13', aksi: 'persetujuanAkun' },
+            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14', aksi: 'kelolaAkun' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
             { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
             { nama: 'Setting Rekening Master', ikon: 'fas fa-university', blok: '10.17' },
@@ -1048,25 +1149,32 @@ const menuConfig = {
 
 // ========== LOAD MENU & PLACEHOLDER ==========
 function loadMenuNavigasi(kodeRole) {
-    const config = menuConfig[kodeRole] || menuConfig['CT'];
-    const menuContainer = document.getElementById('menuNavigasi');
-    let htmlMenu = '';
-    config.menu.forEach(function(item) {
+    var config = menuConfig[kodeRole] || menuConfig['CT'];
+    var menuContainer = document.getElementById('menuNavigasi');
+    var htmlMenu = '';
+
+    for (var i = 0; i < config.menu.length; i++) {
+        var item = config.menu[i];
         if (item.aksi === 'buatAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+        } else if (item.aksi === 'persetujuanAkun') {
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+        } else if (item.aksi === 'kelolaAkun') {
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         } else {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu(\'' + item.nama + '\', \'' + item.blok + '\')"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         }
-    });
-    htmlMenu += `<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+    }
+
+    htmlMenu += '<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>';
     menuContainer.innerHTML = htmlMenu;
 }
 
 function tampilkanPlaceholderMenu(namaMenu, blok) {
-    const konten = document.getElementById('kontenDasbor');
+    var konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    konten.innerHTML = `<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ${blok} - ${namaMenu}</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">${namaMenu}</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>`;
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    konten.innerHTML = '<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ' + blok + ' - ' + namaMenu + '</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">' + namaMenu + '</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>';
+    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
 }
 
@@ -1079,40 +1187,68 @@ function kembaliKeDasbor() {
 
 // ========== FORM BUAT AKUN ==========
 function tampilkanFormBuatAkun() {
-    const konten = document.getElementById('kontenDasbor');
+    var konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    const form = document.getElementById('formBuatAkunContainer');
+    var form = document.getElementById('formBuatAkunContainer');
     if (form) konten.innerHTML = form.innerHTML;
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
 }
 
 function togglePasswordBuat() {
-    const pw = document.getElementById('passwordBuat');
-    const icon = document.getElementById('iconTogglePasswordBuat');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
+    var pw = document.getElementById('passwordBuat');
+    var icon = document.getElementById('iconTogglePasswordBuat');
+    if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        pw.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
 }
 
 function generateIDBuat(kodeRole) {
-    const format = { ADM:'ID_TK2R_ADM', SOT:'ID_TK2R_SOT', SOO:'ID_TK2R_SOO', MKT:'ID_TK2R_MKT', TGH:'ID_TK2R_TGH', CS:'ID_TK2R_CS', CT:'ID_TK2R_CUST', TK:'ID_TK2R_TK', OJ:'ID_TK2R_OJ', PP:'ID_TK2R_PS', PM:'ID_TK2R_PM', COD:'ID_TK2R_CS' };
-    const input = document.getElementById('idOtomatisBuat');
+    var format = {
+        ADM: 'ID_TK2R_ADM',
+        SOT: 'ID_TK2R_SOT',
+        SOO: 'ID_TK2R_SOO',
+        MKT: 'ID_TK2R_MKT',
+        TGH: 'ID_TK2R_TGH',
+        CS: 'ID_TK2R_CS',
+        CT: 'ID_TK2R_CUST',
+        TK: 'ID_TK2R_TK',
+        OJ: 'ID_TK2R_OJ',
+        PP: 'ID_TK2R_PS',
+        PM: 'ID_TK2R_PM',
+        COD: 'ID_TK2R_CS'
+    };
+    var input = document.getElementById('idOtomatisBuat');
     if (!input) return '';
-    if (!format[kodeRole]) { input.value = ''; return ''; }
-    const id = format[kodeRole] + '-' + Math.floor(Math.random()*9000+1000);
+    if (!format[kodeRole]) {
+        input.value = '';
+        return '';
+    }
+    var id = format[kodeRole] + '-' + (Math.floor(Math.random() * 9000) + 1000);
     input.value = id;
     return id;
 }
 
 function cekRoleBuatAkun() {
-    const role = document.getElementById('roleAkunBuat').value;
-    const bagianNIK = document.getElementById('bagianNIKBuat');
-    const nikInput = document.getElementById('nikKtpBuat');
-    const info = document.getElementById('infoRoleBuat');
-    const nikRoles = ['SOT','SOO','TK','OJ','PP','PM','COD'];
-    if (nikRoles.includes(role)) {
+    var role = document.getElementById('roleAkunBuat').value;
+    var bagianNIK = document.getElementById('bagianNIKBuat');
+    var nikInput = document.getElementById('nikKtpBuat');
+    var info = document.getElementById('infoRoleBuat');
+    var nikRoles = ['SOT', 'SOO', 'TK', 'OJ', 'PP', 'PM', 'COD'];
+    var perluNIK = false;
+    for (var i = 0; i < nikRoles.length; i++) {
+        if (nikRoles[i] === role) {
+            perluNIK = true;
+            break;
+        }
+    }
+    if (perluNIK) {
         bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required','');
+        nikInput.setAttribute('required', '');
     } else {
         bagianNIK.style.display = 'none';
         nikInput.removeAttribute('required');
@@ -1123,57 +1259,218 @@ function cekRoleBuatAkun() {
 }
 
 function ambilKoordinatBuat() {
-    const status = document.getElementById('statusKoordinatBuat');
-    const tombol = document.getElementById('tombolAmbilKoordinatBuat');
-    if (!navigator.geolocation) { status.innerHTML = 'Geolokasi tidak didukung'; return; }
+    var status = document.getElementById('statusKoordinatBuat');
+    var tombol = document.getElementById('tombolAmbilKoordinatBuat');
+    if (!navigator.geolocation) {
+        status.innerHTML = 'Geolokasi tidak didukung';
+        return;
+    }
     status.innerHTML = 'Mengambil lokasi...';
     tombol.disabled = true;
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        document.getElementById('latitudeBuat').value = pos.coords.latitude;
-        document.getElementById('longitudeBuat').value = pos.coords.longitude;
-        document.getElementById('textLatitudeBuat').textContent = pos.coords.latitude;
-        document.getElementById('textLongitudeBuat').textContent = pos.coords.longitude;
-        status.innerHTML = 'Lokasi berhasil!'; status.style.color = 'green';
-        document.getElementById('koordinatTextBuat').classList.remove('d-none');
-        tombol.disabled = false;
-        cekTombolBuatAktif();
-    }, function() {
-        status.innerHTML = 'Gagal mengambil lokasi'; status.style.color = 'red';
-        tombol.disabled = false;
-    });
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+            document.getElementById('latitudeBuat').value = pos.coords.latitude;
+            document.getElementById('longitudeBuat').value = pos.coords.longitude;
+            document.getElementById('textLatitudeBuat').textContent = pos.coords.latitude;
+            document.getElementById('textLongitudeBuat').textContent = pos.coords.longitude;
+            status.innerHTML = 'Lokasi berhasil!';
+            status.style.color = 'green';
+            document.getElementById('koordinatTextBuat').classList.remove('d-none');
+            tombol.disabled = false;
+            cekTombolBuatAktif();
+        },
+        function() {
+            status.innerHTML = 'Gagal mengambil lokasi';
+            status.style.color = 'red';
+            tombol.disabled = false;
+        }
+    );
 }
 
 function cekTombolBuatAktif() {
-    const lat = document.getElementById('latitudeBuat').value;
-    const lng = document.getElementById('longitudeBuat').value;
-    const role = document.getElementById('roleAkunBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
-    const btn = document.getElementById('tombolBuatAkun');
+    var lat = document.getElementById('latitudeBuat').value;
+    var lng = document.getElementById('longitudeBuat').value;
+    var role = document.getElementById('roleAkunBuat').value;
+    var id = document.getElementById('idOtomatisBuat').value;
+    var btn = document.getElementById('tombolBuatAkun');
     if (btn) btn.disabled = !(lat && lng && role && id);
 }
 
 function prosesBuatAkun(event) {
     event.preventDefault();
-    const notif = document.getElementById('notifikasiBuatAkun');
-    const pass = document.getElementById('passwordBuat').value;
-    const konf = document.getElementById('konfirmasiPasswordBuat').value;
-    const nama = document.getElementById('namaLengkapBuat').value;
-    const user = document.getElementById('usernameBuat').value;
-    const id = document.getElementById('idOtomatisBuat').value;
+    var notif = document.getElementById('notifikasiBuatAkun');
+    var pass = document.getElementById('passwordBuat').value;
+    var konf = document.getElementById('konfirmasiPasswordBuat').value;
+    var nama = document.getElementById('namaLengkapBuat').value;
+    var user = document.getElementById('usernameBuat').value;
+    var id = document.getElementById('idOtomatisBuat').value;
+
     if (pass !== konf) {
         notif.className = 'alert alert-warning';
         notif.innerHTML = 'Password tidak cocok!';
         notif.classList.remove('d-none');
         return false;
     }
+
     notif.className = 'alert alert-success';
-    notif.innerHTML = `<strong>Akun berhasil dibuat!</strong><br>Nama: ${nama}<br>ID: ${id}<br>Username: ${user}<br>Status: AKTIF`;
+    notif.innerHTML = '<strong>Akun berhasil dibuat!</strong><br>Nama: ' + nama + '<br>ID: ' + id + '<br>Username: ' + user + '<br>Status: AKTIF';
     notif.classList.remove('d-none');
     document.getElementById('formBuatAkun').reset();
     document.getElementById('idOtomatisBuat').value = '';
     document.getElementById('tombolBuatAkun').disabled = true;
     document.getElementById('koordinatTextBuat').classList.add('d-none');
     return false;
+}
+
+// ========== PERSETUJUAN AKUN ==========
+var dataPending = [
+    { id: 'ID_TK2R_TK-1001', nama: 'Toko Maju Jaya', role: 'Toko', username: 'tokomaju', tgl: '2026-07-25' },
+    { id: 'ID_TK2R_OJ-1002', nama: 'Ojek Sigap', role: 'Ojek', username: 'ojeksigap', tgl: '2026-07-26' },
+    { id: 'ID_TK2R_PM-1003', nama: 'Warung Makan Enak', role: 'Pedagang Makanan', username: 'wmakanenak', tgl: '2026-07-26' },
+    { id: 'ID_TK2R_CS-1004', nama: 'COD Seller Murah', role: 'COD Seller', username: 'codmurah', tgl: '2026-07-27' }
+];
+
+function tampilkanPersetujuanAkun() {
+    var konten = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
+    var container = document.getElementById('halamanPersetujuanAkunContainer');
+    if (container) {
+        konten.innerHTML = container.innerHTML;
+        muatTabelPending();
+    }
+    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) offcanvas.hide();
+}
+
+function muatTabelPending() {
+    var tbody = document.getElementById('tabelPending');
+    var tidakAda = document.getElementById('tidakAdaPending');
+    if (!tbody) return;
+
+    if (dataPending.length === 0) {
+        tbody.innerHTML = '';
+        tidakAda.classList.remove('d-none');
+        return;
+    }
+    tidakAda.classList.add('d-none');
+
+    var rows = '';
+    for (var i = 0; i < dataPending.length; i++) {
+        var item = dataPending[i];
+        rows += '<tr id="row-' + i + '">' +
+            '<td><span class="fw-bold">' + item.id + '</span></td>' +
+            '<td>' + item.nama + '</td>' +
+            '<td>' + item.role + '</td>' +
+            '<td>' + item.username + '</td>' +
+            '<td>' + item.tgl + '</td>' +
+            '<td>' +
+            '<button class="btn btn-sm btn-success me-1" onclick="setujuiAkun(' + i + ')"><i class="fas fa-check"></i> Setujui</button>' +
+            '<button class="btn btn-sm btn-danger" onclick="tolakAkun(' + i + ')"><i class="fas fa-times"></i> Tolak</button>' +
+            '</td>' +
+            '</tr>';
+    }
+    tbody.innerHTML = rows;
+}
+
+function setujuiAkun(index) {
+    var notif = document.getElementById('notifikasiPersetujuan');
+    var item = dataPending[index];
+    if (!item) return;
+    dataPending.splice(index, 1);
+    notif.className = 'alert alert-success';
+    notif.innerHTML = '<i class="fas fa-check-circle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DISETUJUI</strong> dan sekarang AKTIF.';
+    notif.classList.remove('d-none');
+    muatTabelPending();
+    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
+}
+
+function tolakAkun(index) {
+    var notif = document.getElementById('notifikasiPersetujuan');
+    var item = dataPending[index];
+    if (!item) return;
+    if (!confirm('Apakah Anda yakin menolak akun ' + item.nama + ' (' + item.id + ')?')) return;
+    dataPending.splice(index, 1);
+    notif.className = 'alert alert-warning';
+    notif.innerHTML = '<i class="fas fa-times-circle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DITOLAK</strong>.';
+    notif.classList.remove('d-none');
+    muatTabelPending();
+    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
+}
+
+// ========== KELOLA AKUN AKTIF ==========
+var dataAkunAktif = [
+    { id: 'ID_TK2R_TK-2001', nama: 'Toko Berkah Abadi', role: 'Toko', username: 'berkah', status: 'Aktif' },
+    { id: 'ID_TK2R_OJ-2002', nama: 'Ojek Ngebut', role: 'Ojek', username: 'ngebut', status: 'Aktif' },
+    { id: 'ID_TK2R_PM-2003', nama: 'Bakso Mantap', role: 'Pedagang Makanan', username: 'bakso', status: 'Aktif' },
+    { id: 'ID_TK2R_ADM-2004', nama: 'Admin CS', role: 'Customer Service', username: 'admincs', status: 'Aktif' }
+];
+
+function tampilkanKelolaAkun() {
+    var konten = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
+    var container = document.getElementById('halamanKelolaAkunContainer');
+    if (container) {
+        konten.innerHTML = container.innerHTML;
+        muatTabelAkunAktif();
+    }
+    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) offcanvas.hide();
+}
+
+function muatTabelAkunAktif() {
+    var tbody = document.getElementById('tabelAkunAktif');
+    var tidakAda = document.getElementById('tidakAdaAkunAktif');
+    if (!tbody) return;
+
+    if (dataAkunAktif.length === 0) {
+        tbody.innerHTML = '';
+        tidakAda.classList.remove('d-none');
+        return;
+    }
+    tidakAda.classList.add('d-none');
+
+    var rows = '';
+    for (var i = 0; i < dataAkunAktif.length; i++) {
+        var item = dataAkunAktif[i];
+        rows += '<tr id="rowaktif-' + i + '">' +
+            '<td><span class="fw-bold">' + item.id + '</span></td>' +
+            '<td>' + item.nama + '</td>' +
+            '<td>' + item.role + '</td>' +
+            '<td>' + item.username + '</td>' +
+            '<td><span class="badge bg-success">' + item.status + '</span></td>' +
+            '<td>' +
+            '<button class="btn btn-sm btn-warning me-1" onclick="blokirAkun(' + i + ')"><i class="fas fa-lock"></i> Blokir</button>' +
+            '<button class="btn btn-sm btn-danger" onclick="hapusAkun(' + i + ')"><i class="fas fa-trash"></i> Hapus</button>' +
+            '</td>' +
+            '</tr>';
+    }
+    tbody.innerHTML = rows;
+}
+
+function blokirAkun(index) {
+    var notif = document.getElementById('notifikasiKelolaAkun');
+    var item = dataAkunAktif[index];
+    if (!item) return;
+    if (!confirm('Blokir akun ' + item.nama + ' (' + item.id + ')?')) return;
+    item.status = 'Diblokir';
+    notif.className = 'alert alert-warning';
+    notif.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DIBLOKIR</strong>.';
+    notif.classList.remove('d-none');
+    muatTabelAkunAktif();
+    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
+}
+
+function hapusAkun(index) {
+    var notif = document.getElementById('notifikasiKelolaAkun');
+    var item = dataAkunAktif[index];
+    if (!item) return;
+    if (!confirm('Hapus permanen akun ' + item.nama + ' (' + item.id + ')?')) return;
+    dataAkunAktif.splice(index, 1);
+    notif.className = 'alert alert-danger';
+    notif.innerHTML = '<i class="fas fa-trash-alt me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DIHAPUS</strong>.';
+    notif.classList.remove('d-none');
+    muatTabelAkunAktif();
+    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
 }
 <!--- ===== AKHIR BLOK 9.2 ===== --->
 </script>
