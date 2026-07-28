@@ -1298,7 +1298,7 @@ const menuConfig = {
             { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '10.9' },
             { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
-            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12' },
+            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' }  
             { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
             { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
@@ -1559,7 +1559,23 @@ function loadMenuNavigasi(kodeRole) {
     
     menuContainer.innerHTML = htmlMenu;
 }
+function loadMenuNavigasi(kodeRole) {
+    const config = menuConfig[kodeRole] || menuConfig['CT'];
+    const menuContainer = document.getElementById('menuNavigasi');
+    let htmlMenu = '';
 
+    config.menu.forEach(function(item) {
+        if (item.aksi === 'buatAkun') {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        } else {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        }
+    });
+
+    htmlMenu += `<hr class="border-secondary">
+                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+    menuContainer.innerHTML = htmlMenu;
+}
 // ============================================
 // TAMPILKAN PLACEHOLDER MENU
 // ============================================
