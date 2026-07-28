@@ -1214,9 +1214,6 @@ function prosesBuatAkun(event) {
 }
 <!--- ===== AKHIR BLOK 9.2 ===== --->
 <!--- ===== BLOK 9.9 JavaScript Persetujuan Akun ===== --->
-// ============================================
-// DATA DUMMY PENDAFTARAN PENDING
-// ============================================
 const dataPending = [
     { id: 'ID_TK2R_TK-1001', nama: 'Toko Maju Jaya', role: 'Toko', username: 'tokomaju', tgl: '2026-07-25' },
     { id: 'ID_TK2R_OJ-1002', nama: 'Ojek Sigap', role: 'Ojek', username: 'ojeksigap', tgl: '2026-07-26' },
@@ -1224,9 +1221,6 @@ const dataPending = [
     { id: 'ID_TK2R_CS-1004', nama: 'COD Seller Murah', role: 'COD Seller', username: 'codmurah', tgl: '2026-07-27' }
 ];
 
-// ============================================
-// TAMPILKAN HALAMAN PERSETUJUAN
-// ============================================
 function tampilkanPersetujuanAkun() {
     const konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
@@ -1239,9 +1233,6 @@ function tampilkanPersetujuanAkun() {
     if (offcanvas) offcanvas.hide();
 }
 
-// ============================================
-// MUAT DATA PENDING KE TABEL
-// ============================================
 function muatTabelPending() {
     const tbody = document.getElementById('tabelPending');
     const tidakAda = document.getElementById('tidakAdaPending');
@@ -1277,9 +1268,6 @@ function muatTabelPending() {
     tbody.innerHTML = rows;
 }
 
-// ============================================
-// SETUJUI AKUN
-// ============================================
 function setujuiAkun(index) {
     const notif = document.getElementById('notifikasiPersetujuan');
     const item = dataPending[index];
@@ -1298,9 +1286,6 @@ function setujuiAkun(index) {
     }, 4000);
 }
 
-// ============================================
-// TOLAK AKUN
-// ============================================
 function tolakAkun(index) {
     const notif = document.getElementById('notifikasiPersetujuan');
     const item = dataPending[index];
