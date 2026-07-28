@@ -943,7 +943,7 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 10.13 ===== --->
-<!--- ===== BLOK 10.14 Container Kelola Akun Aktif ===== --->
+    <!--- ===== BLOK 10.14 Container Kelola Akun Aktif ===== --->
 <div id="kelolaAkunContainer" style="display:none;">
     <div class="container-fluid px-4 py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -953,7 +953,6 @@
             </button>
         </div>
 
-        <!-- Filter Pencarian -->
         <div class="card border-0 shadow mb-4">
             <div class="card-body">
                 <div class="row g-3 align-items-end">
@@ -995,7 +994,6 @@
             </div>
         </div>
 
-        <!-- Tabel Akun -->
         <div class="card border-0 shadow">
             <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
                 <span><i class="fas fa-list me-2"></i>Daftar Semua Akun</span>
@@ -1017,7 +1015,7 @@
                             </tr>
                         </thead>
                         <tbody id="tabelKelolaAkun">
-                            <!-- Data dummy dimuat JavaScript -->
+                            <!-- Data dimuat oleh JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -1181,31 +1179,29 @@ const menuConfig = {
 
 // ========== LOAD MENU & PLACEHOLDER ==========
 function loadMenuNavigasi(kodeRole) {
-    var config = menuConfig[kodeRole] || menuConfig['CT'];
-    var menuContainer = document.getElementById('menuNavigasi');
-    var htmlMenu = '';
-
-    config.menu.forEach(function(item) {
+    const config = menuConfig[kodeRole] || menuConfig['CT'];
+    const menuContainer = document.getElementById('menuNavigasi');
+    let htmlMenu = '';
+        config.menu.forEach(function(item) {
         if (item.aksi === 'buatAkun') {
-            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         } else if (item.aksi === 'persetujuanAkun') {
-            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         } else if (item.aksi === 'kelolaAkunAktif') {
-            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkunAktif()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkunAktif()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         } else {
-            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu(\'' + item.nama + '\', \'' + item.blok + '\')"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         }
     });
-
-    htmlMenu += '<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>';
+    htmlMenu += `<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
     menuContainer.innerHTML = htmlMenu;
 }
 
 function tampilkanPlaceholderMenu(namaMenu, blok) {
-    var konten = document.getElementById('kontenDasbor');
+    const konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    konten.innerHTML = '<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ' + blok + ' - ' + namaMenu + '</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">' + namaMenu + '</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>';
-    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    konten.innerHTML = `<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ${blok} - ${namaMenu}</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">${namaMenu}</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>`;
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
 }
 
@@ -1525,7 +1521,6 @@ function resetFormDaftar() {
 <!--- ===== BLOK 9.7 JavaScript Kelola Akun Aktif ===== --->
 <script>
 // ========== KELOLA AKUN AKTIF ==========
-// Data dummy lengkap dengan koordinat dan status
 let dataAkunAktif = [
     { id: 'ID_TK2R_SA-0001', nama: 'SuperAdmin', role: 'SuperAdmin', username: 'AppTokoOnLine2R', hp: '0811111111', email: 'superadmin@2r.com', alamat: 'Jl. Utama No.1', lat: -6.200000, lng: 106.816666, status: 'Aktif' },
     { id: 'ID_TK2R_ADM-1002', nama: 'Rina Staf Admin', role: 'Staf Admin', username: 'rina_admin', hp: '081234567891', email: 'rina@2r.com', alamat: 'Jl. Admin No.2', lat: -6.210000, lng: 106.820000, status: 'Aktif' },
@@ -1552,9 +1547,7 @@ function renderTabelKelolaAkun() {
             akun.nama.toLowerCase().includes(cari) ||
             akun.id.toLowerCase().includes(cari) ||
             akun.username.toLowerCase().includes(cari);
-        const cocokRole = filterRole === '' || akun.role === filterRole;
-        const cocokStatus = filterStatus === '' || akun.status === filterStatus;
-        return cocokCari && cocokRole && cocokStatus;
+        return cocokCari && (filterRole === '' || akun.role === filterRole) && (filterStatus === '' || akun.status === filterStatus);
     });
 
     jumlahTotal.textContent = `${dataFilter.length} Akun`;
@@ -1565,72 +1558,62 @@ function renderTabelKelolaAkun() {
     }
 
     let html = '';
-    dataFilter.forEach((akun, indexGlobal) => {
-        const indexAsli = dataAkunAktif.indexOf(akun); // indeks di data asli untuk aksi
+    dataFilter.forEach(akun => {
+        const indexAsli = dataAkunAktif.indexOf(akun);
         const statusBadge = akun.status === 'Aktif' 
             ? '<span class="badge bg-success">Aktif</span>' 
             : '<span class="badge bg-secondary">Nonaktif</span>';
-        
         const koordinatText = (akun.lat && akun.lng) 
             ? `${akun.lat.toFixed(6)}, ${akun.lng.toFixed(6)}` 
             : '<span class="text-muted">-</span>';
 
-        html += `
-            <tr>
-                <td><span class="fw-bold text-success small">${akun.id}</span></td>
-                <td>${akun.nama}</td>
-                <td>${akun.role}</td>
-                <td>${akun.username}</td>
-                <td><small>${akun.hp}<br>${akun.email}</small></td>
-                <td><small>${akun.alamat}</small></td>
-                <td><small>${koordinatText}</small></td>
-                <td>${statusBadge}</td>
-                <td>
-                    <div class="btn-group">
-                        ${akun.status === 'Aktif' 
-                            ? `<button class="btn btn-sm btn-warning" onclick="nonaktifkanAkun(${indexAsli})" title="Nonaktifkan"><i class="fas fa-pause"></i> Nonaktifkan</button>`
-                            : `<button class="btn btn-sm btn-success" onclick="aktifkanAkun(${indexAsli})" title="Aktifkan"><i class="fas fa-play"></i> Aktifkan</button>`
-                        }
-                        <button class="btn btn-sm btn-danger" onclick="hapusAkun(${indexAsli})" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        html += `<tr>
+            <td><span class="fw-bold text-success small">${akun.id}</span></td>
+            <td>${akun.nama}</td>
+            <td>${akun.role}</td>
+            <td>${akun.username}</td>
+            <td><small>${akun.hp}<br>${akun.email}</small></td>
+            <td><small>${akun.alamat}</small></td>
+            <td><small>${koordinatText}</small></td>
+            <td>${statusBadge}</td>
+            <td>
+                <div class="btn-group">
+                    ${akun.status === 'Aktif' 
+                        ? `<button class="btn btn-sm btn-warning" onclick="nonaktifkanAkun(${indexAsli})"><i class="fas fa-pause"></i> Nonaktifkan</button>`
+                        : `<button class="btn btn-sm btn-success" onclick="aktifkanAkun(${indexAsli})"><i class="fas fa-play"></i> Aktifkan</button>`}
+                    <button class="btn btn-sm btn-danger" onclick="hapusAkun(${indexAsli})"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`;
     });
     tbody.innerHTML = html;
 }
 
 function nonaktifkanAkun(index) {
     const akun = dataAkunAktif[index];
-    if (akun.role === 'SuperAdmin') {
-        alert('Akun SuperAdmin tidak dapat dinonaktifkan.');
-        return;
-    }
-    if (confirm(`Nonaktifkan akun ${akun.nama} (${akun.id})?`)) {
+    if (akun.role === 'SuperAdmin') { alert('SuperAdmin tidak dapat dinonaktifkan.'); return; }
+    if (confirm(`Nonaktifkan ${akun.nama}?`)) {
         akun.status = 'Nonaktif';
-        alert(`Akun ${akun.id} sekarang Nonaktif.`);
+        alert(`Akun ${akun.id} dinonaktifkan.`);
         renderTabelKelolaAkun();
     }
 }
 
 function aktifkanAkun(index) {
     const akun = dataAkunAktif[index];
-    if (confirm(`Aktifkan kembali akun ${akun.nama} (${akun.id})?`)) {
+    if (confirm(`Aktifkan kembali ${akun.nama}?`)) {
         akun.status = 'Aktif';
-        alert(`Akun ${akun.id} sekarang Aktif.`);
+        alert(`Akun ${akun.id} diaktifkan.`);
         renderTabelKelolaAkun();
     }
 }
 
 function hapusAkun(index) {
     const akun = dataAkunAktif[index];
-    if (akun.role === 'SuperAdmin') {
-        alert('Akun SuperAdmin tidak dapat dihapus.');
-        return;
-    }
-    if (confirm(`Hapus permanen akun ${akun.nama} (${akun.id})?\nSemua data terkait akan hilang.`)) {
+    if (akun.role === 'SuperAdmin') { alert('SuperAdmin tidak dapat dihapus.'); return; }
+    if (confirm(`Hapus permanen ${akun.nama}?`)) {
         dataAkunAktif.splice(index, 1);
-        alert(`Akun ${akun.id} telah dihapus.`);
+        alert(`Akun ${akun.id} dihapus.`);
         renderTabelKelolaAkun();
     }
 }
@@ -1642,14 +1625,10 @@ function tampilkanKelolaAkunAktif() {
     if (container) {
         konten.innerHTML = container.innerHTML;
         renderTabelKelolaAkun();
-        const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-        if (offcanvas) offcanvas.hide();
-    } else {
-        alert('Container kelola akun tidak ditemukan.');
+        bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'))?.hide();
     }
 }
 </script>
 <!--- ===== AKHIR BLOK 9.7 ===== --->
-
 </body>
 </html>
