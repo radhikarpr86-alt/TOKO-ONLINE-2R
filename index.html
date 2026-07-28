@@ -897,7 +897,53 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 10.12 ===== --->
+<!--- ===== BLOK 10.13 Container Persetujuan Akun ===== --->
+<div id="persetujuanAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-white"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h4>
+            <button class="btn btn-outline-light" onclick="kembaliKeDasbor()">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Dasbor
+            </button>
+        </div>
 
+        <div class="card border-0 shadow">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <span><i class="fas fa-list me-2"></i>Daftar Akun Menunggu Persetujuan</span>
+                <span class="badge bg-light text-dark" id="jumlahPending">0</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID Otomatis</th>
+                                <th>Nama Lengkap</th>
+                                <th>Jenis Akun</th>
+                                <th>Nomor HP</th>
+                                <th>Email</th>
+                                <th>Tanggal Daftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPersetujuan">
+                            <!-- Data dummy akan dimuat via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white text-center" id="footerPersetujuan">
+                <button class="btn text-white" style="background-color: #FF8C00;" onclick="setujuiSemua()">
+                    <i class="fas fa-check-double me-1"></i> Setujui Semua
+                </button>
+                <button class="btn btn-outline-danger ms-2" onclick="tolakSemua()">
+                    <i class="fas fa-times-circle me-1"></i> Tolak Semua
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.13 ===== --->
 <!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1056,12 +1102,12 @@ function loadMenuNavigasi(kodeRole) {
     let htmlMenu = '';
     config.menu.forEach(function(item) {
         if (item.aksi === 'buatAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-        } else if (item.aksi === 'persetujuanAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-        } else {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-        }
+    htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+} else if (item.nama === 'Persetujuan Akun') {
+    htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+} else {
+    htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+}
     });
     htmlMenu += `<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
     menuContainer.innerHTML = htmlMenu;
@@ -1189,6 +1235,7 @@ function prosesBuatAkun(event) {
 <!--- ===== BLOK 9.5 JavaScript Persetujuan Akun ===== --->
 <script>
 // ========== PERSETUJUAN AKUN ==========
+// Data dummy akun pending (contoh)
 let dataPending = [
     { id: 'ID_TK2R_TK-1001', nama: 'Budi Santoso', role: 'Toko', hp: '081234567890', email: 'budi@email.com', tgl: '2026-07-28' },
     { id: 'ID_TK2R_OJ-2005', nama: 'Andi Setiawan', role: 'Ojek', hp: '085678901234', email: 'andi@email.com', tgl: '2026-07-27' },
@@ -1232,8 +1279,9 @@ function renderTabelPersetujuan() {
 function setujuiAkun(index) {
     const akun = dataPending[index];
     if (confirm(`Setujui akun ${akun.nama} (${akun.id})?`)) {
+        // Di sini Anda akan mengirim persetujuan ke backend
         alert(`Akun ${akun.id} telah DISETUJUI.`);
-        dataPending.splice(index, 1);
+        dataPending.splice(index, 1); // Hapus dari pending
         renderTabelPersetujuan();
     }
 }
@@ -1271,7 +1319,7 @@ function tampilkanPersetujuanAkun() {
     const container = document.getElementById('persetujuanAkunContainer');
     if (container) {
         konten.innerHTML = container.innerHTML;
-        renderTabelPersetujuan();
+        renderTabelPersetujuan(); // Render tabel setelah konten ditampilkan
         const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
         if (offcanvas) offcanvas.hide();
     }
