@@ -362,7 +362,7 @@
                     <i class="fas fa-unlock-alt fa-3x" style="color: #FF8C00;"></i>
                 </div>
                 <h3 class="fw-bold text-white">Lupa Password</h3>
-                <p class="text-white opacity-75">Masukkan username atau email untuk reset password</p>
+                <p class="text-white opacity-75">Masukkan nomor HP atau email terdaftar untuk reset password</p>
             </div>
             
             <div class="card shadow-lg border-0">
@@ -370,19 +370,30 @@
                     
                     <div id="notifikasiLupaPassword" class="alert d-none" role="alert"></div>
                     
+                    <!-- Tahap 1: Input Nomor HP atau Email -->
                     <div id="tahapSatuLupaPassword">
                         <form onsubmit="return prosesLupaPassword(event)">
                             <div class="mb-3">
                                 <label for="identitasLupa" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Username atau Email
+                                    <i class="fas fa-phone-alt me-1" style="color: #FF8C00;"></i>Nomor HP atau Email
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
-                                        <i class="fas fa-user"></i>
+                                        <i class="fas fa-address-book"></i>
                                     </span>
-                                    <input type="text" id="identitasLupa" name="identitas" class="form-control" placeholder="Masukkan username atau email" required autocomplete="username">
+                                    <input 
+                                        type="text" 
+                                        id="identitasLupa" 
+                                        name="identitas" 
+                                        class="form-control" 
+                                        placeholder="08xxxxxxxx atau email@domain.com" 
+                                        required 
+                                        autocomplete="username"
+                                    >
                                 </div>
-                                <small class="text-muted">Masukkan username atau email yang terdaftar</small>
+                                <small class="text-muted">
+                                    Gunakan nomor HP yang terdaftar (08xx) atau alamat email Anda
+                                </small>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
@@ -392,9 +403,11 @@
                         </form>
                     </div>
                     
+                    <!-- Tahap 2: Input Password Baru (Muncul setelah verifikasi token) -->
                     <div id="tahapDuaLupaPassword" class="d-none">
                         <form onsubmit="return prosesResetPassword(event)">
                             <input type="hidden" id="tokenReset" name="token" value="">
+                            
                             <div class="mb-3">
                                 <label for="passwordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password Baru
@@ -403,13 +416,22 @@
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-lock"></i>
                                     </span>
-                                    <input type="password" id="passwordBaru" name="password_baru" class="form-control" placeholder="Masukkan password baru" minlength="6" required>
+                                    <input 
+                                        type="password" 
+                                        id="passwordBaru" 
+                                        name="password_baru" 
+                                        class="form-control" 
+                                        placeholder="Masukkan password baru" 
+                                        minlength="6" 
+                                        required
+                                    >
                                     <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBaru()" title="Lihat password">
                                         <i class="fas fa-eye" id="iconToggleBaru"></i>
                                     </button>
                                 </div>
                                 <small class="text-muted">Minimal 6 karakter</small>
                             </div>
+                            
                             <div class="mb-3">
                                 <label for="konfirmasiPasswordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password Baru
@@ -418,9 +440,18 @@
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-check-circle"></i>
                                     </span>
-                                    <input type="password" id="konfirmasiPasswordBaru" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password baru" minlength="6" required>
+                                    <input 
+                                        type="password" 
+                                        id="konfirmasiPasswordBaru" 
+                                        name="konfirmasi_password" 
+                                        class="form-control" 
+                                        placeholder="Ketik ulang password baru" 
+                                        minlength="6" 
+                                        required
+                                    >
                                 </div>
                             </div>
+                            
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-save me-2"></i>Simpan Password Baru
@@ -431,6 +462,7 @@
                     
                     <hr>
                     
+                    <!-- Link Kembali ke Login -->
                     <div class="text-center">
                         <a href="#" class="fw-bold" style="color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-arrow-left me-1"></i>Kembali ke Halaman Login
@@ -440,6 +472,7 @@
                 </div>
             </div>
             
+            <!-- Footer Kecil -->
             <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
