@@ -973,7 +973,7 @@
 </div>
 <!--- ===== AKHIR BLOK 10.14 ===== --->
 
-<!--- ===== BLOK 9.2 JavaScript Core (REVISI AMAN, TANPA ERROR) ===== --->
+<!--- ===== BLOK 9.2 JavaScript Core (ES5, TANPA ERROR) ===== --->
 var SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 var SUPERADMIN_PASSWORD = 'MyHand0286';
 var userAktif = null;
@@ -985,6 +985,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateWaktu();
 });
 
+// Navigasi halaman
 function tampilkanHalaman(halaman) {
     var semua = document.querySelectorAll('.page-section');
     for (var i = 0; i < semua.length; i++) {
@@ -995,6 +996,7 @@ function tampilkanHalaman(halaman) {
     window.scrollTo(0, 0);
 }
 
+// Toggle password
 function togglePasswordLogin() {
     var pw = document.getElementById('passwordLogin');
     var icon = document.getElementById('iconToggleLogin');
@@ -1014,6 +1016,7 @@ function togglePasswordBaru() {
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
 
+// Update waktu
 function updateWaktu() {
     var s = new Date();
     var opt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' };
@@ -1026,6 +1029,7 @@ function updateWaktu() {
 }
 setInterval(updateWaktu, 1000);
 
+// Login
 function prosesLogin(event) {
     event.preventDefault();
     var u = document.getElementById('usernameLogin').value.trim();
@@ -1052,6 +1056,7 @@ function prosesLogin(event) {
     return false;
 }
 
+// Masuk dasbor
 function masukDasbor() {
     var konten = document.getElementById('kontenDasbor');
     if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
@@ -1067,6 +1072,7 @@ function masukDasbor() {
     updateWaktu();
 }
 
+// Logout
 function prosesLogout() {
     var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
@@ -1119,7 +1125,7 @@ var menuConfig = {
     }
 };
 
-// ===================== LOAD MENU (TANPA TEMPLATE LITERAL) =====================
+// ===================== LOAD MENU (ES5, NO TEMPLATE LITERAL) =====================
 function loadMenuNavigasi(kodeRole) {
     var config = menuConfig[kodeRole] || menuConfig['CT'];
     var menuContainer = document.getElementById('menuNavigasi');
@@ -1159,7 +1165,7 @@ function kembaliKeDasbor() {
     }
 }
 
-// ===================== FORM BUAT AKUN =====================
+// ===================== FORM BUAT AKUN (ES5) =====================
 function tampilkanFormBuatAkun() {
     var konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
@@ -1192,7 +1198,11 @@ function cekRoleBuatAkun() {
     var nikInput = document.getElementById('nikKtpBuat');
     var info = document.getElementById('infoRoleBuat');
     var nikRoles = ['SOT','SOO','TK','OJ','PP','PM','COD'];
-    if (nikRoles.indexOf(role) !== -1) {
+    var perluNIK = false;
+    for (var i = 0; i < nikRoles.length; i++) {
+        if (nikRoles[i] === role) { perluNIK = true; break; }
+    }
+    if (perluNIK) {
         bagianNIK.style.display = 'block';
         nikInput.setAttribute('required','');
     } else {
