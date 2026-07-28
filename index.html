@@ -1569,6 +1569,19 @@ function renderTabelKelolaAkun() {
             ? `${akun.lat.toFixed(6)}, ${akun.lng.toFixed(6)}` 
             : '<span class="text-muted">-</span>';
 
+        // Khusus SuperAdmin: tidak tampilkan tombol aksi
+        let kolomAksi = '';
+        if (akun.role === 'SuperAdmin') {
+            kolomAksi = '<span class="text-muted small">Akun Utama</span>';
+        } else {
+            kolomAksi = `<div class="btn-group">
+                ${akun.status === 'Aktif' 
+                    ? `<button class="btn btn-sm btn-warning" onclick="nonaktifkanAkun(${indexAsli})"><i class="fas fa-pause"></i> Nonaktifkan</button>`
+                    : `<button class="btn btn-sm btn-success" onclick="aktifkanAkun(${indexAsli})"><i class="fas fa-play"></i> Aktifkan</button>`}
+                <button class="btn btn-sm btn-danger" onclick="hapusAkun(${indexAsli})"><i class="fas fa-trash"></i></button>
+            </div>`;
+        }
+
         html += `<tr>
             <td><span class="fw-bold text-success small">${akun.id}</span></td>
             <td>${akun.nama}</td>
@@ -1578,14 +1591,7 @@ function renderTabelKelolaAkun() {
             <td><small>${akun.alamat}</small></td>
             <td><small>${koordinatText}</small></td>
             <td>${statusBadge}</td>
-            <td>
-                <div class="btn-group">
-                    ${akun.status === 'Aktif' 
-                        ? `<button class="btn btn-sm btn-warning" onclick="nonaktifkanAkun(${indexAsli})"><i class="fas fa-pause"></i> Nonaktifkan</button>`
-                        : `<button class="btn btn-sm btn-success" onclick="aktifkanAkun(${indexAsli})"><i class="fas fa-play"></i> Aktifkan</button>`}
-                    <button class="btn btn-sm btn-danger" onclick="hapusAkun(${indexAsli})"><i class="fas fa-trash"></i></button>
-                </div>
-            </td>
+            <td>${kolomAksi}</td>
         </tr>`;
     });
     tbody.innerHTML = html;
