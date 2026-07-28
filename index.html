@@ -166,7 +166,7 @@
 </nav>
 <!--- ===== AKHIR BLOK 3.1 ===== --->
 
-<!--- ===== BLOK 3.2 Form Pendaftaran ===== --->
+<!--- ===== BLOK 3.2 REVISI Form Pendaftaran dengan ID Otomatis ===== --->
 <div class="container mt-4 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
@@ -198,6 +198,19 @@
                                 <option value="CT">Customer (Langsung Aktif)</option>
                             </select>
                             <small class="text-muted" id="infoRole"></small>
+                        </div>
+                        
+                        <div class="mb-3 p-3 rounded border" style="background-color: #E8F5E9;">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>ID Otomatis
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-white" style="background-color: #4CAF50; border-color: #4CAF50;">
+                                    <i class="fas fa-qrcode"></i>
+                                </span>
+                                <input type="text" id="idOtomatis" name="id_otomatis" class="form-control bg-light fw-bold text-success text-center" placeholder="Pilih role terlebih dahulu" readonly>
+                            </div>
+                            <small class="text-muted">ID akan dibuat otomatis berdasarkan jenis akun yang dipilih</small>
                         </div>
                         
                         <div class="mb-3">
@@ -323,7 +336,6 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 3.2 ===== --->
-
 </div>
 <!--- ===== AKHIR BLOK 3 Halaman Pendaftaran ===== --->
 
@@ -821,7 +833,7 @@
 
 <script>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
-    <!--- ===== BLOK 9.2 JavaScript Core: Variabel Global, Navigasi, Toggle Password, Waktu ===== --->
+<!--- ===== BLOK 9.2 REVISI JavaScript Core: Variabel Global, Navigasi, Toggle Password, Waktu, Login SuperAdmin ===== --->
 // ============================================
 // DATA SUPERADMIN (Tertanam)
 // Username: AppTokoOnLine2R
@@ -924,6 +936,127 @@ function updateWaktu() {
 }
 setInterval(updateWaktu, 1000);
 updateWaktu();
+
+// ============================================
+// PROSES LOGIN (REVISI - Debug SuperAdmin)
+// ============================================
+function prosesLogin(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('usernameLogin').value.trim();
+    const password = document.getElementById('passwordLogin').value.trim();
+    const notifikasi = document.getElementById('notifikasiLogin');
+    
+    // Debug log
+    console.log('=== PROSES LOGIN ===');
+    console.log('Username input:', username);
+    console.log('Password input:', password);
+    console.log('SuperAdmin username tersimpan:', SUPERADMIN_USERNAME);
+    console.log('SuperAdmin password tersimpan:', SUPERADMIN_PASSWORD);
+    console.log('Username cocok:', username === SUPERADMIN_USERNAME);
+    console.log('Password cocok:', password === SUPERADMIN_PASSWORD);
+    
+    if (username === '' || password === '') {
+        notifikasi.className = 'alert alert-warning';
+        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username dan Password wajib diisi!';
+        notifikasi.classList.remove('d-none');
+        return false;
+    }
+    
+    // Cek SuperAdmin - menggunakan perbandingan langsung
+    if (username === 'AppTokoOnLine2R' && password === 'MyHand0286') {
+        console.log('>>> LOGIN SUPERADMIN BERHASIL <<<');
+        userAktif = {
+            nama: 'SuperAdmin',
+            role: 'SuperAdmin',
+            kodeRole: 'SA',
+            idUser: 'ID_TK2R_SA-0001'
+        };
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login SuperAdmin berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { 
+            console.log('Redirect ke dasbor...');
+            masukDasbor(); 
+        }, 1000);
+        return false;
+    }
+    
+    // Cek akun demo lainnya
+    const akunDemo = cekAkunDemo(username, password);
+    if (akunDemo) {
+        console.log('>>> LOGIN DEMO BERHASIL: ' + akunDemo.nama + ' <<<');
+        userAktif = akunDemo;
+        notifikasi.className = 'alert alert-success';
+        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login berhasil! Mengalihkan...';
+        notifikasi.classList.remove('d-none');
+        setTimeout(function() { masukDasbor(); }, 1000);
+        return false;
+    }
+    
+    // Login gagal
+    console.log('>>> LOGIN GAGAL <<<');
+    notifikasi.className = 'alert alert-danger';
+    notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>Username atau Password salah!';
+    notifikasi.classList.remove('d-none');
+    return false;
+}
+
+// ============================================
+// CEK AKUN DEMO (Simulasi Database) - dengan ID Otomatis
+// ============================================
+function cekAkunDemo(username, password) {
+    const akunDemo = {
+        'admin': { password: 'admin123', nama: 'Staf Admin', role: 'Staf Admin', kodeRole: 'ADM', idUser: 'ID_TK2R_ADM-0001' },
+        'owner': { password: 'owner123', nama: 'Staf Owner Toko', role: 'Staf Owner Toko', kodeRole: 'SOT', idUser: 'ID_TK2R_SOT-0001' },
+        'ojekowner': { password: 'ojek123', nama: 'Staf Owner Ojek', role: 'Staf Owner Ojek', kodeRole: 'SOO', idUser: 'ID_TK2R_SOO-0001' },
+        'marketing': { password: 'marketing123', nama: 'Staf Marketing', role: 'Staf Marketing', kodeRole: 'MKT', idUser: 'ID_TK2R_MKT-0001' },
+        'penagihan': { password: 'penagihan123', nama: 'Staf Penagihan', role: 'Staf Penagihan', kodeRole: 'TGH', idUser: 'ID_TK2R_TGH-0001' },
+        'cs': { password: 'cs123', nama: 'Customer Service', role: 'Customer Service', kodeRole: 'CS', idUser: 'ID_TK2R_CS-0001' },
+        'toko': { password: 'toko123', nama: 'Toko Berkah', role: 'Toko', kodeRole: 'TK', idUser: 'ID_TK2R_TK-0001' },
+        'makanan': { password: 'makanan123', nama: 'Pedagang Makanan', role: 'Pedagang Makanan', kodeRole: 'PM', idUser: 'ID_TK2R_PM-0001' },
+        'pasar': { password: 'pasar123', nama: 'Pedagang Pasar', role: 'Pedagang Pasar', kodeRole: 'PP', idUser: 'ID_TK2R_PS-0001' },
+        'cod': { password: 'cod123', nama: 'COD Seller', role: 'COD Seller', kodeRole: 'COD', idUser: 'ID_TK2R_CS-0001' },
+        'driver': { password: 'driver123', nama: 'Ojek Driver', role: 'Ojek', kodeRole: 'OJ', idUser: 'ID_TK2R_OJ-0001' },
+        'customer': { password: 'customer123', nama: 'Customer', role: 'Customer', kodeRole: 'CT', idUser: 'ID_TK2R_CUST-0001' }
+    };
+    
+    if (akunDemo[username] && akunDemo[username].password === password) {
+        return akunDemo[username];
+    }
+    return null;
+}
+
+// ============================================
+// MASUK KE DASBOR
+// ============================================
+function masukDasbor() {
+    console.log('Masuk dasbor sebagai:', userAktif.nama, 'Role:', userAktif.role);
+    document.getElementById('namaUserDisplay').textContent = userAktif.nama;
+    document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
+    document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
+    document.getElementById('offcanvasRoleUser').textContent = userAktif.role;
+    loadMenuNavigasi(userAktif.kodeRole);
+    tampilkanHalaman('dasbor');
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+    document.getElementById('notifikasiLogin').classList.add('d-none');
+    updateWaktu();
+}
+
+// ============================================
+// PROSES LOGOUT
+// ============================================
+function prosesLogout() {
+    console.log('Logout...');
+    userAktif = null;
+    kontenAsliDasbor = null;
+    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    if (offcanvas) { offcanvas.hide(); }
+    tampilkanHalaman('login');
+    document.getElementById('usernameLogin').value = '';
+    document.getElementById('passwordLogin').value = '';
+}
 <!--- ===== AKHIR BLOK 9.2 ===== --->
     <!--- ===== BLOK 9.3 JavaScript Login, Akun Demo, Masuk Dasbor, Logout ===== --->
 // ============================================
@@ -1357,7 +1490,34 @@ function kembaliKeDasbor() {
     }
 }
 <!--- ===== AKHIR BLOK 9.5 ===== --->
-    <!--- ===== BLOK 9.6 JavaScript Pendaftaran, Lupa Password, Geolocation ===== --->
+<!--- ===== BLOK 9.6 REVISI JavaScript Pendaftaran, Lupa Password, Geolocation, Generate ID ===== --->
+// ============================================
+// GENERATE ID OTOMATIS
+// ============================================
+function generateID(kodeRole) {
+    const formatID = {
+        'CT': 'ID_TK2R_CUST',
+        'TK': 'ID_TK2R_TK',
+        'PP': 'ID_TK2R_PS',
+        'PM': 'ID_TK2R_PM',
+        'COD': 'ID_TK2R_CS',
+        'OJ': 'ID_TK2R_OJ'
+    };
+    
+    if (!formatID[kodeRole]) {
+        document.getElementById('idOtomatis').value = '';
+        document.getElementById('idOtomatis').placeholder = 'Pilih role terlebih dahulu';
+        return '';
+    }
+    
+    const nomorUrut = Math.floor(Math.random() * 9000) + 1000;
+    const idLengkap = formatID[kodeRole] + '-' + nomorUrut;
+    
+    document.getElementById('idOtomatis').value = idLengkap;
+    console.log('ID Otomatis dibuat:', idLengkap);
+    return idLengkap;
+}
+
 // ============================================
 // PROSES DAFTAR
 // ============================================
@@ -1369,6 +1529,13 @@ function prosesDaftar(event) {
     const lat = document.getElementById('latitude').value;
     const lng = document.getElementById('longitude').value;
     const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
+    
+    console.log('=== PROSES DAFTAR ===');
+    console.log('Role:', role);
+    console.log('ID Otomatis:', idOtomatis);
+    console.log('Latitude:', lat);
+    console.log('Longitude:', lng);
     
     if (lat === '' || lng === '') {
         notifikasi.className = 'alert alert-warning';
@@ -1393,14 +1560,15 @@ function prosesDaftar(event) {
     }
     
     notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pendaftaran berhasil! Silakan login.';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pendaftaran berhasil! ID Anda: ' + idOtomatis + '. Silakan login.';
     notifikasi.classList.remove('d-none');
-    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 2000);
+    console.log('Pendaftaran sukses, ID:', idOtomatis);
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
     return false;
 }
 
 // ============================================
-// CEK ROLE PENDAFTARAN
+// CEK ROLE PENDAFTARAN (dengan Generate ID)
 // ============================================
 function cekRolePendaftaran() {
     const role = document.getElementById('roleAkun').value;
@@ -1408,19 +1576,46 @@ function cekRolePendaftaran() {
     const nikInput = document.getElementById('nikKtp');
     const infoRole = document.getElementById('infoRole');
     
+    console.log('Role dipilih:', role);
+    
     if (role === 'CT') {
         bagianNIK.style.display = 'none';
         nikInput.removeAttribute('required');
-        infoRole.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Akun Customer akan langsung aktif tanpa persetujuan';
-    } else if (role !== '') {
+        infoRole.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #4CAF50;"></i>Akun Customer akan langsung aktif tanpa persetujuan';
+        generateID('CT');
+    } else if (role === 'TK') {
         bagianNIK.style.display = 'block';
         nikInput.setAttribute('required', 'required');
-        infoRole.innerHTML = '<i class="fas fa-info-circle me-1" style="color: #FF8C00;"></i>Akun memerlukan verifikasi Admin';
+        infoRole.innerHTML = '<i class="fas fa-store me-1" style="color: #FF8C00;"></i>Akun Toko memerlukan verifikasi Admin';
+        generateID('TK');
+    } else if (role === 'OJ') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-motorcycle me-1" style="color: #FF6B00;"></i>Akun Ojek memerlukan verifikasi Admin';
+        generateID('OJ');
+    } else if (role === 'PP') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-shopping-basket me-1" style="color: #FF8C00;"></i>Akun Pedagang Pasar memerlukan verifikasi Admin';
+        generateID('PP');
+    } else if (role === 'PM') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-utensils me-1" style="color: #FF8C00;"></i>Akun Pedagang Makanan memerlukan verifikasi Admin';
+        generateID('PM');
+    } else if (role === 'COD') {
+        bagianNIK.style.display = 'block';
+        nikInput.setAttribute('required', 'required');
+        infoRole.innerHTML = '<i class="fas fa-truck me-1" style="color: #FF8C00;"></i>Akun COD Seller memerlukan verifikasi Admin';
+        generateID('COD');
     } else {
         bagianNIK.style.display = 'block';
         nikInput.removeAttribute('required');
         infoRole.innerHTML = '';
+        document.getElementById('idOtomatis').value = '';
+        document.getElementById('idOtomatis').placeholder = 'Pilih role terlebih dahulu';
     }
+    
     cekTombolAktif();
 }
 
@@ -1453,6 +1648,7 @@ function ambilKoordinat() {
             koordinatText.classList.remove('d-none');
             tombolAmbil.disabled = false;
             tombolAmbil.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Ambil Ulang Lokasi';
+            console.log('Koordinat diambil:', lat, lng);
             cekTombolAktif();
         },
         function(error) {
@@ -1464,6 +1660,7 @@ function ambilKoordinat() {
             statusKoordinat.className = 'mt-2 small text-danger';
             tombolAmbil.disabled = false;
             tombolAmbil.innerHTML = '<i class="fas fa-location-crosshairs me-2"></i>Coba Ambil Lokasi Lagi';
+            console.log('Gagal ambil koordinat:', pesanError);
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
@@ -1476,11 +1673,13 @@ function cekTombolAktif() {
     const lat = document.getElementById('latitude').value;
     const lng = document.getElementById('longitude').value;
     const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
     const tombolDaftar = document.getElementById('tombolDaftar');
     const tombolAjukan = document.getElementById('tombolAjukan');
-    if (lat !== '' && lng !== '' && role !== '') {
+    if (lat !== '' && lng !== '' && role !== '' && idOtomatis !== '') {
         tombolDaftar.disabled = false;
         tombolAjukan.disabled = false;
+        console.log('Tombol Daftar dan Ajukan diaktifkan');
     } else {
         tombolDaftar.disabled = true;
         tombolAjukan.disabled = true;
@@ -1495,6 +1694,11 @@ function ajukanPendaftaran() {
     const lat = document.getElementById('latitude').value;
     const lng = document.getElementById('longitude').value;
     const role = document.getElementById('roleAkun').value;
+    const idOtomatis = document.getElementById('idOtomatis').value;
+    
+    console.log('=== AJUKAN PENDAFTARAN ===');
+    console.log('ID Otomatis:', idOtomatis);
+    
     if (lat === '' || lng === '' || role === '') {
         notifikasi.className = 'alert alert-warning';
         notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Pastikan Anda sudah memilih role dan mengambil koordinat!';
@@ -1503,9 +1707,10 @@ function ajukanPendaftaran() {
         return;
     }
     notifikasi.className = 'alert alert-success';
-    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pengajuan berhasil dikirim! Admin akan memproses.';
+    notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Pengajuan berhasil dikirim! ID Anda: ' + idOtomatis + '. Admin akan memproses.';
     notifikasi.classList.remove('d-none');
-    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 2000);
+    console.log('Pengajuan sukses, ID:', idOtomatis);
+    setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiDaftar').classList.add('d-none'); }, 3000);
 }
 
 // ============================================
@@ -1524,6 +1729,7 @@ function prosesLupaPassword(event) {
     notifikasi.className = 'alert alert-success';
     notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link reset password telah dikirim ke email Anda.';
     notifikasi.classList.remove('d-none');
+    console.log('Lupa password untuk:', identitas);
     return false;
 }
 
@@ -1550,6 +1756,7 @@ function prosesResetPassword(event) {
     notifikasi.className = 'alert alert-success';
     notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Password berhasil direset! Silakan login.';
     notifikasi.classList.remove('d-none');
+    console.log('Password berhasil direset');
     setTimeout(function() { tampilkanHalaman('login'); document.getElementById('notifikasiLupaPassword').classList.add('d-none'); }, 2000);
     return false;
 }
