@@ -833,226 +833,117 @@
 
 <script>
 <!--- ===== AKHIR BLOK 9.1 ===== --->
-<!--- ===== BLOK 9.2 REVISI JavaScript Core: Variabel Global, Navigasi, Toggle Password, Waktu, Login SuperAdmin ===== --->
+<!--- ===== BLOK 9.2 JavaScript Core: Login, Navigasi, Toggle, Waktu ===== --->
 // ============================================
 // DATA SUPERADMIN (Tertanam)
-// Username: AppTokoOnLine2R
-// Password: MyHand0286
 // ============================================
 const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 const SUPERADMIN_PASSWORD = 'MyHand0286';
 
-// ============================================
-// VARIABEL GLOBAL
-// ============================================
 let userAktif = null;
 let kontenAsliDasbor = null;
 
-// ============================================
-// NAVIGASI HALAMAN
-// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const kontenDasbor = document.getElementById('kontenDasbor');
+    if (kontenDasbor) kontenAsliDasbor = kontenDasbor.innerHTML;
+    updateWaktu();
+});
+
 function tampilkanHalaman(halaman) {
-    const semuaHalaman = document.querySelectorAll('.page-section');
-    semuaHalaman.forEach(function(hal) {
-        hal.classList.remove('active');
-    });
-    
+    const semua = document.querySelectorAll('.page-section');
+    semua.forEach(hal => hal.classList.remove('active'));
     const target = document.getElementById('halaman' + halaman.charAt(0).toUpperCase() + halaman.slice(1));
-    if (target) {
-        target.classList.add('active');
-    }
-    
-    window.scrollTo(0, 0);
+    if (target) target.classList.add('active');
+    window.scrollTo(0,0);
 }
 
-// ============================================
-// TOGGLE PASSWORD
-// ============================================
 function togglePasswordLogin() {
-    const passwordInput = document.getElementById('passwordLogin');
+    const pw = document.getElementById('passwordLogin');
     const icon = document.getElementById('iconToggleLogin');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
+    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
+    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
-
 function togglePasswordDaftar() {
-    const passwordInput = document.getElementById('passwordDaftar');
+    const pw = document.getElementById('passwordDaftar');
     const icon = document.getElementById('iconToggleDaftar');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
+    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
+    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
-
 function togglePasswordBaru() {
-    const passwordInput = document.getElementById('passwordBaru');
+    const pw = document.getElementById('passwordBaru');
     const icon = document.getElementById('iconToggleBaru');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
+    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
+    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
 
-// ============================================
-// UPDATE WAKTU REAL-TIME WIB
-// ============================================
 function updateWaktu() {
-    const sekarang = new Date();
-    const opsiTanggal = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        timeZone: 'Asia/Jakarta'
-    };
-    const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
-    const jamStr = sekarang.toLocaleTimeString('id-ID', { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit',
-        timeZone: 'Asia/Jakarta'
-    });
-    const elTanggal = document.getElementById('tanggalSekarang');
+    const s = new Date();
+    const opt = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Jakarta' };
+    const tgl = s.toLocaleDateString('id-ID', opt);
+    const jam = s.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta' });
+    const elTgl = document.getElementById('tanggalSekarang');
     const elJam = document.getElementById('jamSekarang');
-    if (elTanggal) elTanggal.textContent = tanggalStr;
-    if (elJam) elJam.textContent = jamStr + ' WIB';
+    if (elTgl) elTgl.textContent = tgl;
+    if (elJam) elJam.textContent = jam + ' WIB';
 }
 setInterval(updateWaktu, 1000);
-updateWaktu();
 
-// ============================================
-// PROSES LOGIN (REVISI - Debug SuperAdmin)
-// ============================================
 function prosesLogin(event) {
     event.preventDefault();
+    const u = document.getElementById('usernameLogin').value.trim();
+    const p = document.getElementById('passwordLogin').value.trim();
+    const notif = document.getElementById('notifikasiLogin');
     
-    const username = document.getElementById('usernameLogin').value.trim();
-    const password = document.getElementById('passwordLogin').value.trim();
-    const notifikasi = document.getElementById('notifikasiLogin');
-    
-    // Debug log
-    console.log('=== PROSES LOGIN ===');
-    console.log('Username input:', username);
-    console.log('Password input:', password);
-    console.log('SuperAdmin username tersimpan:', SUPERADMIN_USERNAME);
-    console.log('SuperAdmin password tersimpan:', SUPERADMIN_PASSWORD);
-    console.log('Username cocok:', username === SUPERADMIN_USERNAME);
-    console.log('Password cocok:', password === SUPERADMIN_PASSWORD);
-    
-    if (username === '' || password === '') {
-        notifikasi.className = 'alert alert-warning';
-        notifikasi.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Username dan Password wajib diisi!';
-        notifikasi.classList.remove('d-none');
+    if (!u || !p) {
+        notif.className = 'alert alert-warning';
+        notif.innerHTML = 'Username dan Password wajib diisi!';
+        notif.classList.remove('d-none');
         return false;
     }
-    
-    // Cek SuperAdmin - menggunakan perbandingan langsung
-    if (username === 'AppTokoOnLine2R' && password === 'MyHand0286') {
-        console.log('>>> LOGIN SUPERADMIN BERHASIL <<<');
-        userAktif = {
-            nama: 'SuperAdmin',
-            role: 'SuperAdmin',
-            kodeRole: 'SA',
-            idUser: 'ID_TK2R_SA-0001'
-        };
-        notifikasi.className = 'alert alert-success';
-        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login SuperAdmin berhasil! Mengalihkan...';
-        notifikasi.classList.remove('d-none');
-        setTimeout(function() { 
-            console.log('Redirect ke dasbor...');
-            masukDasbor(); 
-        }, 1000);
+    if (u === SUPERADMIN_USERNAME && p === SUPERADMIN_PASSWORD) {
+        userAktif = { nama:'SuperAdmin', role:'SuperAdmin', kodeRole:'SA', idUser:'ID_TK2R_SA-0001' };
+        notif.className = 'alert alert-success';
+        notif.innerHTML = 'Login SuperAdmin berhasil! Mengalihkan...';
+        notif.classList.remove('d-none');
+        setTimeout(masukDasbor, 500);
         return false;
     }
-    
-    // Cek akun demo lainnya
-    const akunDemo = cekAkunDemo(username, password);
-    if (akunDemo) {
-        console.log('>>> LOGIN DEMO BERHASIL: ' + akunDemo.nama + ' <<<');
-        userAktif = akunDemo;
-        notifikasi.className = 'alert alert-success';
-        notifikasi.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login berhasil! Mengalihkan...';
-        notifikasi.classList.remove('d-none');
-        setTimeout(function() { masukDasbor(); }, 1000);
-        return false;
-    }
-    
-    // Login gagal
-    console.log('>>> LOGIN GAGAL <<<');
-    notifikasi.className = 'alert alert-danger';
-    notifikasi.innerHTML = '<i class="fas fa-times-circle me-2"></i>Username atau Password salah!';
-    notifikasi.classList.remove('d-none');
+    // Akun demo (jika diperlukan, silakan tambahkan di sini)
+    notif.className = 'alert alert-danger';
+    notif.innerHTML = 'Username atau Password salah!';
+    notif.classList.remove('d-none');
     return false;
 }
 
-// ============================================
-// CEK AKUN DEMO (Simulasi Database) - dengan ID Otomatis
-// ============================================
-function cekAkunDemo(username, password) {
-    const akunDemo = {
-        'admin': { password: 'admin123', nama: 'Staf Admin', role: 'Staf Admin', kodeRole: 'ADM', idUser: 'ID_TK2R_ADM-0001' },
-        'owner': { password: 'owner123', nama: 'Staf Owner Toko', role: 'Staf Owner Toko', kodeRole: 'SOT', idUser: 'ID_TK2R_SOT-0001' },
-        'ojekowner': { password: 'ojek123', nama: 'Staf Owner Ojek', role: 'Staf Owner Ojek', kodeRole: 'SOO', idUser: 'ID_TK2R_SOO-0001' },
-        'marketing': { password: 'marketing123', nama: 'Staf Marketing', role: 'Staf Marketing', kodeRole: 'MKT', idUser: 'ID_TK2R_MKT-0001' },
-        'penagihan': { password: 'penagihan123', nama: 'Staf Penagihan', role: 'Staf Penagihan', kodeRole: 'TGH', idUser: 'ID_TK2R_TGH-0001' },
-        'cs': { password: 'cs123', nama: 'Customer Service', role: 'Customer Service', kodeRole: 'CS', idUser: 'ID_TK2R_CS-0001' },
-        'toko': { password: 'toko123', nama: 'Toko Berkah', role: 'Toko', kodeRole: 'TK', idUser: 'ID_TK2R_TK-0001' },
-        'makanan': { password: 'makanan123', nama: 'Pedagang Makanan', role: 'Pedagang Makanan', kodeRole: 'PM', idUser: 'ID_TK2R_PM-0001' },
-        'pasar': { password: 'pasar123', nama: 'Pedagang Pasar', role: 'Pedagang Pasar', kodeRole: 'PP', idUser: 'ID_TK2R_PS-0001' },
-        'cod': { password: 'cod123', nama: 'COD Seller', role: 'COD Seller', kodeRole: 'COD', idUser: 'ID_TK2R_CS-0001' },
-        'driver': { password: 'driver123', nama: 'Ojek Driver', role: 'Ojek', kodeRole: 'OJ', idUser: 'ID_TK2R_OJ-0001' },
-        'customer': { password: 'customer123', nama: 'Customer', role: 'Customer', kodeRole: 'CT', idUser: 'ID_TK2R_CUST-0001' }
-    };
-    
-    if (akunDemo[username] && akunDemo[username].password === password) {
-        return akunDemo[username];
-    }
-    return null;
-}
-
-// ============================================
-// MASUK KE DASBOR
-// ============================================
 function masukDasbor() {
-    console.log('Masuk dasbor sebagai:', userAktif.nama, 'Role:', userAktif.role);
+    // Reset konten dasbor ke asli
+    const konten = document.getElementById('kontenDasbor');
+    if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
+    
+    // Update info user
     document.getElementById('namaUserDisplay').textContent = userAktif.nama;
     document.getElementById('roleUserDisplay').textContent = 'Role: ' + userAktif.role;
     document.getElementById('offcanvasNamaUser').textContent = userAktif.nama;
     document.getElementById('offcanvasRoleUser').textContent = userAktif.role;
+    
+    // Load menu (fungsi dari blok 9.5)
     loadMenuNavigasi(userAktif.kodeRole);
+    
+    // Tampilkan halaman dasbor
     tampilkanHalaman('dasbor');
+    
+    // Reset form login
     document.getElementById('usernameLogin').value = '';
     document.getElementById('passwordLogin').value = '';
     document.getElementById('notifikasiLogin').classList.add('d-none');
+    
     updateWaktu();
 }
 
-// ============================================
-// PROSES LOGOUT
-// ============================================
 function prosesLogout() {
-    console.log('Logout...');
-    userAktif = null;
-    kontenAsliDasbor = null;
     const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) { offcanvas.hide(); }
+    if (offcanvas) offcanvas.hide();
+    userAktif = null;
     tampilkanHalaman('login');
     document.getElementById('usernameLogin').value = '';
     document.getElementById('passwordLogin').value = '';
