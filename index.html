@@ -943,6 +943,89 @@
     </div>
 </div>
 <!--- ===== AKHIR BLOK 10.13 ===== --->
+<!--- ===== BLOK 10.14 Container Kelola Akun Aktif ===== --->
+<div id="kelolaAkunContainer" style="display:none;">
+    <div class="container-fluid px-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-white"><i class="fas fa-users-cog me-2"></i>Kelola Akun Aktif</h4>
+            <button class="btn btn-outline-light" onclick="kembaliKeDasbor()">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Dasbor
+            </button>
+        </div>
+
+        <!-- Filter Pencarian -->
+        <div class="card border-0 shadow mb-4">
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold"><i class="fas fa-search me-1"></i>Cari Akun</label>
+                        <input type="text" id="cariAkun" class="form-control" placeholder="Nama, ID, atau username..." onkeyup="renderTabelKelolaAkun()">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold"><i class="fas fa-filter me-1"></i>Filter Role</label>
+                        <select id="filterRoleAkun" class="form-select" onchange="renderTabelKelolaAkun()">
+                            <option value="">Semua Role</option>
+                            <option value="SuperAdmin">SuperAdmin</option>
+                            <option value="Staf Admin">Staf Admin</option>
+                            <option value="Staf Owner Toko">Staf Owner Toko</option>
+                            <option value="Staf Owner Ojek">Staf Owner Ojek</option>
+                            <option value="Staf Marketing">Staf Marketing</option>
+                            <option value="Staf Penagihan">Staf Penagihan</option>
+                            <option value="Customer Service">Customer Service</option>
+                            <option value="Toko">Toko</option>
+                            <option value="Ojek">Ojek</option>
+                            <option value="Pedagang Pasar">Pedagang Pasar</option>
+                            <option value="Pedagang Makanan">Pedagang Makanan</option>
+                            <option value="COD Seller">COD Seller</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold"><i class="fas fa-toggle-on me-1"></i>Status</label>
+                        <select id="filterStatusAkun" class="form-select" onchange="renderTabelKelolaAkun()">
+                            <option value="">Semua</option>
+                            <option value="Aktif">Aktif</option>
+                            <option value="Nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <span class="badge bg-dark fs-6" id="jumlahAkunTotal">0 Akun</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Akun -->
+        <div class="card border-0 shadow">
+            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
+                <span><i class="fas fa-list me-2"></i>Daftar Semua Akun</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>HP/Email</th>
+                                <th>Alamat</th>
+                                <th>Koordinat</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelKelolaAkun">
+                            <!-- Data dummy dimuat JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--- ===== AKHIR BLOK 10.14 ===== --->
 <!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1071,7 +1154,7 @@ const menuConfig = {
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
             { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
             { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13', aksi: 'persetujuanAkun' },
-            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
+            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14', aksi: 'kelolaAkunAktif' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
             { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
             { nama: 'Setting Rekening Master', ikon: 'fas fa-university', blok: '10.17' },
@@ -1107,6 +1190,9 @@ function loadMenuNavigasi(kodeRole) {
     } else if (item.aksi === 'persetujuanAkun') {
         htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
     } else {
+    } else if (item.aksi === 'persetujuanAkun') {
+        htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+    }
         htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
     }
 });
@@ -1435,6 +1521,134 @@ function resetFormDaftar() {
 }
 </script>
 <!--- ===== AKHIR BLOK 9.6 ===== --->
+<!--- ===== BLOK 9.7 JavaScript Kelola Akun Aktif ===== --->
+<script>
+// ========== KELOLA AKUN AKTIF ==========
+// Data dummy lengkap dengan koordinat dan status
+let dataAkunAktif = [
+    { id: 'ID_TK2R_SA-0001', nama: 'SuperAdmin', role: 'SuperAdmin', username: 'AppTokoOnLine2R', hp: '0811111111', email: 'superadmin@2r.com', alamat: 'Jl. Utama No.1', lat: -6.200000, lng: 106.816666, status: 'Aktif' },
+    { id: 'ID_TK2R_ADM-1002', nama: 'Rina Staf Admin', role: 'Staf Admin', username: 'rina_admin', hp: '081234567891', email: 'rina@2r.com', alamat: 'Jl. Admin No.2', lat: -6.210000, lng: 106.820000, status: 'Aktif' },
+    { id: 'ID_TK2R_TK-2003', nama: 'Toko Makmur', role: 'Toko', username: 'tokomakmur', hp: '081345678901', email: 'makmur@toko.com', alamat: 'Pasar Induk Blok A', lat: -6.250000, lng: 106.800000, status: 'Aktif' },
+    { id: 'ID_TK2R_OJ-3004', nama: 'Ojek Kilat', role: 'Ojek', username: 'ojekkilat', hp: '085678901234', email: 'kilat@ojek.com', alamat: 'Terminal 1', lat: -6.230000, lng: 106.810000, status: 'Nonaktif' },
+    { id: 'ID_TK2R_PM-4005', nama: 'Warung Sate Madura', role: 'Pedagang Makanan', username: 'satemadura', hp: '082156789012', email: 'sate@madura.com', alamat: 'Jl. Merdeka 10', lat: -6.270000, lng: 106.790000, status: 'Aktif' },
+    { id: 'ID_TK2R_CUST-5006', nama: 'Andi Pelanggan', role: 'Customer', username: 'andi123', hp: '087812345678', email: 'andi@gmail.com', alamat: 'Perum Griya Asri', lat: -6.300000, lng: 106.770000, status: 'Aktif' },
+    { id: 'ID_TK2R_CS-6007', nama: 'Dita Layanan', role: 'Customer Service', username: 'dita_cs', hp: '089912345678', email: 'dita@2r.com', alamat: 'Kantor Pusat', lat: -6.220000, lng: 106.815000, status: 'Aktif' },
+    { id: 'ID_TK2R_SOT-7008', nama: 'Budi Owner Toko', role: 'Staf Owner Toko', username: 'budi_owner', hp: '08112223344', email: 'budi.owner@toko.com', alamat: 'Ruko Blok B', lat: -6.260000, lng: 106.805000, status: 'Aktif' },
+    { id: 'ID_TK2R_TGH-8009', nama: 'Teguh Penagih', role: 'Staf Penagihan', username: 'teguh_tgh', hp: '08551112233', email: 'teguh@2r.com', alamat: 'Jl. Anggrek 5', lat: -6.240000, lng: 106.825000, status: 'Nonaktif' }
+];
+
+function renderTabelKelolaAkun() {
+    const tbody = document.getElementById('tabelKelolaAkun');
+    const jumlahTotal = document.getElementById('jumlahAkunTotal');
+    if (!tbody) return;
+
+    const cari = (document.getElementById('cariAkun')?.value || '').toLowerCase();
+    const filterRole = document.getElementById('filterRoleAkun')?.value || '';
+    const filterStatus = document.getElementById('filterStatusAkun')?.value || '';
+
+    const dataFilter = dataAkunAktif.filter(akun => {
+        const cocokCari = cari === '' || 
+            akun.nama.toLowerCase().includes(cari) ||
+            akun.id.toLowerCase().includes(cari) ||
+            akun.username.toLowerCase().includes(cari);
+        const cocokRole = filterRole === '' || akun.role === filterRole;
+        const cocokStatus = filterStatus === '' || akun.status === filterStatus;
+        return cocokCari && cocokRole && cocokStatus;
+    });
+
+    jumlahTotal.textContent = `${dataFilter.length} Akun`;
+
+    if (dataFilter.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">Tidak ada akun ditemukan.</td></tr>`;
+        return;
+    }
+
+    let html = '';
+    dataFilter.forEach((akun, indexGlobal) => {
+        const indexAsli = dataAkunAktif.indexOf(akun); // indeks di data asli untuk aksi
+        const statusBadge = akun.status === 'Aktif' 
+            ? '<span class="badge bg-success">Aktif</span>' 
+            : '<span class="badge bg-secondary">Nonaktif</span>';
+        
+        const koordinatText = (akun.lat && akun.lng) 
+            ? `${akun.lat.toFixed(6)}, ${akun.lng.toFixed(6)}` 
+            : '<span class="text-muted">-</span>';
+
+        html += `
+            <tr>
+                <td><span class="fw-bold text-success small">${akun.id}</span></td>
+                <td>${akun.nama}</td>
+                <td>${akun.role}</td>
+                <td>${akun.username}</td>
+                <td><small>${akun.hp}<br>${akun.email}</small></td>
+                <td><small>${akun.alamat}</small></td>
+                <td><small>${koordinatText}</small></td>
+                <td>${statusBadge}</td>
+                <td>
+                    <div class="btn-group">
+                        ${akun.status === 'Aktif' 
+                            ? `<button class="btn btn-sm btn-warning" onclick="nonaktifkanAkun(${indexAsli})" title="Nonaktifkan"><i class="fas fa-pause"></i> Nonaktifkan</button>`
+                            : `<button class="btn btn-sm btn-success" onclick="aktifkanAkun(${indexAsli})" title="Aktifkan"><i class="fas fa-play"></i> Aktifkan</button>`
+                        }
+                        <button class="btn btn-sm btn-danger" onclick="hapusAkun(${indexAsli})" title="Hapus"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function nonaktifkanAkun(index) {
+    const akun = dataAkunAktif[index];
+    if (akun.role === 'SuperAdmin') {
+        alert('Akun SuperAdmin tidak dapat dinonaktifkan.');
+        return;
+    }
+    if (confirm(`Nonaktifkan akun ${akun.nama} (${akun.id})?`)) {
+        akun.status = 'Nonaktif';
+        alert(`Akun ${akun.id} sekarang Nonaktif.`);
+        renderTabelKelolaAkun();
+    }
+}
+
+function aktifkanAkun(index) {
+    const akun = dataAkunAktif[index];
+    if (confirm(`Aktifkan kembali akun ${akun.nama} (${akun.id})?`)) {
+        akun.status = 'Aktif';
+        alert(`Akun ${akun.id} sekarang Aktif.`);
+        renderTabelKelolaAkun();
+    }
+}
+
+function hapusAkun(index) {
+    const akun = dataAkunAktif[index];
+    if (akun.role === 'SuperAdmin') {
+        alert('Akun SuperAdmin tidak dapat dihapus.');
+        return;
+    }
+    if (confirm(`Hapus permanen akun ${akun.nama} (${akun.id})?\nSemua data terkait akan hilang.`)) {
+        dataAkunAktif.splice(index, 1);
+        alert(`Akun ${akun.id} telah dihapus.`);
+        renderTabelKelolaAkun();
+    }
+}
+
+function tampilkanKelolaAkunAktif() {
+    const konten = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
+    const container = document.getElementById('kelolaAkunContainer');
+    if (container) {
+        konten.innerHTML = container.innerHTML;
+        renderTabelKelolaAkun();
+        const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+        if (offcanvas) offcanvas.hide();
+    } else {
+        alert('Container kelola akun tidak ditemukan.');
+    }
+}
+</script>
+<!--- ===== AKHIR BLOK 9.7 ===== --->
 
 </body>
 </html>
