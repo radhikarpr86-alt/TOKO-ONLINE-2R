@@ -900,10 +900,9 @@
 
 <!--- ===== BLOK 9.1 Penghubung Halaman Maintenance ke JavaScript ===== --->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-<!--- ===== AKHIR BLOK 9.1 ===== --->
 
-<!--- ===== BLOK 9.2 JavaScript Core (BERSIH, TIDAK ADA DUPLIKASI) ===== --->
+<!--- ===== BLOK 9.2 JavaScript Core (Navigasi & Autentikasi Dasar) ===== --->
+<script>
 const SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 const SUPERADMIN_PASSWORD = 'MyHand0286';
 let userAktif = null;
@@ -1002,7 +1001,11 @@ function prosesLogout() {
     document.getElementById('usernameLogin').value = '';
     document.getElementById('passwordLogin').value = '';
 }
+</script>
+<!--- ===== AKHIR BLOK 9.2 ===== --->
 
+<!--- ===== BLOK 9.3 JavaScript Menu & Navigasi ===== --->
+<script>
 // ========== MENU CONFIG ==========
 const menuConfig = {
     'SA': {
@@ -1020,7 +1023,7 @@ const menuConfig = {
             { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
             { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
             { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
-            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13' },
+            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13', aksi: 'persetujuanAkun' },
             { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14' },
             { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
             { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
@@ -1054,6 +1057,8 @@ function loadMenuNavigasi(kodeRole) {
     config.menu.forEach(function(item) {
         if (item.aksi === 'buatAkun') {
             htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        } else if (item.aksi === 'persetujuanAkun') {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         } else {
             htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
         }
@@ -1076,8 +1081,11 @@ function kembaliKeDasbor() {
         updateWaktu();
     }
 }
+</script>
+<!--- ===== AKHIR BLOK 9.3 ===== --->
 
-// ========== FORM BUAT AKUN ==========
+<!--- ===== BLOK 9.4 JavaScript Form Buat Akun (SuperAdmin) ===== --->
+<script>
 function tampilkanFormBuatAkun() {
     const konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
@@ -1175,7 +1183,101 @@ function prosesBuatAkun(event) {
     document.getElementById('koordinatTextBuat').classList.add('d-none');
     return false;
 }
-<!--- ===== AKHIR BLOK 9.2 ===== --->
+</script>
+<!--- ===== AKHIR BLOK 9.4 ===== --->
+
+<!--- ===== BLOK 9.5 JavaScript Persetujuan Akun ===== --->
+<script>
+// ========== PERSETUJUAN AKUN ==========
+let dataPending = [
+    { id: 'ID_TK2R_TK-1001', nama: 'Budi Santoso', role: 'Toko', hp: '081234567890', email: 'budi@email.com', tgl: '2026-07-28' },
+    { id: 'ID_TK2R_OJ-2005', nama: 'Andi Setiawan', role: 'Ojek', hp: '085678901234', email: 'andi@email.com', tgl: '2026-07-27' },
+    { id: 'ID_TK2R_PM-3002', nama: 'Siti Rahayu', role: 'Pedagang Makanan', hp: '082156789012', email: 'siti@email.com', tgl: '2026-07-26' }
+];
+
+function renderTabelPersetujuan() {
+    const tbody = document.getElementById('tabelPersetujuan');
+    const jumlah = document.getElementById('jumlahPending');
+    if (!tbody) return;
+    
+    if (dataPending.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">Tidak ada akun yang menunggu persetujuan.</td></tr>`;
+        jumlah.textContent = '0';
+        return;
+    }
+    
+    jumlah.textContent = dataPending.length;
+    let html = '';
+    dataPending.forEach((item, index) => {
+        html += `
+            <tr>
+                <td><span class="fw-bold text-success">${item.id}</span></td>
+                <td>${item.nama}</td>
+                <td><span class="badge" style="background-color: #FF8C00;">${item.role}</span></td>
+                <td>${item.hp}</td>
+                <td>${item.email}</td>
+                <td>${item.tgl}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-success" onclick="setujuiAkun(${index})" title="Setujui"><i class="fas fa-check"></i> Setujui</button>
+                        <button class="btn btn-sm btn-danger" onclick="tolakAkun(${index})" title="Tolak"><i class="fas fa-times"></i> Tolak</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function setujuiAkun(index) {
+    const akun = dataPending[index];
+    if (confirm(`Setujui akun ${akun.nama} (${akun.id})?`)) {
+        alert(`Akun ${akun.id} telah DISETUJUI.`);
+        dataPending.splice(index, 1);
+        renderTabelPersetujuan();
+    }
+}
+
+function tolakAkun(index) {
+    const akun = dataPending[index];
+    if (confirm(`Tolak akun ${akun.nama} (${akun.id})?`)) {
+        alert(`Akun ${akun.id} telah DITOLAK.`);
+        dataPending.splice(index, 1);
+        renderTabelPersetujuan();
+    }
+}
+
+function setujuiSemua() {
+    if (dataPending.length === 0) return;
+    if (confirm(`Setujui semua ${dataPending.length} akun?`)) {
+        alert('Semua akun telah disetujui.');
+        dataPending = [];
+        renderTabelPersetujuan();
+    }
+}
+
+function tolakSemua() {
+    if (dataPending.length === 0) return;
+    if (confirm(`Tolak semua ${dataPending.length} akun?`)) {
+        alert('Semua akun telah ditolak.');
+        dataPending = [];
+        renderTabelPersetujuan();
+    }
+}
+
+function tampilkanPersetujuanAkun() {
+    const konten = document.getElementById('kontenDasbor');
+    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
+    const container = document.getElementById('persetujuanAkunContainer');
+    if (container) {
+        konten.innerHTML = container.innerHTML;
+        renderTabelPersetujuan();
+        const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+        if (offcanvas) offcanvas.hide();
+    }
+}
+</script>
+<!--- ===== AKHIR BLOK 9.5 ===== --->
 </script>
 </body>
 </html>
