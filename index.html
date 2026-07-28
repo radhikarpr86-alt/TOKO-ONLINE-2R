@@ -1181,31 +1181,31 @@ const menuConfig = {
 
 // ========== LOAD MENU & PLACEHOLDER ==========
 function loadMenuNavigasi(kodeRole) {
-    const config = menuConfig[kodeRole] || menuConfig['CT'];
-    const menuContainer = document.getElementById('menuNavigasi');
-    let htmlMenu = '';
+    var config = menuConfig[kodeRole] || menuConfig['CT'];
+    var menuContainer = document.getElementById('menuNavigasi');
+    var htmlMenu = '';
 
     config.menu.forEach(function(item) {
         if (item.aksi === 'buatAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         } else if (item.aksi === 'persetujuanAkun') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         } else if (item.aksi === 'kelolaAkunAktif') {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkunAktif()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkunAktif()"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         } else {
-            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+            htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu(\'' + item.nama + '\', \'' + item.blok + '\')"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
         }
     });
 
-    htmlMenu += `<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+    htmlMenu += '<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>';
     menuContainer.innerHTML = htmlMenu;
 }
 
 function tampilkanPlaceholderMenu(namaMenu, blok) {
-    const konten = document.getElementById('kontenDasbor');
+    var konten = document.getElementById('kontenDasbor');
     if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    konten.innerHTML = `<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ${blok} - ${namaMenu}</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">${namaMenu}</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>`;
-    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
+    konten.innerHTML = '<div class="container-fluid px-4 py-4"><div class="card border-0 shadow-sm"><div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Blok ' + blok + ' - ' + namaMenu + '</h5><button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor</button></div><div class="card-body text-center py-5"><i class="fas fa-tools fa-5x text-muted mb-4"></i><h3 class="text-muted">' + namaMenu + '</h3><p class="lead text-muted">Halaman ini masih dalam pengembangan</p><button class="btn btn-lg text-white mt-3" style="background-color: #FF8C00;" onclick="kembaliKeDasbor()"><i class="fas fa-arrow-left me-2"></i>Kembali ke Dasbor</button></div></div></div>';
+    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
 }
 
