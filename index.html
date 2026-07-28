@@ -455,10 +455,10 @@
 <!--- ===== BLOK 5 Halaman Dasbor Default Setelah Login ===== --->
 <div id="halamanDasbor" class="page-section">
 
-<!--- ===== BLOK 5.1 Navigasi Atas Dasbor (Revisi – Tombol Selalu Ada) ===== --->
+<!--- ===== BLOK 5.1 Navigasi Atas Dasbor (Tombol Selalu Muncul) ===== --->
 <nav class="navbar navbar-expand-lg navbar-orange sticky-top">
     <div class="container">
-        <!-- Tombol hamburger TANPA d-lg-none, agar selalu tampil di semua layar -->
+        <!-- Tombol hamburger SELALU TAMPIL di SEMUA layar -->
         <button class="btn text-white me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
             <i class="fas fa-bars fa-lg"></i>
         </button>
@@ -478,7 +478,7 @@
                         <i class="fas fa-user-circle fa-lg me-1"></i>
                         <span id="namaUserDisplay">Pengguna</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><span class="dropdown-item-text fw-bold" id="roleUserDisplay">Role: -</span></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
@@ -489,7 +489,7 @@
                         <i class="fas fa-bell fa-lg"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="jumlahNotifikasi">0</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 300px;">
+                    <ul class="dropdown-menu dropdown-menu-end" id="daftarNotifikasi" style="min-width: 300px;">
                         <li><span class="dropdown-item-text text-muted">Belum ada notifikasi</span></li>
                     </ul>
                 </li>
