@@ -1184,19 +1184,22 @@ function loadMenuNavigasi(kodeRole) {
     const config = menuConfig[kodeRole] || menuConfig['CT'];
     const menuContainer = document.getElementById('menuNavigasi');
     let htmlMenu = '';
+
     config.menu.forEach(function(item) {
-    if (item.aksi === 'buatAkun') {
-        htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-    } else if (item.aksi === 'persetujuanAkun') {
-        htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-    } else {
-    } else if (item.aksi === 'persetujuanAkun') {
-        htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-    }
-        htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
-    }
-});
-    htmlMenu += `<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+        if (item.aksi === 'buatAkun') {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanFormBuatAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        } else if (item.aksi === 'persetujuanAkun') {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPersetujuanAkun()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        } else if (item.aksi === 'kelolaAkunAktif') {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanKelolaAkunAktif()"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        } else {
+            htmlMenu += `<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu('${item.nama}', '${item.blok}')"><i class="${item.ikon} me-2" style="color: #FF8C00;"></i>${item.nama}</a>`;
+        }
+    });
+
+    htmlMenu += `<hr class="border-secondary">
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>`;
+
     menuContainer.innerHTML = htmlMenu;
 }
 
