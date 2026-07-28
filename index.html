@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <link rel="icon" href="data:,">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Toko Online 2R - Platform Marketplace Terpercaya">
-    <meta name="author" content="Toko Online 2R">
-    <meta name="robots" content="noindex, nofollow">
     <title>Toko Online 2R - Marketplace</title>
 <!--- ===== AKHIR BLOK 1 ===== --->
 
@@ -70,7 +67,6 @@
 <!--- ===== BLOK 2 Halaman Login Multi-Login (Halaman Utama) ===== --->
 <div id="halamanLogin" class="page-section active">
 
-<!--- ===== BLOK 2.1 Container Login ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5 col-lg-4">
@@ -149,7 +145,6 @@
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 2.1 ===== --->
 
 </div>
 <!--- ===== AKHIR BLOK 2 Halaman Login Multi-Login ===== --->
@@ -157,7 +152,6 @@
 <!--- ===== BLOK 3 Halaman Pendaftaran ===== --->
 <div id="halamanDaftar" class="page-section">
 
-<!--- ===== BLOK 3.1 Navigasi Atas Pendaftaran ===== --->
 <nav class="navbar navbar-orange">
     <div class="container">
         <a class="navbar-brand fw-bold text-white" href="#" onclick="tampilkanHalaman('login')">
@@ -165,9 +159,7 @@
         </a>
     </div>
 </nav>
-<!--- ===== AKHIR BLOK 3.1 ===== --->
 
-<!--- ===== BLOK 3.2 REVISI Form Pendaftaran dengan ID Otomatis ===== --->
 <div class="container mt-4 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
@@ -336,14 +328,12 @@
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 3.2 ===== --->
 </div>
 <!--- ===== AKHIR BLOK 3 Halaman Pendaftaran ===== --->
 
 <!--- ===== BLOK 4 Halaman Lupa Password ===== --->
 <div id="halamanLupaPassword" class="page-section">
 
-<!--- ===== BLOK 4.1 Navigasi Atas Lupa Password ===== --->
 <nav class="navbar navbar-orange">
     <div class="container">
         <a class="navbar-brand fw-bold text-white" href="#" onclick="tampilkanHalaman('login')">
@@ -351,9 +341,7 @@
         </a>
     </div>
 </nav>
-<!--- ===== AKHIR BLOK 4.1 ===== --->
 
-<!--- ===== BLOK 4.2 Container Utama Lupa Password ===== --->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5 col-lg-4">
@@ -371,7 +359,6 @@
                     
                     <div id="notifikasiLupaPassword" class="alert d-none" role="alert"></div>
                     
-                    <!-- Tahap 1: Input Nomor HP atau Email -->
                     <div id="tahapSatuLupaPassword">
                         <form onsubmit="return prosesLupaPassword(event)">
                             <div class="mb-3">
@@ -382,19 +369,9 @@
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-address-book"></i>
                                     </span>
-                                    <input 
-                                        type="text" 
-                                        id="identitasLupa" 
-                                        name="identitas" 
-                                        class="form-control" 
-                                        placeholder="08xxxxxxxx atau email@domain.com" 
-                                        required 
-                                        autocomplete="username"
-                                    >
+                                    <input type="text" id="identitasLupa" name="identitas" class="form-control" placeholder="08xxxxxxxx atau email@domain.com" required autocomplete="username">
                                 </div>
-                                <small class="text-muted">
-                                    Gunakan nomor HP yang terdaftar (08xx) atau alamat email Anda
-                                </small>
+                                <small class="text-muted">Gunakan nomor HP yang terdaftar (08xx) atau alamat email Anda</small>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
@@ -404,11 +381,9 @@
                         </form>
                     </div>
                     
-                    <!-- Tahap 2: Input Password Baru (Muncul setelah verifikasi token) -->
                     <div id="tahapDuaLupaPassword" class="d-none">
                         <form onsubmit="return prosesResetPassword(event)">
                             <input type="hidden" id="tokenReset" name="token" value="">
-                            
                             <div class="mb-3">
                                 <label for="passwordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password Baru
@@ -417,22 +392,13 @@
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-lock"></i>
                                     </span>
-                                    <input 
-                                        type="password" 
-                                        id="passwordBaru" 
-                                        name="password_baru" 
-                                        class="form-control" 
-                                        placeholder="Masukkan password baru" 
-                                        minlength="6" 
-                                        required
-                                    >
+                                    <input type="password" id="passwordBaru" name="password_baru" class="form-control" placeholder="Masukkan password baru" minlength="6" required>
                                     <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBaru()" title="Lihat password">
                                         <i class="fas fa-eye" id="iconToggleBaru"></i>
                                     </button>
                                 </div>
                                 <small class="text-muted">Minimal 6 karakter</small>
                             </div>
-                            
                             <div class="mb-3">
                                 <label for="konfirmasiPasswordBaru" class="form-label fw-bold text-dark">
                                     <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password Baru
@@ -441,18 +407,9 @@
                                     <span class="input-group-text text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                         <i class="fas fa-check-circle"></i>
                                     </span>
-                                    <input 
-                                        type="password" 
-                                        id="konfirmasiPasswordBaru" 
-                                        name="konfirmasi_password" 
-                                        class="form-control" 
-                                        placeholder="Ketik ulang password baru" 
-                                        minlength="6" 
-                                        required
-                                    >
+                                    <input type="password" id="konfirmasiPasswordBaru" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password baru" minlength="6" required>
                                 </div>
                             </div>
-                            
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #FF8C00; border-color: #FF8C00;">
                                     <i class="fas fa-save me-2"></i>Simpan Password Baru
@@ -463,7 +420,6 @@
                     
                     <hr>
                     
-                    <!-- Link Kembali ke Login -->
                     <div class="text-center">
                         <a href="#" class="fw-bold" style="color: #FF8C00;" onclick="tampilkanHalaman('login')">
                             <i class="fas fa-arrow-left me-1"></i>Kembali ke Halaman Login
@@ -473,7 +429,6 @@
                 </div>
             </div>
             
-            <!-- Footer Kecil -->
             <div class="text-center mt-4 text-white small">
                 <p>&copy; 2026 Toko Online 2R. All rights reserved.</p>
             </div>
@@ -481,15 +436,12 @@
         </div>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 4.2 ===== --->
-
 </div>
 <!--- ===== AKHIR BLOK 4 Halaman Lupa Password ===== --->
 
 <!--- ===== BLOK 5 Halaman Dasbor Default Setelah Login ===== --->
 <div id="halamanDasbor" class="page-section">
 
-<!--- ===== BLOK 5.1 Navigasi Atas Dasbor (Tombol Selalu Muncul) ===== --->
 <nav class="navbar navbar-expand-lg navbar-orange sticky-top">
     <div class="container">
         <button class="btn text-white me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
@@ -517,9 +469,7 @@
         </div>
     </div>
 </nav>
-<!--- ===== AKHIR BLOK 5.1 ===== --->
 
-<!--- ===== BLOK 5.2 Offcanvas Sidebar Menu ===== --->
 <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasMenu">
     <div class="offcanvas-header" style="background-color: #FF6B00;">
         <h5 class="offcanvas-title fw-bold"><i class="fas fa-bars me-2"></i>Menu</h5>
@@ -538,9 +488,7 @@
         </nav>
     </div>
 </div>
-<!--- ===== AKHIR BLOK 5.2 ===== --->
 
-<!--- ===== BLOK 5.3 Konten Utama Dasbor ===== --->
 <main class="container-fluid px-4 py-4" id="kontenDasbor">
     
     <div class="row mb-4">
@@ -605,96 +553,7 @@
         </div>
     </div>
     
-    <div class="row mb-4 g-3">
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body text-center py-3">
-                    <i class="fas fa-store fa-2x mb-2" style="color: #FF8C00;"></i>
-                    <h4 class="fw-bold mb-0">0</h4>
-                    <small class="text-muted">Total Toko</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body text-center py-3">
-                    <i class="fas fa-box fa-2x mb-2" style="color: #FF8C00;"></i>
-                    <h4 class="fw-bold mb-0">0</h4>
-                    <small class="text-muted">Total Produk</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body text-center py-3">
-                    <i class="fas fa-motorcycle fa-2x mb-2" style="color: #FF6B00;"></i>
-                    <h4 class="fw-bold mb-0">0</h4>
-                    <small class="text-muted">Ojek Online</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body text-center py-3">
-                    <i class="fas fa-shopping-cart fa-2x mb-2" style="color: #FF8C00;"></i>
-                    <h4 class="fw-bold mb-0">0</h4>
-                    <small class="text-muted">Order Hari Ini</small>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row g-4">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-store me-2" style="color: #FF8C00;"></i>Toko Terdekat
-                </div>
-                <div class="card-body text-center py-4 text-muted">
-                    <i class="fas fa-store-alt fa-2x mb-2"></i>
-                    <p>Daftar toko terdekat akan ditampilkan di sini</p>
-                    <small>Fitur dalam pengembangan</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-box-open me-2" style="color: #FF8C00;"></i>Produk Terbaru
-                </div>
-                <div class="card-body">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Cari produk...">
-                        <button class="btn text-white" style="background-color: #FF8C00;"><i class="fas fa-search"></i> Cari</button>
-                    </div>
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-box-open fa-2x mb-2"></i>
-                        <p>Daftar produk terbaru akan ditampilkan di sini</p>
-                        <small>Fitur dalam pengembangan</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom fw-bold">
-                    <i class="fas fa-motorcycle me-2" style="color: #FF6B00;"></i>Ojek Online di Sekitar Anda
-                </div>
-                <div class="card-body text-center py-4 text-muted">
-                    <i class="fas fa-motorcycle fa-2x mb-2"></i>
-                    <p>Daftar ojek online akan ditampilkan di sini</p>
-                    <small>Fitur dalam pengembangan</small>
-                </div>
-            </div>
-        </div>
-    </div>
-    
 </main>
-<!--- ===== AKHIR BLOK 5.3 ===== --->
-
 </div>
 <!--- ===== AKHIR BLOK 5 Halaman Dasbor Default ===== --->
 
@@ -717,263 +576,12 @@
 </div>
 <!--- ===== AKHIR BLOK 6 Halaman Logout ===== --->
 
-<!--- ===== BLOK 10.12 Container Form Buat Akun (disembunyikan) ===== --->
-<div id="formBuatAkunContainer" style="display:none;">
-    <div class="container-fluid px-4 py-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                
-                <div class="text-center mb-4">
-                    <i class="fas fa-user-plus fa-4x text-white mb-3"></i>
-                    <h3 class="fw-bold text-white">Buat Akun Baru</h3>
-                    <p class="text-white opacity-75">SuperAdmin dapat membuat akun untuk semua role termasuk Staf</p>
-                </div>
-                
-                <div class="card shadow-lg border-0">
-                    <div class="card-body p-4">
-                        
-                        <div id="notifikasiBuatAkun" class="alert d-none" role="alert"></div>
-                        
-                        <form id="formBuatAkun" onsubmit="return prosesBuatAkun(event)">
-                            
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-tag me-1" style="color: #FF8C00;"></i>Jenis Akun
-                                </label>
-                                <select id="roleAkunBuat" name="role" class="form-select" required onchange="cekRoleBuatAkun()">
-                                    <option value="">-- Pilih Jenis Akun --</option>
-                                    <optgroup label="Akun Staf">
-                                        <option value="ADM">Staf Admin</option>
-                                        <option value="SOT">Staf Owner Toko</option>
-                                        <option value="SOO">Staf Owner Ojek</option>
-                                        <option value="MKT">Staf Marketing</option>
-                                        <option value="TGH">Staf Penagihan</option>
-                                        <option value="CS">Customer Service</option>
-                                    </optgroup>
-                                    <optgroup label="Akun Seller">
-                                        <option value="TK">Toko</option>
-                                        <option value="OJ">Ojek</option>
-                                        <option value="PP">Pedagang Pasar</option>
-                                        <option value="PM">Pedagang Makanan</option>
-                                        <option value="COD">COD Seller</option>
-                                    </optgroup>
-                                    <optgroup label="Akun Umum">
-                                        <option value="CT">Customer</option>
-                                    </optgroup>
-                                </select>
-                                <small class="text-muted" id="infoRoleBuat"></small>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #E8F5E9;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>ID Otomatis
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text text-white" style="background-color: #4CAF50; border-color: #4CAF50;">
-                                        <i class="fas fa-qrcode"></i>
-                                    </span>
-                                    <input type="text" id="idOtomatisBuat" name="id_otomatis" class="form-control bg-light fw-bold text-success text-center" placeholder="Pilih jenis akun terlebih dahulu" readonly>
-                                </div>
-                                <small class="text-muted">ID akan dibuat otomatis berdasarkan jenis akun yang dipilih</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="namaLengkapBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user me-1" style="color: #FF8C00;"></i>Nama Lengkap
-                                </label>
-                                <input type="text" id="namaLengkapBuat" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap sesuai KTP" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="nomorHpBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-phone me-1" style="color: #FF8C00;"></i>Nomor HP
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">+62</span>
-                                    <input type="tel" id="nomorHpBuat" name="hp" class="form-control" placeholder="81234567890" pattern="[0-9]{10,13}" required>
-                                </div>
-                                <small class="text-muted">Nomor HP aktif untuk verifikasi</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="emailBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-envelope me-1" style="color: #FF8C00;"></i>Email
-                                </label>
-                                <input type="email" id="emailBuat" name="email" class="form-control" placeholder="contoh@email.com" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="alamatBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-map-marker-alt me-1" style="color: #FF8C00;"></i>Alamat Lengkap
-                                </label>
-                                <textarea id="alamatBuat" name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #FFF3E0;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-map-pin text-danger me-1"></i>Titik Koordinat Lokasi (WAJIB)
-                                </label>
-                                <div class="d-grid gap-2">
-                                    <button type="button" id="tombolAmbilKoordinatBuat" class="btn btn-outline-secondary" onclick="ambilKoordinatBuat()" style="border-color: #FF8C00; color: #FF8C00;">
-                                        <i class="fas fa-location-crosshairs me-2"></i>Ambil Titik Lokasi Sekarang
-                                    </button>
-                                </div>
-                                <div id="statusKoordinatBuat" class="mt-2 small text-muted">
-                                    <i class="fas fa-exclamation-circle text-danger me-1"></i>Koordinat belum diambil. Wajib diisi!
-                                </div>
-                                <input type="hidden" id="latitudeBuat" name="latitude" value="">
-                                <input type="hidden" id="longitudeBuat" name="longitude" value="">
-                                <div id="koordinatTextBuat" class="mt-2 small d-none">
-                                    <span class="fw-bold">Latitude:</span> <span id="textLatitudeBuat"></span><br>
-                                    <span class="fw-bold">Longitude:</span> <span id="textLongitudeBuat"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="usernameBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-circle me-1" style="color: #FF8C00;"></i>Username
-                                </label>
-                                <input type="text" id="usernameBuat" name="username" class="form-control" placeholder="Buat username untuk login" minlength="5" required>
-                                <small class="text-muted">Minimal 5 karakter, digunakan untuk login</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="passwordBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-lock me-1" style="color: #FF8C00;"></i>Password
-                                </label>
-                                <div class="input-group">
-                                    <input type="password" id="passwordBuat" name="password" class="form-control" placeholder="Buat password minimal 6 karakter" minlength="6" required>
-                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordBuat()" title="Lihat password">
-                                        <i class="fas fa-eye" id="iconTogglePasswordBuat"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="konfirmasiPasswordBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-check-circle me-1" style="color: #FF8C00;"></i>Konfirmasi Password
-                                </label>
-                                <input type="password" id="konfirmasiPasswordBuat" name="konfirmasi_password" class="form-control" placeholder="Ketik ulang password" minlength="6" required>
-                            </div>
-                            
-                            <div class="mb-3" id="bagianNIKBuat">
-                                <label for="nikKtpBuat" class="form-label fw-bold text-dark">
-                                    <i class="fas fa-id-card me-1" style="color: #FF8C00;"></i>NIK KTP
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" id="nikKtpBuat" name="nik_ktp" class="form-control" placeholder="Masukkan 16 digit NIK KTP" pattern="[0-9]{16}" maxlength="16">
-                                <small class="text-muted">Wajib diisi untuk Toko, Ojek, Pedagang, dan COD Seller</small>
-                            </div>
-                            
-                            <div class="mb-3 p-3 rounded border" style="background-color: #E3F2FD;">
-                                <label class="form-label fw-bold text-dark">
-                                    <i class="fas fa-user-shield me-1" style="color: #FF8C00;"></i>Dibuat Oleh
-                                </label>
-                                <input type="text" class="form-control bg-light fw-bold" value="SuperAdmin - ID_TK2R_SA-0001" readonly>
-                                <small class="text-muted">Akun ini dibuat langsung oleh SuperAdmin, status langsung AKTIF</small>
-                            </div>
-                            
-                            <div class="d-grid gap-2 mb-3">
-                                <button type="submit" id="tombolBuatAkun" class="btn btn-lg fw-bold text-white" disabled style="background-color: #4CAF50; border-color: #4CAF50;">
-                                    <i class="fas fa-user-check me-2"></i>Buat Akun Sekarang (Langsung Aktif)
-                                </button>
-                            </div>
-                            
-                        </form>
-                        
-                        <hr>
-                        
-                        <div class="text-center">
-                            <button class="btn btn-outline-secondary" onclick="kembaliKeDasbor()">
-                                <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
-                            </button>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.12 ===== --->
-<!--- ===== BLOK 10.13 Container Persetujuan Akun ===== --->
-<div id="halamanPersetujuanAkunContainer" style="display:none;">
-    <div class="container-fluid px-4 py-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
-                <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Persetujuan Akun</h5>
-                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
-                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
-                </button>
-            </div>
-            <div class="card-body">
-                <div id="notifikasiPersetujuan" class="alert d-none"></div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Lengkap</th>
-                                <th>Role</th>
-                                <th>Username</th>
-                                <th>Tanggal Daftar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelPending">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tidakAdaPending" class="text-center py-4 text-muted d-none">
-                    <i class="fas fa-check-circle fa-3x mb-3"></i>
-                    <h5>Tidak ada akun yang menunggu persetujuan</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.13 ===== --->
+<!--- ===== BLOK 9.1 Bootstrap JS ===== --->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!--- ===== AKHIR BLOK 9.1 ===== --->
 
-<!--- ===== BLOK 10.14 Container Kelola Akun Aktif ===== --->
-<div id="halamanKelolaAkunContainer" style="display:none;">
-    <div class="container-fluid px-4 py-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #FF8C00;">
-                <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Kelola Akun Aktif</h5>
-                <button class="btn btn-outline-light btn-sm" onclick="kembaliKeDasbor()">
-                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dasbor
-                </button>
-            </div>
-            <div class="card-body">
-                <div id="notifikasiKelolaAkun" class="alert d-none"></div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Lengkap</th>
-                                <th>Role</th>
-                                <th>Username</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelAkunAktif">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tidakAdaAkunAktif" class="text-center py-4 text-muted d-none">
-                    <i class="fas fa-check-circle fa-3x mb-3"></i>
-                    <h5>Tidak ada akun aktif</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--- ===== AKHIR BLOK 10.14 ===== --->
-
-<!--- ===== BLOK 9.2 JavaScript Core (ES5, TANPA ERROR) ===== --->
+<!--- ===== BLOK 9.2 JavaScript (ES5, NO ERROR) ===== --->
+<script>
 var SUPERADMIN_USERNAME = 'AppTokoOnLine2R';
 var SUPERADMIN_PASSWORD = 'MyHand0286';
 var userAktif = null;
@@ -985,7 +593,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateWaktu();
 });
 
-// Navigasi halaman
 function tampilkanHalaman(halaman) {
     var semua = document.querySelectorAll('.page-section');
     for (var i = 0; i < semua.length; i++) {
@@ -996,7 +603,6 @@ function tampilkanHalaman(halaman) {
     window.scrollTo(0, 0);
 }
 
-// Toggle password
 function togglePasswordLogin() {
     var pw = document.getElementById('passwordLogin');
     var icon = document.getElementById('iconToggleLogin');
@@ -1016,7 +622,6 @@ function togglePasswordBaru() {
     else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
 }
 
-// Update waktu
 function updateWaktu() {
     var s = new Date();
     var opt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' };
@@ -1029,7 +634,6 @@ function updateWaktu() {
 }
 setInterval(updateWaktu, 1000);
 
-// Login
 function prosesLogin(event) {
     event.preventDefault();
     var u = document.getElementById('usernameLogin').value.trim();
@@ -1056,7 +660,6 @@ function prosesLogin(event) {
     return false;
 }
 
-// Masuk dasbor
 function masukDasbor() {
     var konten = document.getElementById('kontenDasbor');
     if (konten && kontenAsliDasbor) konten.innerHTML = kontenAsliDasbor;
@@ -1072,7 +675,6 @@ function masukDasbor() {
     updateWaktu();
 }
 
-// Logout
 function prosesLogout() {
     var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
     if (offcanvas) offcanvas.hide();
@@ -1082,70 +684,24 @@ function prosesLogout() {
     document.getElementById('passwordLogin').value = '';
 }
 
-// ===================== MENU CONFIG =====================
+// Menu config sederhana dulu
 var menuConfig = {
     'SA': {
         namaRole: 'SuperAdmin',
         menu: [
-            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '10.1' },
-            { nama: 'Profil', ikon: 'fas fa-user', blok: '10.2' },
-            { nama: 'Penagihan Otomatis', ikon: 'fas fa-robot', blok: '10.3' },
-            { nama: 'Riwayat Penagihan', ikon: 'fas fa-history', blok: '10.4' },
-            { nama: 'Laporan Keuangan', ikon: 'fas fa-file-invoice', blok: '10.5' },
-            { nama: 'Setting Harga Aplikasi', ikon: 'fas fa-tags', blok: '10.6' },
-            { nama: 'Data Penagihan', ikon: 'fas fa-database', blok: '10.7' },
-            { nama: 'Semua Transaksi', ikon: 'fas fa-exchange-alt', blok: '10.8' },
-            { nama: 'Semua Order', ikon: 'fas fa-shopping-cart', blok: '10.9' },
-            { nama: 'Verifikasi Dokumen', ikon: 'fas fa-check-double', blok: '10.10' },
-            { nama: 'Manajemen Owner', ikon: 'fas fa-user-tie', blok: '10.11' },
-            { nama: 'Daftar Akun Baru', ikon: 'fas fa-user-plus', blok: '10.12', aksi: 'buatAkun' },
-            { nama: 'Persetujuan Akun', ikon: 'fas fa-user-check', blok: '10.13', aksi: 'persetujuanAkun' },
-            { nama: 'Kelola Akun Aktif', ikon: 'fas fa-users-cog', blok: '10.14', aksi: 'kelolaAkun' },
-            { nama: 'Pengajuan Buka Akun', ikon: 'fas fa-folder-open', blok: '10.15' },
-            { nama: 'Pengajuan Upload Produk', ikon: 'fas fa-upload', blok: '10.16' },
-            { nama: 'Setting Rekening Master', ikon: 'fas fa-university', blok: '10.17' },
-            { nama: 'Menu Iklan', ikon: 'fas fa-ad', blok: '10.18' },
-            { nama: 'Papan Informasi', ikon: 'fas fa-bullhorn', blok: '10.19' },
-            { nama: 'Notifikasi Broadcast', ikon: 'fas fa-bell', blok: '10.20' },
-            { nama: 'Katalog Produk', ikon: 'fas fa-th-list', blok: '10.21' },
-            { nama: 'Manajemen Katalog', ikon: 'fas fa-folder', blok: '10.22' },
-            { nama: 'Penataan Produk', ikon: 'fas fa-sort', blok: '10.23' },
-            { nama: 'Kelola Wilayah', ikon: 'fas fa-map-marked-alt', blok: '10.24' },
-            { nama: 'Backup & Restore', ikon: 'fas fa-cloud-upload-alt', blok: '10.25' },
-            { nama: 'Reset & Pembersihan', ikon: 'fas fa-broom', blok: '10.26' },
-            { nama: 'Notepad+', ikon: 'fas fa-sticky-note', blok: '10.27' },
-            { nama: 'Keamanan Sistem', ikon: 'fas fa-shield-alt', blok: '10.28' },
-            { nama: 'Histori Aktivitas', ikon: 'fas fa-history', blok: '10.29' },
-            { nama: 'Log Aktivitas Lanjutan', ikon: 'fas fa-clipboard-list', blok: '10.30' },
-            { nama: 'Pengaturan Umum', ikon: 'fas fa-cog', blok: '10.31' },
-            { nama: 'Restart System', ikon: 'fas fa-power-off', blok: '10.32' },
-            { nama: 'Bantuan & FAQ', ikon: 'fas fa-question-circle', blok: '10.33' },
-            { nama: 'Dokumentasi', ikon: 'fas fa-book', blok: '10.34' }
+            { nama: 'Dasbor', ikon: 'fas fa-tachometer-alt', blok: '10.1' }
         ]
     }
 };
 
-// ===================== LOAD MENU (ES5, NO TEMPLATE LITERAL) =====================
 function loadMenuNavigasi(kodeRole) {
     var config = menuConfig[kodeRole] || menuConfig['CT'];
     var menuContainer = document.getElementById('menuNavigasi');
     var htmlMenu = '';
-
     for (var i = 0; i < config.menu.length; i++) {
         var item = config.menu[i];
-        var onclickAction = '';
-        if (item.aksi === 'buatAkun') {
-            onclickAction = 'tampilkanFormBuatAkun()';
-        } else if (item.aksi === 'persetujuanAkun') {
-            onclickAction = 'tampilkanPersetujuanAkun()';
-        } else if (item.aksi === 'kelolaAkun') {
-            onclickAction = 'tampilkanKelolaAkun()';
-        } else {
-            onclickAction = "tampilkanPlaceholderMenu('" + item.nama + "', '" + item.blok + "')";
-        }
-        htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="' + onclickAction + '"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
+        htmlMenu += '<a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="tampilkanPlaceholderMenu(\'' + item.nama + '\', \'' + item.blok + '\')"><i class="' + item.ikon + ' me-2" style="color: #FF8C00;"></i>' + item.nama + '</a>';
     }
-
     htmlMenu += '<hr class="border-secondary"><a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary menu-item" onclick="prosesLogout()"><i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout</a>';
     menuContainer.innerHTML = htmlMenu;
 }
@@ -1164,261 +720,7 @@ function kembaliKeDasbor() {
         updateWaktu();
     }
 }
-
-// ===================== FORM BUAT AKUN (ES5) =====================
-function tampilkanFormBuatAkun() {
-    var konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    var form = document.getElementById('formBuatAkunContainer');
-    if (form) konten.innerHTML = form.innerHTML;
-    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
-}
-
-function togglePasswordBuat() {
-    var pw = document.getElementById('passwordBuat');
-    var icon = document.getElementById('iconTogglePasswordBuat');
-    if (pw.type === 'password') { pw.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-    else { pw.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
-}
-
-function generateIDBuat(kodeRole) {
-    var format = { ADM:'ID_TK2R_ADM', SOT:'ID_TK2R_SOT', SOO:'ID_TK2R_SOO', MKT:'ID_TK2R_MKT', TGH:'ID_TK2R_TGH', CS:'ID_TK2R_CS', CT:'ID_TK2R_CUST', TK:'ID_TK2R_TK', OJ:'ID_TK2R_OJ', PP:'ID_TK2R_PS', PM:'ID_TK2R_PM', COD:'ID_TK2R_CS' };
-    var input = document.getElementById('idOtomatisBuat');
-    if (!input) return '';
-    if (!format[kodeRole]) { input.value = ''; return ''; }
-    var id = format[kodeRole] + '-' + Math.floor(Math.random() * 9000 + 1000);
-    input.value = id;
-    return id;
-}
-
-function cekRoleBuatAkun() {
-    var role = document.getElementById('roleAkunBuat').value;
-    var bagianNIK = document.getElementById('bagianNIKBuat');
-    var nikInput = document.getElementById('nikKtpBuat');
-    var info = document.getElementById('infoRoleBuat');
-    var nikRoles = ['SOT','SOO','TK','OJ','PP','PM','COD'];
-    var perluNIK = false;
-    for (var i = 0; i < nikRoles.length; i++) {
-        if (nikRoles[i] === role) { perluNIK = true; break; }
-    }
-    if (perluNIK) {
-        bagianNIK.style.display = 'block';
-        nikInput.setAttribute('required','');
-    } else {
-        bagianNIK.style.display = 'none';
-        nikInput.removeAttribute('required');
-    }
-    info.innerHTML = '<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i> Akun ' + role + ' - Langsung AKTIF';
-    generateIDBuat(role);
-    cekTombolBuatAktif();
-}
-
-function ambilKoordinatBuat() {
-    var status = document.getElementById('statusKoordinatBuat');
-    var tombol = document.getElementById('tombolAmbilKoordinatBuat');
-    if (!navigator.geolocation) { status.innerHTML = 'Geolokasi tidak didukung'; return; }
-    status.innerHTML = 'Mengambil lokasi...';
-    tombol.disabled = true;
-    navigator.geolocation.getCurrentPosition(function(pos) {
-        document.getElementById('latitudeBuat').value = pos.coords.latitude;
-        document.getElementById('longitudeBuat').value = pos.coords.longitude;
-        document.getElementById('textLatitudeBuat').textContent = pos.coords.latitude;
-        document.getElementById('textLongitudeBuat').textContent = pos.coords.longitude;
-        status.innerHTML = 'Lokasi berhasil!'; status.style.color = 'green';
-        document.getElementById('koordinatTextBuat').classList.remove('d-none');
-        tombol.disabled = false;
-        cekTombolBuatAktif();
-    }, function() {
-        status.innerHTML = 'Gagal mengambil lokasi'; status.style.color = 'red';
-        tombol.disabled = false;
-    });
-}
-
-function cekTombolBuatAktif() {
-    var lat = document.getElementById('latitudeBuat').value;
-    var lng = document.getElementById('longitudeBuat').value;
-    var role = document.getElementById('roleAkunBuat').value;
-    var id = document.getElementById('idOtomatisBuat').value;
-    var btn = document.getElementById('tombolBuatAkun');
-    if (btn) btn.disabled = !(lat && lng && role && id);
-}
-
-function prosesBuatAkun(event) {
-    event.preventDefault();
-    var notif = document.getElementById('notifikasiBuatAkun');
-    var pass = document.getElementById('passwordBuat').value;
-    var konf = document.getElementById('konfirmasiPasswordBuat').value;
-    var nama = document.getElementById('namaLengkapBuat').value;
-    var user = document.getElementById('usernameBuat').value;
-    var id = document.getElementById('idOtomatisBuat').value;
-    if (pass !== konf) {
-        notif.className = 'alert alert-warning';
-        notif.innerHTML = 'Password tidak cocok!';
-        notif.classList.remove('d-none');
-        return false;
-    }
-    notif.className = 'alert alert-success';
-    notif.innerHTML = '<strong>Akun berhasil dibuat!</strong><br>Nama: ' + nama + '<br>ID: ' + id + '<br>Username: ' + user + '<br>Status: AKTIF';
-    notif.classList.remove('d-none');
-    document.getElementById('formBuatAkun').reset();
-    document.getElementById('idOtomatisBuat').value = '';
-    document.getElementById('tombolBuatAkun').disabled = true;
-    document.getElementById('koordinatTextBuat').classList.add('d-none');
-    return false;
-}
-
-// ===================== PERSETUJUAN AKUN =====================
-var dataPending = [
-    { id: 'ID_TK2R_TK-1001', nama: 'Toko Maju Jaya', role: 'Toko', username: 'tokomaju', tgl: '2026-07-25' },
-    { id: 'ID_TK2R_OJ-1002', nama: 'Ojek Sigap', role: 'Ojek', username: 'ojeksigap', tgl: '2026-07-26' },
-    { id: 'ID_TK2R_PM-1003', nama: 'Warung Makan Enak', role: 'Pedagang Makanan', username: 'wmakanenak', tgl: '2026-07-26' },
-    { id: 'ID_TK2R_CS-1004', nama: 'COD Seller Murah', role: 'COD Seller', username: 'codmurah', tgl: '2026-07-27' }
-];
-
-function tampilkanPersetujuanAkun() {
-    var konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    var container = document.getElementById('halamanPersetujuanAkunContainer');
-    if (container) {
-        konten.innerHTML = container.innerHTML;
-        muatTabelPending();
-    }
-    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
-}
-
-function muatTabelPending() {
-    var tbody = document.getElementById('tabelPending');
-    var tidakAda = document.getElementById('tidakAdaPending');
-    if (!tbody) return;
-    
-    if (dataPending.length === 0) {
-        tbody.innerHTML = '';
-        tidakAda.classList.remove('d-none');
-        return;
-    }
-    tidakAda.classList.add('d-none');
-    
-    var rows = '';
-    for (var i = 0; i < dataPending.length; i++) {
-        var item = dataPending[i];
-        rows += '<tr id="row-' + i + '">' +
-            '<td><span class="fw-bold">' + item.id + '</span></td>' +
-            '<td>' + item.nama + '</td>' +
-            '<td>' + item.role + '</td>' +
-            '<td>' + item.username + '</td>' +
-            '<td>' + item.tgl + '</td>' +
-            '<td>' +
-            '<button class="btn btn-sm btn-success me-1" onclick="setujuiAkun(' + i + ')"><i class="fas fa-check"></i> Setujui</button>' +
-            '<button class="btn btn-sm btn-danger" onclick="tolakAkun(' + i + ')"><i class="fas fa-times"></i> Tolak</button>' +
-            '</td>' +
-            '</tr>';
-    }
-    tbody.innerHTML = rows;
-}
-
-function setujuiAkun(index) {
-    var notif = document.getElementById('notifikasiPersetujuan');
-    var item = dataPending[index];
-    if (!item) return;
-    dataPending.splice(index, 1);
-    notif.className = 'alert alert-success';
-    notif.innerHTML = '<i class="fas fa-check-circle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DISETUJUI</strong> dan sekarang AKTIF.';
-    notif.classList.remove('d-none');
-    muatTabelPending();
-    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
-}
-
-function tolakAkun(index) {
-    var notif = document.getElementById('notifikasiPersetujuan');
-    var item = dataPending[index];
-    if (!item) return;
-    if (!confirm('Apakah Anda yakin menolak akun ' + item.nama + ' (' + item.id + ')?')) return;
-    dataPending.splice(index, 1);
-    notif.className = 'alert alert-warning';
-    notif.innerHTML = '<i class="fas fa-times-circle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DITOLAK</strong>.';
-    notif.classList.remove('d-none');
-    muatTabelPending();
-    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
-}
-
-// ===================== KELOLA AKUN AKTIF =====================
-var dataAkunAktif = [
-    { id: 'ID_TK2R_TK-2001', nama: 'Toko Berkah Abadi', role: 'Toko', username: 'berkah', status: 'Aktif' },
-    { id: 'ID_TK2R_OJ-2002', nama: 'Ojek Ngebut', role: 'Ojek', username: 'ngebut', status: 'Aktif' },
-    { id: 'ID_TK2R_PM-2003', nama: 'Bakso Mantap', role: 'Pedagang Makanan', username: 'bakso', status: 'Aktif' },
-    { id: 'ID_TK2R_ADM-2004', nama: 'Admin CS', role: 'Customer Service', username: 'admincs', status: 'Aktif' }
-];
-
-function tampilkanKelolaAkun() {
-    var konten = document.getElementById('kontenDasbor');
-    if (!kontenAsliDasbor) kontenAsliDasbor = konten.innerHTML;
-    var container = document.getElementById('halamanKelolaAkunContainer');
-    if (container) {
-        konten.innerHTML = container.innerHTML;
-        muatTabelAkunAktif();
-    }
-    var offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasMenu'));
-    if (offcanvas) offcanvas.hide();
-}
-
-function muatTabelAkunAktif() {
-    var tbody = document.getElementById('tabelAkunAktif');
-    var tidakAda = document.getElementById('tidakAdaAkunAktif');
-    if (!tbody) return;
-
-    if (dataAkunAktif.length === 0) {
-        tbody.innerHTML = '';
-        tidakAda.classList.remove('d-none');
-        return;
-    }
-    tidakAda.classList.add('d-none');
-
-    var rows = '';
-    for (var i = 0; i < dataAkunAktif.length; i++) {
-        var item = dataAkunAktif[i];
-        rows += '<tr id="rowaktif-' + i + '">' +
-            '<td><span class="fw-bold">' + item.id + '</span></td>' +
-            '<td>' + item.nama + '</td>' +
-            '<td>' + item.role + '</td>' +
-            '<td>' + item.username + '</td>' +
-            '<td><span class="badge bg-success">' + item.status + '</span></td>' +
-            '<td>' +
-            '<button class="btn btn-sm btn-warning me-1" onclick="blokirAkun(' + i + ')"><i class="fas fa-lock"></i> Blokir</button>' +
-            '<button class="btn btn-sm btn-danger" onclick="hapusAkun(' + i + ')"><i class="fas fa-trash"></i> Hapus</button>' +
-            '</td>' +
-            '</tr>';
-    }
-    tbody.innerHTML = rows;
-}
-
-function blokirAkun(index) {
-    var notif = document.getElementById('notifikasiKelolaAkun');
-    var item = dataAkunAktif[index];
-    if (!item) return;
-    if (!confirm('Blokir akun ' + item.nama + ' (' + item.id + ')?')) return;
-    item.status = 'Diblokir';
-    notif.className = 'alert alert-warning';
-    notif.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DIBLOKIR</strong>.';
-    notif.classList.remove('d-none');
-    muatTabelAkunAktif();
-    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
-}
-
-function hapusAkun(index) {
-    var notif = document.getElementById('notifikasiKelolaAkun');
-    var item = dataAkunAktif[index];
-    if (!item) return;
-    if (!confirm('Hapus permanen akun ' + item.nama + ' (' + item.id + ')?')) return;
-    dataAkunAktif.splice(index, 1);
-    notif.className = 'alert alert-danger';
-    notif.innerHTML = '<i class="fas fa-trash-alt me-2"></i>Akun <strong>' + item.nama + '</strong> (' + item.id + ') telah <strong>DIHAPUS</strong>.';
-    notif.classList.remove('d-none');
-    muatTabelAkunAktif();
-    setTimeout(function() { notif.classList.add('d-none'); }, 4000);
-}
-<!--- ===== AKHIR BLOK 9.2 ===== --->
 </script>
+<!--- ===== AKHIR BLOK 9.2 ===== --->
 </body>
 </html>
